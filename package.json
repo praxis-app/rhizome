@@ -12,7 +12,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@chriscourses/perlin-noise": "^1.0.6",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.1",
@@ -26,7 +25,6 @@
     "react-router-dom": "^7.0.1",
     "react-use-websocket": "^4.10.0",
     "redis": "^4.7.0",
-    "tone": "^15.0.4",
     "url": "^0.11.4",
     "uuid": "^10.0.0",
     "ws": "^8.18.0",
