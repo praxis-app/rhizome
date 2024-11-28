@@ -14,7 +14,7 @@ By embracing both integration and the autonomy of a standalone platform, Rhizome
 
 ## Installation
 
-Ensure that you're using Node v20.16.0 before proceeding.
+Ensure that you're using Node v22.11.0 before proceeding.
 
 ```bash
 # Install project dependencies

@@ -1,4 +1,4 @@
-FROM node:20.16.0-alpine AS build_stage
+FROM node:22.11.0-alpine AS build_stage
 
 RUN apk add --update python3 build-base
 
@@ -29,7 +29,7 @@ RUN npm ci --only=production
 RUN rm -rf src
 RUN rm -rf view
 
-FROM node:20.16.0-alpine AS runtime_stage
+FROM node:22.11.0-alpine AS runtime_stage
 
 COPY --from=build_stage /app /app
 
