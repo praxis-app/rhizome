@@ -1,6 +1,13 @@
-## Rhizome
+# Rhizome
 
-Exploring audio-visual interactive art concepts
+A new approach for Praxis to extend and integrate with other systems, while paving the way towards a standalone platform.
+
+## Project goals
+
+- **Rhizomatic design**: A more rhizomatic approach to the design of features and system architecture.
+- **Hybrid platform/utility**: Strike a balance between versatile utility and a standalone platform.
+- **Chat as the primary medium**: Use chat as the primary medium for collaborative decision-making (CDM) functionality.
+- **REST and OpenAPI**: Provide a simple REST API and OpenAPI for integration with other systems.
 
 ## Installation
 
