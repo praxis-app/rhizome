@@ -1,10 +1,20 @@
-## Rhizome
+# Rhizome
 
-Exploring audio-visual interactive art concepts
+Rhizome represents a new approach for Praxis, emphasizing seamless integration with existing systems while laying the groundwork for an autonomous, self-sustaining platform. The project aims to strike a balance between versatile utility and a standalone platform, with chat as the primary medium for collaborative decision-making (CDM) functionality.
+
+By embracing both integration and the autonomy of a standalone platform, Rhizome opens the door to greater user adoption without compromising the security and reliability of it's core platform.
+
+## Project goals
+
+- **Rhizomatic design**: A more rhizomatic approach to the design of both features and architecture.
+- **Hybrid platform/utility**: Strike a balance between versatile utility and a standalone platform.
+- **Chat as the primary medium**: Use chat as the primary medium for CDM features & functionality.
+- **REST and OpenAPI**: Simple REST API with OpenAPI so other systems can integrate with Praxis.
+- **Vite and Express**: Embraces flexible, modular, unopinionated architecture.
 
 ## Installation
 
-Ensure that you're using Node v20.16.0 before proceeding.
+Ensure that you're using Node v22.11.0 before proceeding.
 
 ```bash
 # Install project dependencies
