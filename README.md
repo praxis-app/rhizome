@@ -2,7 +2,7 @@
 
 Rhizome represents a new approach for Praxis, emphasizing seamless integration with existing systems while laying the groundwork for an autonomous, self-sustaining platform. The project aims to strike a balance between versatile utility and a standalone platform, with chat as the primary medium for collaborative decision-making (CDM) functionality.
 
-By embracing both integration and the autonomy of a standalone platform, Rhizome opens the door to greater user adoption without compromising the security and reliability offered by a core platform.
+By embracing both integration and the autonomy of a standalone platform, Rhizome opens the door to greater user adoption without compromising the security and reliability of a core platform.
 
 ## Project goals
 
