@@ -8,8 +8,8 @@ By embracing both integration and the autonomy of a standalone platform, Rhizome
 
 - **Rhizomatic design**: A more rhizomatic approach to the design of both features and architecture.
 - **Hybrid platform/utility**: Strike a balance between versatile utility and a standalone platform.
-- **Chat as the primary medium**: Use chat as the primary medium for CDM functionality.
-- **REST and OpenAPI**: Provide a simple REST API and OpenAPI for integration with other systems.
+- **Chat as the primary medium**: Use chat as the primary medium for CDM features & functionality.
+- **REST and OpenAPI**: A simple REST API with OpenAPI for integration with other systems.
 - **Vite and Express**: Embraces flexible, modular, unopinionated architecture.
 
 ## Installation
