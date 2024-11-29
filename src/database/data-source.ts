@@ -1,10 +1,5 @@
-import { DataSource, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-}
+import { DataSource } from 'typeorm';
+import { User } from '../users/user.entity';
 
 export const dataSource = new DataSource({
   type: 'postgres',

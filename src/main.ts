@@ -6,9 +6,10 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import appRouter from './app.routes';
 import cacheService from './cache/cache.service';
-import { dataSource, User } from './database/data-source';
+import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
 import pubSubService from './pub-sub/pub-sub.service';
+import { User } from './users/user.entity';
 
 dotenv.config();
 
