@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "tsx watch src/main.ts",
+    "start": "tsx watch --tsconfig ./tsconfig.src.json src/main.ts",
     "start:client": "vite --host",
     "build": "tsc -b && eslint src --ext ts && tsc && babel -x .ts -d dist src",
     "build:client": "tsc -b && eslint view --ext ts,tsx && vite build --emptyOutDir true",
@@ -26,6 +26,7 @@
     "react-router-dom": "^7.0.1",
     "react-use-websocket": "^4.10.0",
     "redis": "^4.7.0",
+    "typeorm": "^0.3.14",
     "url": "^0.11.4",
     "uuid": "^10.0.0",
     "ws": "^8.18.0",
@@ -57,8 +58,5 @@
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vite-plugin-dynamic-import": "^1.5.0"
-  },
-  "engines": {
-    "node": ">=22.11.0"
   }
 }

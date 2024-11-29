@@ -5,6 +5,10 @@
     "lib": ["ESNext"],
     "resolveJsonModule": true,
     "allowJs": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "sourceMap": true,
 
     /* Modules */
     "module": "ESNext",

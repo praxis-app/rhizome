@@ -6,6 +6,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import appRouter from './app.routes';
 import cacheService from './cache/cache.service';
+import { dataSource, User } from './database/data-source';
 import { db } from './database/database.client';
 import { usersTable } from './database/database.schema';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
@@ -18,12 +19,18 @@ dotenv.config();
   const server = createServer(app);
   const webSocketServer = new WebSocketServerWithIds({ path: '/ws', server });
 
-  // TODO: Remove after testing
-  const users = await db.select().from(usersTable);
-  console.log('Getting all users from the database: ', users);
-
   await cacheService.initializeCache();
+  await dataSource.initialize();
   app.use(cors());
+
+  // TODO: Remove after testing
+  const userRepository = dataSource.getRepository(User);
+  const users = await userRepository.find();
+  console.log('Getting all users with TypeORM: ', users);
+
+  // TODO: Remove after testing
+  const drizzleUsers = await db.select().from(usersTable);
+  console.log('Getting all users with Drizzle: ', drizzleUsers);
 
   // Serve static files and API routes
   const __dirname = dirname(fileURLToPath(import.meta.url));
