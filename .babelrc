@@ -9,5 +9,8 @@
     ],
     "@babel/typescript"
   ],
-  "plugins": ["add-import-extension"]
+  "plugins": [
+    "add-import-extension",
+    ["@babel/plugin-syntax-decorators", { "decoratorsBeforeExport": true }]
+  ]
 }
