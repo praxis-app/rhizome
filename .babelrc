@@ -10,7 +10,8 @@
     "@babel/typescript"
   ],
   "plugins": [
-    "add-import-extension",
-    ["@babel/plugin-syntax-decorators", { "decoratorsBeforeExport": true }]
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-transform-class-properties",
+    "add-import-extension"
   ]
 }
