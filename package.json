@@ -10,7 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "typeorm": "tsx --tsconfig ./tsconfig.src.json ./node_modules/typeorm/cli.js",
     "typeorm:gen": "npm run typeorm migration:generate -- -d ./src/database/data-source.ts",
-    "typeorm:run": "npm run typeorm migration:run -- -d ./dist/database/data-source.js",
+    "typeorm:run": "npm run typeorm migration:run -- -d ./src/database/data-source.ts",
     "preview": "vite preview"
   },
   "dependencies": {
