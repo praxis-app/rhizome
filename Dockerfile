@@ -4,6 +4,7 @@ RUN apk add --update python3 build-base
 
 COPY src /app/src
 COPY view /app/view
+COPY scripts /app/scripts
 
 COPY package.json /app
 COPY package-lock.json /app
@@ -17,13 +18,20 @@ COPY .babelrc /app
 WORKDIR /app
 RUN npm ci
 
+# Build args
 ARG NODE_ENV
 ARG SERVER_PORT
+ARG RUN_MIGRATIONS
 
+# Build the app
 RUN npm run build
 RUN npm run build:client
 
-# Prep for runtime image
+# Run migrations
+ENV RUN_MIGRATIONS=${RUN_MIGRATIONS}
+# RUN npm run typeorm:run
+
+# Clean up for runtime image
 RUN rm -rf node_modules
 RUN npm ci --only=production
 RUN rm -rf src

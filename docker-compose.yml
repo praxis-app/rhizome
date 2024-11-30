@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   app:
@@ -13,9 +13,13 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     restart: always
     env_file: .env
+    networks:
+      - webnet
     depends_on:
-      cache:
+      postgres:
         condition: service_healthy
+      cache:
+        condition: service_healthy 
 
   cache:
     container_name: redis
@@ -33,6 +37,30 @@ services:
     volumes:
       - cache:/data
 
+  postgres:
+    container_name: postgres
+    image: postgres:17
+    networks:
+      - webnet
+    environment:
+      POSTGRES_DB: ${DB_SCHEMA}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PG_DATA: /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
 volumes:
+  pgdata:
   cache:
     driver: local
+
+networks:
+  webnet:
