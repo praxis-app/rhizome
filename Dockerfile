@@ -29,7 +29,7 @@ RUN npm run build:client
 
 # Run migrations
 ENV RUN_MIGRATIONS=${RUN_MIGRATIONS}
-# RUN npm run typeorm:run
+RUN npm run typeorm:run
 
 # Clean up for runtime image
 RUN rm -rf node_modules
