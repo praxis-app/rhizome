@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-const ErrorPage = () => {
+export const ErrorPage = () => {
   const [textColor, setTextColor] = useState('white');
   const [backgroundColor, setBackgroundColor] = useState('black');
 
@@ -46,5 +46,3 @@ const ErrorPage = () => {
     </Box>
   );
 };
-
-export default ErrorPage;

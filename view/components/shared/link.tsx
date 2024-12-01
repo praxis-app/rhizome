@@ -12,7 +12,7 @@ interface Props {
   to: string;
 }
 
-const Link = ({
+export const Link = ({
   children,
   disabled,
   leftSpace,
@@ -37,5 +37,3 @@ const Link = ({
     {children}
   </MuiLink>
 );
-
-export default Link;

@@ -1,13 +1,13 @@
 import { Container, LinearProgress, SxProps } from '@mui/material';
 import { ReactNode } from 'react';
-import useAppStore from '../../store/app.store';
+import { useAppStore } from '../../store/app.store';
 
 interface Props {
   children: ReactNode;
   sx?: SxProps;
 }
 
-const Layout = ({ children, sx }: Props) => {
+export const Layout = ({ children, sx }: Props) => {
   const isLoading = useAppStore((state) => state.isAppLoading);
 
   if (isLoading) {
@@ -16,5 +16,3 @@ const Layout = ({ children, sx }: Props) => {
 
   return <Container sx={sx}>{children}</Container>;
 };
-
-export default Layout;

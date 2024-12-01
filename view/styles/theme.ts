@@ -6,7 +6,7 @@ interface Props<OwnerState = unknown> {
   ownerState: OwnerState;
 }
 
-const theme = createTheme({
+export const theme = createTheme({
   typography: {
     fontFamily: 'system-ui',
   },
@@ -145,5 +145,3 @@ const theme = createTheme({
     },
   },
 });
-
-export default theme;

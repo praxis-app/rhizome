@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
-import Layout from '../components/app/layout';
+import { Layout } from '../components/app/layout';
 
-const PageNotFound = () => (
+export const PageNotFound = () => (
   <Layout>
     <Typography
       paddingTop="80px"
@@ -13,5 +13,3 @@ const PageNotFound = () => (
     </Typography>
   </Layout>
 );
-
-export default PageNotFound;
