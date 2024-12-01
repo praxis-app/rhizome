@@ -24,6 +24,9 @@ $ npm install
 ## Running the app
 
 ```bash
+# Copy environment variables
+$ cp .env.example .env
+
 # Start server for development
 $ npm run start
 
