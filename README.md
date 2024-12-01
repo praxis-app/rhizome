@@ -14,8 +14,6 @@ By embracing both integration and the autonomy of a standalone platform, Rhizome
 
 ## Installation and setup
 
-Ensure that you're using Node v22.11.0 before proceeding.
-
 Ensure that you have Node v22.11.0 installed on your machine before proceeding. If not, you can download it [here](https://nodejs.org/en/download).
 
 ```bash
