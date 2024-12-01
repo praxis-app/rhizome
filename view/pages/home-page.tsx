@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useAboveBreakpoint } from '../hooks/shared.hooks';
-import useAppStore from '../store/app.store';
+import { useAppStore } from '../store/app.store';
 
-const HomePage = () => {
+export const HomePage = () => {
   const token = useAppStore((state) => state.token);
   const [time, setTime] = useState<string>();
 
@@ -57,5 +57,3 @@ const HomePage = () => {
     </Box>
   );
 };
-
-export default HomePage;

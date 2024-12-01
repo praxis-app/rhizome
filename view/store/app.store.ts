@@ -7,7 +7,7 @@ interface AppState {
   setIsAppLoading(isAppLoading: boolean): void;
 }
 
-const useAppStore = create<AppState>((set) => ({
+export const useAppStore = create<AppState>((set) => ({
   token: null,
   isAppLoading: true,
 
@@ -18,5 +18,3 @@ const useAppStore = create<AppState>((set) => ({
     set({ isAppLoading });
   },
 }));
-
-export default useAppStore;

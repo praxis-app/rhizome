@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import cacheService from '../cache/cache.service';
+import { cacheService } from '../cache/cache.service';
 import { PubSubMessage, WebSocketWithId } from './pub-sub.models';
 
 type ChannelHandler = (
@@ -103,5 +103,4 @@ class PubSubService {
   }
 }
 
-const pubSubService = new PubSubService();
-export default pubSubService;
+export const pubSubService = new PubSubService();

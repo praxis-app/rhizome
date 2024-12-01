@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import useWebSocket, { Options } from 'react-use-websocket';
-import useAppStore from '../store/app.store';
+import { useAppStore } from '../store/app.store';
 import { getWebSocketURL } from '../utils/shared.utils';
 
 export interface PubSubMessage<T = unknown> {

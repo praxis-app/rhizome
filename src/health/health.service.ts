@@ -7,5 +7,4 @@ class HealthService {
   }
 }
 
-const healthService = new HealthService();
-export default healthService;
+export const healthService = new HealthService();
