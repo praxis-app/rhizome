@@ -1,4 +1,3 @@
 export class ChatService {}
 
-const chatService = new ChatService();
-export default chatService;
+export const chatService = new ChatService();
