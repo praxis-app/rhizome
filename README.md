@@ -62,4 +62,4 @@ $ npm run typeorm:gen ./src/database/migrations/<migration-name>
 $ npm run typeorm:run
 ```
 
-To run migrations in production, set `DB_MIGRATIONS` to `true` in your `.env` file.
+To run migrations in production, set `DB_MIGRATIONS` to `true` in your `.env` file. This will run migrations on startup via `start-prod.sh`.
