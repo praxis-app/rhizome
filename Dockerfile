@@ -4,7 +4,6 @@ RUN apk add --update python3 build-base
 
 COPY src /app/src
 COPY view /app/view
-COPY scripts /app/scripts
 
 COPY package.json /app
 COPY package-lock.json /app
@@ -13,6 +12,7 @@ COPY tsconfig.src.json /app
 COPY tsconfig.view.json /app
 COPY vite.config.ts /app
 COPY .eslintrc.cjs /app
+COPY start-prod.sh /app
 COPY .babelrc /app
 
 WORKDIR /app
@@ -37,4 +37,4 @@ FROM node:22.11.0-alpine AS runtime_stage
 
 COPY --from=build_stage /app /app
 ENV DB_MIGRATIONS=${DB_MIGRATIONS}
-CMD [ "sh", "/app/bin/start-prod.sh" ]
+CMD [ "sh", "/app/start-prod.sh" ]
