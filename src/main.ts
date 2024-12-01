@@ -9,7 +9,6 @@ import cacheService from './cache/cache.service';
 import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
 import pubSubService from './pub-sub/pub-sub.service';
-import { User } from './users/user.entity';
 
 dotenv.config();
 
@@ -21,11 +20,6 @@ dotenv.config();
   await cacheService.initializeCache();
   await dataSource.initialize();
   app.use(cors());
-
-  // TODO: Remove after testing
-  const userRepository = dataSource.getRepository(User);
-  const users = await userRepository.find();
-  console.log('Getting all users with TypeORM: ', users);
 
   // Serve static files and API routes
   const __dirname = dirname(fileURLToPath(import.meta.url));
