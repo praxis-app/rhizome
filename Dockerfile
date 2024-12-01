@@ -37,4 +37,4 @@ FROM node:22.11.0-alpine AS runtime_stage
 
 COPY --from=build_stage /app /app
 ENV DB_MIGRATIONS=${DB_MIGRATIONS}
-CMD [ "sh", "/app/scripts/start-prod.sh" ]
+CMD [ "sh", "/app/bin/start-prod.sh" ]
