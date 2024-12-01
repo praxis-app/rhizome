@@ -14,8 +14,6 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     restart: always
     env_file: .env
-    networks:
-      - webnet
     depends_on:
       database:
         condition: service_healthy
@@ -25,8 +23,6 @@ services:
   database:
     container_name: database
     image: postgres:17
-    networks:
-      - webnet
     environment:
       POSTGRES_DB: ${DB_SCHEMA}
       POSTGRES_USER: ${DB_USERNAME}
@@ -57,13 +53,8 @@ services:
     env_file: .env
     volumes:
       - cache:/data
-    networks:
-      - webnet
 
 volumes:
   pgdata:
   cache:
     driver: local
-
-networks:
-  webnet:
