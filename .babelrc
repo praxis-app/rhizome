@@ -9,5 +9,9 @@
     ],
     "@babel/typescript"
   ],
-  "plugins": ["add-import-extension"]
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-transform-class-properties",
+    "add-import-extension"
+  ]
 }

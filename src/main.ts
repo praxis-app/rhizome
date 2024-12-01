@@ -6,6 +6,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import appRouter from './app.routes';
 import cacheService from './cache/cache.service';
+import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
 import pubSubService from './pub-sub/pub-sub.service';
 
@@ -15,7 +16,9 @@ dotenv.config();
   const app = express();
   const server = createServer(app);
   const webSocketServer = new WebSocketServerWithIds({ path: '/ws', server });
+
   await cacheService.initializeCache();
+  await dataSource.initialize();
   app.use(cors());
 
   // Serve static files and API routes

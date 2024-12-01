@@ -12,13 +12,16 @@ By embracing both integration and the autonomy of a standalone platform, Rhizome
 - **REST and OpenAPI**: Simple REST API with OpenAPI so other systems can integrate with Praxis.
 - **Vite and Express**: Embraces flexible, modular, unopinionated architecture.
 
-## Installation
+## Installation and setup
 
-Ensure that you're using Node v22.11.0 before proceeding.
+Ensure that you have [Node.js](https://nodejs.org/en/download) v22.11.0 installed on your machine before proceeding.
 
 ```bash
 # Install project dependencies
 $ npm install
+
+# Copy environment variables
+$ cp .env.example .env
 ```
 
 ## Running the app
@@ -35,7 +38,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to view an
 
 ## Docker
 
-Ensure that you have [Docker](https://docs.docker.com/engine/install) installed to use the following commands.
+Install [Docker](https://docs.docker.com/engine/install) to use the following commands.
 
 ```bash
 # Start app in a container
@@ -44,3 +47,19 @@ $ docker compose up -d
 # Build and restart app after making changes
 $ docker compose up -d --build
 ```
+
+## Migrations
+
+TypeORM is used to handle database interactions and migrations. [PostgreSQL](https://www.postgresql.org/download) is the primary database and can be run via Docker or installed locally.
+
+If you're using a locally installed instance of PostgreSQL, ensure that connection details in your `.env` file are correct.
+
+```bash
+# Create a new migration
+$ npm run typeorm:gen ./src/database/migrations/<migration-name>
+
+# Run migrations
+$ npm run typeorm:run
+```
+
+To run migrations in production, set `DB_MIGRATIONS` to `true` in your `.env` file. This will run migrations on startup via `start-prod.sh`.

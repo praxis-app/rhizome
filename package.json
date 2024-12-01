@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "tsx watch src/main.ts",
+    "start": "tsx watch --tsconfig ./tsconfig.src.json src/main.ts",
     "start:client": "vite --host",
     "build": "tsc -b && eslint src --ext ts && tsc && babel -x .ts -d dist src",
     "build:client": "tsc -b && eslint view --ext ts,tsx && vite build --emptyOutDir true",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "typeorm": "tsx --tsconfig ./tsconfig.src.json ./node_modules/typeorm/cli.js",
+    "typeorm:gen": "npm run typeorm migration:generate -- -p -d ./src/database/data-source.ts",
+    "typeorm:run": "npm run typeorm migration:run -- -d ./src/database/data-source.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.13.5",
@@ -24,6 +26,7 @@
     "react-router-dom": "^7.0.1",
     "react-use-websocket": "^4.10.0",
     "redis": "^4.7.0",
+    "typeorm": "^0.3.14",
     "url": "^0.11.4",
     "uuid": "^10.0.0",
     "ws": "^8.18.0",
@@ -31,6 +34,8 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.25.7",
+    "@babel/plugin-proposal-decorators": "^7.25.9",
+    "@babel/plugin-transform-class-properties": "^7.25.9",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-typescript": "^7.25.7",
     "@types/cors": "^2.8.17",
@@ -49,12 +54,9 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "prettier": "^3.3.3",
-    "tsx": "^4.19.1",
-    "typescript": "^5.7.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.5.4",
     "vite": "^5.4.11",
     "vite-plugin-dynamic-import": "^1.5.0"
-  },
-  "engines": {
-    "node": ">=22.11.0"
   }
 }
