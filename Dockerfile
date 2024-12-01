@@ -29,6 +29,7 @@ RUN npm run build:client
 
 # Clean up for runtime image
 RUN rm package-lock.json vite.config.ts
+RUN rm tsconfig.json tsconfig.view.json
 RUN rm .eslintrc.cjs .babelrc
 RUN rm -rf view
 
