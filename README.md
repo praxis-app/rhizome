@@ -38,7 +38,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to view an
 
 ## Docker
 
-Ensure that you have [Docker](https://docs.docker.com/engine/install) installed to use the following commands.
+Install [Docker](https://docs.docker.com/engine/install) to use the following commands.
 
 ```bash
 # Start app in a container
@@ -60,4 +60,7 @@ $ npm run typeorm:gen ./src/database/migrations/<migration-name>
 $ npm run typeorm:run
 ```
 
-To run migrations in production, set `DB_MIGRATIONS` to `true` in your `.env` file.
+### Tips for running migrations
+
+- If you're running against a locally installed instance of PostgreSQL, ensure that connection details in your `.env` file are correct.
+- To run migrations in production, set `DB_MIGRATIONS` to `true` in your `.env` file.
