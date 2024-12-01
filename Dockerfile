@@ -26,19 +26,12 @@ ARG DB_MIGRATIONS
 # Build the app
 RUN npm run build
 RUN npm run build:client
-
-# Run migrations
-ENV DB_MIGRATIONS=${DB_MIGRATIONS}
-RUN npm run typeorm:run
-
-# Clean up for runtime image
-RUN rm -rf node_modules
-RUN npm ci --only=production
-RUN rm -rf src
 RUN rm -rf view
 
 FROM node:22.11.0-alpine AS runtime_stage
 
+ENV DB_MIGRATIONS=${DB_MIGRATIONS}
+
 COPY --from=build_stage /app /app
 
-CMD [ "node", "/app/dist/main.js" ]
+CMD [ "sh", "/app/scripts/start-prod.sh" ]
