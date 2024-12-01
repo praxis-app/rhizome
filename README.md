@@ -50,7 +50,7 @@ $ docker compose up -d --build
 
 ## Migrations
 
-TypeORM is used to handle database interactions and migrations. PostgreSQL is the primary database and can be run via Docker or installed locally.
+TypeORM is used to handle database interactions and migrations. [PostgreSQL](https://www.postgresql.org/download) is the primary database and can be run via Docker or installed locally.
 
 ```bash
 # Create a new migration
