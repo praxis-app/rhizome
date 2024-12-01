@@ -44,3 +44,17 @@ $ docker compose up -d
 # Build and restart app after making changes
 $ docker compose up -d --build
 ```
+
+## Migrations
+
+TypeORM is used to handle database interactions and migrations. PostgreSQL is the primary database and can be run via Docker or installed locally.
+
+```bash
+# Create a new migration
+$ npm run typeorm:gen ./src/database/migrations/<migration-name>
+
+# Run migrations
+$ npm run typeorm:run
+```
+
+To run migrations in production, set `DB_MIGRATIONS` to `true` in your `.env` file.
