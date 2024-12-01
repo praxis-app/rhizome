@@ -9,6 +9,7 @@ services:
       args:
         - NODE_ENV=${NODE_ENV}
         - SERVER_PORT=${SERVER_PORT}
+        - DB_MIGRATIONS=${DB_MIGRATIONS}
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     restart: always
@@ -16,12 +17,12 @@ services:
     networks:
       - webnet
     depends_on:
-      postgres:
+      database:
         condition: service_healthy
       cache:
         condition: service_healthy
 
-  postgres:
+  database:
     container_name: postgres
     image: postgres:17
     networks:

@@ -2,8 +2,8 @@
 
 set -e
 
-if [ "$RUN_MIGRATIONS" = "true" ]; then
+if [ "$DB_MIGRATIONS" = "true" ]; then
     npm run typeorm migration:run -- -d ./src/database/data-source.ts
 else
-    echo "RUN_MIGRATIONS is not set. Skipping migrations."
+    echo "DB_MIGRATIONS is not set. Skipping migrations."
 fi

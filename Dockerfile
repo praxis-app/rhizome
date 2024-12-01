@@ -21,14 +21,14 @@ RUN npm ci
 # Build args
 ARG NODE_ENV
 ARG SERVER_PORT
-ARG RUN_MIGRATIONS
+ARG DB_MIGRATIONS
 
 # Build the app
 RUN npm run build
 RUN npm run build:client
 
 # Run migrations
-ENV RUN_MIGRATIONS=${RUN_MIGRATIONS}
+ENV DB_MIGRATIONS=${DB_MIGRATIONS}
 RUN npm run typeorm:run
 
 # Clean up for runtime image
