@@ -2,11 +2,11 @@ import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import useAppStore from '../../store/app.store';
-import theme from '../../styles/theme';
-import Layout from './layout';
+import { useAppStore } from '../../store/app.store';
+import { theme } from '../../styles/theme';
+import { Layout } from './layout';
 
-const App = () => {
+export const App = () => {
   const { setIsAppLoading, setToken, token } = useAppStore((state) => state);
 
   useEffect(() => {
@@ -40,5 +40,3 @@ const App = () => {
     </ThemeProvider>
   );
 };
-
-export default App;
