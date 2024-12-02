@@ -1,9 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
+import jwt from 'jsonwebtoken';
+import { Repository } from 'typeorm';
+import { User } from '../users/user.entity';
+import { dataSource } from '../database/data-source';
 
 class AuthService {
-  generateToken() {
-    return uuidv4();
+  private userRepository: Repository<User>;
+
+  constructor() {
+    this.userRepository = dataSource.getRepository(User);
+  }
+
+  async register() {
+    const user = await this.userRepository.save({});
+    const payload = { userId: user.id };
+
+    return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
+      expiresIn: '30d',
+    });
   }
 
   // TODO: Implement addTokenToLocals once more routes are added
