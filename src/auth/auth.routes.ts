@@ -3,7 +3,10 @@ import { authService } from './auth.service';
 
 export const authRouter = express.Router();
 
+authRouter.use(authService.authenticateUser);
+
 authRouter.post('/', async (_, res) => {
-  const token = await authService.register();
+  console.log('POST /auth');
+  const token = await authService.register(res);
   res.json({ token });
 });

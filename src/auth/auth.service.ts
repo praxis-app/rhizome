@@ -1,17 +1,21 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
-import { User } from '../users/user.entity';
 import { dataSource } from '../database/data-source';
+import { User } from '../users/user.entity';
 
 class AuthService {
   private userRepository: Repository<User>;
 
   constructor() {
     this.userRepository = dataSource.getRepository(User);
+    this.authenticateUser = this.authenticateUser.bind(this);
   }
 
-  async register() {
+  async register(res: Response) {
+    if (res.locals.user) {
+      return res.sendStatus(409);
+    }
     const user = await this.userRepository.save({});
     const payload = { userId: user.id };
 
@@ -20,16 +24,28 @@ class AuthService {
     });
   }
 
-  // TODO: Implement addTokenToLocals once more routes are added
-  async addTokenToLocals(req: Request, res: Response, next: NextFunction) {
+  authenticateUser(req: Request, res: Response, next: NextFunction) {
     const { authorization } = req.headers;
     const [type, token] = authorization?.split(' ') ?? [];
-
-    if (type !== 'Bearer') {
-      throw new Error('Invalid token type');
+    if (type !== 'Bearer' || !token) {
+      return next();
     }
 
-    res.locals.token = token;
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET as string,
+      async (err, payload) => {
+        if (err) {
+          return;
+        }
+
+        const { userId } = payload as { userId: number };
+        const user = await this.userRepository.findOne({
+          where: { id: userId },
+        });
+        res.locals.user = user;
+      },
+    );
     next();
   }
 }
