@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import express from 'express';
@@ -19,6 +20,8 @@ dotenv.config();
 
   await cacheService.initializeCache();
   await dataSource.initialize();
+
+  app.use(bodyParser.json({ limit: '10mb' }));
   app.use(cors());
 
   // Serve static files and API routes
