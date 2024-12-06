@@ -4,7 +4,7 @@
   "scripts": {
     "start": "ts-node --project ./tsconfig.src.json src/main.ts",
     "start:client": "vite --host",
-    "build": "tsc -b && eslint src --ext ts && tsc && babel -x .ts -d dist src",
+    "build": "tsc -b && eslint src --ext ts && tsc --project ./tsconfig.src.json",
     "build:client": "tsc -b && eslint view --ext ts,tsx && vite build --emptyOutDir true",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "typeorm": "ts-node --project ./tsconfig.src.json ./node_modules/typeorm/cli.js",
