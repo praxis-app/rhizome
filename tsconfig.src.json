@@ -10,11 +10,11 @@
     "strictPropertyInitialization": false,
 
     /* Modules */
-    "module": "ESNext",
+    "module": "CommonJS",
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
 
     /* Type Checking */
     "strict": true,

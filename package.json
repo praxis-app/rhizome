@@ -1,9 +1,8 @@
 {
   "name": "rhizome",
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "start": "tsx watch --tsconfig ./tsconfig.src.json src/main.ts",
+    "start": "ts-node --project ./tsconfig.src.json src/main.ts",
     "start:client": "vite --host",
     "build": "tsc -b && eslint src --ext ts && tsc && babel -x .ts -d dist src",
     "build:client": "tsc -b && eslint view --ext ts,tsx && vite build --emptyOutDir true",
