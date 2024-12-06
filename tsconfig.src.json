@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     /* Language and Environment */
-    "target": "ESNext",
-    "lib": ["ESNext"],
+    "target": "es5",
+    "lib": ["es5", "es6"],
     "resolveJsonModule": true,
     "allowJs": false,
     "emitDecoratorMetadata": true,
