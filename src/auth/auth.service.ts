@@ -11,14 +11,10 @@ class AuthService {
   constructor() {
     this.userRepository = dataSource.getRepository(User);
     this.authenticateUser = this.authenticateUser.bind(this);
-    this.validateUserRegistration = this.validateUserRegistration.bind(this);
+    this.validateRegister = this.validateRegister.bind(this);
   }
 
-  async register(req: Request, res: Response) {
-    if (res.locals.user) {
-      return res.sendStatus(409);
-    }
-    const { clientId } = req.body;
+  async register(clientId: string) {
     const user = await this.userRepository.save({ clientId });
     const payload = { userId: user.id };
 
@@ -52,18 +48,14 @@ class AuthService {
     next();
   }
 
-  async validateUserRegistration(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
+  async validateRegister(req: Request, res: Response, next: NextFunction) {
     const { clientId } = req.body;
     if (!clientId || !uuidValidate(clientId)) {
       res.status(400).send('Invalid client ID');
       return;
     }
     const userExists = await this.userRepository.exist({ where: { clientId } });
-    if (userExists) {
+    if (userExists || res.locals.user) {
       res.status(409).send('User already exists');
       return;
     }
