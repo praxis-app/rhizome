@@ -30,6 +30,7 @@
     "react-router-dom": "^7.0.1",
     "react-use-websocket": "^4.10.0",
     "redis": "^4.7.0",
+    "routing-controllers": "^0.10.4",
     "typeorm": "^0.3.14",
     "uuid": "^10.0.0",
     "ws": "^8.18.0",

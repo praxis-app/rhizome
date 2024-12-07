@@ -1,10 +1,12 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { Express } from 'express';
 import { createServer } from 'http';
 import { join } from 'path';
+import { createExpressServer } from 'routing-controllers';
 import { appRouter } from './app.routes';
+import { AuthController } from './auth/auth.controller';
 import { cacheService } from './cache/cache.service';
 import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
@@ -13,7 +15,10 @@ import { pubSubService } from './pub-sub/pub-sub.service';
 dotenv.config();
 
 (async () => {
-  const app = express();
+  const app: Express = createExpressServer({
+    controllers: [AuthController],
+    routePrefix: '/api',
+  });
   const server = createServer(app);
   const webSocketServer = new WebSocketServerWithIds({ path: '/ws', server });
 

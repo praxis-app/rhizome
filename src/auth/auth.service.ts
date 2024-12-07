@@ -14,11 +14,7 @@ class AuthService {
     this.validateUserRegistration = this.validateUserRegistration.bind(this);
   }
 
-  async register(req: Request, res: Response) {
-    if (res.locals.user) {
-      return res.sendStatus(409);
-    }
-    const { clientId } = req.body;
+  async register(clientId: string) {
     const user = await this.userRepository.save({ clientId });
     const payload = { userId: user.id };
 
@@ -57,6 +53,10 @@ class AuthService {
     res: Response,
     next: NextFunction,
   ) {
+    if (res.locals.user) {
+      res.status(409).send('Already authenticated');
+      return;
+    }
     const { clientId } = req.body;
     if (!clientId || !uuidValidate(clientId)) {
       res.status(400).send('Invalid client ID');
