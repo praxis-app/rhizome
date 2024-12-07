@@ -10,20 +10,18 @@ class AuthService {
 
   constructor() {
     this.userRepository = dataSource.getRepository(User);
-    this.authenticateUser = this.authenticateUser.bind(this);
-    this.validateRegister = this.validateRegister.bind(this);
   }
 
-  async register(clientId: string) {
+  register = async (clientId: string) => {
     const user = await this.userRepository.save({ clientId });
     const payload = { userId: user.id };
 
     return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
       expiresIn: '30d',
     });
-  }
+  };
 
-  authenticateUser(req: Request, res: Response, next: NextFunction) {
+  authenticateUser = (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
     const [type, token] = authorization?.split(' ') ?? [];
     if (type !== 'Bearer' || !token) {
@@ -46,9 +44,13 @@ class AuthService {
       },
     );
     next();
-  }
+  };
 
-  async validateRegister(req: Request, res: Response, next: NextFunction) {
+  validateRegister = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     const { clientId } = req.body;
     if (!clientId || !uuidValidate(clientId)) {
       res.status(400).send('Invalid client ID');
@@ -60,7 +62,7 @@ class AuthService {
       return;
     }
     next();
-  }
+  };
 }
 
 export const authService = new AuthService();
