@@ -18,7 +18,7 @@
     {
       "name": "Debug Server",
       "request": "launch",
-      "runtimeArgs": ["run-script", "start"],
+      "runtimeArgs": ["run-script", "start:dev"],
       "outputCapture": "std",
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],

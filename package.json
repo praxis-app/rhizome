@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "start": "ts-node --project ./tsconfig.src.json src/main.ts",
+    "start:dev": "nodemon --config ./nodemon.json",
     "start:client": "vite --host",
     "build": "tsc -b && eslint src --ext ts && tsc --project ./tsconfig.src.json",
     "build:client": "tsc -b && eslint view --ext ts,tsx && vite build --emptyOutDir true",
@@ -50,6 +51,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
