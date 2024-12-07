@@ -11,12 +11,21 @@ interface Props {
 export const AuthWrapper = ({ children }: Props) => {
   const { token, setToken, setIsAppLoading } = useAppStore((state) => state);
 
+  const getClientId = () => {
+    const clientId = localStorage.getItem('clientId');
+    if (!clientId) {
+      const newClientId = uuidv4();
+      localStorage.setItem('clientId', newClientId);
+      return newClientId;
+    }
+    return clientId;
+  };
+
   const { mutate: register } = useMutation(async () => {
-    const body = { clientId: uuidv4() };
+    const body = { clientId: getClientId() };
     const { data } = await axios.post<{ token: string }>('/api/auth', body, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    localStorage.setItem('clientId', body.clientId);
     localStorage.setItem('token', data.token);
     setIsAppLoading(false);
     setToken(data.token);

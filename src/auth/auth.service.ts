@@ -1,3 +1,4 @@
+import { validate as uuidValidate } from 'uuid';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
@@ -10,6 +11,7 @@ class AuthService {
   constructor() {
     this.userRepository = dataSource.getRepository(User);
     this.authenticateUser = this.authenticateUser.bind(this);
+    this.validateUserRegistration = this.validateUserRegistration.bind(this);
   }
 
   async register(req: Request, res: Response) {
@@ -47,6 +49,24 @@ class AuthService {
         res.locals.user = user;
       },
     );
+    next();
+  }
+
+  async validateUserRegistration(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    const { clientId } = req.body;
+    if (!clientId || !uuidValidate(clientId)) {
+      res.status(400).send('Invalid client ID');
+      return;
+    }
+    const userExists = await this.userRepository.exist({ where: { clientId } });
+    if (userExists) {
+      res.status(409).send('User already exists');
+      return;
+    }
     next();
   }
 }
