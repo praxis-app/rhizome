@@ -13,7 +13,6 @@ COPY tsconfig.view.json /app
 COPY vite.config.ts /app
 COPY .eslintrc.cjs /app
 COPY start-prod.sh /app
-COPY .babelrc /app
 
 WORKDIR /app
 RUN npm ci
@@ -28,9 +27,8 @@ RUN npm run build
 RUN npm run build:client
 
 # Clean up for runtime image
-RUN rm package-lock.json vite.config.ts
+RUN rm package-lock.json vite.config.ts .eslintrc.cjs
 RUN rm tsconfig.json tsconfig.view.json
-RUN rm .eslintrc.cjs .babelrc
 RUN rm -rf view
 
 FROM node:22.11.0-alpine AS runtime_stage
