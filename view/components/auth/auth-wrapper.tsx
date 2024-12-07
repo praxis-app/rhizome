@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { ReactNode, useEffect } from 'react';
 import { useMutation } from 'react-query';
-import { useAppStore } from '../../store/app.store';
 import { v4 as uuidv4 } from 'uuid';
+import { useAppStore } from '../../store/app.store';
 
 interface Props {
   children: ReactNode;
@@ -11,7 +11,7 @@ interface Props {
 export const AuthWrapper = ({ children }: Props) => {
   const { token, setToken, setIsAppLoading } = useAppStore((state) => state);
 
-  const { mutate: register, isLoading } = useMutation(async () => {
+  const { mutate: register } = useMutation(async () => {
     const body = { clientId: uuidv4() };
     const { data } = await axios.post<{ token: string }>('/api/auth', body, {
       headers: { Authorization: `Bearer ${token}` },
@@ -23,7 +23,7 @@ export const AuthWrapper = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (token || isLoading) {
+    if (token) {
       return;
     }
     const tokenFromStorage = localStorage.getItem('token');
@@ -33,7 +33,7 @@ export const AuthWrapper = ({ children }: Props) => {
       return;
     }
     register();
-  }, [token, register, setToken, setIsAppLoading, isLoading]);
+  }, [token, register, setToken, setIsAppLoading]);
 
   return <>{children}</>;
 };

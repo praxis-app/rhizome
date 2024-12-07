@@ -7,11 +7,15 @@ export const authRouter = express.Router();
 authRouter.use(authService.authenticateUser);
 
 authRouter.post('/', async (req, res) => {
-  const { clientId } = req.body;
-  if (!clientId || !uuidValidate(clientId)) {
-    res.status(400).send('Invalid client ID');
-    return;
+  try {
+    const { clientId } = req.body;
+    if (!clientId || !uuidValidate(clientId)) {
+      res.status(400).send('Invalid client ID');
+      return;
+    }
+    const token = await authService.register(res);
+    res.json({ token });
+  } catch (e: any) {
+    res.status(500).send(e.message);
   }
-  const token = await authService.register(res);
-  res.json({ token });
 });
