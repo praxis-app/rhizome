@@ -13,7 +13,7 @@ authRouter.post('/', async (req, res) => {
       res.status(400).send('Invalid client ID');
       return;
     }
-    const token = await authService.register(res);
+    const token = await authService.register(req, res);
     res.json({ token });
   } catch (e: any) {
     res.status(500).send(e.message);

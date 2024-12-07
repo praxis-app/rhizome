@@ -12,11 +12,12 @@ class AuthService {
     this.authenticateUser = this.authenticateUser.bind(this);
   }
 
-  async register(res: Response) {
+  async register(req: Request, res: Response) {
     if (res.locals.user) {
       return res.sendStatus(409);
     }
-    const user = await this.userRepository.save({});
+    const { clientId } = req.body;
+    const user = await this.userRepository.save({ clientId });
     const payload = { userId: user.id };
 
     return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
