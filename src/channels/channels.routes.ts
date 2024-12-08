@@ -4,3 +4,4 @@ import { channelsController } from './channels.controller';
 export const channelsRouter = express.Router();
 
 channelsRouter.get('/', channelsController.getChannels);
+channelsRouter.get('/:channelId', channelsController.getChannel);
