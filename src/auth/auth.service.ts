@@ -21,6 +21,24 @@ class AuthService {
     });
   };
 
+  validateRegister = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const { clientId } = req.body;
+    if (!clientId || !uuidValidate(clientId)) {
+      res.status(400).send('Invalid client ID');
+      return;
+    }
+    const userExists = await this.userRepository.exist({ where: { clientId } });
+    if (userExists || res.locals.user) {
+      res.status(409).send('User already exists');
+      return;
+    }
+    next();
+  };
+
   authenticateUser = (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
     const [type, token] = authorization?.split(' ') ?? [];
@@ -43,24 +61,6 @@ class AuthService {
         res.locals.user = user;
       },
     );
-    next();
-  };
-
-  validateRegister = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
-    const { clientId } = req.body;
-    if (!clientId || !uuidValidate(clientId)) {
-      res.status(400).send('Invalid client ID');
-      return;
-    }
-    const userExists = await this.userRepository.exist({ where: { clientId } });
-    if (userExists || res.locals.user) {
-      res.status(409).send('User already exists');
-      return;
-    }
     next();
   };
 }
