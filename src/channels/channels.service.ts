@@ -18,13 +18,23 @@ export class ChannelsService {
     });
   }
 
-  getChannels() {
+  async getChannels() {
+    const channelCount = await this.channelRepository.count();
+    if (channelCount === 0) {
+      await this.initializeGeneralChannel();
+    }
     return this.channelRepository.find();
   }
 
   getChannelMembers(channelId: number) {
     return this.channelMemberRepository.find({
       where: { channelId },
+    });
+  }
+
+  initializeGeneralChannel() {
+    return this.channelRepository.insert({
+      name: 'general',
     });
   }
 }
