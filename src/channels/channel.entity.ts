@@ -9,16 +9,14 @@ import {
 import { Message } from '../messages/message.entity';
 
 @Entity()
-export class User {
+export class Channel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  clientId: string;
+  @Column()
+  name: string;
 
-  @OneToMany(() => Message, (message) => message.user, {
-    cascade: true,
-  })
+  @OneToMany(() => Message, (message) => message.channel)
   messages: Message[];
 
   @CreateDateColumn()

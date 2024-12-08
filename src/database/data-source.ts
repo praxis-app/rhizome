@@ -1,5 +1,7 @@
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
+import { Channel } from '../channels/channel.entity';
+import { Message } from '../messages/message.entity';
 import { User } from '../users/user.entity';
 import { AddUserTable1733010289874 } from './migrations/1733010289874-AddUserTable';
 
@@ -13,6 +15,6 @@ export const dataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT as string),
   synchronize: process.env.NODE_ENV === 'development',
-  entities: [User],
+  entities: [User, Message, Channel],
   migrations: [AddUserTable1733010289874],
 });
