@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { dataSource } from '../database/data-source';
-import { Channel } from './channel.entity';
+import { Channel } from './models/channel.entity';
 
 export class ChannelsService {
   private channelRepository: Repository<Channel>;

@@ -6,7 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Message } from '../messages/message.entity';
+import { Message } from '../../messages/message.entity';
+import { ChannelMember } from './channel-member.entity';
 
 @Entity()
 export class Channel {
@@ -18,6 +19,11 @@ export class Channel {
 
   @OneToMany(() => Message, (message) => message.channel)
   messages: Message[];
+
+  @OneToMany(() => ChannelMember, (member) => member.channel, {
+    cascade: true,
+  })
+  members: ChannelMember[];
 
   @CreateDateColumn()
   createdAt: Date;

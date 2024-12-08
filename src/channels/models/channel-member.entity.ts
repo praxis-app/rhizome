@@ -6,18 +6,18 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Channel } from '../channels/models/channel.entity';
-import { User } from '../users/user.entity';
+import { Channel } from './channel.entity';
+import { User } from '../../users/user.entity';
 
 @Entity()
-export class Message {
+export class ChannelMember {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true, type: 'varchar' })
-  body: string | null;
+  @Column({ nullable: true, type: 'int' })
+  lastMessageReadId: number | null;
 
-  @ManyToOne(() => User, (user) => user.messages, {
+  @ManyToOne(() => User, (user) => user.channelMembers, {
     onDelete: 'CASCADE',
   })
   user: User;
@@ -25,7 +25,7 @@ export class Message {
   @Column()
   userId: number;
 
-  @ManyToOne(() => Channel, (channel) => channel.messages, {
+  @ManyToOne(() => Channel, (channel) => channel.members, {
     onDelete: 'CASCADE',
   })
   channel: Channel;
