@@ -1,42 +1,22 @@
 import { ThemeProvider } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
-import { useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Outlet } from 'react-router-dom';
-import { useAppStore } from '../../store/app.store';
 import { theme } from '../../styles/theme';
+import { AuthWrapper } from '../auth/auth-wrapper';
 import { Layout } from './layout';
 
-export const App = () => {
-  const { setIsAppLoading, setToken, token } = useAppStore((state) => state);
+const queryClient = new QueryClient();
 
-  useEffect(() => {
-    if (token) {
-      return;
-    }
-
-    const tokenFromStorage = localStorage.getItem('token');
-    if (tokenFromStorage) {
-      setToken(tokenFromStorage);
-      setIsAppLoading(false);
-      return;
-    }
-
-    const init = async () => {
-      const result = await fetch('/api/auth', { method: 'POST' });
-      const data: { token: string } = await result.json();
-      localStorage.setItem('token', data.token);
-      setIsAppLoading(false);
-      setToken(data.token);
-    };
-    init();
-  }, [token, setToken, setIsAppLoading]);
-
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Layout>
-        <Outlet />
-      </Layout>
-    </ThemeProvider>
-  );
-};
+export const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthWrapper>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Layout>
+          <Outlet />
+        </Layout>
+      </ThemeProvider>
+    </AuthWrapper>
+  </QueryClientProvider>
+);
