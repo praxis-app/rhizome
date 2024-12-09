@@ -32,7 +32,7 @@ class AuthService {
       return;
     }
     const userExists = await this.userRepository.exist({ where: { clientId } });
-    if (userExists || res.locals.user) {
+    if (userExists) {
       res.status(409).send('User already exists');
       return;
     }
@@ -43,7 +43,8 @@ class AuthService {
     const { authorization } = req.headers;
     const [type, token] = authorization?.split(' ') ?? [];
     if (type !== 'Bearer' || !token) {
-      return next();
+      res.status(401).send('Unauthorized');
+      return;
     }
 
     jwt.verify(
@@ -51,6 +52,7 @@ class AuthService {
       process.env.TOKEN_SECRET as string,
       async (err, payload) => {
         if (err) {
+          res.status(401).send('Unauthorized');
           return;
         }
 
