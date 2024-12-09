@@ -1,11 +1,20 @@
 import { Send } from '@mui/icons-material';
 import { Box, FormGroup, IconButton, Input, SxProps } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { t } from 'i18next';
+import { useForm } from 'react-hook-form';
+import { KeyCodes } from '../../constants/shared.constants';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
-import { grey } from '@mui/material/colors';
+
+interface FormValues {
+  body: string;
+}
 
 const MessageForm = () => {
+  const { handleSubmit, getValues, register, setValue } = useForm<FormValues>();
+  const { ref: bodyRef, onChange, ...registerBodyProps } = register('body');
+
   const formStyles: SxProps = {
     position: 'fixed',
     bottom: '0px',
@@ -26,6 +35,24 @@ const MessageForm = () => {
     transform: 'translateY(5px)',
   };
 
+  // TODO: Replace with actual send message logic
+  const handleSendMessage = () => {
+    const { body } = getValues();
+    console.log(body);
+    setValue('body', '');
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent) => {
+    if (e.code !== KeyCodes.Enter) {
+      return;
+    }
+    if (e.shiftKey) {
+      return;
+    }
+    e.preventDefault();
+    handleSubmit(handleSendMessage)();
+  };
+
   return (
     <Box sx={formStyles}>
       <FormGroup row>
@@ -37,10 +64,15 @@ const MessageForm = () => {
           flex={1}
         >
           <Input
+            {...registerBodyProps}
             autoComplete="off"
             placeholder={t('chat.prompts.sendAMessage')}
+            onKeyDown={handleInputKeyDown}
             sx={inputStyles}
-            value={''}
+            onChange={onChange}
+            ref={(e) => {
+              bodyRef(e);
+            }}
             disableUnderline
             multiline
           />
@@ -51,7 +83,12 @@ const MessageForm = () => {
               multiple
             />
 
-            <IconButton sx={sendButtonStyles} edge="end" disableRipple>
+            <IconButton
+              sx={sendButtonStyles}
+              edge="end"
+              onClick={handleSendMessage}
+              disableRipple
+            >
               <Send sx={{ fontSize: 20, color: 'text.secondary' }} />
             </IconButton>
           </Box>
