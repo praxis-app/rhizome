@@ -1,7 +1,7 @@
-import axios from 'axios';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
+import { apiClient } from '../../client/api-client';
 import { useAppStore } from '../../store/app.store';
 
 interface Props {
@@ -23,13 +23,11 @@ export const AuthWrapper = ({ children }: Props) => {
   };
 
   const { mutate: register } = useMutation(async () => {
-    const body = { clientId: getClientId() };
-    const { data } = await axios.post<{ token: string }>('/api/auth', body, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    localStorage.setItem('token', data.token);
+    const clientId = getClientId();
+    const { token } = await apiClient.register(clientId);
+    localStorage.setItem('token', token);
     setIsAppLoading(false);
-    setToken(data.token);
+    setToken(token);
   });
 
   useEffect(() => {

@@ -1,19 +1,12 @@
 import { Typography } from '@mui/material';
-import axios from 'axios';
 import { useQuery } from 'react-query';
+import { apiClient } from '../client/api-client';
 import ProgressBar from '../components/shared/progress-bar';
-import { useAppStore } from '../store/app.store';
 
 export const HealthPage = () => {
-  const token = useAppStore((state) => state.token);
-
   const { data, isLoading } = useQuery({
     queryKey: 'health',
-    queryFn: async () => {
-      const result = await axios.get<{ timestamp: string }>('/api/health');
-      return result.data;
-    },
-    enabled: !!token,
+    queryFn: apiClient.getHealth,
   });
 
   if (isLoading) {
