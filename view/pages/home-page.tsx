@@ -7,9 +7,11 @@ export const HomePage = () => {
   const token = useAppStore((state) => state.token);
 
   const { data, isLoading } = useQuery({
-    queryKey: 'health',
+    queryKey: 'channels',
     queryFn: async () => {
-      const result = await axios.get('/api/channels');
+      const result = await axios.get('/api/channels', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       return result.data;
     },
     enabled: !!token,
