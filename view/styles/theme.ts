@@ -1,4 +1,3 @@
-import { linearProgressClasses } from '@mui/material';
 import { createTheme, Theme } from '@mui/material/styles';
 
 interface Props<OwnerState = unknown> {
@@ -37,18 +36,6 @@ export const theme = createTheme({
             0 2px 4px -2px rgba(0,0,0,.1)
           `,
         },
-      },
-    },
-
-    MuiContainer: {
-      styleOverrides: {
-        root: ({ theme }: Props) => ({
-          paddingTop: '70px',
-
-          [theme.breakpoints.up('md')]: {
-            paddingTop: '100px',
-          },
-        }),
       },
     },
 
@@ -119,25 +106,6 @@ export const theme = createTheme({
             backgroundColor: 'rgb(0, 0, 50, 0.04)',
             ...theme.applyStyles('dark', {
               backgroundColor: 'rgb(205, 205, 255, 0.1)',
-            }),
-          },
-        }),
-      },
-    },
-
-    MuiLinearProgress: {
-      styleOverrides: {
-        root: ({ theme }: Props) => ({
-          [`&.${linearProgressClasses.colorPrimary}`]: {
-            backgroundColor: '#fafafa',
-            ...theme.applyStyles('dark', {
-              backgroundColor: '#09090b',
-            }),
-          },
-          [`& .${linearProgressClasses.bar}`]: {
-            backgroundColor: '#e4e4e7',
-            ...theme.applyStyles('dark', {
-              backgroundColor: '#18181b',
             }),
           },
         }),
