@@ -1,12 +1,12 @@
 import { Typography } from '@mui/material';
 import { useQuery } from 'react-query';
-import { apiClient } from '../client/api-client';
+import { api } from '../client/client.service';
 import ProgressBar from '../components/shared/progress-bar';
 
 export const HealthPage = () => {
   const { data, isLoading } = useQuery({
     queryKey: 'health',
-    queryFn: apiClient.getHealth,
+    queryFn: api.getHealth,
   });
 
   if (isLoading) {

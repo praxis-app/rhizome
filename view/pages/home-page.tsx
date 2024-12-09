@@ -1,11 +1,12 @@
 import { useQuery } from 'react-query';
-import { apiClient } from '../client/api-client';
+import { api } from '../client/client.service';
+import ChatPanel from '../components/chat/chat-panel';
 import ProgressBar from '../components/shared/progress-bar';
 
 export const HomePage = () => {
   const { data, isLoading } = useQuery({
     queryKey: 'channels',
-    queryFn: apiClient.getChannels,
+    queryFn: api.getChannels,
   });
 
   if (isLoading) {
@@ -16,5 +17,5 @@ export const HomePage = () => {
     return null;
   }
 
-  return <>{JSON.stringify(data)}</>;
+  return <ChatPanel />;
 };

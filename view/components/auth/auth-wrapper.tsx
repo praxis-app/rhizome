@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
-import { apiClient } from '../../client/api-client';
+import { api } from '../../client/client.service';
 import { useAppStore } from '../../store/app.store';
 
 interface Props {
@@ -24,7 +24,7 @@ export const AuthWrapper = ({ children }: Props) => {
 
   const { mutate: register } = useMutation(async () => {
     const clientId = getClientId();
-    const { token } = await apiClient.register(clientId);
+    const { token } = await api.register(clientId);
     localStorage.setItem('token', token);
     setIsAppLoading(false);
     setToken(token);

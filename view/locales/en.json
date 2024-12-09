@@ -76,5 +76,31 @@
     "weeks_other": "{{count}} weeks",
     "hoursFull_one": "{{count}} hour",
     "hoursFull_other": "{{count}} hours"
+  },
+
+  "images": {
+    "labels": {
+      "attachedImage": "Attached image",
+      "attachedImagePreview": "Attached image preview",
+      "attachedImages": "Attached images",
+      "attachImages": "Attach images",
+      "coverPhoto": "Cover photo",
+      "profilePicture": "Profile picture",
+      "removeImage": "Remove image"
+    },
+    "errors": {
+      "unsupportedFormat": "Unsupported image format"
+    }
+  },
+
+  "chat": {
+    "prompts": {
+      "sendAMessage": "Send a message...",
+      "noMessagesYet": "No messages yet"
+    },
+    "errors": {
+      "longBody": "Message body cannot exceed 6000 characters",
+      "couldNotSend": "Message could not be sent"
+    }
   }
 }

@@ -4,7 +4,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import useWebSocket, { Options } from 'react-use-websocket';
 import { useAppStore } from '../store/app.store';
 import { getWebSocketURL } from '../utils/shared.utils';
@@ -100,4 +100,38 @@ export const useScreenSize = () => {
   }, []);
 
   return [screenSize.width, screenSize.height];
+};
+
+export const useInView = (ref: RefObject<HTMLElement>, rootMargin = '0px') => {
+  const [inView, setInView] = useState(false);
+  const [viewed, setViewed] = useState(false);
+
+  useEffect(() => {
+    const isBrowserCompatible = 'IntersectionObserver' in window;
+    if (!isBrowserCompatible) {
+      setInView(true);
+      setViewed(true);
+      return;
+    }
+    if (!ref.current) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setViewed(true);
+        }
+        setInView(entry.isIntersecting);
+      },
+      { rootMargin },
+    );
+    observer.observe(ref.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [ref, rootMargin]);
+
+  return { inView, setInView, viewed, setViewed };
 };

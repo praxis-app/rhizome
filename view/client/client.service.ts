@@ -1,10 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { API_ROOT } from './client.constants';
 
-class ApiClient {
+class ClientService {
   private axiosInstance: AxiosInstance;
 
   constructor() {
-    this.axiosInstance = axios.create({ baseURL: '/api' });
+    this.axiosInstance = axios.create({ baseURL: API_ROOT });
   }
 
   register = async (clientId: string) => {
@@ -46,4 +47,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient();
+export const api = new ClientService();
