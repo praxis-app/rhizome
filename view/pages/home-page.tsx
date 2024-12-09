@@ -1,20 +1,11 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
+import { apiClient } from '../client/api-client';
 import ProgressBar from '../components/shared/progress-bar';
-import { useAppStore } from '../store/app.store';
 
 export const HomePage = () => {
-  const token = useAppStore((state) => state.token);
-
   const { data, isLoading } = useQuery({
     queryKey: 'channels',
-    queryFn: async () => {
-      const result = await axios.get('/api/channels', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return result.data;
-    },
-    enabled: !!token,
+    queryFn: apiClient.getChannels,
   });
 
   if (isLoading) {
