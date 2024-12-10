@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useQuery } from 'react-query';
-import { api } from '../client/client.service';
+import { api } from '../client/api-client';
 import ProgressBar from '../components/shared/progress-bar';
 
 export const HealthPage = () => {

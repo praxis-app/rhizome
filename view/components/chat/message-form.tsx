@@ -3,6 +3,8 @@ import { Box, FormGroup, IconButton, Input, SxProps } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { t } from 'i18next';
 import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
+import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
@@ -11,15 +13,25 @@ interface FormValues {
   body: string;
 }
 
-const MessageForm = () => {
-  const { handleSubmit, getValues, register, setValue } = useForm<FormValues>();
+interface Props {
+  channelId: number;
+}
+
+const MessageForm = ({ channelId }: Props) => {
+  const { handleSubmit, register, setValue } = useForm<FormValues>();
   const { ref: bodyRef, onChange, ...registerBodyProps } = register('body');
 
+  const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
+    const result = await api.sendMessage(channelId, body);
+    console.log(result);
+    setValue('body', '');
+  });
+
   const formStyles: SxProps = {
+    bgcolor: 'background.paper',
     position: 'fixed',
     bottom: '0px',
     left: 0,
-    bgcolor: 'background.paper',
     paddingY: 1,
     paddingX: 0.9,
     width: '100%',
@@ -35,13 +47,6 @@ const MessageForm = () => {
     transform: 'translateY(5px)',
   };
 
-  // TODO: Replace with actual send message logic
-  const handleSendMessage = () => {
-    const { body } = getValues();
-    console.log(body);
-    setValue('body', '');
-  };
-
   const handleInputKeyDown = (e: React.KeyboardEvent) => {
     if (e.code !== KeyCodes.Enter) {
       return;
@@ -50,7 +55,7 @@ const MessageForm = () => {
       return;
     }
     e.preventDefault();
-    handleSubmit(handleSendMessage)();
+    handleSubmit((values) => sendMessage(values))();
   };
 
   return (
@@ -86,7 +91,7 @@ const MessageForm = () => {
             <IconButton
               sx={sendButtonStyles}
               edge="end"
-              onClick={handleSendMessage}
+              onClick={handleSubmit((values) => sendMessage(values))}
               disableRipple
             >
               <Send sx={{ fontSize: 20, color: 'text.secondary' }} />

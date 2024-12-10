@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ChannelMember } from '../channels/models/channel-member.entity';
-import { Message } from '../messages/message.entity';
+import { Message } from '../messages/models/message.entity';
 
 @Entity()
 export class User {

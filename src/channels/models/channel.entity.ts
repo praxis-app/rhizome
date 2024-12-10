@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Message } from '../../messages/message.entity';
+import { Message } from '../../messages/models/message.entity';
 import { ChannelMember } from './channel-member.entity';
 
 @Entity()

@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { api } from '../client/client.service';
+import { api } from '../client/api-client';
 import ChatPanel from '../components/chat/chat-panel';
 import ProgressBar from '../components/shared/progress-bar';
 
@@ -17,5 +17,8 @@ export const HomePage = () => {
     return null;
   }
 
-  return <ChatPanel />;
+  // TODO: Add support for multiple channels
+  const channelId = data.channels[0].id;
+
+  return <ChatPanel channelId={channelId} />;
 };

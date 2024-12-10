@@ -1,6 +1,8 @@
+import { validate } from 'class-validator';
 import { Repository } from 'typeorm';
 import { dataSource } from '../database/data-source';
-import { Message } from './message.entity';
+import { MessageDto } from './models/message.dto';
+import { Message } from './models/message.entity';
 
 export class MessagesService {
   private messageRepository: Repository<Message>;
@@ -9,8 +11,22 @@ export class MessagesService {
     this.messageRepository = dataSource.getRepository(Message);
   }
 
-  getMessages() {
-    return this.messageRepository.find();
+  getMessages(channelId: number) {
+    return this.messageRepository.find({
+      where: { channelId },
+    });
+  }
+
+  async createMessage(userId: number, channelId: number, message: MessageDto) {
+    const errors = await validate(message);
+    if (errors.length > 0) {
+      throw new Error(JSON.stringify(errors));
+    }
+    return this.messageRepository.save({
+      ...message,
+      channelId,
+      userId,
+    });
   }
 }
 

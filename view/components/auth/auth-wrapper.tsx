@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
-import { api } from '../../client/client.service';
+import { api } from '../../client/api-client';
 import { useAppStore } from '../../store/app.store';
 
 interface Props {

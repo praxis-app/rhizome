@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
-import { API_ROOT } from './client.constants';
+import { API_ROOT } from './api-client.constants';
 
-class ClientService {
+class ApiClient {
   private axiosInstance: AxiosInstance;
 
   constructor() {
@@ -15,11 +15,28 @@ class ClientService {
   };
 
   getChannels = async () => {
-    return this.executeRequest<{ channels: any[] }>('get', '/channels');
+    return this.executeRequest<{ channels: { id: number; name: string }[] }>(
+      'get',
+      '/channels',
+    );
+  };
+
+  getChannelMessages = async (channelId: number) => {
+    const path = `/channels/${channelId}/messages`;
+    return this.executeRequest<{ messages: { id: number; body: string }[] }>(
+      'get',
+      path,
+    );
   };
 
   getHealth = async () => {
     return this.executeRequest<{ timestamp: string }>('get', '/health');
+  };
+
+  sendMessage = async (channelId: number, body: string) => {
+    return this.executeRequest<{ message: any }>('post', '/messages', {
+      data: { channelId, body },
+    });
   };
 
   private async executeRequest<T>(
@@ -47,4 +64,4 @@ class ClientService {
   }
 }
 
-export const api = new ClientService();
+export const api = new ApiClient();
