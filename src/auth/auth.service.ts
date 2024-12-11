@@ -61,9 +61,9 @@ class AuthService {
           where: { id: userId },
         });
         res.locals.user = user;
+        next();
       },
     );
-    next();
   };
 }
 
