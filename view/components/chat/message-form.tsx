@@ -3,7 +3,7 @@ import { Box, FormGroup, IconButton, Input, SxProps } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { t } from 'i18next';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
 import AttachedImagePreview from '../images/attached-image-preview';
@@ -20,10 +20,13 @@ interface Props {
 const MessageForm = ({ channelId }: Props) => {
   const { handleSubmit, register, setValue } = useForm<FormValues>();
   const { ref: bodyRef, onChange, ...registerBodyProps } = register('body');
+  const queryClient = useQueryClient();
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
     const result = await api.sendMessage(channelId, body);
-    console.log(result);
+    queryClient.setQueryData(['messages', channelId], (oldData: any) => ({
+      messages: [...oldData.messages, result.message],
+    }));
     setValue('body', '');
   });
 
