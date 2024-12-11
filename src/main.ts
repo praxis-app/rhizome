@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { createServer } from 'http';
 import { join } from 'path';
 import { appRouter } from './app.routes';
@@ -26,6 +26,12 @@ dotenv.config();
   // Serve static files and API routes
   app.use(express.static(join(__dirname, './view')));
   app.use('/api', appRouter);
+
+  // Add error handling middleware for all routes
+  app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    res.status(500).send(err.message);
+    console.error(err);
+  });
 
   // Catch-all route to serve index.html for SPA routing
   app.get(/(.*)/, (_, res) => {

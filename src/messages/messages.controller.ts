@@ -13,17 +13,13 @@ class MessagesController {
   };
 
   createMessage = async (req: Request, res: Response) => {
-    try {
-      const channelId = parseInt(req.params.channelId as string);
-      const message = await messagesService.createMessage(
-        res.locals.user.id,
-        channelId,
-        req.body,
-      );
-      res.json({ message });
-    } catch (e: any) {
-      res.status(500).send(e.message);
-    }
+    const channelId = parseInt(req.params.channelId as string);
+    const message = await messagesService.createMessage(
+      res.locals.user.id,
+      channelId,
+      req.body,
+    );
+    res.json({ message });
   };
 }
 
