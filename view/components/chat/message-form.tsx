@@ -1,3 +1,5 @@
+// TODO: Add remaining layout and functionality - below is a WIP
+
 import { Send } from '@mui/icons-material';
 import { Box, FormGroup, IconButton, Input, SxProps } from '@mui/material';
 import { grey } from '@mui/material/colors';
