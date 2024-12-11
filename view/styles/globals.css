@@ -3,7 +3,6 @@
   height: 100%;
 }
 
-/* Disable pull-to-refresh and overscroll stretch effect */
 body,
 html {
   overscroll-behavior: none;
