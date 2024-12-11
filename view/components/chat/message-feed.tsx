@@ -1,15 +1,15 @@
-import { Box } from '@mui/material';
+import Message from './message';
 
 interface Props {
   messages: any[];
 }
 
-const MessageFeed = ({ messages }: Props) => {
-  return (
-    <Box color="white" height="10px">
-      {JSON.stringify(messages)}
-    </Box>
-  );
-};
+const MessageFeed = ({ messages }: Props) => (
+  <>
+    {messages.map((message, index) => (
+      <Message key={index} message={message} />
+    ))}
+  </>
+);
 
 export default MessageFeed;
