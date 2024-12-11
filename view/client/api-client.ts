@@ -34,7 +34,8 @@ class ApiClient {
   };
 
   sendMessage = async (channelId: number, body: string) => {
-    return this.executeRequest<{ message: any }>('post', '/messages', {
+    const path = `/channels/${channelId}/messages`;
+    return this.executeRequest<{ message: any }>('post', path, {
       data: { channelId, body },
     });
   };
