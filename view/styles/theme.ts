@@ -7,7 +7,7 @@ interface Props<OwnerState = unknown> {
 
 export const theme = createTheme({
   typography: {
-    fontFamily: 'system-ui',
+    fontFamily: 'Inter',
   },
   colorSchemes: {
     light: {

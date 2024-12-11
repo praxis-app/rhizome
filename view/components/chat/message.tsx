@@ -11,10 +11,11 @@ interface Props {
   message: any;
 }
 
-const Message = ({ message: { body, images = [], createdAt } }: Props) => {
-  const formattedDate = timeAgo(createdAt);
-
+const Message = ({
+  message: { body, images = [], user, createdAt },
+}: Props) => {
   const isLarge = useAboveBreakpoint('md');
+  const formattedDate = timeAgo(createdAt);
 
   return (
     <Box display="flex" gap={2} paddingBottom={2}>
@@ -22,6 +23,7 @@ const Message = ({ message: { body, images = [], createdAt } }: Props) => {
 
       <Box>
         <Box display="flex" gap={1}>
+          <Typography fontFamily="Inter Bold">{user.uuid}</Typography>
           <Typography
             color="text.secondary"
             sx={{ cursor: 'default' }}

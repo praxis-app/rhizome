@@ -14,6 +14,15 @@ export class MessagesService {
   getMessages(channelId: number) {
     return this.messageRepository.find({
       where: { channelId },
+      relations: ['user'],
+      select: {
+        id: true,
+        body: true,
+        createdAt: true,
+        user: {
+          uuid: true,
+        },
+      },
     });
   }
 
