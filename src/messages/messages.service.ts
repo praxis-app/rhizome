@@ -20,7 +20,7 @@ export class MessagesService {
         body: true,
         createdAt: true,
         user: {
-          uuid: true,
+          name: true,
         },
       },
     });

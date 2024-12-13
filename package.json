@@ -37,6 +37,7 @@
     "react-use-websocket": "^4.10.0",
     "redis": "^4.7.0",
     "typeorm": "^0.3.14",
+    "unique-names-generator": "^4.7.1",
     "uuid": "^10.0.0",
     "ws": "^8.18.0",
     "zustand": "^4.5.5"

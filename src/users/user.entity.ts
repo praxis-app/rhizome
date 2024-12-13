@@ -19,6 +19,9 @@ export class User {
   @Generated('uuid')
   uuid: string;
 
+  @Column()
+  name: string;
+
   @Column({ unique: true })
   clientId: string;
 
