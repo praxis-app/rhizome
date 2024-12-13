@@ -1,22 +1,4 @@
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/Inter.ttf') format('woff');
-}
-
-@font-face {
-  font-family: 'Inter Medium';
-  src: url('/fonts/Inter-Medium.ttf') format('woff');
-}
-
-@font-face {
-  font-family: 'Inter Bold';
-  src: url('/fonts/Inter-SemiBold.woff2') format('woff');
-}
-
-@font-face {
-  font-family: 'Inter Extra Bold';
-  src: url('/fonts/Inter-ExtraBold.woff') format('woff');
-}
+@import './fonts.css';
 
 :root {
   touch-action: pan-x pan-y;

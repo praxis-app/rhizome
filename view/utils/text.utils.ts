@@ -34,5 +34,8 @@ export const parseMarkdownText = async (text: string) => {
 
 export const convertBoldToSpan = (text: string) =>
   text
-    .replace(/<(b|strong)>/g, '<span style="font-family: Inter Bold;">')
+    .replace(
+      /<(b|strong)>/g,
+      '<span style="font-family: Inter; font-weight: 700;">',
+    )
     .replace(/<\/(b|strong)>/g, '</span>');

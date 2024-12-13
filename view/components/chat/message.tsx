@@ -23,7 +23,9 @@ const Message = ({
 
       <Box>
         <Box display="flex" gap={1}>
-          <Typography fontFamily="Inter Bold">{user.name}</Typography>
+          <Typography fontFamily="Inter" fontWeight={600}>
+            {user.name}
+          </Typography>
           <Typography
             color="text.secondary"
             sx={{ cursor: 'default' }}
