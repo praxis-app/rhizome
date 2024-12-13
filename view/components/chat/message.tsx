@@ -23,7 +23,7 @@ const Message = ({
 
       <Box>
         <Box display="flex" gap={1}>
-          <Typography fontFamily="Inter Bold">{user.uuid}</Typography>
+          <Typography fontFamily="Inter Bold">{user.name}</Typography>
           <Typography
             color="text.secondary"
             sx={{ cursor: 'default' }}
