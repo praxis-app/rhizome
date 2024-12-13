@@ -1,15 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
-import {
-  colors,
-  NumberDictionary,
-  uniqueNamesGenerator,
-} from 'unique-names-generator';
 import { validate as uuidValidate } from 'uuid';
 import { dataSource } from '../database/data-source';
-import { NATURE_DICTIONARY, SPACE_DICTIONARY } from '../users/user.constants';
 import { User } from '../users/user.entity';
+import { usersService } from '../users/users.service';
 
 class AuthService {
   private userRepository: Repository<User>;
@@ -19,21 +14,9 @@ class AuthService {
   }
 
   register = async (clientId: string) => {
-    const numberDictionary = NumberDictionary.generate({
-      min: 10,
-      max: 99,
-    });
-    const nounDictionary =
-      Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
-    const name = uniqueNamesGenerator({
-      dictionaries: [colors, nounDictionary, numberDictionary],
-      separator: '-',
-    });
-    const user = await this.userRepository.save({
-      clientId,
-      name,
-    });
+    const user = await usersService.createUser(clientId);
     const payload = { userId: user.id };
+
     return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
       expiresIn: '30d',
     });
