@@ -6,9 +6,10 @@ import { timeAgo } from '../../utils/time.utils';
 import AttachedImageList from '../images/attached-image-list';
 import FormattedText from '../shared/formatted-text';
 import UserAvatar from '../users/user-avatar';
+import { Message as MessageType } from '../../types/chat.types';
 
 interface Props {
-  message: any;
+  message: MessageType;
 }
 
 const Message = ({

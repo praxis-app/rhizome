@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
+import { Message } from '../../types/chat.types';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
 
@@ -26,9 +27,14 @@ const MessageForm = ({ channelId }: Props) => {
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
     const result = await api.sendMessage(channelId, body);
-    queryClient.setQueryData(['messages', channelId], (oldData: any) => ({
-      messages: [...oldData.messages, result.message],
-    }));
+    queryClient.setQueryData<{ messages: Message[] }>(
+      ['messages', channelId],
+      (oldData) => ({
+        messages: oldData
+          ? [...oldData.messages, result.message]
+          : [result.message],
+      }),
+    );
     setValue('body', '');
   });
 

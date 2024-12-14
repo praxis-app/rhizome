@@ -1,4 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { Channel, Message } from '../types/chat.types';
+import { CurrentUser } from '../types/user.types';
 import { API_ROOT } from './api-client.constants';
 
 class ApiClient {
@@ -9,10 +11,7 @@ class ApiClient {
   }
 
   getCurrentUser = async () => {
-    return this.executeRequest<{ user: { id: number; name: string } }>(
-      'get',
-      '/users/me',
-    );
+    return this.executeRequest<{ user: CurrentUser }>('get', '/users/me');
   };
 
   register = async (clientId: string) => {
@@ -23,24 +22,18 @@ class ApiClient {
 
   sendMessage = async (channelId: number, body: string) => {
     const path = `/channels/${channelId}/messages`;
-    return this.executeRequest<{ message: any }>('post', path, {
+    return this.executeRequest<{ message: Message }>('post', path, {
       data: { channelId, body },
     });
   };
 
   getChannels = async () => {
-    return this.executeRequest<{ channels: { id: number; name: string }[] }>(
-      'get',
-      '/channels',
-    );
+    return this.executeRequest<{ channels: Channel[] }>('get', '/channels');
   };
 
   getChannelMessages = async (channelId: number) => {
     const path = `/channels/${channelId}/messages`;
-    return this.executeRequest<{ messages: { id: number; body: string }[] }>(
-      'get',
-      path,
-    );
+    return this.executeRequest<{ messages: Message[] }>('get', path);
   };
 
   getHealth = async () => {

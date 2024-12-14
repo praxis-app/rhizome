@@ -1,8 +1,9 @@
 import { Box } from '@mui/material';
+import { Message as MessageType } from '../../types/chat.types';
 import Message from './message';
 
 interface Props {
-  messages: any[];
+  messages: MessageType[];
 }
 
 const MessageFeed = ({ messages }: Props) => (
