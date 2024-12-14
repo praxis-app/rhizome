@@ -26,7 +26,7 @@ export class ChannelsService {
     return this.channelRepository.find();
   }
 
-  getChannelMembers(channelId: number) {
+  getChannelMembers(channelId: string) {
     return this.channelMemberRepository.find({
       where: { channelId },
     });

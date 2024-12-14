@@ -15,6 +15,13 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
+  getCurrentUser = async (user: User) => {
+    return {
+      id: user.id,
+      name: user.name,
+    };
+  };
+
   createUser = async (clientId: string) => {
     const name = await this.generateName();
     return this.userRepository.save({

@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
 import { api } from '../../client/api-client';
 import { useAppStore } from '../../store/app.store';
@@ -11,6 +11,10 @@ interface Props {
 export const AuthWrapper = ({ children }: Props) => {
   const { token, setToken, setIsAppLoading } = useAppStore((state) => state);
   const authCalledRef = useRef(false);
+
+  const { data: meData } = useQuery('me', api.getCurrentUser, {
+    enabled: !!token,
+  });
 
   const getClientId = () => {
     const clientId = localStorage.getItem('clientId');
@@ -26,7 +30,6 @@ export const AuthWrapper = ({ children }: Props) => {
     const clientId = getClientId();
     const { token } = await api.register(clientId);
     localStorage.setItem('token', token);
-    setIsAppLoading(false);
     setToken(token);
   });
 
@@ -37,12 +40,17 @@ export const AuthWrapper = ({ children }: Props) => {
     const tokenFromStorage = localStorage.getItem('token');
     if (tokenFromStorage) {
       setToken(tokenFromStorage);
-      setIsAppLoading(false);
       return;
     }
     register();
     authCalledRef.current = true;
   }, [token, register, setToken, setIsAppLoading]);
+
+  useEffect(() => {
+    if (meData && token) {
+      setIsAppLoading(false);
+    }
+  }, [meData, token, setIsAppLoading]);
 
   return <>{children}</>;
 };

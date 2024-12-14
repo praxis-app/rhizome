@@ -11,7 +11,7 @@ import { User } from '../../users/user.entity';
 
 @Entity()
 export class ChannelMember {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column({ nullable: true, type: 'int' })
@@ -23,7 +23,7 @@ export class ChannelMember {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Channel, (channel) => channel.members, {
     onDelete: 'CASCADE',
@@ -31,7 +31,7 @@ export class ChannelMember {
   channel: Channel;
 
   @Column()
-  channelId: number;
+  channelId: string;
 
   @CreateDateColumn()
   createdAt: Date;

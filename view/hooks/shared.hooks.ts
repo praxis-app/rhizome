@@ -16,7 +16,14 @@ export interface PubSubMessage<T = unknown> {
   body?: T;
 }
 
-export const useSubscription = (channel: string, options?: Options) => {
+export interface SubscriptionOptions extends Options {
+  enabled?: boolean;
+}
+
+export const useSubscription = (
+  channel: string,
+  options?: SubscriptionOptions,
+) => {
   const token = useAppStore((state) => state.token);
 
   const getOptions = () => {

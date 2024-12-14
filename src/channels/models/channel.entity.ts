@@ -11,7 +11,7 @@ import { ChannelMember } from './channel-member.entity';
 
 @Entity()
 export class Channel {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()

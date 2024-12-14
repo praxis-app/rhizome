@@ -4,7 +4,7 @@ import { messagesService } from './messages.service';
 class MessagesController {
   getMessages = async (req: Request, res: Response) => {
     try {
-      const channelId = parseInt(req.params.channelId as string);
+      const { channelId } = req.params;
       const messages = await messagesService.getMessages(channelId);
       res.json({ messages });
     } catch (e: any) {
@@ -13,11 +13,13 @@ class MessagesController {
   };
 
   createMessage = async (req: Request, res: Response) => {
-    const channelId = parseInt(req.params.channelId as string);
+    const { channelId } = req.params;
+    const { user } = res.locals;
+
     const message = await messagesService.createMessage(
-      res.locals.user.id,
       channelId,
       req.body,
+      user,
     );
     res.json({ message });
   };

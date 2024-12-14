@@ -8,9 +8,23 @@ class ApiClient {
     this.axiosInstance = axios.create({ baseURL: API_ROOT });
   }
 
+  getCurrentUser = async () => {
+    return this.executeRequest<{ user: { id: number; name: string } }>(
+      'get',
+      '/users/me',
+    );
+  };
+
   register = async (clientId: string) => {
     return this.executeRequest<{ token: string }>('post', '/auth', {
       data: { clientId },
+    });
+  };
+
+  sendMessage = async (channelId: number, body: string) => {
+    const path = `/channels/${channelId}/messages`;
+    return this.executeRequest<{ message: any }>('post', path, {
+      data: { channelId, body },
     });
   };
 
@@ -31,13 +45,6 @@ class ApiClient {
 
   getHealth = async () => {
     return this.executeRequest<{ timestamp: string }>('get', '/health');
-  };
-
-  sendMessage = async (channelId: number, body: string) => {
-    const path = `/channels/${channelId}/messages`;
-    return this.executeRequest<{ message: any }>('post', path, {
-      data: { channelId, body },
-    });
   };
 
   private async executeRequest<T>(

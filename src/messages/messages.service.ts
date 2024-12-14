@@ -1,8 +1,10 @@
 import { validate } from 'class-validator';
 import { Repository } from 'typeorm';
 import { dataSource } from '../database/data-source';
-import { MessageDto } from './models/message.dto';
+import { CreateMessageDto } from './models/create-message.dto';
 import { Message } from './models/message.entity';
+import { pubSubService } from '../pub-sub/pub-sub.service';
+import { User } from '../users/user.entity';
 
 export class MessagesService {
   private messageRepository: Repository<Message>;
@@ -11,7 +13,7 @@ export class MessagesService {
     this.messageRepository = dataSource.getRepository(Message);
   }
 
-  getMessages(channelId: number) {
+  getMessages(channelId: string) {
     return this.messageRepository.find({
       where: { channelId },
       relations: ['user'],
@@ -26,16 +28,34 @@ export class MessagesService {
     });
   }
 
-  async createMessage(userId: number, channelId: number, message: MessageDto) {
-    const errors = await validate(message);
+  async createMessage(
+    channelId: string,
+    messageData: CreateMessageDto,
+    user: User,
+  ) {
+    const errors = await validate(messageData);
     if (errors.length > 0) {
       throw new Error(JSON.stringify(errors));
     }
-    return this.messageRepository.save({
-      ...message,
+    const message = await this.messageRepository.save({
+      ...messageData,
+      userId: user.id,
       channelId,
-      userId,
     });
+
+    await pubSubService.publish(
+      this.getNewMessageChannelKey(channelId, user.id),
+      message,
+    );
+
+    return {
+      ...message,
+      user: { name: user.name },
+    };
+  }
+
+  getNewMessageChannelKey(channelId: string, userId: string) {
+    return `new-message-${channelId}-${userId}`;
   }
 }
 

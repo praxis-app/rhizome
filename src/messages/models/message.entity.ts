@@ -11,8 +11,8 @@ import { User } from '../../users/user.entity';
 
 @Entity()
 export class Message {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ nullable: true, type: 'varchar' })
   body: string | null;
@@ -23,7 +23,7 @@ export class Message {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Channel, (channel) => channel.messages, {
     onDelete: 'CASCADE',
@@ -31,7 +31,7 @@ export class Message {
   channel: Channel;
 
   @Column()
-  channelId: number;
+  channelId: string;
 
   @CreateDateColumn()
   createdAt: Date;

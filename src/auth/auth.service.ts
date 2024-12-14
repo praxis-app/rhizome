@@ -57,7 +57,7 @@ class AuthService {
           return;
         }
 
-        const { userId } = payload as { userId: number };
+        const { userId } = payload as { userId: string };
         const user = await this.userRepository.findOne({
           where: { id: userId },
         });
