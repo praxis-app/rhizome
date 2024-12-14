@@ -1,7 +1,8 @@
 import { ReactNode, useEffect, useRef } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
 import { api } from '../../client/api-client';
+import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 
 interface Props {
@@ -10,11 +11,8 @@ interface Props {
 
 export const AuthWrapper = ({ children }: Props) => {
   const { token, setToken, setIsAppLoading } = useAppStore((state) => state);
+  const { data: meData } = useMeQuery({ enabled: !!token });
   const authCalledRef = useRef(false);
-
-  const { data: meData } = useQuery('me', api.getCurrentUser, {
-    enabled: !!token,
-  });
 
   const getClientId = () => {
     const clientId = localStorage.getItem('clientId');

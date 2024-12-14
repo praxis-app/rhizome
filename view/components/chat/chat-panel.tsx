@@ -4,6 +4,7 @@ import { PubSubMessage, useSubscription } from '../../hooks/shared.hooks';
 import { Message } from '../../types/chat.types';
 import MessageFeed from './message-feed';
 import MessageForm from './message-form';
+import { useMeQuery } from '../../hooks/user.hooks';
 
 interface Props {
   channelId: number;
@@ -14,7 +15,7 @@ const ChatPanel = ({ channelId }: Props) => {
     queryKey: ['messages', channelId],
     queryFn: () => api.getChannelMessages(channelId),
   });
-  const { data: meData } = useQuery('me', api.getCurrentUser);
+  const { data: meData } = useMeQuery({ enabled: true });
   const queryClient = useQueryClient();
 
   useSubscription(`new-message-${channelId}-${meData?.user.id}`, {
