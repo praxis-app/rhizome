@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import { createServer } from 'http';
 import { join } from 'path';
-import { appRouter } from './app.routes';
+import { appRouter } from './app.router';
 import { cacheService } from './cache/cache.service';
 import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';

@@ -1,9 +1,9 @@
 import express from 'express';
-import { authRouter } from './auth/auth.routes';
-import { channelsRouter } from './channels/channels.routes';
-import { healthRouter } from './health/health.routes';
-import { messagesRouter } from './messages/messages.routes';
-import { usersRouter } from './users/users.routes';
+import { authRouter } from './auth/auth.router';
+import { channelsRouter } from './channels/channels.router';
+import { healthRouter } from './health/health.router';
+import { messagesRouter } from './messages/messages.router';
+import { usersRouter } from './users/users.router';
 
 export const appRouter = express.Router();
 
