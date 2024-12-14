@@ -25,6 +25,7 @@ export const useSubscription = (
   options?: SubscriptionOptions,
 ) => {
   const token = useAppStore((state) => state.token);
+  const isEnabled = options?.enabled ?? true;
 
   const getOptions = () => {
     if (!options || !options.onMessage) {
@@ -41,24 +42,37 @@ export const useSubscription = (
     return { ...options, onMessage };
   };
 
-  const { sendMessage, ...rest } = useWebSocket(getWebSocketURL(), {
-    onOpen: () => {
-      if (!token) {
-        return;
-      }
-      const message: PubSubMessage = {
-        request: 'SUBSCRIBE',
-        channel,
-        token,
-      };
-      sendMessage(JSON.stringify(message));
-    },
+  const { sendMessage, readyState, ...rest } = useWebSocket(getWebSocketURL(), {
     // Ensure multiple channels can be subscribed to in
     // the same component with `share` set to `true`
     share: true,
     shouldReconnect: () => !!token,
     ...getOptions(),
   });
+
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    if (isEnabled && readyState === WebSocket.OPEN) {
+      const message: PubSubMessage = {
+        request: 'SUBSCRIBE',
+        channel,
+        token,
+      };
+      sendMessage(JSON.stringify(message));
+    }
+
+    return () => {
+      const message: PubSubMessage = {
+        request: 'UNSUBSCRIBE',
+        channel,
+        token,
+      };
+      sendMessage(JSON.stringify(message));
+    };
+  }, [channel, token, isEnabled, readyState, sendMessage]);
 
   return { sendMessage, ...rest };
 };

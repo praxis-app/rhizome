@@ -11,7 +11,6 @@ interface Props extends BoxProps {
   imageFile?: File;
   linkStyles?: CSSProperties;
   size?: number;
-  user?: any;
   withLink?: boolean;
   href?: string;
 }
@@ -21,7 +20,6 @@ const UserAvatar = ({
   linkStyles,
   size,
   sx,
-  user,
   withLink,
   href,
   ...avatarProps

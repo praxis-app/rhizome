@@ -3,7 +3,7 @@ import { dataSource } from '../database/data-source';
 import { Channel } from './models/channel.entity';
 import { ChannelMember } from './models/channel-member.entity';
 
-export class ChannelsService {
+class ChannelsService {
   private channelRepository: Repository<Channel>;
   private channelMemberRepository: Repository<ChannelMember>;
 

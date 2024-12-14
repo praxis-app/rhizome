@@ -1,10 +1,11 @@
 import { validate } from 'class-validator';
 import { Repository } from 'typeorm';
+import { channelsService } from '../channels/channels.service';
 import { dataSource } from '../database/data-source';
-import { CreateMessageDto } from './models/create-message.dto';
-import { Message } from './models/message.entity';
 import { pubSubService } from '../pub-sub/pub-sub.service';
 import { User } from '../users/user.entity';
+import { CreateMessageDto } from './models/create-message.dto';
+import { Message } from './models/message.entity';
 
 export class MessagesService {
   private messageRepository: Repository<Message>;
@@ -25,6 +26,7 @@ export class MessagesService {
           name: true,
         },
       },
+      order: { createdAt: 'ASC' },
     });
   }
 
@@ -37,21 +39,26 @@ export class MessagesService {
     if (errors.length > 0) {
       throw new Error(JSON.stringify(errors));
     }
+
     const message = await this.messageRepository.save({
       ...messageData,
       userId: user.id,
       channelId,
     });
-
-    await pubSubService.publish(
-      this.getNewMessageChannelKey(channelId, user.id),
-      message,
-    );
-
-    return {
+    const messagePayload = {
       ...message,
       user: { name: user.name },
     };
+
+    const channelMembers = await channelsService.getChannelMembers(channelId);
+    for (const member of channelMembers) {
+      await pubSubService.publish(
+        this.getNewMessageChannelKey(channelId, member.userId),
+        { message: messagePayload },
+      );
+    }
+
+    return messagePayload;
   }
 
   getNewMessageChannelKey(channelId: string, userId: string) {

@@ -32,7 +32,7 @@ export const useImageSrc = (
       setSrc(url);
     };
     getImageSrc();
-  }, [imageId, viewed, imageCache]);
+  }, [imageId, viewed, imageCache, setImageCache]);
 
   return src;
 };

@@ -35,7 +35,7 @@ class PubSubService {
         this.subscribe(channel, token, webSocket);
         break;
       case 'UNSUBSCRIBE':
-        this.unsubscribe(channel, webSocket);
+        this.unsubscribe(channel, token);
         break;
       default:
         webSocket.send(JSON.stringify({ error: 'Invalid request type' }));
@@ -86,16 +86,15 @@ class PubSubService {
 
     // Clean up on disconnect
     subscriber.on('close', async () => {
-      await this.unsubscribe(channel, subscriber);
+      await this.unsubscribe(channel, token);
       delete this.subscribers[token];
     });
   }
 
-  async unsubscribe(channel: string, subscriber: WebSocketWithId) {
+  async unsubscribe(channel: string, token: string) {
     const channelKey = this.getChannelCacheKey(channel);
-    await cacheService.removeSetMember(channelKey, subscriber.id);
-
-    delete this.subscribers[subscriber.id];
+    await cacheService.removeSetMember(channelKey, token);
+    delete this.subscribers[token];
   }
 
   getChannelCacheKey(channel: string) {
