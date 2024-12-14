@@ -3,7 +3,7 @@ import { usersService } from './users.service';
 
 class UsersController {
   async getCurrentUser(_req: Request, res: Response) {
-    const user = await usersService.getCurrentUser(res.locals.user);
+    const user = await usersService.shapeCurrentUser(res.locals.user);
     res.json({ user });
   }
 }

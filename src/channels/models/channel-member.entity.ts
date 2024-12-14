@@ -12,7 +12,7 @@ import { User } from '../../users/user.entity';
 @Entity()
 export class ChannelMember {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column({ nullable: true, type: 'int' })
   lastMessageReadId: number | null;

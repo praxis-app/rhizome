@@ -8,8 +8,7 @@ class ChannelsController {
   };
 
   getChannel = async (req: Request, res: Response) => {
-    const channelId = parseInt(req.params.channelId);
-    const channel = await channelsService.getChannel(channelId);
+    const channel = await channelsService.getChannel(req.params.channelId);
     res.json({ channel });
   };
 }

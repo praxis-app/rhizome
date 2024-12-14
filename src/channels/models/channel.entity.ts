@@ -12,7 +12,7 @@ import { ChannelMember } from './channel-member.entity';
 @Entity()
 export class Channel {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   name: string;

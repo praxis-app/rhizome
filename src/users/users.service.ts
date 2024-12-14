@@ -4,6 +4,7 @@ import {
   NumberDictionary,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
+import { channelsService } from '../channels/channels.service';
 import { dataSource } from '../database/data-source';
 import { User } from './user.entity';
 import { NATURE_DICTIONARY, SPACE_DICTIONARY } from './users.constants';
@@ -15,19 +16,11 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  getCurrentUser = async (user: User) => {
-    return {
-      id: user.id,
-      name: user.name,
-    };
-  };
-
   createUser = async (clientId: string) => {
     const name = await this.generateName();
-    return this.userRepository.save({
-      clientId,
-      name,
-    });
+    const user = await this.userRepository.save({ clientId, name });
+    await channelsService.addMemberToGeneralChannel(user.id);
+    return user;
   };
 
   generateName = async () => {
@@ -45,6 +38,10 @@ class UsersService {
     });
 
     return name;
+  };
+
+  shapeCurrentUser = async (user: User) => {
+    return { id: user.id, name: user.name };
   };
 }
 

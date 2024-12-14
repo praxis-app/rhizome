@@ -52,6 +52,9 @@ export class MessagesService {
 
     const channelMembers = await channelsService.getChannelMembers(channelId);
     for (const member of channelMembers) {
+      if (member.userId === user.id) {
+        continue;
+      }
       await pubSubService.publish(
         this.getNewMessageChannelKey(channelId, member.userId),
         { message: messagePayload },

@@ -12,10 +12,20 @@ class ChannelsService {
     this.channelMemberRepository = dataSource.getRepository(ChannelMember);
   }
 
-  getChannel(channelId: number) {
+  getChannel(channelId: string) {
     return this.channelRepository.findOneOrFail({
       where: { id: channelId },
     });
+  }
+
+  async getGeneralChannel() {
+    const generalChannel = await this.channelRepository.findOne({
+      where: { name: 'general' },
+    });
+    if (!generalChannel) {
+      return this.initializeGeneralChannel();
+    }
+    return generalChannel;
   }
 
   async getChannels() {
@@ -32,8 +42,17 @@ class ChannelsService {
     });
   }
 
+  addMemberToGeneralChannel = async (userId: string) => {
+    const generalChannel = await this.getGeneralChannel();
+    await this.channelMemberRepository.save({
+      channelId: generalChannel.id,
+      userId,
+    });
+  };
+
+  // TODO: Add constant for general channel name
   initializeGeneralChannel() {
-    return this.channelRepository.insert({
+    return this.channelRepository.save({
       name: 'general',
     });
   }
