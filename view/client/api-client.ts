@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { Channel, Message } from '../types/chat.types';
 import { CurrentUser } from '../types/user.types';
-import { API_ROOT } from './api-client.constants';
+
+export const API_ROOT = '/api';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;

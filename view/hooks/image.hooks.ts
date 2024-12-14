@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useState } from 'react';
-import { useInView } from './shared.hooks';
-import { API_ROOT } from '../client/api-client.constants';
+import { API_ROOT } from '../client/api-client';
 import { useAppStore } from '../store/app.store';
+import { useInView } from './shared.hooks';
 
 export const useImageSrc = (
   imageId: number | undefined,
