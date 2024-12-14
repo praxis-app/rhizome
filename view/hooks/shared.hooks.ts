@@ -63,16 +63,7 @@ export const useSubscription = (
       };
       sendMessage(JSON.stringify(message));
     }
-
-    return () => {
-      const message: PubSubMessage = {
-        request: 'UNSUBSCRIBE',
-        channel,
-        token,
-      };
-      sendMessage(JSON.stringify(message));
-    };
-  }, [channel, token, isEnabled, readyState, sendMessage]);
+  }, [channel, isEnabled, readyState, sendMessage, token]);
 
   return { sendMessage, ...rest };
 };
