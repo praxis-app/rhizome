@@ -25,10 +25,15 @@ export const useSubscription = (
     if (!options || !options.onMessage) {
       return options;
     }
-    // Ignore messages from other channels
     const onMessage = (event: MessageEvent) => {
       const message: PubSubMessage = JSON.parse(event.data);
+      // Ignore messages from other channels
       if (message.channel !== channel || !options.onMessage) {
+        return;
+      }
+      // Log errors from the server
+      if (message.type === 'RESPONSE' && message.error) {
+        console.error(message.error);
         return;
       }
       options.onMessage(event);

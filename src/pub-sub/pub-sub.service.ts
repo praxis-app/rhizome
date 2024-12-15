@@ -1,7 +1,11 @@
 import WebSocket from 'ws';
 import { authService } from '../auth/auth.service';
 import { cacheService } from '../cache/cache.service';
-import { PubSubRequest, WebSocketWithId } from './pub-sub.models';
+import {
+  PubSubRequest,
+  PubSubResponse,
+  WebSocketWithId,
+} from './pub-sub.models';
 
 type ChannelHandler = (
   message: any,
@@ -31,7 +35,12 @@ class PubSubService {
 
     const user = await authService.verifyToken(token);
     if (!user) {
-      webSocket.send(JSON.stringify({ error: 'Unauthorized' }));
+      const response: PubSubResponse = {
+        error: { code: 'UNAUTHORIZED', message: 'Invalid token' },
+        type: 'RESPONSE',
+        channel,
+      };
+      webSocket.send(JSON.stringify(response));
       return;
     }
 
