@@ -9,6 +9,7 @@ import { cacheService } from './cache/cache.service';
 import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
 import { pubSubService } from './pub-sub/pub-sub.service';
+import morgan from 'morgan';
 
 dotenv.config();
 
@@ -20,7 +21,9 @@ dotenv.config();
   await cacheService.initializeCache();
   await dataSource.initialize();
 
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ limit: '10mb' }));
+  app.use(morgan('dev'));
   app.use(cors());
 
   // Serve static files and API routes
