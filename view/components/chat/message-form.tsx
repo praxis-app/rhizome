@@ -31,7 +31,7 @@ const MessageForm = ({ channelId }: Props) => {
       ['messages', channelId],
       (oldData) => ({
         messages: oldData
-          ? [...oldData.messages, result.message]
+          ? [result.message, ...oldData.messages]
           : [result.message],
       }),
     );

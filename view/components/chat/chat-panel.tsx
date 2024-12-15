@@ -31,7 +31,7 @@ const ChatPanel = ({ channelId }: Props) => {
         ['messages', channelId],
         (oldData) => ({
           messages: oldData
-            ? [...oldData.messages, body.message]
+            ? [body.message, ...oldData.messages]
             : [body.message],
         }),
       );

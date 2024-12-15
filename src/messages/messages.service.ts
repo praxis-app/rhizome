@@ -26,7 +26,7 @@ export class MessagesService {
           name: true,
         },
       },
-      order: { createdAt: 'ASC' },
+      order: { createdAt: 'DESC' },
     });
   }
 
