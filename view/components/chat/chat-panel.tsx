@@ -1,9 +1,10 @@
 import { Box } from '@mui/material';
 import { useQuery, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
-import { PubSubMessage, useSubscription } from '../../hooks/shared.hooks';
+import { useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { Message } from '../../types/chat.types';
+import { PubSubMessage } from '../../types/shared.types';
 import MessageFeed from './message-feed';
 import MessageForm from './message-form';
 

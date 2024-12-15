@@ -7,14 +7,8 @@ import {
 import { RefObject, useEffect, useState } from 'react';
 import useWebSocket, { Options } from 'react-use-websocket';
 import { useAppStore } from '../store/app.store';
+import { PubSubMessage } from '../types/shared.types';
 import { getWebSocketURL } from '../utils/shared.utils';
-
-export interface PubSubMessage<T = unknown> {
-  request: 'PUBLISH' | 'SUBSCRIBE' | 'UNSUBSCRIBE';
-  channel: string;
-  token: string;
-  body?: T;
-}
 
 export interface SubscriptionOptions extends Options {
   enabled?: boolean;
@@ -57,6 +51,7 @@ export const useSubscription = (
 
     if (isEnabled && readyState === WebSocket.OPEN) {
       const message: PubSubMessage = {
+        type: 'REQUEST',
         request: 'SUBSCRIBE',
         channel,
         token,

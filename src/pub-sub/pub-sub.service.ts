@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import { authService } from '../auth/auth.service';
 import { cacheService } from '../cache/cache.service';
-import { PubSubMessage, WebSocketWithId } from './pub-sub.models';
+import { PubSubRequest, WebSocketWithId } from './pub-sub.models';
 
 type ChannelHandler = (
   message: any,
@@ -25,7 +25,7 @@ class PubSubService {
   }
 
   async handleMessage(webSocket: WebSocketWithId, data: WebSocket.RawData) {
-    const { channel, body, request, token }: PubSubMessage = JSON.parse(
+    const { channel, body, request, token }: PubSubRequest = JSON.parse(
       data.toString(),
     );
 
