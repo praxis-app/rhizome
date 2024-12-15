@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Channel } from '../../channels/models/channel.entity';
+import { Image } from '../../images/models/image.entity';
 import { User } from '../../users/user.entity';
 
 @Entity()
@@ -16,6 +18,9 @@ export class Message {
 
   @Column({ nullable: true, type: 'varchar' })
   body: string | null;
+
+  @OneToMany(() => Image, (image) => image.message)
+  images: Image[];
 
   @ManyToOne(() => User, (user) => user.messages, {
     onDelete: 'CASCADE',
