@@ -47,22 +47,36 @@ class AuthService {
       res.status(401).send('Unauthorized');
       return;
     }
+    const handleSuccess = (user: User) => {
+      res.locals.user = user;
+      next();
+    };
+    const handleError = () => {
+      res.status(401).send('Unauthorized');
+    };
+    this.verifyToken(token, handleSuccess, handleError);
+  };
 
+  verifyToken = async (
+    token: string,
+    onSuccess: (user: User) => void,
+    onError?: () => void,
+  ) => {
     jwt.verify(
       token,
       process.env.TOKEN_SECRET as string,
-      async (err, payload) => {
-        if (err) {
-          res.status(401).send('Unauthorized');
-          return;
-        }
-
+      async (_, payload) => {
         const { userId } = payload as { userId: string };
         const user = await this.userRepository.findOne({
           where: { id: userId },
         });
-        res.locals.user = user;
-        next();
+        if (!user) {
+          if (onError) {
+            onError();
+          }
+          return;
+        }
+        onSuccess(user);
       },
     );
   };
