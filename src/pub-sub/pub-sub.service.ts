@@ -62,9 +62,7 @@ class PubSubService {
 
     const channelKey = this.getChannelCacheKey(channel);
     const subscriberIds = await cacheService.getSetMembers(channelKey);
-
     if (subscriberIds.length === 0) {
-      console.error(`Channel ${channel} does not have any subscribers.`);
       return;
     }
 
