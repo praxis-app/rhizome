@@ -11,6 +11,7 @@ import { KeyCodes } from '../../constants/shared.constants';
 import { Message } from '../../types/chat.types';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
 
 interface FormValues {
   body: string;
@@ -23,6 +24,8 @@ interface Props {
 const MessageForm = ({ channelId }: Props) => {
   const { handleSubmit, register, setValue } = useForm<FormValues>();
   const { ref: bodyRef, onChange, ...registerBodyProps } = register('body');
+
+  const isDarkMode = useIsDarkMode();
   const queryClient = useQueryClient();
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
@@ -39,6 +42,7 @@ const MessageForm = ({ channelId }: Props) => {
   });
 
   const formStyles: SxProps = {
+    borderTop: `1px solid ${isDarkMode ? grey[900] : grey[100]}`,
     bgcolor: 'background.paper',
     paddingY: 1,
     paddingX: 0.9,
@@ -70,7 +74,7 @@ const MessageForm = ({ channelId }: Props) => {
     <Box sx={formStyles}>
       <FormGroup row>
         <Box
-          bgcolor={grey[900]}
+          bgcolor={isDarkMode ? grey[900] : grey[100]}
           borderRadius={4}
           paddingX={1.5}
           paddingY={0.2}

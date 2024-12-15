@@ -6,6 +6,7 @@ import { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import LazyLoadImage from '../images/lazy-load-image';
 import { Link } from '../shared/link';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
 
 interface Props extends BoxProps {
   imageFile?: File;
@@ -25,9 +26,10 @@ const UserAvatar = ({
   ...avatarProps
 }: Props) => {
   const { t } = useTranslation();
+  const isDarkMode = useIsDarkMode();
 
   const avatarStyles = {
-    backgroundColor: grey[900],
+    backgroundColor: isDarkMode ? grey[900] : grey[200],
     borderRadius: '50%',
     width: 40,
     height: 40,

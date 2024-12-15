@@ -11,6 +11,7 @@ const MessageFeed = ({ messages }: Props) => (
     display="flex"
     flexDirection="column-reverse"
     sx={{ overflowY: 'scroll' }}
+    paddingX={1.5}
   >
     {messages.map((message, index) => (
       <Message key={index} message={message} />
