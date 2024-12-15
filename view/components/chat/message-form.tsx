@@ -40,9 +40,6 @@ const MessageForm = ({ channelId }: Props) => {
 
   const formStyles: SxProps = {
     bgcolor: 'background.paper',
-    position: 'fixed',
-    bottom: '0px',
-    left: 0,
     paddingY: 1,
     paddingX: 0.9,
     width: '100%',

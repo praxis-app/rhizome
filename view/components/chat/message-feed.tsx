@@ -7,7 +7,11 @@ interface Props {
 }
 
 const MessageFeed = ({ messages }: Props) => (
-  <Box paddingTop={2}>
+  <Box
+    display="flex"
+    flexDirection="column-reverse"
+    sx={{ overflowY: 'scroll' }}
+  >
     {messages.map((message, index) => (
       <Message key={index} message={message} />
     ))}

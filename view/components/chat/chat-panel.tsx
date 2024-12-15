@@ -1,10 +1,11 @@
+import { Box } from '@mui/material';
 import { useQuery, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { PubSubMessage, useSubscription } from '../../hooks/shared.hooks';
+import { useMeQuery } from '../../hooks/user.hooks';
 import { Message } from '../../types/chat.types';
 import MessageFeed from './message-feed';
 import MessageForm from './message-form';
-import { useMeQuery } from '../../hooks/user.hooks';
 
 interface Props {
   channelId: number;
@@ -43,10 +44,18 @@ const ChatPanel = ({ channelId }: Props) => {
   }
 
   return (
-    <>
+    <Box
+      display="flex"
+      flexDirection="column"
+      position="fixed"
+      top={0}
+      left={0}
+      bottom={0}
+      right={0}
+    >
       <MessageFeed messages={messagesData.messages} />
       <MessageForm channelId={channelId} />
-    </>
+    </Box>
   );
 };
 
