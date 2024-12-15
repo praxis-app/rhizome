@@ -65,7 +65,11 @@ class AuthService {
       jwt.verify(
         token,
         process.env.TOKEN_SECRET as string,
-        async (_, payload) => {
+        async (err, payload) => {
+          if (err) {
+            resolve(null);
+            return;
+          }
           const { userId } = payload as { userId: string };
           const user = await this.userRepository.findOne({
             where: { id: userId },
