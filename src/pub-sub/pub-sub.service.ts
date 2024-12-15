@@ -1,7 +1,6 @@
 import WebSocket from 'ws';
 import { authService } from '../auth/auth.service';
 import { cacheService } from '../cache/cache.service';
-import { User } from '../users/user.entity';
 import { PubSubMessage, WebSocketWithId } from './pub-sub.models';
 
 type ChannelHandler = (
@@ -30,7 +29,7 @@ class PubSubService {
       data.toString(),
     );
 
-    const user = await this.authenticateUser(token);
+    const user = await authService.verifyToken(token);
     if (!user) {
       webSocket.send(JSON.stringify({ error: 'Unauthorized' }));
       return;
@@ -104,14 +103,6 @@ class PubSubService {
     const channelKey = this.getChannelCacheKey(channel);
     await cacheService.removeSetMember(channelKey, token);
     delete this.subscribers[token];
-  }
-
-  async authenticateUser(token: string) {
-    let user: User | undefined;
-    await authService.verifyToken(token, (result) => {
-      user = result;
-    });
-    return user;
   }
 
   getChannelCacheKey(channel: string) {

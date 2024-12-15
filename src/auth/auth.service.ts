@@ -40,45 +40,40 @@ class AuthService {
     next();
   };
 
-  authenticateUser = (req: Request, res: Response, next: NextFunction) => {
+  authenticateUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     const { authorization } = req.headers;
     const [type, token] = authorization?.split(' ') ?? [];
     if (type !== 'Bearer' || !token) {
       res.status(401).send('Unauthorized');
       return;
     }
-    const handleSuccess = (user: User) => {
-      res.locals.user = user;
-      next();
-    };
-    const handleError = () => {
+    const user = await this.verifyToken(token);
+    if (!user) {
       res.status(401).send('Unauthorized');
-    };
-    this.verifyToken(token, handleSuccess, handleError);
+      return;
+    }
+    res.locals.user = user;
+    next();
   };
 
-  verifyToken = async (
-    token: string,
-    onSuccess: (user: User) => void,
-    onError?: () => void,
-  ) => {
-    jwt.verify(
-      token,
-      process.env.TOKEN_SECRET as string,
-      async (_, payload) => {
-        const { userId } = payload as { userId: string };
-        const user = await this.userRepository.findOne({
-          where: { id: userId },
-        });
-        if (!user) {
-          if (onError) {
-            onError();
-          }
-          return;
-        }
-        onSuccess(user);
-      },
-    );
+  verifyToken = async (token: string) => {
+    return new Promise<User | null>((resolve) => {
+      jwt.verify(
+        token,
+        process.env.TOKEN_SECRET as string,
+        async (_, payload) => {
+          const { userId } = payload as { userId: string };
+          const user = await this.userRepository.findOne({
+            where: { id: userId },
+          });
+          resolve(user);
+        },
+      );
+    });
   };
 }
 
