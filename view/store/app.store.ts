@@ -3,7 +3,7 @@ import { create } from 'zustand';
 interface AppState {
   token: string | null;
   isAppLoading: boolean;
-  imageCache: Record<number, string>;
+  imageCache: Record<string, string>;
   setToken(token: string): void;
   setIsAppLoading(isAppLoading: boolean): void;
   setImageCache(imageCache: Record<number, string>): void;

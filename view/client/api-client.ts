@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { Channel, Message } from '../types/chat.types';
 import { CurrentUser } from '../types/user.types';
+import { Image } from '../types/image.types';
 
 export const API_ROOT = '/api';
 
@@ -34,7 +35,7 @@ class ApiClient {
     formData: FormData,
   ) => {
     const path = `/channels/${channelId}/messages/${messageId}/images`;
-    return this.executeRequest<{ message: Message }>('post', path, {
+    return this.executeRequest<{ images: Image[] }>('post', path, {
       data: formData,
     });
   };

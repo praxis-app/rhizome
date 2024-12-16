@@ -6,7 +6,7 @@ import { useAppStore } from '../../store/app.store';
 interface Props extends BoxProps {
   alt: string;
   skipAnimation?: boolean;
-  imageId?: number;
+  imageId?: string;
   src?: string;
   sx?: SxProps;
 }

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { getUploadsPath } from './images.utils';
 import { imagesService } from './images.service';
+import { getUploadsPath } from './images.utils';
 
 class ImagesController {
   async getImageFile(req: Request, res: Response) {
@@ -25,8 +25,7 @@ class ImagesController {
 
     const { messageId } = req.params;
     const files = req.files as Express.Multer.File[];
-    const imageFilenames = files.map((file) => file.filename);
-    const images = await imagesService.createImages(messageId, imageFilenames);
+    const images = await imagesService.createImages(messageId, files);
 
     res.status(201).json(images);
   }

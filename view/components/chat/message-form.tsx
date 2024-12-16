@@ -13,6 +13,7 @@ import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { Message } from '../../types/chat.types';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
+import { Image } from '../../types/image.types';
 
 interface FormValues {
   body: string;
@@ -33,27 +34,43 @@ const MessageForm = ({ channelId }: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
-    const result = await api.sendMessage(channelId, body);
+    const { message } = await api.sendMessage(channelId, body);
+    let messageImages: Image[] = [];
 
     if (images.length) {
       const formData = new FormData();
-      const { message } = result;
 
       for (const image of images) {
         formData.append('images', image);
       }
       await api.uploadMessageImages(channelId, message.id, formData);
+
+      const result = await api.uploadMessageImages(
+        channelId,
+        message.id,
+        formData,
+      );
+      messageImages = result.images;
+
       setImagesInputKey(Date.now());
       setImages([]);
     }
 
+    const messageWithImages = {
+      ...message,
+      images: messageImages,
+    };
+
     queryClient.setQueryData<{ messages: Message[] }>(
       ['messages', channelId],
-      (oldData) => ({
-        messages: oldData
-          ? [result.message, ...oldData.messages]
-          : [result.message],
-      }),
+      (oldData) => {
+        if (!oldData) {
+          return { messages: [messageWithImages] };
+        }
+        return {
+          messages: [messageWithImages, ...oldData.messages],
+        };
+      },
     );
     setValue('body', '');
   });

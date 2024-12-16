@@ -12,9 +12,7 @@ interface Props {
   message: MessageType;
 }
 
-const Message = ({
-  message: { body, images = [], user, createdAt },
-}: Props) => {
+const Message = ({ message: { body, images, user, createdAt } }: Props) => {
   const isLarge = useAboveBreakpoint('md');
   const formattedDate = timeAgo(createdAt);
 

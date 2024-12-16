@@ -4,7 +4,7 @@ import { useAppStore } from '../store/app.store';
 import { useInView } from './shared.hooks';
 
 export const useImageSrc = (
-  imageId: number | undefined,
+  imageId: string | undefined,
   ref: RefObject<HTMLElement>,
 ) => {
   const { imageCache, setImageCache } = useAppStore((state) => state);

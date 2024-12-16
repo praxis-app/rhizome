@@ -14,7 +14,8 @@ class ImagesService {
     return this.imageRepository.findOne({ where });
   }
 
-  async createImages(messageId: string, imageFilenames: string[]) {
+  async createImages(messageId: string, files: Express.Multer.File[]) {
+    const imageFilenames = files.map((file) => file.filename);
     const images = imageFilenames.map((filename) =>
       this.imageRepository.create({ messageId, filename }),
     );
