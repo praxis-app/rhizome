@@ -24,8 +24,8 @@ export class Image {
   })
   message?: Message;
 
-  @Column({ nullable: true })
-  messageId?: number;
+  @Column({ nullable: true, type: 'varchar' })
+  messageId: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

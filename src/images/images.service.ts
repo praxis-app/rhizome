@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { dataSource } from '../database/data-source';
 import { deleteImageFile } from './images.utils';
 import { Image } from './models/image.entity';
@@ -10,10 +10,8 @@ class ImagesService {
     this.imageRepository = dataSource.getRepository(Image);
   }
 
-  async getImage(imageId: string) {
-    return this.imageRepository.findOne({
-      where: { id: imageId },
-    });
+  async getImage(where: FindOptionsWhere<Image>) {
+    return this.imageRepository.findOne({ where });
   }
 
   async deleteImage(imageId: string) {

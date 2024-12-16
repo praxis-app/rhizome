@@ -4,7 +4,8 @@ import { imagesService } from './images.service';
 
 class ImagesController {
   async getImageFile(req: Request, res: Response) {
-    const image = await imagesService.getImage(req.params.id);
+    const { id, messageId } = req.params;
+    const image = await imagesService.getImage({ id, messageId });
 
     if (!image) {
       res.status(404).send('Image not found');
