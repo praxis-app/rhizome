@@ -1,6 +1,5 @@
 import { Box, BoxProps, SxProps } from '@mui/material';
 import { SyntheticEvent, useRef, useState } from 'react';
-import { useImageSrc } from '../../hooks/image.hooks';
 import { useAppStore } from '../../store/app.store';
 
 interface Props extends BoxProps {
@@ -25,7 +24,9 @@ const LazyLoadImage = ({
   const [loaded, setLoaded] = useState(!!alreadyLoadedSrc);
 
   const ref = useRef<HTMLDivElement>(null);
-  const srcFromImageId = useImageSrc(imageId, ref);
+
+  // TODO: Implement useImageSrc hook
+  // const srcFromImageId = useImageSrc(imageId, ref);
 
   const animationStyles: SxProps = {
     transition: 'filter 0.3s, opacity 0.3s',
@@ -51,7 +52,7 @@ const LazyLoadImage = ({
       component="img"
       loading={src ? 'lazy' : 'eager'}
       onLoad={handleLoad}
-      src={src || alreadyLoadedSrc || srcFromImageId}
+      // src={src || alreadyLoadedSrc || srcFromImageId}
       sx={imageStyles}
       {...boxProps}
     />
