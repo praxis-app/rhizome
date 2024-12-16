@@ -22,12 +22,11 @@ class ImagesController {
       res.status(400).send('No images uploaded');
       return;
     }
-
     const { messageId } = req.params;
     const files = req.files as Express.Multer.File[];
     const images = await imagesService.createImages(messageId, files);
 
-    res.status(201).json(images);
+    res.status(201).json({ images });
   }
 }
 

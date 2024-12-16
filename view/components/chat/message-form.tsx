@@ -39,19 +39,15 @@ const MessageForm = ({ channelId }: Props) => {
 
     if (images.length) {
       const formData = new FormData();
-
       for (const image of images) {
         formData.append('images', image);
       }
-      await api.uploadMessageImages(channelId, message.id, formData);
-
       const result = await api.uploadMessageImages(
         channelId,
         message.id,
         formData,
       );
       messageImages = result.images;
-
       setImagesInputKey(Date.now());
       setImages([]);
     }
