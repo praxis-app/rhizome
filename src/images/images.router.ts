@@ -9,7 +9,9 @@ import {
 import { imagesController } from './images.controller';
 import { getUploadsPath } from './images.utils';
 
-export const imagesRouter = express.Router();
+export const imagesRouter = express.Router({
+  mergeParams: true,
+});
 
 const storage = multer.diskStorage({
   destination: (_req, _file, callback) => {

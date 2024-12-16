@@ -23,9 +23,10 @@ class ImagesController {
       return;
     }
 
+    const { messageId } = req.params;
     const files = req.files as Express.Multer.File[];
     const imageFilenames = files.map((file) => file.filename);
-    const images = await imagesService.createImages(imageFilenames);
+    const images = await imagesService.createImages(messageId, imageFilenames);
 
     res.status(201).json(images);
   }
