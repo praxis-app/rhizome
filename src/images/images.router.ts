@@ -39,4 +39,5 @@ const upload = multer({
 const multiImageUpload = upload.array('images', MAX_IMAGE_COUNT);
 
 imagesRouter.use(authService.authenticateUser);
-imagesRouter.get('/:id', multiImageUpload, imagesController.getImageFile);
+imagesRouter.get('/:id', imagesController.getImageFile);
+imagesRouter.post('/', multiImageUpload, imagesController.createImages);

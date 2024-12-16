@@ -14,6 +14,13 @@ class ImagesService {
     return this.imageRepository.findOne({ where });
   }
 
+  async createImages(imageFilenames: string[]) {
+    const images = imageFilenames.map((filename) =>
+      this.imageRepository.create({ filename }),
+    );
+    return this.imageRepository.save(images);
+  }
+
   async deleteImage(imageId: string) {
     const image = await this.imageRepository.findOne({
       where: { id: imageId },

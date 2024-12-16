@@ -24,3 +24,7 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Uploaded content
+/content/*
+!/content/README.md

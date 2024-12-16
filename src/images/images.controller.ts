@@ -16,6 +16,19 @@ class ImagesController {
       root: getUploadsPath(),
     });
   }
+
+  async createImages(req: Request, res: Response) {
+    if (!req.files) {
+      res.status(400).send('No images uploaded');
+      return;
+    }
+
+    const files = req.files as Express.Multer.File[];
+    const imageFilenames = files.map((file) => file.filename);
+    const images = await imagesService.createImages(imageFilenames);
+
+    res.status(201).json(images);
+  }
 }
 
 export const imagesController = new ImagesController();

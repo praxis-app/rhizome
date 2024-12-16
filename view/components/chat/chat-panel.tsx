@@ -9,7 +9,7 @@ import MessageFeed from './message-feed';
 import MessageForm from './message-form';
 
 interface Props {
-  channelId: number;
+  channelId: string;
 }
 
 const ChatPanel = ({ channelId }: Props) => {

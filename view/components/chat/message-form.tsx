@@ -4,7 +4,7 @@ import { Send } from '@mui/icons-material';
 import { Box, FormGroup, IconButton, Input, SxProps } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { t } from 'i18next';
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
@@ -19,10 +19,13 @@ interface FormValues {
 }
 
 interface Props {
-  channelId: number;
+  channelId: string;
 }
 
 const MessageForm = ({ channelId }: Props) => {
+  const [images, setImages] = useState<File[]>([]);
+  const [imagesInputKey, setImagesInputKey] = useState<number>();
+
   const { handleSubmit, register, setValue } = useForm<FormValues>();
   const { ref: bodyRef, onChange, ...registerBodyProps } = register('body');
 
@@ -31,6 +34,19 @@ const MessageForm = ({ channelId }: Props) => {
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
     const result = await api.sendMessage(channelId, body);
+
+    if (images.length) {
+      const formData = new FormData();
+      const { message } = result;
+
+      for (const image of images) {
+        formData.append('images', image);
+      }
+      await api.uploadMessageImages(channelId, message.id, formData);
+      setImagesInputKey(Date.now());
+      setImages([]);
+    }
+
     queryClient.setQueryData<{ messages: Message[] }>(
       ['messages', channelId],
       (oldData) => ({
@@ -75,6 +91,11 @@ const MessageForm = ({ channelId }: Props) => {
     handleSubmit((values) => sendMessage(values))();
   };
 
+  const handleRemoveSelectedImage = (imageName: string) => {
+    setImages(images.filter((image) => image.name !== imageName));
+    setImagesInputKey(Date.now());
+  };
+
   return (
     <Box sx={formStyles}>
       <FormGroup row>
@@ -101,6 +122,8 @@ const MessageForm = ({ channelId }: Props) => {
 
           <Box display="flex" justifyContent="space-between">
             <ImageInput
+              key={imagesInputKey}
+              setImages={setImages}
               iconStyles={{ fontSize: 25, color: 'text.secondary' }}
               multiple
             />
@@ -117,7 +140,11 @@ const MessageForm = ({ channelId }: Props) => {
         </Box>
       </FormGroup>
 
-      <AttachedImagePreview selectedImages={[]} sx={{ marginLeft: 1.5 }} />
+      <AttachedImagePreview
+        handleRemove={handleRemoveSelectedImage}
+        selectedImages={images}
+        sx={{ marginLeft: 1.5 }}
+      />
     </Box>
   );
 };

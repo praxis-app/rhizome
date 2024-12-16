@@ -6,6 +6,7 @@ import { useImageSrc } from '../../hooks/image.hooks';
 
 const REMOVE_BUTTON_STYLES: SxProps = {
   position: 'absolute',
+  borderRadius: '60%',
   right: -21,
   top: -21,
 };

@@ -21,10 +21,21 @@ class ApiClient {
     });
   };
 
-  sendMessage = async (channelId: number, body: string) => {
+  sendMessage = async (channelId: string, body: string) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ message: Message }>('post', path, {
       data: { channelId, body },
+    });
+  };
+
+  uploadMessageImages = async (
+    channelId: string,
+    messageId: string,
+    formData: FormData,
+  ) => {
+    const path = `/channels/${channelId}/messages/${messageId}/images`;
+    return this.executeRequest<{ message: Message }>('post', path, {
+      data: formData,
     });
   };
 
@@ -32,7 +43,7 @@ class ApiClient {
     return this.executeRequest<{ channels: Channel[] }>('get', '/channels');
   };
 
-  getChannelMessages = async (channelId: number) => {
+  getChannelMessages = async (channelId: string) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ messages: Message[] }>('get', path);
   };

@@ -16,8 +16,8 @@ export class Image {
   @Column()
   filename: string;
 
-  @Column()
-  imageType: string;
+  @Column({ nullable: true, type: 'varchar' })
+  imageType: string | null;
 
   @ManyToOne(() => Message, (message) => message.images, {
     onDelete: 'CASCADE',

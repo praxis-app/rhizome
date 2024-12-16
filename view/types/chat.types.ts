@@ -1,5 +1,5 @@
 export interface Message {
-  id: number;
+  id: string;
   body: string;
 
   // TODO: Add images, currently not implemented
@@ -10,6 +10,6 @@ export interface Message {
 }
 
 export interface Channel {
-  id: number;
+  id: string;
   name: string;
 }
