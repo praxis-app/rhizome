@@ -1,38 +1,32 @@
-import { RefObject, useEffect, useState } from 'react';
-import { API_ROOT } from '../client/api-client';
+import { RefObject } from 'react';
+import { useQuery } from 'react-query';
+import { api } from '../client/api-client';
 import { useAppStore } from '../store/app.store';
 import { useInView } from './shared.hooks';
 
+// TODO: Remove image cache from store and just use react-query instead
 export const useImageSrc = (
   imageId: string | undefined,
   ref: RefObject<HTMLElement>,
 ) => {
   const { imageCache, setImageCache } = useAppStore((state) => state);
-  const [src, setSrc] = useState<string>();
-
   const { viewed } = useInView(ref, '100px');
 
-  useEffect(() => {
-    if (!imageId || !viewed) {
-      return;
-    }
-    if (imageCache[imageId]) {
-      setSrc(imageCache[imageId]);
-      return;
-    }
-    const getImageSrc = async () => {
-      const imagePath = `${API_ROOT}/images/${imageId}/view`;
-      const token = localStorage.getItem('token');
-      const headers = { headers: { Authorization: `Bearer ${token}` } };
-      const result = await fetch(imagePath, headers);
-      const blob = await result.blob();
-      const url = URL.createObjectURL(blob);
-
+  const { data } = useQuery(
+    ['image', imageId],
+    async () => {
+      if (!imageId) {
+        return;
+      }
+      const result = await api.getImage(imageId);
+      const url = URL.createObjectURL(result);
       setImageCache({ ...imageCache, [imageId]: url });
-      setSrc(url);
-    };
-    getImageSrc();
-  }, [imageId, viewed, imageCache, setImageCache]);
+      return url;
+    },
+    {
+      enabled: !!imageId && !imageCache[imageId] && viewed,
+    },
+  );
 
-  return src;
+  return data;
 };

@@ -49,6 +49,11 @@ class ApiClient {
     return this.executeRequest<{ messages: Message[] }>('get', path);
   };
 
+  getImage = (imageId: string) => {
+    const path = `/images/${imageId}`;
+    return this.executeRequest<any>('get', path, { responseType: 'blob' });
+  };
+
   getHealth = async () => {
     return this.executeRequest<{ timestamp: string }>('get', '/health');
   };
@@ -56,7 +61,7 @@ class ApiClient {
   private async executeRequest<T>(
     method: Method,
     path: string,
-    options?: { data?: any; params?: any },
+    options?: { data?: any; params?: any; responseType?: any },
   ): Promise<T> {
     try {
       const token = localStorage.getItem('token');
@@ -67,6 +72,7 @@ class ApiClient {
         url: path,
         data: options?.data,
         params: options?.params,
+        responseType: options?.responseType,
         headers,
       });
 

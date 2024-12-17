@@ -1,4 +1,4 @@
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { dataSource } from '../database/data-source';
 import { deleteImageFile } from './images.utils';
 import { Image } from './models/image.entity';
@@ -10,16 +10,10 @@ class ImagesService {
     this.imageRepository = dataSource.getRepository(Image);
   }
 
-  async getImage(where: FindOptionsWhere<Image>) {
-    return this.imageRepository.findOne({ where });
-  }
-
-  async createImages(messageId: string, files: Express.Multer.File[]) {
-    const imageFilenames = files.map((file) => file.filename);
-    const images = imageFilenames.map((filename) =>
-      this.imageRepository.create({ messageId, filename }),
-    );
-    return this.imageRepository.save(images);
+  async getImage(imageId: string) {
+    return this.imageRepository.findOne({
+      where: { id: imageId },
+    });
   }
 
   async deleteImage(imageId: string) {

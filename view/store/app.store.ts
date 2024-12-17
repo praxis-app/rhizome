@@ -6,7 +6,7 @@ interface AppState {
   imageCache: Record<string, string>;
   setToken(token: string): void;
   setIsAppLoading(isAppLoading: boolean): void;
-  setImageCache(imageCache: Record<number, string>): void;
+  setImageCache(imageCache: Record<string, string>): void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
