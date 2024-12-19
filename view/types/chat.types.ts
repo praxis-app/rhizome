@@ -3,7 +3,7 @@ import { Image } from './image.types';
 export interface Message {
   id: string;
   body: string;
-  images: Image[];
+  images?: Image[];
   user: { name: string };
   createdAt: string;
 }

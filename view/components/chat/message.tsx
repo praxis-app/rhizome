@@ -15,6 +15,7 @@ interface Props {
 const Message = ({ message: { body, images, user, createdAt } }: Props) => {
   const isLarge = useAboveBreakpoint('md');
   const formattedDate = timeAgo(createdAt);
+  const showImages = !!images?.length;
 
   return (
     <Box display="flex" gap={2} paddingBottom={2}>
@@ -36,7 +37,7 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
 
         <FormattedText text={body} lineHeight={1.2} paddingBottom={0.4} />
 
-        {!!images.length && (
+        {showImages && (
           <AttachedImageList
             images={images}
             imageSx={{ borderRadius: 2 }}
