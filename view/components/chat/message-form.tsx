@@ -34,20 +34,23 @@ const MessageForm = ({ channelId }: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
-    const { message } = await api.sendMessage(channelId, body);
-    let messageImages: Image[] = [];
+    const { message } = await api.sendMessage(channelId, body, images.length);
+    const messageImages: Image[] = [];
 
-    if (images.length) {
-      const formData = new FormData();
-      for (const image of images) {
-        formData.append('images', image);
+    if (images.length && message.images) {
+      for (let i = 0; i < images.length; i++) {
+        const formData = new FormData();
+        formData.set('file', images[i]);
+
+        const placeholder = message.images[i];
+        const { image } = await api.uploadMessageImage(
+          channelId,
+          message.id,
+          placeholder.id,
+          formData,
+        );
+        messageImages.push(image);
       }
-      const result = await api.uploadMessageImages(
-        channelId,
-        message.id,
-        formData,
-      );
-      messageImages = result.images;
       setImagesInputKey(Date.now());
       setImages([]);
     }

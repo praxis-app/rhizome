@@ -8,6 +8,11 @@ import { User } from '../users/user.entity';
 import { CreateMessageDto } from './models/create-message.dto';
 import { Message } from './models/message.entity';
 
+enum MessageType {
+  MESSAGE = 'message',
+  IMAGE = 'image',
+}
+
 export class MessagesService {
   private messageRepository: Repository<Message>;
   private imageRepository: Repository<Image>;
@@ -30,6 +35,7 @@ export class MessagesService {
         },
         images: {
           id: true,
+          filename: true,
           createdAt: true,
         },
       },
@@ -39,28 +45,34 @@ export class MessagesService {
     });
   }
 
-  async createMessage(channelId: string, messageData: CreateMessageDto, user: User) {
+  async createMessage({ imageCount, ...messageData }: CreateMessageDto, user: User) {
     const errors = await validate(messageData);
     if (errors.length > 0) {
       throw new Error(JSON.stringify(errors));
     }
+    const message = await this.messageRepository.save({ ...messageData, userId: user.id });
+    let images: Image[] = [];
 
-    const message = await this.messageRepository.save({
-      ...messageData,
-      userId: user.id,
-      channelId,
-    });
+    if (imageCount) {
+      const imagePlaceholders = Array.from({ length: imageCount }).map(() => {
+        return this.imageRepository.create({ messageId: message.id });
+      });
+      images = await this.imageRepository.save(imagePlaceholders);
+    }
     const messagePayload = {
       ...message,
       user: { name: user.name },
+      images,
     };
 
+    const { channelId } = messageData;
     const channelMembers = await channelsService.getChannelMembers(channelId);
     for (const member of channelMembers) {
       if (member.userId === user.id) {
         continue;
       }
-      await pubSubService.publish(this.getNewMessageChannelKey(channelId, member.userId), {
+      await pubSubService.publish(this.getChannelKey(channelId, member.userId), {
+        type: MessageType.MESSAGE,
         message: messagePayload,
       });
     }
@@ -68,16 +80,33 @@ export class MessagesService {
     return messagePayload;
   }
 
-  async createMessageImages(messageId: string, files: Express.Multer.File[]) {
-    const imageFilenames = files.map((file) => file.filename);
-    const images = imageFilenames.map((filename) =>
-      this.imageRepository.create({ messageId, filename }),
-    );
-    return this.imageRepository.save(images);
+  async saveMessageImage(messageId: string, imageId: string, filename: string, user: User) {
+    const message = await this.messageRepository.findOne({
+      where: { id: messageId },
+    });
+    if (!message) {
+      throw new Error('Message not found');
+    }
+
+    const image = await this.imageRepository.save({ id: imageId, filename });
+    const channelMembers = await channelsService.getChannelMembers(message.channelId);
+    for (const member of channelMembers) {
+      if (member.userId === user.id) {
+        continue;
+      }
+      const channelKey = this.getChannelKey(message.channelId, member.userId);
+      await pubSubService.publish(channelKey, {
+        type: MessageType.IMAGE,
+        messageId,
+        imageId,
+        filename,
+      });
+    }
+    return image;
   }
 
-  getNewMessageChannelKey(channelId: string, userId: string) {
-    return `new-message-${channelId}-${userId}`;
+  getChannelKey(channelId: string, userId: string) {
+    return `channel-${channelId}-${userId}`;
   }
 }
 

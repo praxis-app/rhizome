@@ -10,6 +10,10 @@ class ImagesController {
       res.status(404).send('Image not found');
       return;
     }
+    if (!image.filename) {
+      res.status(404).send('Image has not been uploaded yet');
+      return;
+    }
 
     return res.sendFile(image.filename, {
       root: getUploadsPath(),

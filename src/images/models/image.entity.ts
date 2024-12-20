@@ -13,8 +13,8 @@ export class Image {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  filename: string;
+  @Column({ nullable: true, type: 'varchar' })
+  filename: string | null;
 
   @Column({ nullable: true, type: 'varchar' })
   imageType: string | null;

@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateMessageDto {
   @IsString()
@@ -7,4 +7,7 @@ export class CreateMessageDto {
 
   @IsString()
   channelId: string;
+
+  @IsInt()
+  imageCount: number;
 }

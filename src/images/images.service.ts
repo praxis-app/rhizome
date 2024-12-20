@@ -21,8 +21,8 @@ class ImagesService {
       where: { id: imageId },
       select: ['filename'],
     });
-    if (!image) {
-      return;
+    if (!image || !image.filename) {
+      throw new Error('Image not found');
     }
     await deleteImageFile(image.filename);
     this.imageRepository.delete(imageId);

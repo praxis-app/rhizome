@@ -8,6 +8,23 @@ import { PubSubMessage } from '../../types/shared.types';
 import MessageFeed from './message-feed';
 import MessageForm from './message-form';
 
+enum MessageType {
+  MESSAGE = 'message',
+  IMAGE = 'image',
+}
+
+interface NewMessagePayload {
+  type: MessageType.MESSAGE;
+  message: Message;
+}
+
+interface ImageMessagePayload {
+  type: MessageType.IMAGE;
+  filename: string;
+  messageId: string;
+  imageId: string;
+}
+
 interface Props {
   channelId: string;
 }
@@ -20,22 +37,51 @@ const ChatPanel = ({ channelId }: Props) => {
   const { data: meData } = useMeQuery({ enabled: true });
   const queryClient = useQueryClient();
 
-  useSubscription(`new-message-${channelId}-${meData?.user.id}`, {
+  useSubscription(`channel-${channelId}-${meData?.user.id}`, {
     onMessage: (event) => {
-      const { body }: PubSubMessage<{ message: Message }> = JSON.parse(
-        event.data,
-      );
+      const { body }: PubSubMessage<NewMessagePayload | ImageMessagePayload> =
+        JSON.parse(event.data);
       if (!body) {
         return;
       }
-      queryClient.setQueryData<{ messages: Message[] }>(
-        ['messages', channelId],
-        (oldData) => ({
-          messages: oldData
-            ? [body.message, ...oldData.messages]
-            : [body.message],
-        }),
-      );
+
+      // Update cache with new message
+      if (body.type === MessageType.MESSAGE) {
+        queryClient.setQueryData<{ messages: Message[] }>(
+          ['messages', channelId],
+          (oldData) => ({
+            messages: oldData
+              ? [body.message, ...oldData.messages]
+              : [body.message],
+          }),
+        );
+      }
+
+      // Update cache with image filename once uploaded
+      if (body.type === MessageType.IMAGE) {
+        queryClient.setQueryData<{ messages: Message[] }>(
+          ['messages', channelId],
+          (oldData) => {
+            if (!oldData) {
+              return { messages: [] };
+            }
+            const messages = oldData.messages.map((message) => {
+              if (message.id === body.messageId) {
+                return {
+                  ...message,
+                  images: message.images?.map((image) =>
+                    image.id === body.imageId
+                      ? { ...image, filename: body.filename }
+                      : image,
+                  ),
+                };
+              }
+              return message;
+            });
+            return { messages };
+          },
+        );
+      }
     },
     enabled: !!meData,
   });

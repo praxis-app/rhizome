@@ -1,8 +1,9 @@
 import { Box, BoxProps, SxProps } from '@mui/material';
 import AttachedImage from './attached-image';
+import { Image } from '../../types/image.types';
 
 interface Props extends Omit<BoxProps, 'children'> {
-  images: any[];
+  images: Image[];
   imageSx?: SxProps;
   onImageLoad?(): void;
   topRounded?: boolean;
@@ -33,6 +34,10 @@ const AttachedImageList = ({
           borderTopLeftRadius: topRounded && index === 0 ? '7px' : undefined,
           ...imageSx,
         };
+
+        if (!image.filename) {
+          return null;
+        }
 
         return (
           <AttachedImage

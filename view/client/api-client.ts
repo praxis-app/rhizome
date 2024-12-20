@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { Channel, Message } from '../types/chat.types';
-import { CurrentUser } from '../types/user.types';
 import { Image } from '../types/image.types';
+import { CurrentUser } from '../types/user.types';
 
 export const API_ROOT = '/api';
 
@@ -22,20 +22,21 @@ class ApiClient {
     });
   };
 
-  sendMessage = async (channelId: string, body: string) => {
+  sendMessage = async (channelId: string, body: string, imageCount: number) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ message: Message }>('post', path, {
-      data: { channelId, body },
+      data: { channelId, body, imageCount },
     });
   };
 
-  uploadMessageImages = async (
+  uploadMessageImage = async (
     channelId: string,
     messageId: string,
+    imageId: string,
     formData: FormData,
   ) => {
-    const path = `/channels/${channelId}/messages/${messageId}/images`;
-    return this.executeRequest<{ images: Image[] }>('post', path, {
+    const path = `/channels/${channelId}/messages/${messageId}/images/${imageId}/upload`;
+    return this.executeRequest<{ image: Image }>('post', path, {
       data: formData,
     });
   };

@@ -1,9 +1,5 @@
 import multer from 'multer';
-import {
-  MAX_IMAGE_COUNT,
-  MAX_IMAGE_SIZE,
-  VALID_IMAGE_FORMAT,
-} from '../image.constants';
+import { MAX_IMAGE_SIZE, VALID_IMAGE_FORMAT } from '../image.constants';
 import { getUploadsPath } from '../images.utils';
 
 const storage = multer.diskStorage({
@@ -31,4 +27,4 @@ const upload = multer({
   storage,
 });
 
-export const uploadImages = upload.array('images', MAX_IMAGE_COUNT);
+export const uploadImage = upload.single('file');

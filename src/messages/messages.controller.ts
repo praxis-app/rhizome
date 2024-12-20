@@ -13,23 +13,21 @@ class MessagesController {
   };
 
   createMessage = async (req: Request, res: Response) => {
-    const { channelId } = req.params;
-    const { user } = res.locals;
-
-    const message = await messagesService.createMessage(channelId, req.body, user);
+    const message = await messagesService.createMessage(req.body, res.locals.user);
     res.json({ message });
   };
 
-  async createMessageImages(req: Request, res: Response) {
-    if (!req.files) {
-      res.status(400).send('No images uploaded');
+  async uploadMessageImage(req: Request, res: Response) {
+    if (!req.file) {
+      res.status(400).send('No image uploaded');
       return;
     }
-    const { messageId } = req.params;
-    const files = req.files as Express.Multer.File[];
-    const images = await messagesService.createMessageImages(messageId, files);
+    const { user } = res.locals;
+    const { messageId, imageId } = req.params;
+    const { filename } = req.file as Express.Multer.File;
+    const image = await messagesService.saveMessageImage(messageId, imageId, filename, user);
 
-    res.status(201).json({ images });
+    res.status(201).json({ image });
   }
 }
 
