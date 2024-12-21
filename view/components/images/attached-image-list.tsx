@@ -29,7 +29,7 @@ const AttachedImageList = ({
     <Box sx={boxStyles} {...boxProps}>
       {images.map((image, index) => {
         const imageStyles: SxProps = {
-          marginBottom: index + 1 === images.length ? undefined : 2,
+          marginBottom: index + 1 === images.length ? undefined : 0.8,
           borderTopRightRadius: topRounded && index === 0 ? '7px' : undefined,
           borderTopLeftRadius: topRounded && index === 0 ? '7px' : undefined,
           ...imageSx,
