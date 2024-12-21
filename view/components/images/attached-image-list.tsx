@@ -35,15 +35,12 @@ const AttachedImageList = ({
           ...imageSx,
         };
 
-        if (!image.filename) {
-          return null;
-        }
-
         return (
           <AttachedImage
             key={image.id}
             image={image}
             onImageLoad={onImageLoad}
+            isPlaceholder={true}
             sx={imageStyles}
           />
         );

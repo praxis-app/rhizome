@@ -8,6 +8,7 @@ import { useInView } from './shared.hooks';
 export const useImageSrc = (
   imageId: string | undefined,
   ref: RefObject<HTMLElement>,
+  enabled = true,
 ) => {
   const { imageCache, setImageCache } = useAppStore((state) => state);
   const { viewed } = useInView(ref, '100px');
@@ -24,7 +25,7 @@ export const useImageSrc = (
       return url;
     },
     {
-      enabled: !!imageId && !imageCache[imageId] && viewed,
+      enabled: enabled && !!imageId && !imageCache[imageId] && viewed,
     },
   );
 

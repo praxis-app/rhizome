@@ -11,6 +11,7 @@ interface Props extends BoxProps {
   marginBottom?: string | number;
   width?: string | number;
   onImageLoad?(): void;
+  isPlaceholder?: boolean;
   sx?: SxProps;
 }
 
@@ -19,6 +20,7 @@ const AttachedImage = ({
   marginBottom,
   width = '100%',
   onImageLoad,
+  isPlaceholder,
   ...boxProps
 }: Props) => {
   const images = useAppStore((state) => state.imageCache);
@@ -28,7 +30,7 @@ const AttachedImage = ({
   const { t } = useTranslation();
   const isLarge = useAboveBreakpoint('md');
 
-  const loadingHeight = isLarge ? '400px' : '200px';
+  const loadingHeight = isLarge ? '400px' : '500px';
   const height = isLoaded ? 'auto' : loadingHeight;
 
   const handleLoad = () => {
@@ -44,6 +46,7 @@ const AttachedImage = ({
       height={height}
       onLoad={handleLoad}
       marginBottom={marginBottom}
+      isPlaceholder={isPlaceholder}
       {...boxProps}
     />
   );
