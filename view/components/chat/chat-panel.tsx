@@ -66,17 +66,17 @@ const ChatPanel = ({ channelId }: Props) => {
               return { messages: [] };
             }
             const messages = oldData.messages.map((message) => {
-              if (message.id === body.messageId) {
-                return {
-                  ...message,
-                  images: message.images?.map((image) =>
-                    image.id === body.imageId
-                      ? { ...image, filename: body.filename }
-                      : image,
-                  ),
-                };
+              if (message.id !== body.messageId) {
+                return message;
               }
-              return message;
+              return {
+                ...message,
+                images: message.images?.map((image) =>
+                  image.id === body.imageId
+                    ? { ...image, filename: body.filename }
+                    : image,
+                ),
+              };
             });
             return { messages };
           },

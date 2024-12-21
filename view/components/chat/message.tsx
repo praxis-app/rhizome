@@ -1,19 +1,22 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
 import { Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
+import { Message as MessageType } from '../../types/chat.types';
 import { timeAgo } from '../../utils/time.utils';
 import AttachedImageList from '../images/attached-image-list';
 import FormattedText from '../shared/formatted-text';
 import UserAvatar from '../users/user-avatar';
-import { Message as MessageType } from '../../types/chat.types';
 
 interface Props {
   message: MessageType;
 }
 
 const Message = ({ message: { body, images, user, createdAt } }: Props) => {
+  const { t } = useTranslation();
   const isLarge = useAboveBreakpoint('md');
+
   const formattedDate = timeAgo(createdAt);
   const showImages = !!images?.length;
 
@@ -35,7 +38,9 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
           </Typography>
         </Box>
 
-        <FormattedText text={body} lineHeight={1.2} paddingBottom={0.4} />
+        {body && (
+          <FormattedText text={body} lineHeight={1.2} paddingBottom={0.4} />
+        )}
 
         {showImages && (
           <AttachedImageList
@@ -44,6 +49,12 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
             width={isLarge ? 350 : '100%'}
             paddingTop={0.7}
           />
+        )}
+
+        {!body && !showImages && (
+          <Typography color="text.secondary" fontSize="15px">
+            {t('prompts.noContent')}
+          </Typography>
         )}
       </Box>
     </Box>

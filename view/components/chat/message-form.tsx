@@ -27,8 +27,9 @@ const MessageForm = ({ channelId }: Props) => {
   const [images, setImages] = useState<File[]>([]);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
 
-  const { handleSubmit, register, setValue } = useForm<FormValues>();
-  const { ref: bodyRef, onChange, ...registerBodyProps } = register('body');
+  const { handleSubmit, register, setValue, formState, reset } =
+    useForm<FormValues>();
+  const registerBodyProps = register('body');
 
   const isDarkMode = useIsDarkMode();
   const queryClient = useQueryClient();
@@ -72,6 +73,7 @@ const MessageForm = ({ channelId }: Props) => {
       },
     );
     setValue('body', '');
+    reset();
   });
 
   const formStyles: SxProps = {
@@ -128,10 +130,6 @@ const MessageForm = ({ channelId }: Props) => {
             placeholder={t('chat.prompts.sendAMessage')}
             onKeyDown={handleInputKeyDown}
             sx={inputStyles}
-            onChange={onChange}
-            ref={(e) => {
-              bodyRef(e);
-            }}
             disableUnderline
             multiline
           />
@@ -148,6 +146,7 @@ const MessageForm = ({ channelId }: Props) => {
               sx={sendBtnStyles}
               edge="end"
               onClick={handleSendBtnClick}
+              disabled={!images.length && !formState.dirtyFields.body}
               disableRipple
             >
               <Send sx={{ fontSize: 20, color: 'text.secondary' }} />

@@ -14,8 +14,8 @@ const MessageFeed = ({ messages }: Props) => (
     paddingX={1.5}
     flex={1}
   >
-    {messages.map((message, index) => (
-      <Message key={index} message={message} />
+    {messages.map((message) => (
+      <Message key={message.id} message={message} />
     ))}
   </Box>
 );
