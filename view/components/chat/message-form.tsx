@@ -78,6 +78,7 @@ const MessageForm = ({ channelId }: Props) => {
 
   const formStyles: SxProps = {
     borderTop: `1px solid ${isDarkMode ? grey[900] : grey[100]}`,
+    transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)',
     bgcolor: 'background.paper',
     paddingY: 1,
     paddingX: 0.9,
@@ -119,6 +120,7 @@ const MessageForm = ({ channelId }: Props) => {
       <FormGroup row>
         <Box
           bgcolor={isDarkMode ? grey[900] : grey[100]}
+          sx={{ transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)' }}
           borderRadius={4}
           paddingX={1.5}
           paddingY={0.2}
