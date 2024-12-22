@@ -111,5 +111,28 @@ export const theme = createTheme({
         }),
       },
     },
+
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          '--Paper-overlay': 'none !important',
+        },
+        colorPrimary: ({ theme }: Props) => ({
+          ...theme.applyStyles('dark', {
+            backgroundColor: theme.palette.background.default,
+          }),
+        }),
+      },
+    },
+
+    MuiDialogContent: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          ...theme.applyStyles('dark', {
+            backgroundColor: theme.palette.background.default,
+          }),
+        }),
+      },
+    },
   },
 });

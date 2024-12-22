@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Image } from '../../types/image.types';
+import Modal from '../shared/modal';
 import LazyLoadImage from './lazy-load-image';
 
 interface Props extends BoxProps {
@@ -23,6 +24,7 @@ const AttachedImage = ({
 }: Props) => {
   const images = useAppStore((state) => state.imageCache);
   const [isLoaded, setIsLoaded] = useState(!!images[image.id]);
+  const [isEnlarged, setIsEnlarged] = useState(false);
 
   const { t } = useTranslation();
   const isLarge = useAboveBreakpoint('md');
@@ -30,22 +32,55 @@ const AttachedImage = ({
   const loadingHeight = isLarge ? '400px' : '300px';
   const height = isLoaded ? 'auto' : loadingHeight;
 
+  const modalContentSx: SxProps = {
+    padding: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  };
+
   const handleLoad = () => {
     onImageLoad?.();
     setIsLoaded(true);
   };
 
+  const handleClick = () => {
+    if (isLoaded) {
+      setIsEnlarged(true);
+    }
+  };
+
   return (
-    <LazyLoadImage
-      imageId={image.id}
-      alt={t('images.labels.attachedImage')}
-      width={width}
-      height={height}
-      onLoad={handleLoad}
-      marginBottom={marginBottom}
-      isPlaceholder={image.isPlaceholder}
-      {...boxProps}
-    />
+    <>
+      <Modal
+        open={isEnlarged}
+        onClose={() => setIsEnlarged(false)}
+        appBarSx={{ borderBottom: 'none' }}
+        contentSx={modalContentSx}
+      >
+        {isEnlarged && (
+          <LazyLoadImage
+            imageId={image.id}
+            alt={t('images.labels.attachedImage')}
+            marginBottom={35}
+            width="100%"
+            height="auto"
+          />
+        )}
+      </Modal>
+
+      <LazyLoadImage
+        imageId={image.id}
+        alt={t('images.labels.attachedImage')}
+        width={width}
+        height={height}
+        onLoad={handleLoad}
+        marginBottom={marginBottom}
+        isPlaceholder={image.isPlaceholder}
+        onClick={handleClick}
+        {...boxProps}
+      />
+    </>
   );
 };
 
