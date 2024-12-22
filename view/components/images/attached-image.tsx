@@ -24,13 +24,12 @@ const AttachedImage = ({
   ...boxProps
 }: Props) => {
   const images = useAppStore((state) => state.imageCache);
-  const alreadyLoadedSrc = !!(image.id && images[image.id]);
-  const [isLoaded, setIsLoaded] = useState(alreadyLoadedSrc);
+  const [isLoaded, setIsLoaded] = useState(!!images[image.id]);
 
   const { t } = useTranslation();
   const isLarge = useAboveBreakpoint('md');
 
-  const loadingHeight = isLarge ? '400px' : '500px';
+  const loadingHeight = isLarge ? '400px' : '300px';
   const height = isLoaded ? 'auto' : loadingHeight;
 
   const handleLoad = () => {

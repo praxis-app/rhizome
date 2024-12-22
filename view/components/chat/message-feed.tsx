@@ -11,6 +11,7 @@ const MessageFeed = ({ messages }: Props) => (
     display="flex"
     flexDirection="column-reverse"
     sx={{ overflowY: 'scroll' }}
+    paddingTop={2}
     paddingX={1.5}
     flex={1}
   >

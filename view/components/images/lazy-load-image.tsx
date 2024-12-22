@@ -50,7 +50,7 @@ const LazyLoadImage = ({
     <Box
       ref={ref}
       alt={alt}
-      component="img"
+      component={isPlaceholder ? 'div' : 'img'}
       loading={src ? 'lazy' : 'eager'}
       onLoad={handleLoad}
       src={src || alreadyLoadedSrc || srcFromImageId}

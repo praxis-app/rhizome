@@ -15,7 +15,7 @@ interface Props {
 
 const Message = ({ message: { body, images, user, createdAt } }: Props) => {
   const { t } = useTranslation();
-  const isLarge = useAboveBreakpoint('md');
+  const isLarge = useAboveBreakpoint('sm');
 
   const formattedDate = timeAgo(createdAt);
   const showImages = !!images?.length;
