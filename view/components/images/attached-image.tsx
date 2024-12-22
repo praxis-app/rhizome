@@ -32,11 +32,17 @@ const AttachedImage = ({
   const loadingHeight = isLarge ? '400px' : '300px';
   const height = isLoaded ? 'auto' : loadingHeight;
 
+  const modalSx: SxProps = {
+    '& .MuiDialog-paper': {
+      marginBottom: isLarge ? 12 : 0,
+    },
+  };
   const modalContentSx: SxProps = {
     padding: 0,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    minHeight: isLarge ? 'fit-content' : '60vh',
   };
 
   const handleLoad = () => {
@@ -57,12 +63,14 @@ const AttachedImage = ({
         onClose={() => setIsEnlarged(false)}
         appBarSx={{ borderBottom: 'none' }}
         contentSx={modalContentSx}
+        hideAppBar={isLarge}
+        sx={modalSx}
       >
         {isEnlarged && (
           <LazyLoadImage
             imageId={image.id}
             alt={t('images.labels.attachedImage')}
-            marginBottom={35}
+            marginBottom={isLarge ? 0 : 35}
             width="100%"
             height="auto"
           />

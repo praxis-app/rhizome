@@ -118,6 +118,7 @@ export const theme = createTheme({
           '--Paper-overlay': 'none !important',
         },
         colorPrimary: ({ theme }: Props) => ({
+          backgroundColor: theme.palette.background.default,
           ...theme.applyStyles('dark', {
             backgroundColor: theme.palette.background.default,
           }),

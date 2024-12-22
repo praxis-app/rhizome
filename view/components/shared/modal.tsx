@@ -26,6 +26,7 @@ interface Props extends DialogProps {
   contentSx?: SxProps;
   footerContent?: ReactNode;
   isClosingActionDisabled?: boolean;
+  hideAppBar?: boolean;
   isLoading?: boolean;
   onClose?(): void;
   subtext?: string;
@@ -46,9 +47,11 @@ const Modal = ({
   maxWidth,
   onClose,
   open,
+  hideAppBar,
   subtext,
   title,
   topGap,
+  sx,
   ...dialogProps
 }: Props) => {
   const isDesktop = useAboveBreakpoint('md');
@@ -146,18 +149,20 @@ const Modal = ({
 
   return (
     <Dialog
+      sx={{ marginTop: topGap, ...sx }}
+      onKeyDown={handleKeyDown}
       fullScreen={!isDesktop}
       maxWidth={maxWidth}
-      onKeyDown={handleKeyDown}
       open={open}
-      sx={{ marginTop: topGap }}
       // Required for mobile
       slotProps={{ backdrop: { onClick: onClose } }}
       // Required for desktop
       onClose={onClose}
       {...dialogProps}
     >
-      <AppBar sx={appBarStyles}>{renderAppBarContent()}</AppBar>
+      {!hideAppBar && (
+        <AppBar sx={appBarStyles}>{renderAppBarContent()}</AppBar>
+      )}
       <DialogContent sx={contentStyles}>{children}</DialogContent>
       {footerContent}
     </Dialog>
