@@ -40,7 +40,6 @@ const AttachedImageList = ({
             key={image.id}
             image={image}
             onImageLoad={onImageLoad}
-            isPlaceholder={!image.filename}
             sx={imageStyles}
           />
         );

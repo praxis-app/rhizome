@@ -5,7 +5,7 @@ import { dataSource } from '../database/data-source';
 import { Image } from '../images/models/image.entity';
 import { pubSubService } from '../pub-sub/pub-sub.service';
 import { User } from '../users/user.entity';
-import { CreateMessageDto } from './models/create-message.dto';
+import { CreateMessageReq } from './models/create-message-req.dto';
 import { Message } from './models/message.entity';
 
 enum MessageType {
@@ -22,14 +22,13 @@ export class MessagesService {
     this.imageRepository = dataSource.getRepository(Image);
   }
 
-  getMessages(channelId: string) {
-    return this.messageRepository.find({
+  async getMessages(channelId: string) {
+    const messages = await this.messageRepository.find({
       where: { channelId },
       relations: ['user', 'images'],
       select: {
         id: true,
         body: true,
-        createdAt: true,
         user: {
           name: true,
         },
@@ -38,15 +37,27 @@ export class MessagesService {
           filename: true,
           createdAt: true,
         },
+        createdAt: true,
       },
       order: {
         createdAt: 'DESC',
       },
       take: 20,
     });
+
+    return messages.map((message) => ({
+      ...message,
+      images: message.images.map((image) => {
+        return {
+          id: image.id,
+          isPlaceholder: !image.filename,
+          createdAt: image.createdAt,
+        };
+      }),
+    }));
   }
 
-  async createMessage({ imageCount, ...messageData }: CreateMessageDto, user: User) {
+  async createMessage({ imageCount, ...messageData }: CreateMessageReq, user: User) {
     const errors = await validate(messageData);
     if (errors.length > 0) {
       throw new Error(JSON.stringify(errors));
@@ -60,10 +71,15 @@ export class MessagesService {
       });
       images = await this.imageRepository.save(imagePlaceholders);
     }
+    const shapedImages = images.map((image) => ({
+      id: image.id,
+      isPlaceholder: true,
+      createdAt: image.createdAt,
+    }));
     const messagePayload = {
       ...message,
       user: { name: user.name },
-      images,
+      images: shapedImages,
     };
 
     const { channelId } = messageData;
@@ -98,9 +114,9 @@ export class MessagesService {
       const channelKey = this.getChannelKey(message.channelId, member.userId);
       await pubSubService.publish(channelKey, {
         type: MessageType.IMAGE,
+        isPlaceholder: false,
         messageId,
         imageId,
-        filename,
       });
     }
     return image;

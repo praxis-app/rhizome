@@ -20,7 +20,7 @@ interface NewMessagePayload {
 
 interface ImageMessagePayload {
   type: MessageType.IMAGE;
-  filename: string;
+  isPlaceholder: false;
   messageId: string;
   imageId: string;
 }
@@ -73,7 +73,7 @@ const ChatPanel = ({ channelId }: Props) => {
                 ...message,
                 images: message.images?.map((image) =>
                   image.id === body.imageId
-                    ? { ...image, filename: body.filename }
+                    ? { ...image, isPlaceholder: body.isPlaceholder }
                     : image,
                 ),
               };
