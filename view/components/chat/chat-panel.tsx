@@ -40,6 +40,12 @@ const ChatPanel = ({ channelId }: Props) => {
   const feedBoxRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
+  const scrollToBottom = () => {
+    if (feedBoxRef.current) {
+      feedBoxRef.current.scrollTop = 0;
+    }
+  };
+
   useSubscription(`channel-${channelId}-${meData?.user.id}`, {
     onMessage: (event) => {
       const { body }: PubSubMessage<NewMessagePayload | ImageMessagePayload> =
@@ -85,15 +91,11 @@ const ChatPanel = ({ channelId }: Props) => {
           },
         );
       }
+
+      scrollToBottom();
     },
     enabled: !!meData,
   });
-
-  const handleSend = () => {
-    if (feedBoxRef.current) {
-      feedBoxRef.current.scrollTop = 0;
-    }
-  };
 
   if (!messagesData) {
     return null;
@@ -110,7 +112,7 @@ const ChatPanel = ({ channelId }: Props) => {
       right={0}
     >
       <MessageFeed messages={messagesData.messages} feedBoxRef={feedBoxRef} />
-      <MessageForm channelId={channelId} onSend={handleSend} />
+      <MessageForm channelId={channelId} onSend={scrollToBottom} />
     </Box>
   );
 };
