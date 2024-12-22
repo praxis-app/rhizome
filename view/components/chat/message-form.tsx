@@ -80,7 +80,8 @@ const MessageForm = ({ channelId }: Props) => {
     borderTop: `1px solid ${isDarkMode ? grey[900] : grey[100]}`,
     transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)',
     bgcolor: 'background.paper',
-    paddingY: 1,
+    paddingTop: 1,
+    paddingBottom: 2,
     paddingX: 0.9,
     width: '100%',
   };
@@ -157,11 +158,13 @@ const MessageForm = ({ channelId }: Props) => {
         </Box>
       </FormGroup>
 
-      <AttachedImagePreview
-        handleRemove={handleRemoveSelectedImage}
-        selectedImages={images}
-        sx={{ marginLeft: 1.5 }}
-      />
+      {!!images.length && (
+        <AttachedImagePreview
+          handleRemove={handleRemoveSelectedImage}
+          selectedImages={images}
+          sx={{ marginLeft: 1.5 }}
+        />
+      )}
     </Box>
   );
 };
