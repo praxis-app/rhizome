@@ -20,6 +20,7 @@ const AttachedImage = ({
   marginBottom,
   width = '100%',
   onImageLoad,
+  sx,
   ...boxProps
 }: Props) => {
   const images = useAppStore((state) => state.imageCache);
@@ -32,6 +33,10 @@ const AttachedImage = ({
   const loadingHeight = isLarge ? '400px' : '300px';
   const height = isLoaded ? 'auto' : loadingHeight;
 
+  const imageSx: SxProps = {
+    cursor: isLoaded ? 'pointer' : 'default',
+    ...sx,
+  };
   const modalSx: SxProps = {
     '& .MuiDialog-paper': {
       marginBottom: isLarge ? 12 : 0,
@@ -86,6 +91,7 @@ const AttachedImage = ({
         marginBottom={marginBottom}
         isPlaceholder={image.isPlaceholder}
         onClick={handleClick}
+        sx={imageSx}
         {...boxProps}
       />
     </>
