@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 export const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthWrapper>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme} defaultMode="system">
         <CssBaseline />
         <Layout>
           <Outlet />
