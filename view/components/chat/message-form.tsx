@@ -21,9 +21,10 @@ interface FormValues {
 
 interface Props {
   channelId: string;
+  onSend?(): void;
 }
 
-const MessageForm = ({ channelId }: Props) => {
+const MessageForm = ({ channelId, onSend }: Props) => {
   const [images, setImages] = useState<File[]>([]);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
 
@@ -73,6 +74,7 @@ const MessageForm = ({ channelId }: Props) => {
       },
     );
     setValue('body', '');
+    onSend?.();
     reset();
   });
 

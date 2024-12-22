@@ -1,13 +1,16 @@
 import { Box } from '@mui/material';
 import { Message as MessageType } from '../../types/chat.types';
 import Message from './message';
+import { RefObject } from 'react';
 
 interface Props {
   messages: MessageType[];
+  feedBoxRef: RefObject<HTMLDivElement>;
 }
 
-const MessageFeed = ({ messages }: Props) => (
+const MessageFeed = ({ messages, feedBoxRef }: Props) => (
   <Box
+    ref={feedBoxRef}
     display="flex"
     flexDirection="column-reverse"
     sx={{ overflowY: 'scroll' }}

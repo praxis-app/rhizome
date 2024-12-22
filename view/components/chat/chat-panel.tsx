@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { useRef } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { useSubscription } from '../../hooks/shared.hooks';
@@ -34,7 +35,9 @@ const ChatPanel = ({ channelId }: Props) => {
     queryKey: ['messages', channelId],
     queryFn: () => api.getChannelMessages(channelId),
   });
-  const { data: meData } = useMeQuery({ enabled: true });
+  const { data: meData } = useMeQuery();
+
+  const feedBoxRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
 
   useSubscription(`channel-${channelId}-${meData?.user.id}`, {
@@ -86,6 +89,12 @@ const ChatPanel = ({ channelId }: Props) => {
     enabled: !!meData,
   });
 
+  const handleSend = () => {
+    if (feedBoxRef.current) {
+      feedBoxRef.current.scrollTop = 0;
+    }
+  };
+
   if (!messagesData) {
     return null;
   }
@@ -100,8 +109,8 @@ const ChatPanel = ({ channelId }: Props) => {
       bottom={0}
       right={0}
     >
-      <MessageFeed messages={messagesData.messages} />
-      <MessageForm channelId={channelId} />
+      <MessageFeed messages={messagesData.messages} feedBoxRef={feedBoxRef} />
+      <MessageForm channelId={channelId} onSend={handleSend} />
     </Box>
   );
 };
