@@ -41,7 +41,7 @@ const ChatPanel = ({ channelId }: Props) => {
   const queryClient = useQueryClient();
 
   const scrollToBottom = () => {
-    if (feedBoxRef.current) {
+    if (feedBoxRef.current && feedBoxRef.current.scrollTop >= -100) {
       feedBoxRef.current.scrollTop = 0;
     }
   };

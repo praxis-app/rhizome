@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { RefObject, useEffect, useState } from 'react';
 import useWebSocket, { Options } from 'react-use-websocket';
+import { BrowserEvents } from '../constants/shared.constants';
 import { useAppStore } from '../store/app.store';
 import { PubSubMessage } from '../types/shared.types';
 import { getWebSocketURL } from '../utils/shared.utils';
@@ -146,4 +147,24 @@ export const useInView = (ref: RefObject<HTMLElement>, rootMargin = '0px') => {
   }, [ref, rootMargin]);
 
   return { inView, setInView, viewed, setViewed };
+};
+
+export const useScrollPosition = () => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const handleScroll = () => {
+    const position = window.scrollY;
+    setScrollPosition(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener(BrowserEvents.Scroll, handleScroll, {
+      passive: true,
+    });
+    return () => {
+      window.removeEventListener(BrowserEvents.Scroll, handleScroll);
+    };
+  }, []);
+
+  return scrollPosition;
 };
