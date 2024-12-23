@@ -22,11 +22,7 @@ class AuthService {
     });
   };
 
-  validateRegister = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  validateRegister = async (req: Request, res: Response, next: NextFunction) => {
     const { clientId } = req.body;
     if (!clientId || !uuidValidate(clientId)) {
       res.status(400).send('Invalid client ID');
@@ -40,11 +36,7 @@ class AuthService {
     next();
   };
 
-  authenticateUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
     const [type, token] = authorization?.split(' ') ?? [];
     if (type !== 'Bearer' || !token) {
@@ -62,21 +54,18 @@ class AuthService {
 
   verifyToken = async (token: string) => {
     return new Promise<User | null>((resolve) => {
-      jwt.verify(
-        token,
-        process.env.TOKEN_SECRET as string,
-        async (err, payload) => {
-          if (err) {
-            resolve(null);
-            return;
-          }
-          const { userId } = payload as { userId: string };
-          const user = await this.userRepository.findOne({
-            where: { id: userId },
-          });
-          resolve(user);
-        },
-      );
+      const secret = process.env.TOKEN_SECRET as string;
+      jwt.verify(token, secret, async (err, payload) => {
+        if (err) {
+          resolve(null);
+          return;
+        }
+        const { userId } = payload as { userId: string };
+        const user = await this.userRepository.findOne({
+          where: { id: userId },
+        });
+        resolve(user);
+      });
     });
   };
 }

@@ -1,16 +1,9 @@
 import WebSocket from 'ws';
 import { authService } from '../auth/auth.service';
 import { cacheService } from '../cache/cache.service';
-import {
-  PubSubRequest,
-  PubSubResponse,
-  WebSocketWithId,
-} from './pub-sub.models';
+import { PubSubRequest, PubSubResponse, WebSocketWithId } from './pub-sub.models';
 
-type ChannelHandler = (
-  message: any,
-  publisher: WebSocketWithId,
-) => Promise<void>;
+type ChannelHandler = (message: any, publisher: WebSocketWithId) => Promise<void>;
 
 class PubSubService {
   /** Local mapping of subscriber IDs to websockets */
@@ -29,9 +22,7 @@ class PubSubService {
   }
 
   async handleMessage(webSocket: WebSocketWithId, data: WebSocket.RawData) {
-    const { channel, body, request, token }: PubSubRequest = JSON.parse(
-      data.toString(),
-    );
+    const { channel, body, request, token }: PubSubRequest = JSON.parse(data.toString());
 
     const user = await authService.verifyToken(token);
     if (!user) {
@@ -59,11 +50,7 @@ class PubSubService {
     }
   }
 
-  async publish(
-    channel: string,
-    message: unknown,
-    publisher?: WebSocketWithId,
-  ) {
+  async publish(channel: string, message: unknown, publisher?: WebSocketWithId) {
     // Handle channel specific actions
     if (this.channelHandlers[channel] && publisher) {
       await this.channelHandlers[channel](message, publisher);

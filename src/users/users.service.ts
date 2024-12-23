@@ -1,9 +1,5 @@
 import { Repository } from 'typeorm';
-import {
-  colors,
-  NumberDictionary,
-  uniqueNamesGenerator,
-} from 'unique-names-generator';
+import { colors, NumberDictionary, uniqueNamesGenerator } from 'unique-names-generator';
 import { channelsService } from '../channels/channels.service';
 import { dataSource } from '../database/data-source';
 import { User } from './user.entity';
@@ -24,13 +20,8 @@ class UsersService {
   };
 
   generateName = async () => {
-    const numberDictionary = NumberDictionary.generate({
-      min: 10,
-      max: 99,
-    });
-
-    const nounDictionary =
-      Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
+    const numberDictionary = NumberDictionary.generate({ min: 10, max: 99 });
+    const nounDictionary = Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
 
     const name = uniqueNamesGenerator({
       dictionaries: [colors, nounDictionary, numberDictionary],
@@ -38,10 +29,6 @@ class UsersService {
     });
 
     return name;
-  };
-
-  shapeCurrentUser = async (user: User) => {
-    return { id: user.id, name: user.name };
   };
 }
 
