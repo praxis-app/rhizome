@@ -17,8 +17,10 @@ import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { useAppStore } from '../../store/app.store';
 import { Message } from '../../types/chat.types';
 import { Image } from '../../types/image.types';
+import { validateImageInput } from '../../utils/image.utils';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
 
@@ -34,6 +36,7 @@ interface Props {
 }
 
 const MessageForm = ({ channelId, onSend }: Props) => {
+  const { setToast } = useAppStore((state) => state);
   const [images, setImages] = useState<File[]>([]);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
 
@@ -52,48 +55,60 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     },
   });
 
-  const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
-    const { message } = await api.sendMessage(channelId, body, images.length);
-    const messageImages: Image[] = [];
+  const { mutate: sendMessage } = useMutation(
+    async ({ body }: FormValues) => {
+      validateImageInput(images);
 
-    if (images.length && message.images) {
-      for (let i = 0; i < images.length; i++) {
-        const formData = new FormData();
-        formData.set('file', images[i]);
+      const { message } = await api.sendMessage(channelId, body, images.length);
+      const messageImages: Image[] = [];
 
-        const placeholder = message.images[i];
-        const { image } = await api.uploadMessageImage(
-          channelId,
-          message.id,
-          placeholder.id,
-          formData,
-        );
-        messageImages.push(image);
-      }
-      setImagesInputKey(Date.now());
-      setImages([]);
-    }
+      if (images.length && message.images) {
+        for (let i = 0; i < images.length; i++) {
+          const formData = new FormData();
+          formData.set('file', images[i]);
 
-    const messageWithImages = {
-      ...message,
-      images: messageImages,
-    };
-
-    queryClient.setQueryData<{ messages: Message[] }>(
-      ['messages', channelId],
-      (oldData) => {
-        if (!oldData) {
-          return { messages: [messageWithImages] };
+          const placeholder = message.images[i];
+          const { image } = await api.uploadMessageImage(
+            channelId,
+            message.id,
+            placeholder.id,
+            formData,
+          );
+          messageImages.push(image);
         }
-        return {
-          messages: [messageWithImages, ...oldData.messages],
-        };
+        setImagesInputKey(Date.now());
+        setImages([]);
+      }
+
+      const messageWithImages = {
+        ...message,
+        images: messageImages,
+      };
+
+      queryClient.setQueryData<{ messages: Message[] }>(
+        ['messages', channelId],
+        (oldData) => {
+          if (!oldData) {
+            return { messages: [messageWithImages] };
+          }
+          return {
+            messages: [messageWithImages, ...oldData.messages],
+          };
+        },
+      );
+      setValue('body', '');
+      onSend?.();
+      reset();
+    },
+    {
+      onError: (error: any) => {
+        setToast({
+          title: error.message,
+          status: 'error',
+        });
       },
-    );
-    setValue('body', '');
-    onSend?.();
-    reset();
-  });
+    },
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -128,10 +143,6 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     width: 40,
     height: 40,
     transform: 'translateY(5px)',
-  };
-
-  const handleSendBtnClick = () => {
-    handleSubmit((values) => sendMessage(values))();
   };
 
   const handleInputKeyDown: KeyboardEventHandler = (e) => {
@@ -189,7 +200,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
             <IconButton
               sx={sendBtnStyles}
               edge="end"
-              onClick={handleSendBtnClick}
+              onClick={handleSubmit((values) => sendMessage(values))}
               disabled={!images.length && !formState.dirtyFields.body}
               disableRipple
             >
