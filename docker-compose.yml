@@ -10,6 +10,8 @@ services:
         - NODE_ENV=${NODE_ENV}
         - SERVER_PORT=${SERVER_PORT}
         - DB_MIGRATIONS=${DB_MIGRATIONS}
+    volumes:
+      - content:/app/content
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     restart: always
@@ -56,5 +58,6 @@ services:
 
 volumes:
   pgdata:
+  content:
   cache:
     driver: local

@@ -20,3 +20,11 @@ export enum TruncationSizes {
   Large = 65,
   ExtraLarge = 175,
 }
+
+export enum BrowserEvents {
+  Keydown = 'keydown',
+  MouseDown = 'mousedown',
+  MouseUp = 'mouseup',
+  Resize = 'resize',
+  Scroll = 'scroll',
+}

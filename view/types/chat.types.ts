@@ -1,15 +1,14 @@
+import { Image } from './image.types';
+
 export interface Message {
-  id: number;
+  id: string;
   body: string;
-
-  // TODO: Add images, currently not implemented
-  images: any[];
-
+  images?: Image[];
   user: { name: string };
   createdAt: string;
 }
 
 export interface Channel {
-  id: number;
+  id: string;
   name: string;
 }

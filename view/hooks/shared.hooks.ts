@@ -5,14 +5,10 @@ import {
   useTheme,
 } from '@mui/material';
 import { RefObject, useEffect, useState } from 'react';
-import useWebSocket, { Options } from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 import { useAppStore } from '../store/app.store';
-import { PubSubMessage } from '../types/shared.types';
+import { PubSubMessage, SubscriptionOptions } from '../types/shared.types';
 import { getWebSocketURL } from '../utils/shared.utils';
-
-export interface SubscriptionOptions extends Options {
-  enabled?: boolean;
-}
 
 export const useSubscription = (
   channel: string,

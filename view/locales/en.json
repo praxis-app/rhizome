@@ -19,7 +19,8 @@
     "inDev": "This feature is still in development.",
     "permissionDenied": "Permission denied.",
     "removeItem": "Are you sure you want to remove this {{itemType}}?",
-    "welcomeToPraxis": "Welcome to Praxis"
+    "welcomeToPraxis": "Welcome to Praxis",
+    "noContent": "No content to display."
   },
 
   "labels": {

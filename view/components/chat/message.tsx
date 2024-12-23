@@ -1,22 +1,24 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
 import { Box, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
+import { Message as MessageType } from '../../types/chat.types';
 import { timeAgo } from '../../utils/time.utils';
 import AttachedImageList from '../images/attached-image-list';
 import FormattedText from '../shared/formatted-text';
 import UserAvatar from '../users/user-avatar';
-import { Message as MessageType } from '../../types/chat.types';
 
 interface Props {
   message: MessageType;
 }
 
-const Message = ({
-  message: { body, images = [], user, createdAt },
-}: Props) => {
-  const isLarge = useAboveBreakpoint('md');
+const Message = ({ message: { body, images, user, createdAt } }: Props) => {
+  const { t } = useTranslation();
+  const isLarge = useAboveBreakpoint('sm');
+
   const formattedDate = timeAgo(createdAt);
+  const showImages = !!images?.length;
 
   return (
     <Box display="flex" gap={2} paddingBottom={2}>
@@ -29,22 +31,30 @@ const Message = ({
           </Typography>
           <Typography
             color="text.secondary"
-            sx={{ cursor: 'default' }}
+            sx={{ cursor: 'default', fontSize: '14px' }}
             title={formattedDate}
           >
             {formattedDate}
           </Typography>
         </Box>
 
-        <FormattedText text={body} lineHeight={1.2} paddingBottom={0.4} />
+        {body && (
+          <FormattedText text={body} lineHeight={1.2} paddingBottom={0.4} />
+        )}
 
-        {!!images.length && (
+        {showImages && (
           <AttachedImageList
             images={images}
             imageSx={{ borderRadius: 2 }}
             width={isLarge ? 350 : '100%'}
             paddingTop={0.7}
           />
+        )}
+
+        {!body && !showImages && (
+          <Typography color="text.secondary" fontSize="15px">
+            {t('prompts.noContent')}
+          </Typography>
         )}
       </Box>
     </Box>

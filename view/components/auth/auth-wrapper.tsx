@@ -1,3 +1,4 @@
+import { LinearProgress } from '@mui/material';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
@@ -10,7 +11,9 @@ interface Props {
 }
 
 export const AuthWrapper = ({ children }: Props) => {
-  const { token, setToken, setIsAppLoading } = useAppStore((state) => state);
+  const { token, setToken, isAppLoading, setIsAppLoading } = useAppStore(
+    (state) => state,
+  );
   const { data: meData } = useMeQuery({ enabled: !!token });
   const authCalledRef = useRef(false);
 
@@ -49,6 +52,10 @@ export const AuthWrapper = ({ children }: Props) => {
       setIsAppLoading(false);
     }
   }, [meData, token, setIsAppLoading]);
+
+  if (isAppLoading) {
+    return <LinearProgress sx={{ height: '100vh' }} />;
+  }
 
   return <>{children}</>;
 };

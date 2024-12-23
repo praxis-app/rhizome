@@ -1,13 +1,13 @@
 import express from 'express';
+import { uploadImage } from '../images/middleware/upload-image.middleware';
 import { messagesController } from './messages.controller';
-import { authService } from '../auth/auth.service';
+
+const IMAGE_ROUTE = '/:messageId/images/:imageId';
 
 export const messagesRouter = express.Router({
   mergeParams: true,
 });
 
-// TODO: Determine if this is needed
-messagesRouter.use(authService.authenticateUser);
-
 messagesRouter.get('/', messagesController.getMessages);
 messagesRouter.post('/', messagesController.createMessage);
+messagesRouter.post(`${IMAGE_ROUTE}/upload`, uploadImage, messagesController.uploadMessageImage);

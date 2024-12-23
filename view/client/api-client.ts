@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { Channel, Message } from '../types/chat.types';
+import { Image } from '../types/image.types';
 import { CurrentUser } from '../types/user.types';
 
 export const API_ROOT = '/api';
@@ -21,10 +22,22 @@ class ApiClient {
     });
   };
 
-  sendMessage = async (channelId: number, body: string) => {
+  sendMessage = async (channelId: string, body: string, imageCount: number) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ message: Message }>('post', path, {
-      data: { channelId, body },
+      data: { channelId, body, imageCount },
+    });
+  };
+
+  uploadMessageImage = async (
+    channelId: string,
+    messageId: string,
+    imageId: string,
+    formData: FormData,
+  ) => {
+    const path = `/channels/${channelId}/messages/${messageId}/images/${imageId}/upload`;
+    return this.executeRequest<{ image: Image }>('post', path, {
+      data: formData,
     });
   };
 
@@ -32,9 +45,14 @@ class ApiClient {
     return this.executeRequest<{ channels: Channel[] }>('get', '/channels');
   };
 
-  getChannelMessages = async (channelId: number) => {
+  getChannelMessages = async (channelId: string) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ messages: Message[] }>('get', path);
+  };
+
+  getImage = (imageId: string) => {
+    const path = `/images/${imageId}`;
+    return this.executeRequest<any>('get', path, { responseType: 'blob' });
   };
 
   getHealth = async () => {
@@ -44,7 +62,7 @@ class ApiClient {
   private async executeRequest<T>(
     method: Method,
     path: string,
-    options?: { data?: any; params?: any },
+    options?: { data?: any; params?: any; responseType?: any },
   ): Promise<T> {
     try {
       const token = localStorage.getItem('token');
@@ -55,6 +73,7 @@ class ApiClient {
         url: path,
         data: options?.data,
         params: options?.params,
+        responseType: options?.responseType,
         headers,
       });
 
