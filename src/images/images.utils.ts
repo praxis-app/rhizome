@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
 
-// TODO: Ensure path is correct - migrating from graphql-upload
 export const getUploadsPath = () => `${__dirname}/../../content`;
 
 export const deleteImageFile = async (filename: string) => {
