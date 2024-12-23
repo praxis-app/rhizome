@@ -54,7 +54,7 @@ export const AuthWrapper = ({ children }: Props) => {
   }, [meData, token, setIsAppLoading]);
 
   if (isAppLoading) {
-    return <LinearProgress color="primary" />;
+    return <LinearProgress sx={{ height: '100vh' }} />;
   }
 
   return <>{children}</>;
