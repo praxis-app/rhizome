@@ -1,27 +1,49 @@
 import { Box } from '@mui/material';
+import { RefObject, UIEvent, useRef, useState } from 'react';
+import { useInView } from '../../hooks/shared.hooks';
 import { Message as MessageType } from '../../types/chat.types';
 import Message from './message';
-import { RefObject } from 'react';
 
 interface Props {
   messages: MessageType[];
   feedBoxRef: RefObject<HTMLDivElement>;
+  onLoadMore: () => void;
 }
 
-const MessageFeed = ({ messages, feedBoxRef }: Props) => (
-  <Box
-    ref={feedBoxRef}
-    display="flex"
-    flexDirection="column-reverse"
-    sx={{ overflowY: 'scroll' }}
-    paddingTop={2}
-    paddingX={1.5}
-    flex={1}
-  >
-    {messages.map((message) => (
-      <Message key={message.id} message={message} />
-    ))}
-  </Box>
-);
+const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const feedTopRef = useRef<HTMLDivElement>(null);
+  const { setViewed } = useInView(feedTopRef, '50px', () => {
+    if (scrollPosition < -50) {
+      setViewed(false);
+      onLoadMore();
+    }
+  });
+
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLDivElement;
+    setScrollPosition(target.scrollTop);
+  };
+
+  return (
+    <Box
+      ref={feedBoxRef}
+      display="flex"
+      flexDirection="column-reverse"
+      sx={{ overflowY: 'scroll' }}
+      onScroll={handleScroll}
+      paddingTop={2}
+      paddingX={1.5}
+      flex={1}
+    >
+      {messages.map((message) => (
+        <Message key={message.id} message={message} />
+      ))}
+      {/* Bottom is top due to `column-reverse` */}
+      <Box ref={feedTopRef} />
+    </Box>
+  );
+};
 
 export default MessageFeed;

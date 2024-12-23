@@ -45,9 +45,15 @@ class ApiClient {
     return this.executeRequest<{ channels: Channel[] }>('get', '/channels');
   };
 
-  getChannelMessages = async (channelId: string) => {
+  getChannelMessages = async (
+    channelId: string,
+    offset: number,
+    limit = 20,
+  ) => {
     const path = `/channels/${channelId}/messages`;
-    return this.executeRequest<{ messages: Message[] }>('get', path);
+    return this.executeRequest<{ messages: Message[] }>('get', path, {
+      params: { offset, limit },
+    });
   };
 
   getImage = (imageId: string) => {

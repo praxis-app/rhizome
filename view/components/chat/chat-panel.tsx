@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { useRef } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
@@ -31,9 +31,11 @@ interface Props {
 }
 
 const ChatPanel = ({ channelId }: Props) => {
-  const { data: messagesData } = useQuery({
+  const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', channelId],
-    queryFn: () => api.getChannelMessages(channelId),
+    queryFn: ({ pageParam }) => api.getChannelMessages(channelId, pageParam),
+    getNextPageParam: (_lastPage, pages) =>
+      pages.flatMap((page) => page.messages).length,
   });
   const { data: meData } = useMeQuery();
 
@@ -111,7 +113,11 @@ const ChatPanel = ({ channelId }: Props) => {
       bottom={0}
       right={0}
     >
-      <MessageFeed messages={messagesData.messages} feedBoxRef={feedBoxRef} />
+      <MessageFeed
+        feedBoxRef={feedBoxRef}
+        onLoadMore={fetchNextPage}
+        messages={messagesData.pages.flatMap((page) => page.messages)}
+      />
       <MessageForm channelId={channelId} onSend={scrollToBottom} />
     </Box>
   );

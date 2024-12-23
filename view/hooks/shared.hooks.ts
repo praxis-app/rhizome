@@ -110,7 +110,11 @@ export const useScreenSize = () => {
   return [screenSize.width, screenSize.height];
 };
 
-export const useInView = (ref: RefObject<HTMLElement>, rootMargin = '0px') => {
+export const useInView = (
+  ref: RefObject<HTMLElement>,
+  rootMargin = '0px',
+  onView?: () => void,
+) => {
   const [inView, setInView] = useState(false);
   const [viewed, setViewed] = useState(false);
 
@@ -129,6 +133,7 @@ export const useInView = (ref: RefObject<HTMLElement>, rootMargin = '0px') => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setViewed(true);
+          onView?.();
         }
         setInView(entry.isIntersecting);
       },
@@ -139,7 +144,7 @@ export const useInView = (ref: RefObject<HTMLElement>, rootMargin = '0px') => {
     return () => {
       observer.disconnect();
     };
-  }, [ref, rootMargin]);
+  }, [ref, rootMargin, onView]);
 
   return { inView, setInView, viewed, setViewed };
 };

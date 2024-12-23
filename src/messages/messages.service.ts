@@ -29,7 +29,7 @@ export class MessagesService {
     this.imageRepository = dataSource.getRepository(Image);
   }
 
-  async getMessages(channelId: string) {
+  async getMessages(channelId: string, offset?: number, limit?: number) {
     const messages = await this.messageRepository.find({
       where: { channelId },
       relations: ['user', 'images'],
@@ -49,7 +49,8 @@ export class MessagesService {
       order: {
         createdAt: 'DESC',
       },
-      take: 20,
+      skip: offset,
+      take: limit,
     });
 
     return messages.map((message) => ({
