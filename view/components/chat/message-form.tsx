@@ -1,11 +1,18 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
 import { Send } from '@mui/icons-material';
-import { Box, FormGroup, IconButton, Input, SxProps } from '@mui/material';
+import {
+  Box,
+  FormGroup,
+  IconButton,
+  Input,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { t } from 'i18next';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
@@ -14,6 +21,8 @@ import { Message } from '../../types/chat.types';
 import { Image } from '../../types/image.types';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
+
+const MESSAGE_BODY_MAX = 6000;
 
 interface FormValues {
   body: string;
@@ -28,13 +37,20 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const [images, setImages] = useState<File[]>([]);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
 
+  const { t } = useTranslation();
   const inputRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const isDarkMode = useIsDarkMode();
 
   const { handleSubmit, register, setValue, formState, reset } =
-    useForm<FormValues>();
-  const registerBodyProps = register('body');
+    useForm<FormValues>({ mode: 'onChange' });
+
+  const registerBodyProps = register('body', {
+    maxLength: {
+      value: MESSAGE_BODY_MAX,
+      message: t('chat.errors.longBody'),
+    },
+  });
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
     const { message } = await api.sendMessage(channelId, body, images.length);
@@ -97,6 +113,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     borderTop: `1px solid ${isDarkMode ? grey[900] : grey[100]}`,
     transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)',
     bgcolor: 'background.paper',
+    overflowY: 'auto',
     paddingTop: 1,
     paddingBottom: 2,
     paddingX: 0.9,
@@ -154,6 +171,12 @@ const MessageForm = ({ channelId, onSend }: Props) => {
             disableUnderline
             multiline
           />
+
+          {!!formState.errors.body && (
+            <Typography color="error" fontSize="small">
+              {formState.errors.body.message}
+            </Typography>
+          )}
 
           <Box display="flex" justifyContent="space-between">
             <ImageInput
