@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Message } from '../../messages/models/message.entity';
+import { Message } from '../../messages/message.entity';
 
 @Entity()
 export class Image {

@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Channel } from '../../channels/models/channel.entity';
-import { Image } from '../../images/models/image.entity';
-import { User } from '../../users/user.entity';
+import { Channel } from '../channels/models/channel.entity';
+import { Image } from '../images/models/image.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Message {

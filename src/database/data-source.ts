@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { ChannelMember } from '../channels/models/channel-member.entity';
 import { Channel } from '../channels/models/channel.entity';
 import { Image } from '../images/models/image.entity';
-import { Message } from '../messages/models/message.entity';
+import { Message } from '../messages/message.entity';
 import { User } from '../users/user.entity';
 import { AddUserTable1733010289874 } from './migrations/1733010289874-AddUserTable';
 
