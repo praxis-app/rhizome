@@ -90,7 +90,9 @@
       "removeImage": "Remove image"
     },
     "errors": {
-      "unsupportedFormat": "Unsupported image format"
+      "unsupportedFormat": "{{format}} images are not supported.",
+      "imageTooLarge": "Image is too large. Maximum file size is 8MB.",
+      "tooManyImages": "You can upload a maximum of 5 images."
     }
   },
 
