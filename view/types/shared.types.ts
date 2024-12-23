@@ -1,3 +1,5 @@
+import { Options } from 'react-use-websocket';
+
 export interface PubSubRequest<T = unknown> {
   type: 'REQUEST';
   request: 'PUBLISH' | 'SUBSCRIBE' | 'UNSUBSCRIBE';
@@ -17,3 +19,7 @@ export interface PubSubResponse<T = unknown> {
 }
 
 export type PubSubMessage<T = unknown> = PubSubRequest<T> | PubSubResponse<T>;
+
+export interface SubscriptionOptions extends Options {
+  enabled?: boolean;
+}

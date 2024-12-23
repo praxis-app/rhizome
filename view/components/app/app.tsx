@@ -10,13 +10,13 @@ const queryClient = new QueryClient();
 
 export const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthWrapper>
-      <ThemeProvider theme={theme} defaultMode="system">
-        <CssBaseline />
+    <ThemeProvider theme={theme} defaultMode="system">
+      <CssBaseline />
+      <AuthWrapper>
         <Layout>
           <Outlet />
         </Layout>
-      </ThemeProvider>
-    </AuthWrapper>
+      </AuthWrapper>
+    </ThemeProvider>
   </QueryClientProvider>
 );
