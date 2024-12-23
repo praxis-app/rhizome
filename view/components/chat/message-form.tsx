@@ -4,16 +4,16 @@ import { Send } from '@mui/icons-material';
 import { Box, FormGroup, IconButton, Input, SxProps } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { t } from 'i18next';
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { Message } from '../../types/chat.types';
+import { Image } from '../../types/image.types';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
-import { Image } from '../../types/image.types';
 
 interface FormValues {
   body: string;
@@ -28,12 +28,13 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const [images, setImages] = useState<File[]>([]);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
 
+  const inputRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
+  const isDarkMode = useIsDarkMode();
+
   const { handleSubmit, register, setValue, formState, reset } =
     useForm<FormValues>();
   const registerBodyProps = register('body');
-
-  const isDarkMode = useIsDarkMode();
-  const queryClient = useQueryClient();
 
   const { mutate: sendMessage } = useMutation(async ({ body }: FormValues) => {
     const { message } = await api.sendMessage(channelId, body, images.length);
@@ -78,6 +79,20 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     reset();
   });
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        ['Space', 'Enter', 'Key', 'Digit'].some((key) => e.code.includes(key))
+      ) {
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   const formStyles: SxProps = {
     borderTop: `1px solid ${isDarkMode ? grey[900] : grey[100]}`,
     transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)',
@@ -102,7 +117,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     handleSubmit((values) => sendMessage(values))();
   };
 
-  const handleInputKeyDown = (e: KeyboardEvent) => {
+  const handleInputKeyDown: KeyboardEventHandler = (e) => {
     if (e.code !== KeyCodes.Enter) {
       return;
     }
@@ -135,6 +150,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
             placeholder={t('chat.prompts.sendAMessage')}
             onKeyDown={handleInputKeyDown}
             sx={inputStyles}
+            inputRef={inputRef}
             disableUnderline
             multiline
           />
