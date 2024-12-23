@@ -31,7 +31,7 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
           </Typography>
           <Typography
             color="text.secondary"
-            sx={{ cursor: 'default' }}
+            sx={{ cursor: 'default', fontSize: '14px' }}
             title={formattedDate}
           >
             {formattedDate}
