@@ -3,6 +3,8 @@ import { dataSource } from '../database/data-source';
 import { Channel } from './models/channel.entity';
 import { ChannelMember } from './models/channel-member.entity';
 
+const GENERAL_CHANNEL_NAME = 'general';
+
 class ChannelsService {
   private channelRepository: Repository<Channel>;
   private channelMemberRepository: Repository<ChannelMember>;
@@ -20,7 +22,7 @@ class ChannelsService {
 
   async getGeneralChannel() {
     const generalChannel = await this.channelRepository.findOne({
-      where: { name: 'general' },
+      where: { name: GENERAL_CHANNEL_NAME },
     });
     if (!generalChannel) {
       return this.initializeGeneralChannel();
@@ -50,10 +52,9 @@ class ChannelsService {
     });
   };
 
-  // TODO: Add constant for general channel name
   initializeGeneralChannel() {
     return this.channelRepository.save({
-      name: 'general',
+      name: GENERAL_CHANNEL_NAME,
     });
   }
 }
