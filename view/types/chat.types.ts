@@ -4,7 +4,7 @@ export interface Message {
   id: string;
   body: string;
   images?: Image[];
-  user: { name: string };
+  user: { id: string; name: string };
   createdAt: string;
 }
 

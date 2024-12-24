@@ -37,6 +37,7 @@ export class MessagesService {
         id: true,
         body: true,
         user: {
+          id: true,
           name: true,
         },
         images: {
@@ -82,8 +83,8 @@ export class MessagesService {
     }));
     const messagePayload = {
       ...message,
-      user: { name: user.name },
       images: shapedImages,
+      user: { id: user.id, name: user.name },
     };
 
     const { channelId } = messageData;

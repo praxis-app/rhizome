@@ -11,6 +11,7 @@ import { Link } from '../shared/link';
 interface Props extends AvatarProps {
   imageFile?: File;
   userName: string;
+  userId: string;
   linkStyles?: CSSProperties;
   size?: number;
   withLink?: boolean;
@@ -20,6 +21,7 @@ interface Props extends AvatarProps {
 const UserAvatar = ({
   imageFile,
   linkStyles,
+  userId,
   size,
   userName,
   sx,
@@ -29,10 +31,11 @@ const UserAvatar = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const avatarStyles = {
+  const avatarSx = {
+    fontSize: '17px',
     borderRadius: '50%',
-    width: 40,
-    height: 40,
+    width: 38,
+    height: 38,
     ...sx,
     ...(size ? { width: size, height: size } : {}),
   };
@@ -51,24 +54,24 @@ const UserAvatar = ({
     return `${firstName[0]}`.toUpperCase();
   };
 
-  const getStringAvatarProps = (name: string): AvatarProps => {
+  const getStringAvatarProps = (): AvatarProps => {
     const colorHash = new ColorHash();
-    const baseColor = colorHash.hex(name);
-    const color = chroma(baseColor).darken(2).hex();
-    const bgcolor = chroma(baseColor).brighten(1.5).hex();
+    const baseColor = colorHash.hex(userId);
+    const color = chroma(baseColor).darken(1.25).hex();
+    const bgcolor = chroma(baseColor).brighten(2).hex();
 
     return {
-      sx: { color, bgcolor, ...avatarStyles },
-      children: getNameAcronym(name),
+      sx: { color, bgcolor, ...avatarSx },
+      children: getNameAcronym(userName),
     };
   };
 
   const renderAvatar = () => {
     if (!imageFile) {
-      return <Avatar {...getStringAvatarProps(userName)} />;
+      return <Avatar title={userName} {...getStringAvatarProps()} />;
     }
     return (
-      <Avatar sx={avatarStyles} {...avatarProps}>
+      <Avatar title={userName} sx={avatarSx} {...avatarProps}>
         <LazyLoadImage
           alt={t('images.labels.profilePicture')}
           src={getImageFileSrc()}
