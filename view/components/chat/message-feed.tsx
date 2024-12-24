@@ -42,7 +42,7 @@ const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
         <Message key={message.id} message={message} />
       ))}
       {/* Bottom is top due to `column-reverse` */}
-      <Box ref={feedTopRef} />
+      <Box ref={feedTopRef} paddingBottom={2.25} />
     </Box>
   );
 };
