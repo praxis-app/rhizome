@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { messagesService } from './messages.service';
 
 class MessagesController {
-  getMessages = async (req: Request, res: Response) => {
+  async getMessages(req: Request, res: Response) {
     try {
       const { channelId } = req.params;
       const offset = req.query.offset ? Number(req.query.offset) : undefined;
@@ -12,12 +12,12 @@ class MessagesController {
     } catch (e: any) {
       res.status(500).send(e.message);
     }
-  };
+  }
 
-  createMessage = async (req: Request, res: Response) => {
+  async createMessage(req: Request, res: Response) {
     const message = await messagesService.createMessage(req.body, res.locals.user);
     res.json({ message });
-  };
+  }
 
   async uploadMessageImage(req: Request, res: Response) {
     if (!req.file) {
