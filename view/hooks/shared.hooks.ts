@@ -1,3 +1,5 @@
+// TODO: Consider breaking up into multiple files
+
 import {
   Breakpoint,
   useColorScheme,
@@ -6,18 +8,18 @@ import {
 } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
+import { BrowserEvents } from '../constants/shared.constants';
 import { useAppStore } from '../store/app.store';
 import { PubSubMessage, SubscriptionOptions } from '../types/shared.types';
 import { getWebSocketURL } from '../utils/shared.utils';
-import { BrowserEvents } from '../constants/shared.constants';
 
 const RESET_SCROLL_DIRECTION_TIMEOUT = 700;
 const RESET_SCROLL_DIRECTION_THRESHOLD = 40;
 
-export type ScrollDirection = 'up' | 'down' | null;
+type ScrollDirection = 'up' | 'down' | null;
 
 export const useScrollDirection = (
-  scrollableRef: React.RefObject<HTMLElement>,
+  scrollableRef: RefObject<HTMLElement>,
   resetTimeout = RESET_SCROLL_DIRECTION_TIMEOUT,
 ) => {
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection>(null);
