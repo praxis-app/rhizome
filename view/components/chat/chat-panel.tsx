@@ -33,7 +33,6 @@ interface Props {
 const ChatPanel = ({ channelId }: Props) => {
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', channelId],
-
     queryFn: ({ pageParam }) => {
       return api.getChannelMessages(channelId, pageParam);
     },
