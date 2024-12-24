@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, debounce } from '@mui/material';
 import { useRef } from 'react';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
@@ -33,9 +33,13 @@ interface Props {
 const ChatPanel = ({ channelId }: Props) => {
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', channelId],
-    queryFn: ({ pageParam }) => api.getChannelMessages(channelId, pageParam),
-    getNextPageParam: (_lastPage, pages) =>
-      pages.flatMap((page) => page.messages).length,
+
+    queryFn: ({ pageParam }) => {
+      return api.getChannelMessages(channelId, pageParam);
+    },
+    getNextPageParam: (_lastPage, pages) => {
+      return pages.flatMap((page) => page.messages).length;
+    },
   });
   const { data: meData } = useMeQuery();
 
@@ -115,7 +119,7 @@ const ChatPanel = ({ channelId }: Props) => {
     >
       <MessageFeed
         feedBoxRef={feedBoxRef}
-        onLoadMore={fetchNextPage}
+        onLoadMore={debounce(fetchNextPage, 500)}
         messages={messagesData.pages.flatMap((page) => page.messages)}
       />
       <MessageForm channelId={channelId} onSend={scrollToBottom} />

@@ -4,11 +4,73 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
 import { useAppStore } from '../store/app.store';
 import { PubSubMessage, SubscriptionOptions } from '../types/shared.types';
 import { getWebSocketURL } from '../utils/shared.utils';
+import { BrowserEvents } from '../constants/shared.constants';
+
+const RESET_SCROLL_DIRECTION_TIMEOUT = 700;
+const RESET_SCROLL_DIRECTION_THRESHOLD = 40;
+
+export type ScrollDirection = 'up' | 'down' | null;
+
+export const useScrollDirection = (
+  scrollableRef: React.RefObject<HTMLElement>,
+  resetTimeout = RESET_SCROLL_DIRECTION_TIMEOUT,
+) => {
+  const [scrollDirection, setScrollDirection] = useState<ScrollDirection>(null);
+  const previousScrollTop = useRef<number>(0);
+
+  useEffect(() => {
+    if (!scrollableRef.current) {
+      return;
+    }
+
+    let timeout: ReturnType<typeof setTimeout>;
+
+    // Initialize with the current scroll position
+    previousScrollTop.current = scrollableRef.current.scrollTop;
+
+    const handleScroll = () => {
+      const currentScrollTop = scrollableRef.current!.scrollTop;
+
+      if (previousScrollTop.current > currentScrollTop) {
+        setScrollDirection('up');
+      } else if (previousScrollTop.current < currentScrollTop) {
+        setScrollDirection('down');
+      }
+
+      previousScrollTop.current = currentScrollTop;
+
+      // Reset scroll direction after some time if near top
+      if (currentScrollTop < RESET_SCROLL_DIRECTION_THRESHOLD) {
+        timeout = setTimeout(() => {
+          setScrollDirection(null);
+        }, resetTimeout);
+      }
+    };
+
+    scrollableRef.current.addEventListener(BrowserEvents.Scroll, handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      if (scrollableRef.current) {
+        scrollableRef.current.removeEventListener(
+          BrowserEvents.Scroll,
+          handleScroll,
+        );
+      }
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [scrollableRef]);
+
+  return scrollDirection;
+};
 
 export const useSubscription = (
   channel: string,

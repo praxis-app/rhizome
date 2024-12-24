@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { RefObject, UIEvent, useRef, useState } from 'react';
-import { useInView } from '../../hooks/shared.hooks';
+import { useInView, useScrollDirection } from '../../hooks/shared.hooks';
 import { Message as MessageType } from '../../types/chat.types';
 import Message from './message';
 
@@ -12,10 +12,11 @@ interface Props {
 
 const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollDirection = useScrollDirection(feedBoxRef, 800);
 
   const feedTopRef = useRef<HTMLDivElement>(null);
   const { setViewed } = useInView(feedTopRef, '50px', () => {
-    if (scrollPosition < -50) {
+    if (scrollPosition < -50 && scrollDirection === 'up') {
       setViewed(false);
       onLoadMore();
     }
