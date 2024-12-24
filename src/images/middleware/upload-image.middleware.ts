@@ -1,6 +1,9 @@
 import multer from 'multer';
-import { MAX_IMAGE_SIZE, VALID_IMAGE_FORMAT } from '../image.constants';
 import { getUploadsPath } from '../images.utils';
+
+export const VALID_IMAGE_FORMAT = /(jpe?g|png|gif|webp)$/;
+
+export const MAX_IMAGE_SIZE = 8 * 1024 * 1024; // 8MB
 
 const storage = multer.diskStorage({
   destination: (_req, _file, callback) => {
