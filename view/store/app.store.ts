@@ -6,7 +6,7 @@ interface AppState {
   isAppLoading: boolean;
   imageCache: Record<string, string>;
   toast: ToastNotification | null;
-  setToken(token: string): void;
+  setToken(token: string | null): void;
   setIsAppLoading(isAppLoading: boolean): void;
   setImageCache(imageCache: Record<string, string>): void;
   setToast(toast: ToastNotification | null): void;

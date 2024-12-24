@@ -14,8 +14,16 @@ export const AuthWrapper = ({ children }: Props) => {
   const { token, setToken, isAppLoading, setIsAppLoading } = useAppStore(
     (state) => state,
   );
-  const { data: meData } = useMeQuery({ enabled: !!token });
   const authCalledRef = useRef(false);
+
+  const { data: meData } = useMeQuery({
+    onError: () => {
+      authCalledRef.current = false;
+      localStorage.removeItem('token');
+      setToken(null);
+    },
+    enabled: !!token,
+  });
 
   const getClientId = () => {
     const clientId = localStorage.getItem('clientId');
