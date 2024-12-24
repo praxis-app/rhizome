@@ -60,7 +60,7 @@ const ChatPanel = ({ channelId }: Props) => {
         return;
       }
 
-      // Update cache with new message
+      // Update cache with new message, images are placeholders
       if (body.type === MessageType.MESSAGE) {
         queryClient.setQueryData<{ messages: Message[] }>(
           ['messages', channelId],
@@ -72,7 +72,7 @@ const ChatPanel = ({ channelId }: Props) => {
         );
       }
 
-      // Update cache with image filename once uploaded
+      // Update cache with image status once uploaded
       if (body.type === MessageType.IMAGE) {
         queryClient.setQueryData<{ messages: Message[] }>(
           ['messages', channelId],
