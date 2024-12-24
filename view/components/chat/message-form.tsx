@@ -85,15 +85,23 @@ const MessageForm = ({ channelId, onSend }: Props) => {
         images: messageImages,
       };
 
-      queryClient.setQueryData<{ messages: Message[] }>(
+      queryClient.setQueryData<{ pages: { messages: Message[] }[] }>(
         ['messages', channelId],
         (oldData) => {
           if (!oldData) {
-            return { messages: [messageWithImages] };
+            return {
+              pages: [{ messages: [messageWithImages] }],
+            };
           }
-          return {
-            messages: [messageWithImages, ...oldData.messages],
-          };
+          const pages = oldData.pages.map((page, index) => {
+            if (index === 0) {
+              return {
+                messages: [messageWithImages, ...page.messages],
+              };
+            }
+            return page;
+          });
+          return { pages };
         },
       );
       setValue('body', '');
