@@ -22,7 +22,7 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
 
   return (
     <Box display="flex" gap={2} paddingBottom={2}>
-      <UserAvatar sx={{ marginTop: 0.5 }} withLink />
+      <UserAvatar userName={user.name} sx={{ marginTop: 0.5 }} withLink />
 
       <Box>
         <Box display="flex" gap={1}>

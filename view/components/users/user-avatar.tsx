@@ -1,15 +1,16 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
-import { Box, BoxProps } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Avatar, AvatarProps } from '@mui/material';
+import chroma from 'chroma-js';
+import ColorHash from 'color-hash';
 import { CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import LazyLoadImage from '../images/lazy-load-image';
 import { Link } from '../shared/link';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
 
-interface Props extends BoxProps {
+interface Props extends AvatarProps {
   imageFile?: File;
+  userName: string;
   linkStyles?: CSSProperties;
   size?: number;
   withLink?: boolean;
@@ -20,16 +21,15 @@ const UserAvatar = ({
   imageFile,
   linkStyles,
   size,
+  userName,
   sx,
   withLink,
   href,
   ...avatarProps
 }: Props) => {
   const { t } = useTranslation();
-  const isDarkMode = useIsDarkMode();
 
   const avatarStyles = {
-    backgroundColor: isDarkMode ? grey[900] : grey[200],
     borderRadius: '50%',
     width: 40,
     height: 40,
@@ -43,9 +43,32 @@ const UserAvatar = ({
     }
   };
 
+  const getNameAcronym = (name: string) => {
+    const [firstName, lastName] = name.split('-');
+    if (lastName) {
+      return `${firstName[0]}${lastName[0]}`.toUpperCase();
+    }
+    return `${firstName[0]}`.toUpperCase();
+  };
+
+  const getStringAvatarProps = (name: string): AvatarProps => {
+    const colorHash = new ColorHash();
+    const baseColor = colorHash.hex(name);
+    const color = chroma(baseColor).darken(2).hex();
+    const bgcolor = chroma(baseColor).brighten(1.5).hex();
+
+    return {
+      sx: { color, bgcolor, ...avatarStyles },
+      children: getNameAcronym(name),
+    };
+  };
+
   const renderAvatar = () => {
+    if (!imageFile) {
+      return <Avatar {...getStringAvatarProps(userName)} />;
+    }
     return (
-      <Box display="flex" sx={avatarStyles} {...avatarProps}>
+      <Avatar sx={avatarStyles} {...avatarProps}>
         <LazyLoadImage
           alt={t('images.labels.profilePicture')}
           src={getImageFileSrc()}
@@ -53,7 +76,7 @@ const UserAvatar = ({
           minWidth="100%"
           minHeight="100%"
         />
-      </Box>
+      </Avatar>
     );
   };
 
