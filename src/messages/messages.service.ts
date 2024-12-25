@@ -123,6 +123,7 @@ export class MessagesService {
     next();
   }
 
+  // TODO: Add BE validation for max image count on messages
   async saveMessageImage(messageId: string, imageId: string, filename: string, user: User) {
     const message = await this.messageRepository.findOne({
       where: { id: messageId },
