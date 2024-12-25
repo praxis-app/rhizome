@@ -14,7 +14,6 @@ interface Props extends AvatarProps {
   userId: string;
   linkStyles?: CSSProperties;
   size?: number;
-  withLink?: boolean;
   href?: string;
 }
 
@@ -25,7 +24,6 @@ const UserAvatar = ({
   size,
   userName,
   sx,
-  withLink,
   href,
   ...avatarProps
 }: Props) => {
@@ -83,7 +81,7 @@ const UserAvatar = ({
     );
   };
 
-  if (withLink && href) {
+  if (href) {
     return (
       <Link to={href} sx={linkStyles}>
         {renderAvatar()}

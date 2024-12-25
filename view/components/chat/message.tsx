@@ -26,7 +26,6 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
         userId={user.id}
         userName={user.name}
         sx={{ marginTop: 0.5 }}
-        withLink
       />
 
       <Box>
