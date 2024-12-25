@@ -8,7 +8,7 @@ interface Props<OwnerState = unknown> {
 
 export const theme = createTheme({
   typography: {
-    fontFamily: 'system-ui',
+    fontFamily: 'Inter',
   },
   colorSchemes: {
     light: {
@@ -37,18 +37,6 @@ export const theme = createTheme({
             0 2px 4px -2px rgba(0,0,0,.1)
           `,
         },
-      },
-    },
-
-    MuiContainer: {
-      styleOverrides: {
-        root: ({ theme }: Props) => ({
-          paddingTop: '70px',
-
-          [theme.breakpoints.up('md')]: {
-            paddingTop: '100px',
-          },
-        }),
       },
     },
 
@@ -121,6 +109,30 @@ export const theme = createTheme({
               backgroundColor: 'rgb(205, 205, 255, 0.1)',
             }),
           },
+        }),
+      },
+    },
+
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          '--Paper-overlay': 'none !important',
+        },
+        colorPrimary: ({ theme }: Props) => ({
+          backgroundColor: theme.palette.background.default,
+          ...theme.applyStyles('dark', {
+            backgroundColor: theme.palette.background.default,
+          }),
+        }),
+      },
+    },
+
+    MuiDialogContent: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          ...theme.applyStyles('dark', {
+            backgroundColor: theme.palette.background.default,
+          }),
         }),
       },
     },

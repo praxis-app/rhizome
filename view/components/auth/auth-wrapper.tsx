@@ -1,7 +1,9 @@
-import axios from 'axios';
+import { LinearProgress } from '@mui/material';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
+import { api } from '../../client/api-client';
+import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 
 interface Props {
@@ -9,8 +11,19 @@ interface Props {
 }
 
 export const AuthWrapper = ({ children }: Props) => {
-  const { token, setToken, setIsAppLoading } = useAppStore((state) => state);
+  const { token, setToken, isAppLoading, setIsAppLoading } = useAppStore(
+    (state) => state,
+  );
   const authCalledRef = useRef(false);
+
+  const { data: meData } = useMeQuery({
+    onError: () => {
+      authCalledRef.current = false;
+      localStorage.removeItem('token');
+      setToken(null);
+    },
+    enabled: !!token,
+  });
 
   const getClientId = () => {
     const clientId = localStorage.getItem('clientId');
@@ -23,13 +36,10 @@ export const AuthWrapper = ({ children }: Props) => {
   };
 
   const { mutate: register } = useMutation(async () => {
-    const body = { clientId: getClientId() };
-    const { data } = await axios.post<{ token: string }>('/api/auth', body, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    localStorage.setItem('token', data.token);
-    setIsAppLoading(false);
-    setToken(data.token);
+    const clientId = getClientId();
+    const { token } = await api.register(clientId);
+    localStorage.setItem('token', token);
+    setToken(token);
   });
 
   useEffect(() => {
@@ -39,12 +49,21 @@ export const AuthWrapper = ({ children }: Props) => {
     const tokenFromStorage = localStorage.getItem('token');
     if (tokenFromStorage) {
       setToken(tokenFromStorage);
-      setIsAppLoading(false);
       return;
     }
     register();
     authCalledRef.current = true;
   }, [token, register, setToken, setIsAppLoading]);
+
+  useEffect(() => {
+    if (meData && token) {
+      setIsAppLoading(false);
+    }
+  }, [meData, token, setIsAppLoading]);
+
+  if (isAppLoading) {
+    return <LinearProgress sx={{ height: '100vh' }} />;
+  }
 
   return <>{children}</>;
 };

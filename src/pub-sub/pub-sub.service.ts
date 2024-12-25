@@ -1,11 +1,9 @@
 import WebSocket from 'ws';
+import { authService } from '../auth/auth.service';
 import { cacheService } from '../cache/cache.service';
-import { PubSubMessage, WebSocketWithId } from './pub-sub.models';
+import { PubSubRequest, PubSubResponse, WebSocketWithId } from './pub-sub.models';
 
-type ChannelHandler = (
-  message: any,
-  publisher: WebSocketWithId,
-) => Promise<void>;
+type ChannelHandler = (message: any, publisher: WebSocketWithId) => Promise<void>;
 
 class PubSubService {
   /** Local mapping of subscriber IDs to websockets */
@@ -23,10 +21,20 @@ class PubSubService {
     this.channelHandlers[channel] = handler;
   }
 
-  handleMessage(webSocket: WebSocketWithId, data: WebSocket.RawData) {
-    const { channel, body, request, token }: PubSubMessage = JSON.parse(
-      data.toString(),
-    );
+  async handleMessage(webSocket: WebSocketWithId, data: WebSocket.RawData) {
+    const { channel, body, request, token }: PubSubRequest = JSON.parse(data.toString());
+
+    const user = await authService.verifyToken(token);
+    if (!user) {
+      const response: PubSubResponse = {
+        error: { code: 'UNAUTHORIZED', message: 'Invalid token' },
+        type: 'RESPONSE',
+        channel,
+      };
+      webSocket.send(JSON.stringify(response));
+      return;
+    }
+
     switch (request) {
       case 'PUBLISH':
         this.publish(channel, body, webSocket);
@@ -35,18 +43,14 @@ class PubSubService {
         this.subscribe(channel, token, webSocket);
         break;
       case 'UNSUBSCRIBE':
-        this.unsubscribe(channel, webSocket);
+        this.unsubscribe(channel, token);
         break;
       default:
         webSocket.send(JSON.stringify({ error: 'Invalid request type' }));
     }
   }
 
-  async publish(
-    channel: string,
-    message: unknown,
-    publisher?: WebSocketWithId,
-  ) {
+  async publish(channel: string, message: unknown, publisher?: WebSocketWithId) {
     // Handle channel specific actions
     if (this.channelHandlers[channel] && publisher) {
       await this.channelHandlers[channel](message, publisher);
@@ -54,9 +58,7 @@ class PubSubService {
 
     const channelKey = this.getChannelCacheKey(channel);
     const subscriberIds = await cacheService.getSetMembers(channelKey);
-
     if (subscriberIds.length === 0) {
-      console.error(`Channel ${channel} does not have any subscribers.`);
       return;
     }
 
@@ -86,16 +88,15 @@ class PubSubService {
 
     // Clean up on disconnect
     subscriber.on('close', async () => {
-      await this.unsubscribe(channel, subscriber);
+      await this.unsubscribe(channel, token);
       delete this.subscribers[token];
     });
   }
 
-  async unsubscribe(channel: string, subscriber: WebSocketWithId) {
+  async unsubscribe(channel: string, token: string) {
     const channelKey = this.getChannelCacheKey(channel);
-    await cacheService.removeSetMember(channelKey, subscriber.id);
-
-    delete this.subscribers[subscriber.id];
+    await cacheService.removeSetMember(channelKey, token);
+    delete this.subscribers[token];
   }
 
   getChannelCacheKey(channel: string) {

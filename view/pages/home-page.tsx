@@ -1,59 +1,24 @@
-import { Box, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useAboveBreakpoint } from '../hooks/shared.hooks';
-import { useAppStore } from '../store/app.store';
+import { useQuery } from 'react-query';
+import { api } from '../client/api-client';
+import ChatPanel from '../components/chat/chat-panel';
+import ProgressBar from '../components/shared/progress-bar';
 
 export const HomePage = () => {
-  const token = useAppStore((state) => state.token);
-  const [time, setTime] = useState<string>();
+  const { data, isLoading } = useQuery({
+    queryKey: 'channels',
+    queryFn: api.getChannels,
+  });
 
-  const isAboveMd = useAboveBreakpoint('md');
-  const isAboveLg = useAboveBreakpoint('lg');
+  if (isLoading) {
+    return <ProgressBar />;
+  }
 
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-    const init = async () => {
-      const result = await fetch('/api/health', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data: { timestamp: string } = await result.json();
-      setTime(data.timestamp);
-    };
-    init();
-  }, [token]);
+  if (!data) {
+    return null;
+  }
 
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      gap={isAboveMd ? '4px' : '16px'}
-      paddingLeft={isAboveLg ? 0 : '70px'}
-      paddingTop={isAboveLg ? 0 : '20px'}
-    >
-      {time && (
-        <Box
-          position="fixed"
-          bottom={10}
-          right={10}
-          width="fit-content"
-          height={10}
-        >
-          <Typography
-            fontSize="8px"
-            color="text.secondary"
-            borderRadius="2px"
-            paddingX={0.3}
-            sx={{
-              '&:hover': { color: 'text.primary' },
-              transition: 'all 0.3s ease-in-out',
-            }}
-          >
-            {time}
-          </Typography>
-        </Box>
-      )}
-    </Box>
-  );
+  // TODO: Add support for multiple channels
+  const channelId = data.channels[0].id;
+
+  return <ChatPanel channelId={channelId} />;
 };

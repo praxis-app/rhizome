@@ -1,7 +1,6 @@
 import react from '@vitejs/plugin-react';
 import * as dotenv from 'dotenv';
 import { defineConfig } from 'vite';
-import dynamicImport from 'vite-plugin-dynamic-import';
 
 dotenv.config();
 
@@ -24,14 +23,5 @@ export default defineConfig({
   build: {
     outDir: '../dist/view',
   },
-  plugins: [
-    dynamicImport({
-      filter(id) {
-        if (id.includes('./node_modules/tone')) {
-          return true;
-        }
-      },
-    }),
-    react(),
-  ],
+  plugins: [react()],
 });

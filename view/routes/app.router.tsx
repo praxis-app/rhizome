@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { App } from '../components/app/app';
 import { ErrorPage } from '../pages/error-page';
+import { HealthPage } from '../pages/health-page';
 import { HomePage } from '../pages/home-page';
 import { PageNotFound } from '../pages/page-not-found';
 
@@ -17,6 +18,10 @@ export const appRouter = createBrowserRouter([
       {
         path: '*',
         element: <PageNotFound />,
+      },
+      {
+        path: 'health',
+        element: <HealthPage />,
       },
     ],
   },
