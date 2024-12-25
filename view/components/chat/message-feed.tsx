@@ -34,7 +34,6 @@ const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
       flexDirection="column-reverse"
       sx={{ overflowY: 'scroll' }}
       onScroll={handleScroll}
-      paddingTop={2}
       paddingX={1.5}
       flex={1}
     >

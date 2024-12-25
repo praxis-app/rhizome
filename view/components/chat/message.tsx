@@ -30,13 +30,13 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
       />
 
       <Box>
-        <Box display="flex" gap={1}>
+        <Box display="flex" gap={0.9}>
           <Typography fontFamily="Inter" fontWeight={600}>
             {user.name}
           </Typography>
           <Typography
             color="text.secondary"
-            sx={{ cursor: 'default', fontSize: '14px' }}
+            sx={{ cursor: 'default', fontSize: '14px', marginTop: 0.15 }}
             title={formattedDate}
           >
             {formattedDate}
