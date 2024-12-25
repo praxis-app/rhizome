@@ -1,8 +1,8 @@
 import { BoxProps, SxProps } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
-import { useAppStore } from '../../store/app.store';
 import { Image } from '../../types/image.types';
 import Modal from '../shared/modal';
 import LazyLoadImage from './lazy-load-image';
@@ -23,8 +23,9 @@ const AttachedImage = ({
   sx,
   ...boxProps
 }: Props) => {
-  const images = useAppStore((state) => state.imageCache);
-  const [isLoaded, setIsLoaded] = useState(!!images[image.id]);
+  const queryClient = useQueryClient();
+  const previouslyLoaded = queryClient.getQueryData(['image', image.id]);
+  const [isLoaded, setIsLoaded] = useState(previouslyLoaded);
   const [isEnlarged, setIsEnlarged] = useState(false);
 
   const { t } = useTranslation();
