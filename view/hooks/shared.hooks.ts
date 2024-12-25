@@ -23,13 +23,12 @@ export const useScrollDirection = (
   resetTimeout = RESET_SCROLL_DIRECTION_TIMEOUT,
 ) => {
   const [scrollDirection, setScrollDirection] = useState<ScrollDirection>(null);
-  const previousScrollTop = useRef<number>(0);
+  const previousScrollTop = useRef(0);
 
   useEffect(() => {
     if (!scrollableRef.current) {
       return;
     }
-
     let timeout: ReturnType<typeof setTimeout>;
 
     // Initialize with the current scroll position
