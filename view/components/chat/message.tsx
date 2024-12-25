@@ -13,6 +13,7 @@ interface Props {
   message: MessageType;
 }
 
+// TODO: Truncate message body if it exceeds a certain length
 const Message = ({ message: { body, images, user, createdAt } }: Props) => {
   const { t } = useTranslation();
   const isLarge = useAboveBreakpoint('sm');
