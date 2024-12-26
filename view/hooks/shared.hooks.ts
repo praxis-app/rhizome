@@ -68,7 +68,7 @@ export const useScrollDirection = (
         clearTimeout(timeout);
       }
     };
-  }, [scrollableRef]);
+  }, [scrollableRef, resetTimeout]);
 
   return scrollDirection;
 };
