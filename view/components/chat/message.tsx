@@ -1,5 +1,3 @@
-// TODO: Add remaining layout and functionality - below is a WIP
-
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
@@ -13,7 +11,6 @@ interface Props {
   message: MessageType;
 }
 
-// TODO: Truncate message body if it exceeds a certain length
 const Message = ({ message: { body, images, user, createdAt } }: Props) => {
   const { t } = useTranslation();
   const isLarge = useAboveBreakpoint('sm');
@@ -43,10 +40,12 @@ const Message = ({ message: { body, images, user, createdAt } }: Props) => {
           </Typography>
         </Box>
 
+        {/* TODO: Truncate message body if it exceeds a certain length */}
         {body && (
           <FormattedText text={body} lineHeight={1.2} paddingBottom={0.4} />
         )}
 
+        {/* TODO: Enable navigation between images in modal */}
         {showImages && (
           <AttachedImageList
             images={images}
