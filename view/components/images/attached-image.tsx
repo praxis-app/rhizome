@@ -48,7 +48,7 @@ const AttachedImage = ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    minHeight: isLarge ? 'fit-content' : '60vh',
+    minHeight: 'fit-content',
   };
 
   const handleLoad = () => {
