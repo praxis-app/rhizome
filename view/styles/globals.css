@@ -18,6 +18,13 @@ html {
   margin: 0;
 }
 
+a,
+a:visited,
+a:hover,
+a:active {
+  color: inherit;
+}
+
 /* Set background and text color for autocomplete fields in Chrome */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
