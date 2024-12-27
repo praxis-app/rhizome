@@ -38,9 +38,18 @@ const AttachedImage = ({
     cursor: isLoaded ? 'pointer' : 'default',
     ...sx,
   };
+  const enlargedImageSx: SxProps = {
+    objectFit: 'contain',
+    width: '100%',
+    height: 'auto',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    borderRadius: 1,
+    marginBottom: isLarge ? 0 : 35,
+  };
   const modalSx: SxProps = {
     '& .MuiDialog-paper': {
-      marginBottom: isLarge ? 4 : 0,
+      marginBottom: isLarge ? '35px' : 0,
     },
   };
   const modalContentSx: SxProps = {
@@ -75,17 +84,9 @@ const AttachedImage = ({
       >
         {isEnlarged && (
           <LazyLoadImage
-            imageId={image.id}
             alt={t('images.labels.attachedImage')}
-            marginBottom={isLarge ? 0 : 35}
-            sx={{
-              objectFit: 'contain',
-              maxWidth: '100%',
-              maxHeight: '100%',
-              borderRadius: 1,
-            }}
-            width="100%"
-            height="auto"
+            sx={enlargedImageSx}
+            imageId={image.id}
           />
         )}
       </Modal>
