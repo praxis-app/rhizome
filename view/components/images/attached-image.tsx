@@ -40,8 +40,6 @@ const AttachedImage = ({
   };
   const enlargedImageSx: SxProps = {
     objectFit: 'contain',
-    width: '100%',
-    height: 'auto',
     maxWidth: '100%',
     maxHeight: '100%',
     borderRadius: 1,
