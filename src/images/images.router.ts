@@ -4,5 +4,5 @@ import { imagesController } from './images.controller';
 
 export const imagesRouter = express.Router();
 
-imagesRouter.use(authService.authenticateUser);
+imagesRouter.use(authService.authenticate);
 imagesRouter.get('/:id', imagesController.getImageFile);

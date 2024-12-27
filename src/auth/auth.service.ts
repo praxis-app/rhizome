@@ -36,7 +36,7 @@ class AuthService {
     next();
   };
 
-  authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
+  authenticate = async (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
     const [type, token] = authorization?.split(' ') ?? [];
     if (type !== 'Bearer' || !token) {
