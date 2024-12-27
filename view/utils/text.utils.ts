@@ -19,7 +19,7 @@ export const urlifyText = (text: string, urlTrimSize?: number) =>
     return (
       '<a href="' +
       url +
-      '" rel="noopener noreferrer" target="_blank" style="color:#e4e6ea;">' +
+      '" rel="noopener noreferrer" target="_blank">' +
       (urlTrimSize ? truncatedURL : url) +
       '</a>'
     );

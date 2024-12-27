@@ -30,12 +30,13 @@ export const useScrollDirection = (
       return;
     }
     let timeout: ReturnType<typeof setTimeout>;
+    const scrollableCopy = scrollableRef.current;
 
     // Initialize with the current scroll position
-    previousScrollTop.current = scrollableRef.current.scrollTop;
+    previousScrollTop.current = scrollableCopy.scrollTop;
 
     const handleScroll = () => {
-      const currentScrollTop = scrollableRef.current!.scrollTop;
+      const currentScrollTop = scrollableCopy.scrollTop;
 
       if (previousScrollTop.current > currentScrollTop) {
         setScrollDirection('up');
@@ -53,16 +54,13 @@ export const useScrollDirection = (
       }
     };
 
-    scrollableRef.current.addEventListener(BrowserEvents.Scroll, handleScroll, {
+    scrollableCopy.addEventListener(BrowserEvents.Scroll, handleScroll, {
       passive: true,
     });
 
     return () => {
-      if (scrollableRef.current) {
-        scrollableRef.current.removeEventListener(
-          BrowserEvents.Scroll,
-          handleScroll,
-        );
+      if (scrollableCopy) {
+        scrollableCopy.removeEventListener(BrowserEvents.Scroll, handleScroll);
       }
       if (timeout) {
         clearTimeout(timeout);

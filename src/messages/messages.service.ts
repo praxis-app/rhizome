@@ -8,6 +8,7 @@ import { User } from '../users/user.entity';
 import { Message } from './message.entity';
 
 const MESSAGE_BODY_MAX = 6000;
+const MESSAGE_IMAGE_COUNT_MAX = 5;
 
 enum MessageType {
   MESSAGE = 'message',
@@ -112,6 +113,10 @@ export class MessagesService {
       res.status(400).send('Image count must be a number');
       return;
     }
+    if (message.imageCount < 0 || message.imageCount > MESSAGE_IMAGE_COUNT_MAX) {
+      res.status(400).send(`Image count must be between 0 and ${MESSAGE_IMAGE_COUNT_MAX}`);
+      return;
+    }
     if (message.body && typeof message.body !== 'string') {
       res.status(400).send('Message body must be a string');
       return;
@@ -123,7 +128,6 @@ export class MessagesService {
     next();
   }
 
-  // TODO: Add BE validation for max image count on messages
   async saveMessageImage(messageId: string, imageId: string, filename: string, user: User) {
     const message = await this.messageRepository.findOne({
       where: { id: messageId },

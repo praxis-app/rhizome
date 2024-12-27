@@ -127,6 +127,14 @@ export const theme = createTheme({
       },
     },
 
+    MuiBackdrop: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(0, 0, 0, 0.915)',
+        },
+      },
+    },
+
     MuiDialogContent: {
       styleOverrides: {
         root: ({ theme }: Props) => ({

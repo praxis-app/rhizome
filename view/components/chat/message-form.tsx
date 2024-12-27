@@ -18,7 +18,7 @@ import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
-import { Message } from '../../types/chat.types';
+import { MessagesQuery } from '../../types/chat.types';
 import { Image } from '../../types/image.types';
 import { validateImageInput } from '../../utils/image.utils';
 import AttachedImagePreview from '../images/attached-image-preview';
@@ -85,7 +85,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
         images: messageImages,
       };
 
-      queryClient.setQueryData<{ pages: { messages: Message[] }[] }>(
+      queryClient.setQueryData<MessagesQuery>(
         ['messages', channelId],
         (oldData) => {
           if (!oldData) {

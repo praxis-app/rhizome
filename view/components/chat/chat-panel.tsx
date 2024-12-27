@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
-import { Message } from '../../types/chat.types';
+import { Message, MessagesQuery } from '../../types/chat.types';
 import { PubSubMessage } from '../../types/shared.types';
 import MessageFeed from './message-feed';
 import MessageForm from './message-form';
@@ -61,38 +61,53 @@ const ChatPanel = ({ channelId }: Props) => {
 
       // Update cache with new message, images are placeholders
       if (body.type === MessageType.MESSAGE) {
-        queryClient.setQueryData<{ messages: Message[] }>(
+        queryClient.setQueryData<MessagesQuery>(
           ['messages', channelId],
-          (oldData) => ({
-            messages: oldData
-              ? [body.message, ...oldData.messages]
-              : [body.message],
-          }),
+          (oldData) => {
+            if (!oldData) {
+              return {
+                pages: [{ messages: [body.message] }],
+              };
+            }
+            const pages = oldData.pages.map((page, index) => {
+              if (index === 0) {
+                return {
+                  messages: [body.message, ...page.messages],
+                };
+              }
+              return page;
+            });
+            return { pages };
+          },
         );
       }
 
       // Update cache with image status once uploaded
       if (body.type === MessageType.IMAGE) {
-        queryClient.setQueryData<{ messages: Message[] }>(
+        queryClient.setQueryData<MessagesQuery>(
           ['messages', channelId],
           (oldData) => {
             if (!oldData) {
-              return { messages: [] };
+              return { pages: [] };
             }
-            const messages = oldData.messages.map((message) => {
-              if (message.id !== body.messageId) {
-                return message;
-              }
-              return {
-                ...message,
-                images: message.images?.map((image) =>
-                  image.id === body.imageId
-                    ? { ...image, isPlaceholder: body.isPlaceholder }
-                    : image,
-                ),
-              };
+
+            const pages = oldData.pages.map((page) => {
+              const messages = page.messages.map((message) => {
+                if (message.id !== body.messageId || !message.images) {
+                  return message;
+                }
+                const images = message.images.map((image) => {
+                  if (image.id !== body.imageId) {
+                    return image;
+                  }
+                  return { ...image, isPlaceholder: false };
+                });
+                return { ...message, images };
+              });
+              return { messages };
             });
-            return { messages };
+
+            return { pages };
           },
         );
       }
