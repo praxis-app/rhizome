@@ -113,6 +113,10 @@ export class MessagesService {
       res.status(400).send('Image count must be a number');
       return;
     }
+    if (message.imageCount < 0 || message.imageCount > MESSAGE_IMAGE_COUNT_MAX) {
+      res.status(400).send(`Image count must be between 0 and ${MESSAGE_IMAGE_COUNT_MAX}`);
+      return;
+    }
     if (message.body && typeof message.body !== 'string') {
       res.status(400).send('Message body must be a string');
       return;
@@ -130,13 +134,6 @@ export class MessagesService {
     });
     if (!message) {
       throw new Error('Message not found');
-    }
-
-    const imageCount = await this.imageRepository.count({
-      where: { messageId },
-    });
-    if (imageCount >= MESSAGE_IMAGE_COUNT_MAX) {
-      throw new Error('Message already has the maximum number of images');
     }
 
     const image = await this.imageRepository.save({ id: imageId, filename });
