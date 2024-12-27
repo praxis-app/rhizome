@@ -42,7 +42,7 @@ const AttachedImage = ({
     borderRadius: isLarge ? 1 : 0,
     objectFit: 'contain',
     maxWidth: '100%',
-    maxHeight: '100%',
+    maxHeight: '80%',
   };
   const modalSx: SxProps = {
     '& .MuiDialog-paper': {
