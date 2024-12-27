@@ -16,8 +16,8 @@ class ApiClient {
     return this.executeRequest<{ user: CurrentUser }>('get', '/users/me');
   };
 
-  register = async (clientId: string) => {
-    return this.executeRequest<{ token: string }>('post', '/auth', {
+  registerAnon = async (clientId: string) => {
+    return this.executeRequest<{ token: string }>('post', '/auth/anon', {
       data: { clientId },
     });
   };

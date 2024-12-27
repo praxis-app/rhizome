@@ -13,7 +13,7 @@ class AuthService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  register = async (clientId: string) => {
+  registerAnon = async (clientId: string) => {
     const user = await usersService.createUser(clientId);
     const payload = { userId: user.id };
 
@@ -22,7 +22,7 @@ class AuthService {
     });
   };
 
-  validateRegister = async (req: Request, res: Response, next: NextFunction) => {
+  validateRegisterAnon = async (req: Request, res: Response, next: NextFunction) => {
     const { clientId } = req.body;
     if (!clientId || !uuidValidate(clientId)) {
       res.status(400).send('Invalid client ID');

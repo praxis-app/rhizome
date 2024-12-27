@@ -4,4 +4,4 @@ import { authController } from './auth.controller';
 
 export const authRouter = express.Router();
 
-authRouter.post('/', authService.validateRegister, authController.register);
+authRouter.post('/anon', authService.validateRegisterAnon, authController.registerAnon);
