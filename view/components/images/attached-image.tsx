@@ -39,16 +39,21 @@ const AttachedImage = ({
     ...sx,
   };
   const enlargedImageSx: SxProps = {
+    borderRadius: isLarge ? 1 : 0,
     objectFit: 'contain',
     maxWidth: '100%',
     maxHeight: '100%',
-    borderRadius: isLarge ? 1 : 0,
-    marginBottom: isLarge ? 0 : 35,
   };
   const modalSx: SxProps = {
     '& .MuiDialog-paper': {
       marginBottom: isLarge ? '35px' : 0,
     },
+  };
+  const modalAppBarSx: SxProps = {
+    borderBottom: 'none',
+    position: 'fixed',
+    top: 0,
+    left: 0,
   };
   const modalContentSx: SxProps = {
     padding: 0,
@@ -75,7 +80,7 @@ const AttachedImage = ({
       <Modal
         open={isEnlarged}
         onClose={() => setIsEnlarged(false)}
-        appBarSx={{ borderBottom: 'none' }}
+        appBarSx={modalAppBarSx}
         contentSx={modalContentSx}
         hideAppBar={isLarge}
         sx={modalSx}
