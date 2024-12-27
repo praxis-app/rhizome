@@ -40,7 +40,7 @@ const AttachedImage = ({
   };
   const modalSx: SxProps = {
     '& .MuiDialog-paper': {
-      marginBottom: isLarge ? 12 : 0,
+      marginBottom: isLarge ? 4 : 0,
     },
   };
   const modalContentSx: SxProps = {
@@ -48,7 +48,8 @@ const AttachedImage = ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    minHeight: 'fit-content',
+    width: '100%',
+    height: '100%',
   };
 
   const handleLoad = () => {
@@ -77,6 +78,12 @@ const AttachedImage = ({
             imageId={image.id}
             alt={t('images.labels.attachedImage')}
             marginBottom={isLarge ? 0 : 35}
+            sx={{
+              objectFit: 'contain',
+              maxWidth: '100%',
+              maxHeight: '100%',
+              borderRadius: 1,
+            }}
             width="100%"
             height="auto"
           />
