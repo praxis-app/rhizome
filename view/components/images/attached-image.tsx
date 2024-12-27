@@ -42,7 +42,7 @@ const AttachedImage = ({
     objectFit: 'contain',
     maxWidth: '100%',
     maxHeight: '100%',
-    borderRadius: 1,
+    borderRadius: isLarge ? 1 : 0,
     marginBottom: isLarge ? 0 : 35,
   };
   const modalSx: SxProps = {
