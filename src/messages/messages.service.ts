@@ -15,13 +15,13 @@ enum MessageType {
   IMAGE = 'image',
 }
 
-export interface CreateMessageReq {
+interface CreateMessageReq {
   body?: string;
   channelId: string;
   imageCount: number;
 }
 
-export class MessagesService {
+class MessagesService {
   private messageRepository: Repository<Message>;
   private imageRepository: Repository<Image>;
 
