@@ -47,6 +47,7 @@ const AttachedImage = ({
   const modalSx: SxProps = {
     '& .MuiDialog-paper': {
       marginBottom: isLarge ? '35px' : 0,
+      maxWidth: '760px',
     },
   };
   const modalAppBarSx: SxProps = {
