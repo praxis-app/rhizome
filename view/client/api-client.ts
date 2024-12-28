@@ -17,7 +17,7 @@ class ApiClient {
   };
 
   registerAnon = async (clientId: string) => {
-    return this.executeRequest<{ token: string }>('post', '/auth/anon', {
+    return this.executeRequest<{ token: string }>('post', '/auth', {
       data: { clientId },
     });
   };

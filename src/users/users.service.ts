@@ -12,7 +12,24 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  createUser = async (clientId: string) => {
+  upgradeUser = async (userId: string, name: string, email: string, password: string) => {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    await this.userRepository.update(userId, {
+      ...user,
+      name,
+      email,
+      password,
+      isAnonymous: false,
+    });
+  };
+
+  createAnonUser = async (clientId: string) => {
     const name = await this.generateName();
     const user = await this.userRepository.save({ clientId, name });
     await channelsService.addMemberToGeneralChannel(user.id);
