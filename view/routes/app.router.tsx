@@ -4,6 +4,7 @@ import { ErrorPage } from '../pages/error-page';
 import { HealthPage } from '../pages/health-page';
 import { HomePage } from '../pages/home-page';
 import { PageNotFound } from '../pages/page-not-found';
+import { authRouter } from './auth.router';
 
 export const appRouter = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ export const appRouter = createBrowserRouter([
         path: 'health',
         element: <HealthPage />,
       },
+      authRouter,
     ],
   },
 ]);
