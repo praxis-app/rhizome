@@ -78,6 +78,66 @@
     "hoursFull_other": "{{count}} hours"
   },
 
+  "users": {
+    "actions": {
+      "editProfile": "Edit profile",
+      "logIn": "Log in",
+      "logOut": "Log out",
+      "passwordConfirm": "Confirm password",
+      "resetPassword": "Reset Password",
+      "sendEmail": "Send Email",
+      "signUp": "Sign up"
+    },
+    "headers": {
+      "forgotPassword": "Forgot your password?"
+    },
+    "prompts": {
+      "alreadyLoggedIn": "You're already signed in.",
+      "alreadyRegistered": "You have already created an account.",
+      "authenticated": "You are authenticated.",
+      "enterEmailForReset": "Enter the email address associated with your account and we'll send you a link to reset your password.",
+      "logOut": "Are you sure you want to log out?",
+      "passwordResetEmailSent": "An email to reset your password has been sent. Please check your inbox for further instructions. If you don't see the email, don't forget to look in your spam folder.",
+      "removeSelf": "Are you sure you want to permanently delete your account? All of your data will be deleted and this cannot be undone.",
+      "removeUser": "Are you sure you want to permanently delete this member's account? All of their data will be deleted and this cannot be undone.",
+      "resetYourPassword": "Reset your password"
+    },
+    "form": {
+      "bio": "Bio",
+      "confirmNewPassword": "Confirm new password",
+      "confirmPassword": "Confirm password",
+      "coverPhoto": "Cover photo",
+      "displayName": "Display name",
+      "email": "Email",
+      "username": "Username",
+      "newPassword": "New password",
+      "password": "Password",
+      "yourEmail": "Your email address"
+    },
+    "errors": {
+      "confirmPassword": "Passwords do not match",
+      "invalidEmail": "Email is invalid.",
+      "missingConfirmPassword": "Confirm password cannot be empty",
+      "missingEmail": "Email cannot be empty",
+      "missingName": "Username cannot be empty",
+      "invalidName": "Usernames cannot contain special characters",
+      "shortName": "Username must be at least 2 characters",
+      "longName": "Username cannot exceed 15 characters",
+      "longEmail": "Email cannot exceed 254 characters",
+      "shortDisplayName": "Display name must be at least 4 characters",
+      "longDisplayName": "Display name cannot exceed 30 characters",
+      "longBio": "Bio cannot exceed 500 characters",
+      "missingPassword": "Password cannot be empty",
+      "passwordTooShort": "Password must be at least 8 characters long",
+      "passwordTooLong": "Password must be at most 64 characters long",
+      "tooManyLoginAttempts": "Too many login attempts. You may have been sent an email with instructions on how to reset your password.",
+      "remove": "There was an error removing this member.",
+      "signUp": "There was an error creating your account.",
+      "update": "There was an error updating your account.",
+      "invalidResetPasswordToken": "Password reset token is invalid or has expired."
+    }
+  },
+
   "images": {
     "labels": {
       "attachedImage": "Attached image",

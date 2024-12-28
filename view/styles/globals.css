@@ -29,13 +29,16 @@ a:active {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 20px #242526 inset;
-  -webkit-text-fill-color: #e4e6ea;
+input:-webkit-autofill:active,
+input:-internal-autofill-selected {
+  -webkit-box-shadow: 0 0 0 20px #303643 inset !important;
+  -webkit-text-fill-color: #e4e6ea !important;
+  color-scheme: dark;
 
   @media (prefers-color-scheme: light) {
-    -webkit-box-shadow: 0 0 0 20px #f0f0f0 inset;
-    -webkit-text-fill-color: #242526;
+    -webkit-box-shadow: 0 0 0 20px #e9f0fd inset !important;
+    -webkit-text-fill-color: #242526 !important;
+    color-scheme: light;
   }
 }
 
