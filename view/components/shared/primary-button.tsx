@@ -5,7 +5,7 @@ import {
   SxProps,
   useTheme,
 } from '@mui/material';
-import { Blurple, DarkMode } from '../../styles/theme';
+import { Blurple, Gray } from '../../styles/theme';
 
 interface Props extends ButtonProps {
   isLoading?: boolean;
@@ -24,7 +24,7 @@ const PrimaryActionButton = ({ isLoading, children, sx, ...props }: Props) => {
       backgroundColor: Blurple.SavoryBlue,
     },
     '&:disabled': {
-      backgroundColor: DarkMode.Liver,
+      backgroundColor: Gray.Liver,
     },
     color: theme.palette.common.white,
     fontWeight: 600,

@@ -165,7 +165,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   return (
     <Box sx={formStyles}>
       <Box
-        bgcolor={isDarkMode ? 'background.secondary' : grey[100]}
+        bgcolor="background.secondary"
         sx={{ transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)' }}
         borderRadius={4}
         paddingX={1.5}

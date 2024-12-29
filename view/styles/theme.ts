@@ -2,7 +2,7 @@ import { linearProgressClasses } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { createTheme, Theme } from '@mui/material/styles';
 
-export enum DarkMode {
+export enum Gray {
   Placebo = '#e4e6ea',
   NimbusCloud = '#d3d5d9',
   Casper = '#b1b3b8',
@@ -48,25 +48,28 @@ export const theme = createTheme({
         text: {
           tertiary: Blurple.Neptune,
         },
-        divider: '#e4e4e7',
+        background: {
+          secondary: grey[100],
+        },
+        divider: Gray.Placebo,
       },
     },
     dark: {
       palette: {
         primary: {
-          main: DarkMode.Placebo,
+          main: Gray.Placebo,
         },
         text: {
-          primary: DarkMode.Placebo,
-          secondary: DarkMode.Casper,
+          primary: Gray.Placebo,
+          secondary: Gray.Casper,
           tertiary: Blurple.Neptune,
         },
         background: {
-          default: DarkMode.PianoBlack,
-          paper: DarkMode.Nero,
-          secondary: DarkMode.DeadPixel,
+          default: Gray.PianoBlack,
+          paper: Gray.Nero,
+          secondary: Gray.DeadPixel,
         },
-        divider: DarkMode.DeadPixel,
+        divider: Gray.DeadPixel,
       },
     },
   },
