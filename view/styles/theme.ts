@@ -132,32 +132,41 @@ export const theme = createTheme({
 
     MuiFormLabel: {
       styleOverrides: {
-        root: {
+        root: ({ theme }: Props) => ({
           '&.Mui-focused': {
-            color: grey[100],
+            color: theme.palette.text.secondary,
           },
-        },
+        }),
       },
     },
 
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
+        root: ({ theme }: Props) => ({
           '&:hover': {
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: grey[800],
+              borderColor: grey[200],
+              ...theme.applyStyles('dark', {
+                borderColor: grey[800],
+              }),
             },
           },
           '&.Mui-focused': {
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: grey[100],
+              borderColor: grey[500],
+              ...theme.applyStyles('dark', {
+                borderColor: grey[100],
+              }),
               borderWidth: 1,
             },
           },
-        },
-        notchedOutline: {
-          borderColor: grey[800],
-        },
+        }),
+        notchedOutline: ({ theme }: Props) => ({
+          borderColor: grey[200],
+          ...theme.applyStyles('dark', {
+            borderColor: grey[800],
+          }),
+        }),
       },
     },
 
