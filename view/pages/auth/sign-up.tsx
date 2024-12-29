@@ -1,6 +1,7 @@
 import {
   Card,
   CardContent,
+  CardHeader,
   FormControl,
   FormGroup,
   FormLabel,
@@ -28,6 +29,11 @@ export const SignUp = () => {
 
   return (
     <Card sx={{ marginTop: 3 }}>
+      <CardHeader
+        title={t('users.prompts.createAccount')}
+        subheader={t('users.prompts.upgradeAccount')}
+        sx={{ paddingBottom: 0 }}
+      />
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
