@@ -88,6 +88,14 @@ export const theme = createTheme({
       },
     },
 
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+        },
+      },
+    },
+
     MuiButton: {
       styleOverrides: {
         contained: ({ theme }: Props) => ({
