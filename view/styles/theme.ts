@@ -21,13 +21,6 @@ export const BLURPLE = {
   '500': '#5868CB',
 } as const;
 
-// TODO: Convert to numeric member names
-export enum BlurpleTest {
-  Neptune = '#7D95E3',
-  SavoryBlue = '#6573CF',
-  Marina = '#5868CB',
-}
-
 declare module '@mui/material/styles/createPalette' {
   interface TypeText {
     tertiary: string;
