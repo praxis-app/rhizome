@@ -126,7 +126,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   }, []);
 
   const formStyles: SxProps = {
-    borderTop: `1px solid ${isDarkMode ? grey[900] : grey[100]}`,
+    borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.04)' : grey[100]}`,
     transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)',
     bgcolor: 'background.paper',
     overflowY: 'auto',
