@@ -1,4 +1,5 @@
 import { linearProgressClasses } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import { createTheme, Theme } from '@mui/material/styles';
 
 interface Props<OwnerState = unknown> {
@@ -68,6 +69,37 @@ export const theme = createTheme({
           '& .MuiTouchRipple-root .MuiTouchRipple-child': {
             borderRadius: 7,
           },
+        },
+      },
+    },
+
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focused': {
+            color: grey[100],
+          },
+        },
+      },
+    },
+
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          '&:hover': {
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: grey[800],
+            },
+          },
+          '&.Mui-focused': {
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: grey[100],
+              borderWidth: 1,
+            },
+          },
+        },
+        notchedOutline: {
+          borderColor: grey[800],
         },
       },
     },
