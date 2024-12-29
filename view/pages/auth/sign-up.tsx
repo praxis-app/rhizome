@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import PrimaryActionButton from '../../components/shared/primary-button';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { Gray } from '../../styles/theme';
+import { GRAY } from '../../styles/theme';
 
 interface FormValues {
   name: string;
@@ -30,8 +30,8 @@ export const SignUp = () => {
   const inputProps: InputBaseComponentProps = {
     sx: {
       '&:-webkit-autofill': {
-        WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? Gray.PhantomShip : Gray.Placebo} inset`,
-        WebkitTextFillColor: isDarkMode ? Gray.Placebo : Gray.PianoBlack,
+        WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
+        WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
       },
     },
   };

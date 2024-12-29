@@ -2,19 +2,18 @@ import { linearProgressClasses } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { createTheme, Theme } from '@mui/material/styles';
 
-// TODO: Convert to numeric member names
-export enum Gray {
-  Placebo = '#e4e6ea',
-  NimbusCloud = '#d3d5d9',
-  Casper = '#b1b3b8',
-  Griffin = '#8c8c8d',
-  Excalibur = '#666768',
-  Liver = '#505051',
-  DeadPixel = '#3a3b3c',
-  PhantomShip = '#303233',
-  Nero = '#242526',
-  PianoBlack = '#18191a',
-}
+export const GRAY = {
+  '100': '#e4e6ea',
+  '200': '#d3d5d9',
+  '300': '#b1b3b8',
+  '400': '#8c8c8d',
+  '500': '#666768',
+  '600': '#505051',
+  '700': '#3a3b3c',
+  '800': '#303233',
+  '900': '#242526',
+  '950': '#18191a',
+} as const;
 
 // TODO: Convert to numeric member names
 export enum Blurple {
@@ -53,25 +52,25 @@ export const theme = createTheme({
         background: {
           secondary: grey[100],
         },
-        divider: Gray.Placebo,
+        divider: GRAY['100'],
       },
     },
     dark: {
       palette: {
         primary: {
-          main: Gray.Placebo,
+          main: GRAY['100'],
         },
         text: {
-          primary: Gray.Placebo,
-          secondary: Gray.Casper,
+          primary: GRAY['100'],
+          secondary: GRAY['300'],
           tertiary: Blurple.Neptune,
         },
         background: {
-          default: Gray.PianoBlack,
-          paper: Gray.Nero,
-          secondary: Gray.DeadPixel,
+          default: GRAY['950'],
+          paper: GRAY['900'],
+          secondary: GRAY['700'],
         },
-        divider: Gray.DeadPixel,
+        divider: GRAY['700'],
       },
     },
   },
