@@ -1,14 +1,7 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
 import { Send } from '@mui/icons-material';
-import {
-  Box,
-  FormGroup,
-  IconButton,
-  Input,
-  SxProps,
-  Typography,
-} from '@mui/material';
+import { Box, IconButton, Input, SxProps, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -171,52 +164,50 @@ const MessageForm = ({ channelId, onSend }: Props) => {
 
   return (
     <Box sx={formStyles}>
-      <FormGroup row>
-        <Box
-          bgcolor={isDarkMode ? grey[900] : grey[100]}
-          sx={{ transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)' }}
-          borderRadius={4}
-          paddingX={1.5}
-          paddingY={0.2}
-          flex={1}
-        >
-          <Input
-            {...registerBodyProps}
-            autoComplete="off"
-            placeholder={t('chat.prompts.sendAMessage')}
-            onKeyDown={handleInputKeyDown}
-            sx={inputStyles}
-            inputRef={inputRef}
-            disableUnderline
-            multiline
+      <Box
+        bgcolor={isDarkMode ? grey[900] : grey[100]}
+        sx={{ transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)' }}
+        borderRadius={4}
+        paddingX={1.5}
+        paddingY={0.2}
+        flex={1}
+      >
+        <Input
+          {...registerBodyProps}
+          autoComplete="off"
+          placeholder={t('chat.prompts.sendAMessage')}
+          onKeyDown={handleInputKeyDown}
+          sx={inputStyles}
+          inputRef={inputRef}
+          disableUnderline
+          multiline
+        />
+
+        {!!formState.errors.body && (
+          <Typography color="error" fontSize="small">
+            {formState.errors.body.message}
+          </Typography>
+        )}
+
+        <Box display="flex" justifyContent="space-between">
+          <ImageInput
+            key={imagesInputKey}
+            setImages={setImages}
+            iconStyles={{ fontSize: 25, color: 'text.secondary' }}
+            multiple
           />
 
-          {!!formState.errors.body && (
-            <Typography color="error" fontSize="small">
-              {formState.errors.body.message}
-            </Typography>
-          )}
-
-          <Box display="flex" justifyContent="space-between">
-            <ImageInput
-              key={imagesInputKey}
-              setImages={setImages}
-              iconStyles={{ fontSize: 25, color: 'text.secondary' }}
-              multiple
-            />
-
-            <IconButton
-              sx={sendBtnStyles}
-              edge="end"
-              onClick={handleSubmit((values) => sendMessage(values))}
-              disabled={!images.length && !formState.dirtyFields.body}
-              disableRipple
-            >
-              <Send sx={{ fontSize: 20, color: 'text.secondary' }} />
-            </IconButton>
-          </Box>
+          <IconButton
+            sx={sendBtnStyles}
+            edge="end"
+            onClick={handleSubmit((values) => sendMessage(values))}
+            disabled={!images.length && !formState.dirtyFields.body}
+            disableRipple
+          >
+            <Send sx={{ fontSize: 20, color: 'text.secondary' }} />
+          </IconButton>
         </Box>
-      </FormGroup>
+      </Box>
 
       {!!images.length && (
         <AttachedImagePreview
