@@ -18,7 +18,7 @@ export const Layout = ({ children, sx }: Props) => {
       <ThemeProvider theme={theme} defaultMode="system">
         <CssBaseline />
         <AuthWrapper>
-          <Container sx={sx}>
+          <Container maxWidth="sm" sx={sx}>
             {children}
             <Toast />
           </Container>

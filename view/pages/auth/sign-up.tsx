@@ -41,7 +41,7 @@ export const SignUp = () => {
   };
 
   return (
-    <Card sx={{ marginTop: 3 }}>
+    <Card>
       <CardHeader
         title={t('users.prompts.createAccount')}
         subheader={t('users.prompts.upgradeAccount')}

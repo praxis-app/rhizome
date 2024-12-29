@@ -77,6 +77,35 @@ export const theme = createTheme({
   },
 
   components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          // Mobile (first priority)
+          paddingTop: 18,
+
+          // Tablet
+          [theme.breakpoints.up('sm')]: {
+            paddingTop: 50,
+          },
+
+          // Desktop
+          [theme.breakpoints.up('md')]: {
+            paddingTop: 70,
+          },
+
+          // Larger devices
+          [theme.breakpoints.up('lg')]: {
+            paddingTop: 75,
+          },
+        }),
+        maxWidthSm: ({ theme }: Props) => ({
+          [theme.breakpoints.up('md')]: {
+            maxWidth: 680,
+          },
+        }),
+      },
+    },
+
     MuiPaper: {
       styleOverrides: {
         elevation: {
