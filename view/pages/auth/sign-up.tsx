@@ -5,11 +5,14 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  InputBaseComponentProps,
   OutlinedInput,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import PrimaryActionButton from '../../components/shared/primary-button';
 import { useTranslation } from 'react-i18next';
+import PrimaryActionButton from '../../components/shared/primary-button';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { Gray } from '../../styles/theme';
 
 interface FormValues {
   name: string;
@@ -22,6 +25,16 @@ export const SignUp = () => {
   const { handleSubmit, register } = useForm<FormValues>({ mode: 'onChange' });
 
   const { t } = useTranslation();
+  const isDarkMode = useIsDarkMode();
+
+  const inputProps: InputBaseComponentProps = {
+    sx: {
+      '&:-webkit-autofill': {
+        WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? Gray.PhantomShip : Gray.Placebo} inset`,
+        WebkitTextFillColor: isDarkMode ? Gray.Placebo : Gray.PianoBlack,
+      },
+    },
+  };
 
   const onSubmit = async (values: FormValues) => {
     console.log(values);
@@ -41,14 +54,22 @@ export const SignUp = () => {
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
                 {t('users.form.username')}
               </FormLabel>
-              <OutlinedInput autoComplete="off" {...register('name')} />
+              <OutlinedInput
+                autoComplete="off"
+                inputProps={inputProps}
+                {...register('name')}
+              />
             </FormControl>
 
             <FormControl>
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
                 {t('users.form.email')}
               </FormLabel>
-              <OutlinedInput autoComplete="off" {...register('email')} />
+              <OutlinedInput
+                autoComplete="off"
+                inputProps={inputProps}
+                {...register('email')}
+              />
             </FormControl>
 
             <FormControl>
@@ -57,6 +78,7 @@ export const SignUp = () => {
               </FormLabel>
               <OutlinedInput
                 autoComplete="off"
+                inputProps={inputProps}
                 type="password"
                 {...register('password')}
               />
@@ -68,6 +90,7 @@ export const SignUp = () => {
               </FormLabel>
               <OutlinedInput
                 autoComplete="off"
+                inputProps={inputProps}
                 type="password"
                 {...register('confirmPassword')}
               />

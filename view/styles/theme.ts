@@ -2,6 +2,7 @@ import { linearProgressClasses } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { createTheme, Theme } from '@mui/material/styles';
 
+// TODO: Convert to numeric member names
 export enum Gray {
   Placebo = '#e4e6ea',
   NimbusCloud = '#d3d5d9',
@@ -15,6 +16,7 @@ export enum Gray {
   PianoBlack = '#18191a',
 }
 
+// TODO: Convert to numeric member names
 export enum Blurple {
   BlueWhale = '#222d3e',
   Marina = '#5868CB',
