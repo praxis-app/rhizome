@@ -15,14 +15,17 @@ export const GRAY = {
   '950': '#18191a',
 } as const;
 
+export const BLURPLE = {
+  '300': '#7D95E3',
+  '400': '#6573CF',
+  '500': '#5868CB',
+} as const;
+
 // TODO: Convert to numeric member names
-export enum Blurple {
-  BlueWhale = '#222d3e',
-  Marina = '#5868CB',
-  PoolWater = '#3b86f7',
-  SavoryBlue = '#6573CF',
-  SkyDancer = '#588cf2',
+export enum BlurpleTest {
   Neptune = '#7D95E3',
+  SavoryBlue = '#6573CF',
+  Marina = '#5868CB',
 }
 
 declare module '@mui/material/styles/createPalette' {
@@ -47,7 +50,7 @@ export const theme = createTheme({
     light: {
       palette: {
         text: {
-          tertiary: Blurple.Neptune,
+          tertiary: BLURPLE['300'],
         },
         background: {
           secondary: grey[100],
@@ -63,7 +66,7 @@ export const theme = createTheme({
         text: {
           primary: GRAY['100'],
           secondary: GRAY['300'],
-          tertiary: Blurple.Neptune,
+          tertiary: BLURPLE['300'],
         },
         background: {
           default: GRAY['950'],

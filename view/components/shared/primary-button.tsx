@@ -5,7 +5,7 @@ import {
   SxProps,
   useTheme,
 } from '@mui/material';
-import { Blurple, GRAY } from '../../styles/theme';
+import { BLURPLE, GRAY } from '../../styles/theme';
 
 interface Props extends ButtonProps {
   isLoading?: boolean;
@@ -16,12 +16,12 @@ const PrimaryActionButton = ({ isLoading, children, sx, ...props }: Props) => {
   const theme = useTheme();
 
   const buttonStyles: SxProps = {
-    backgroundColor: Blurple.Marina,
+    backgroundColor: BLURPLE['500'],
     '&:active': {
-      backgroundColor: Blurple.Marina,
+      backgroundColor: BLURPLE['500'],
     },
     '&:hover': {
-      backgroundColor: Blurple.SavoryBlue,
+      backgroundColor: BLURPLE['400'],
     },
     '&:disabled': {
       backgroundColor: GRAY['600'],
