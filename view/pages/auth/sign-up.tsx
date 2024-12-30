@@ -7,14 +7,18 @@ import {
   FormLabel,
   InputBaseComponentProps,
   OutlinedInput,
+  Typography,
 } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import PrimaryActionButton from '../../components/shared/primary-button';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { GRAY } from '../../styles/theme';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
+import PrimaryActionButton from '../../components/shared/primary-button';
+import ProgressBar from '../../components/shared/progress-bar';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { useMeQuery } from '../../hooks/user.hooks';
+import { GRAY } from '../../styles/theme';
+import { UserStatus } from '../../types/user.types';
 
 interface FormValues {
   email: string;
@@ -22,7 +26,12 @@ interface FormValues {
 }
 
 export const SignUp = () => {
-  const { mutate: signUp, isLoading } = useMutation(api.completeRegistration);
+  const queryClient = useQueryClient();
+  const { mutate: signUp, isLoading } = useMutation(api.completeRegistration, {
+    onSuccess: () => queryClient.invalidateQueries('me'),
+  });
+  const { data: meData, isLoading: isMeLoading } = useMeQuery();
+
   const { handleSubmit, register } = useForm<FormValues>({
     mode: 'onChange',
   });
@@ -38,6 +47,14 @@ export const SignUp = () => {
       },
     },
   };
+
+  if (isMeLoading || !meData) {
+    return <ProgressBar />;
+  }
+
+  if (meData.user.status !== UserStatus.ANONYMOUS) {
+    return <Typography>{t('users.prompts.alreadyRegistered')}</Typography>;
+  }
 
   return (
     <Card>

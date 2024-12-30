@@ -1,10 +1,31 @@
-import { LinearProgress } from '@mui/material';
+import {
+  LinearProgress,
+  linearProgressClasses,
+  LinearProgressProps,
+  styled,
+} from '@mui/material';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
 import { api } from '../../client/api-client';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
+
+const ProgressBar = styled(LinearProgress)<LinearProgressProps>(
+  ({ theme }) => ({
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#09090b',
+      }),
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#18181b',
+      }),
+    },
+    height: '100vh',
+  }),
+);
 
 interface Props {
   children: ReactNode;
@@ -62,7 +83,7 @@ export const AuthWrapper = ({ children }: Props) => {
   }, [meData, token, setIsAppLoading]);
 
   if (isAppLoading) {
-    return <LinearProgress sx={{ height: '100vh' }} />;
+    return <ProgressBar />;
   }
 
   return <>{children}</>;

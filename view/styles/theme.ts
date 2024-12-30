@@ -271,15 +271,13 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }: Props) => ({
           [`&.${linearProgressClasses.colorPrimary}`]: {
-            backgroundColor: '#fafafa',
-            ...theme.applyStyles('dark', {
-              backgroundColor: '#09090b',
+            ...theme.applyStyles('light', {
+              backgroundColor: '#fafafa',
             }),
           },
           [`& .${linearProgressClasses.bar}`]: {
-            backgroundColor: '#e4e4e7',
-            ...theme.applyStyles('dark', {
-              backgroundColor: '#18181b',
+            ...theme.applyStyles('light', {
+              backgroundColor: '#e4e4e7',
             }),
           },
         }),

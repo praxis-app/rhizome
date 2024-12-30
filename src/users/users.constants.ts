@@ -17,7 +17,6 @@ export const SPACE_DICTIONARY = [
   'pluto',
   'quasar',
   'saturn',
-  'star',
   'sun',
   'venus',
 ];
