@@ -7,13 +7,16 @@ import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
 import { usersService } from '../users/users.service';
-import {
-  ACCESS_TOKEN_EXPIRES_IN,
-  MAX_PASSWORD_LENGTH,
-  MIN_PASSWORD_LENGTH,
-  SALT_ROUNDS,
-  VALID_EMAIL_REGEX,
-} from './auth.constants';
+
+// TODO: Uncomment when ready to use
+// const VALID_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
+
+const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 64;
+
+const ACCESS_TOKEN_EXPIRES_IN = 60 * 60 * 24 * 90;
+const SALT_ROUNDS = 10;
 
 interface SignUpReq {
   email: string;
