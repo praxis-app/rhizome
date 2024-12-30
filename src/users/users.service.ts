@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { colors, NumberDictionary, uniqueNamesGenerator } from 'unique-names-generator';
 import { channelsService } from '../channels/channels.service';
 import { dataSource } from '../database/data-source';
-import { User } from './user.entity';
+import { User, UserStatus } from './user.entity';
 import { NATURE_DICTIONARY, SPACE_DICTIONARY } from './users.constants';
 
 class UsersService {
@@ -26,7 +26,7 @@ class UsersService {
       ...user,
       email,
       password,
-      isAnonymous: false,
+      status: UserStatus.UNVERIFIED,
     });
   };
 
