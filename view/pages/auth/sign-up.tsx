@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import PrimaryActionButton from '../../components/shared/primary-button';
+import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
@@ -202,14 +202,14 @@ export const SignUp = () => {
             </FormControl>
           </FormGroup>
 
-          <PrimaryActionButton
+          <PrimaryButton
             type="submit"
             sx={{ height: 45 }}
             disabled={isLoading}
             fullWidth
           >
             {t('users.actions.signUp')}
-          </PrimaryActionButton>
+          </PrimaryButton>
         </form>
       </CardContent>
     </Card>

@@ -12,7 +12,7 @@ interface Props extends ButtonProps {
   sx?: SxProps;
 }
 
-const PrimaryActionButton = ({ isLoading, children, sx, ...props }: Props) => {
+const PrimaryButton = ({ isLoading, children, sx, ...props }: Props) => {
   const theme = useTheme();
 
   const buttonStyles: SxProps = {
@@ -51,4 +51,4 @@ const PrimaryActionButton = ({ isLoading, children, sx, ...props }: Props) => {
   );
 };
 
-export default PrimaryActionButton;
+export default PrimaryButton;
