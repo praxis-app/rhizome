@@ -20,6 +20,7 @@ import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
+import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { UserStatus } from '../../types/user.types';
 
@@ -36,12 +37,19 @@ interface FormValues {
 
 export const SignUp = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const { setToast } = useAppStore((state) => state);
 
   const { mutate: signUp, isLoading } = useMutation(api.completeRegistration, {
     onSuccess: () => {
       queryClient.invalidateQueries('me');
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
+    },
+    onError: (error: Error) => {
+      setToast({
+        title: error.message,
+        status: 'error',
+      });
     },
   });
 

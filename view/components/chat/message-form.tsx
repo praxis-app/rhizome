@@ -102,7 +102,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
       reset();
     },
     {
-      onError: (error: any) => {
+      onError: (error: Error) => {
         setToast({
           title: error.message,
           status: 'error',
