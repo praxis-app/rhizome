@@ -47,7 +47,7 @@ export const theme = createTheme({
           tertiary: BLURPLE['300'],
         },
         background: {
-          secondary: grey[100],
+          secondary: GRAY['50'],
         },
         divider: GRAY['100'],
       },
@@ -170,7 +170,7 @@ export const theme = createTheme({
         root: ({ theme }: Props) => ({
           '&:hover': {
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: grey[200],
+              borderColor: GRAY[200],
               ...theme.applyStyles('dark', {
                 borderColor: grey[800],
               }),
@@ -178,16 +178,16 @@ export const theme = createTheme({
           },
           '&.Mui-focused': {
             '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: grey[500],
+              borderColor: GRAY[400],
               ...theme.applyStyles('dark', {
-                borderColor: grey[100],
+                borderColor: GRAY[100],
               }),
               borderWidth: 1,
             },
           },
         }),
         notchedOutline: ({ theme }: Props) => ({
-          borderColor: grey[200],
+          borderColor: GRAY[200],
           ...theme.applyStyles('dark', {
             borderColor: grey[800],
           }),
