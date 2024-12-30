@@ -69,9 +69,8 @@ class MessagesService {
   }
 
   async createMessage({ body, imageCount, ...messageData }: CreateMessageReq, user: User) {
-    const sanitizedBody = sanitizeText(body);
     const message = await this.messageRepository.save({
-      body: sanitizedBody,
+      body: sanitizeText(body),
       userId: user.id,
       ...messageData,
     });
