@@ -1,3 +1,4 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Card,
   CardContent,
@@ -5,8 +6,10 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  InputBaseComponentProps,
+  IconButton,
+  InputAdornment,
   OutlinedInput,
+  SxProps,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
@@ -36,6 +39,7 @@ interface FormValues {
 }
 
 export const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const { setToast } = useAppStore((state) => state);
 
@@ -95,14 +99,25 @@ export const SignUp = () => {
     required: t('users.errors.missingPassword'),
   });
 
-  const inputProps: InputBaseComponentProps = {
-    sx: {
-      '&:-webkit-autofill': {
-        WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
-        WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
-      },
+  const inputBaseSx: SxProps = {
+    '&:-webkit-autofill': {
+      WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
+      WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
     },
   };
+
+  const renderShowPassword = () => (
+    <InputAdornment position="end" sx={{ marginRight: 0.5 }}>
+      <IconButton
+        onClick={() => setShowPassword(!showPassword)}
+        onMouseDown={(e) => e.preventDefault()}
+        onMouseUp={(e) => e.preventDefault()}
+        edge="end"
+      >
+        {showPassword ? <Visibility /> : <VisibilityOff />}
+      </IconButton>
+    </InputAdornment>
+  );
 
   const isRegistered = meData?.user.status !== UserStatus.ANONYMOUS;
   if (isMeLoading || isRedirecting || isRegistered) {
@@ -125,7 +140,7 @@ export const SignUp = () => {
               </FormLabel>
               <OutlinedInput
                 autoComplete="off"
-                inputProps={inputProps}
+                inputProps={{ sx: inputBaseSx }}
                 {...registerEmailProps}
               />
               {!!formState.errors.email && (
@@ -141,8 +156,16 @@ export const SignUp = () => {
               </FormLabel>
               <OutlinedInput
                 autoComplete="off"
-                inputProps={inputProps}
-                type="password"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={renderShowPassword()}
+                inputProps={{
+                  sx: {
+                    borderTopRightRadius: '0 !important',
+                    borderBottomRightRadius: '0 !important',
+                    ...inputBaseSx,
+                  },
+                }}
+                sx={{ backgroundColor: isDarkMode ? GRAY['800'] : GRAY['100'] }}
                 {...registerPasswordProps}
               />
               {!!formState.errors.password && (
