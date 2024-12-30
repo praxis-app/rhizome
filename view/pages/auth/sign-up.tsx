@@ -4,6 +4,7 @@ import {
   CardHeader,
   FormControl,
   FormGroup,
+  FormHelperText,
   FormLabel,
   InputBaseComponentProps,
   OutlinedInput,
@@ -11,7 +12,9 @@ import {
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import PrimaryActionButton from '../../components/shared/primary-button';
+import ProgressBar from '../../components/shared/progress-bar';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { useMeQuery } from '../../hooks/user.hooks';
 import { GRAY } from '../../styles/theme';
 
 interface FormValues {
@@ -22,7 +25,15 @@ interface FormValues {
 }
 
 export const SignUp = () => {
-  const { handleSubmit, register } = useForm<FormValues>({ mode: 'onChange' });
+  const { handleSubmit, register, setValue } = useForm<FormValues>({
+    mode: 'onChange',
+  });
+
+  const { isLoading } = useMeQuery({
+    onSuccess(data) {
+      setValue('name', data.user.name);
+    },
+  });
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
@@ -39,6 +50,10 @@ export const SignUp = () => {
   const onSubmit = async (values: FormValues) => {
     console.log(values);
   };
+
+  if (isLoading) {
+    return <ProgressBar />;
+  }
 
   return (
     <Card>
@@ -59,6 +74,9 @@ export const SignUp = () => {
                 inputProps={inputProps}
                 {...register('name')}
               />
+              <FormHelperText sx={{ marginLeft: 0.1 }}>
+                {t('users.prompts.usernameHelper')}
+              </FormHelperText>
             </FormControl>
 
             <FormControl>
