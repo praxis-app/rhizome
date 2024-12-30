@@ -101,17 +101,17 @@ export const SignUp = () => {
   });
 
   const showPasswordIconSx: SxProps = {
-    color: isDarkMode ? GRAY['300'] : GRAY['800'],
+    color: isDarkMode ? GRAY['300'] : GRAY['900'],
   };
   const inputBaseSx: SxProps = {
     '&:-webkit-autofill': {
-      WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['700'] : GRAY['100']} inset`,
-      WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['900'],
+      WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
+      WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
     },
   };
   const passwordInputSx: SxProps | undefined = isAutofilled
     ? {
-        backgroundColor: isDarkMode ? GRAY['700'] : GRAY['100'],
+        backgroundColor: isDarkMode ? GRAY['800'] : GRAY['100'],
       }
     : undefined;
 
