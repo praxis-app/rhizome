@@ -5,4 +5,4 @@ import { authController } from './auth.controller';
 export const authRouter = express.Router();
 
 authRouter.post('/', authService.validateCreateAnon, authController.createAnon);
-authRouter.put('/', authService.authenticate, authService.validateUpgrade, authController.signUp);
+authRouter.put('/', authService.authenticate, authService.validateSignUp, authController.signUp);

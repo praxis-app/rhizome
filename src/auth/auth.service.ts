@@ -15,7 +15,7 @@ import {
   VALID_EMAIL_REGEX,
 } from './auth.constants';
 
-interface UpgradeReq {
+interface SignUpReq {
   email: string;
   password: string;
 }
@@ -27,13 +27,13 @@ class AuthService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  signUp = async (userId: string, { email, password }: UpgradeReq) => {
+  signUp = async (userId: string, { email, password }: SignUpReq) => {
     const passwordHash = await hash(password, SALT_ROUNDS);
-    await usersService.upgradeUser(userId, email, passwordHash);
+    await usersService.signUp(userId, email, passwordHash);
   };
 
-  validateUpgrade = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body as UpgradeReq;
+  validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body as SignUpReq;
 
     if (!VALID_EMAIL_REGEX.test(email)) {
       res.status(400).send('Invalid email address');

@@ -14,7 +14,7 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  upgradeUser = async (userId: string, email: string, password: string) => {
+  signUp = async (userId: string, email: string, password: string) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
