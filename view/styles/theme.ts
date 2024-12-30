@@ -3,6 +3,7 @@ import { grey } from '@mui/material/colors';
 import { createTheme, Theme } from '@mui/material/styles';
 
 export const GRAY = {
+  '50': '#f5f5f5',
   '100': '#e4e6ea',
   '200': '#d3d5d9',
   '300': '#b1b3b8',
