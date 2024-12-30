@@ -28,3 +28,9 @@ export enum BrowserEvents {
   Resize = 'resize',
   Scroll = 'scroll',
 }
+
+export enum NavigationPaths {
+  Home = '/',
+  Login = '/login',
+  SignUp = '/signup',
+}

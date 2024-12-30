@@ -1,6 +1,35 @@
 import { linearProgressClasses } from '@mui/material';
 import { createTheme, Theme } from '@mui/material/styles';
 
+export const GRAY = {
+  '50': '#f5f5f5',
+  '100': '#e4e6ea',
+  '200': '#d3d5d9',
+  '300': '#b1b3b8',
+  '400': '#8c8c8d',
+  '500': '#505051',
+  '600': '#424242',
+  '700': '#3a3b3c',
+  '800': '#303233',
+  '900': '#242526',
+  '950': '#18191a',
+} as const;
+
+export const BLURPLE = {
+  '300': '#7D95E3',
+  '400': '#6573CF',
+  '500': '#5868CB',
+} as const;
+
+declare module '@mui/material/styles/createPalette' {
+  interface TypeText {
+    tertiary: string;
+  }
+  interface TypeBackground {
+    secondary: string;
+  }
+}
+
 interface Props<OwnerState = unknown> {
   theme: Theme;
   ownerState: OwnerState;
@@ -13,20 +42,65 @@ export const theme = createTheme({
   colorSchemes: {
     light: {
       palette: {
-        divider: '#e4e4e7',
+        text: {
+          tertiary: BLURPLE['300'],
+        },
+        background: {
+          secondary: GRAY['50'],
+        },
+        divider: GRAY['100'],
       },
     },
     dark: {
       palette: {
-        background: {
-          default: '#0a0a0a',
+        primary: {
+          main: GRAY['100'],
         },
-        divider: '#27272a',
+        text: {
+          primary: GRAY['100'],
+          secondary: GRAY['300'],
+          tertiary: BLURPLE['300'],
+        },
+        background: {
+          default: GRAY['950'],
+          paper: GRAY['900'],
+          secondary: GRAY['700'],
+        },
+        divider: GRAY['700'],
       },
     },
   },
 
   components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          // Mobile (first priority)
+          paddingTop: 18,
+
+          // Tablet
+          [theme.breakpoints.up('sm')]: {
+            paddingTop: 50,
+          },
+
+          // Desktop
+          [theme.breakpoints.up('md')]: {
+            paddingTop: 70,
+          },
+
+          // Larger devices
+          [theme.breakpoints.up('lg')]: {
+            paddingTop: 75,
+          },
+        }),
+        maxWidthSm: ({ theme }: Props) => ({
+          [theme.breakpoints.up('md')]: {
+            maxWidth: 680,
+          },
+        }),
+      },
+    },
+
     MuiPaper: {
       styleOverrides: {
         elevation: {
@@ -36,6 +110,14 @@ export const theme = createTheme({
             0 4px 6px -1px rgba(0,0,0,.1),
             0 2px 4px -2px rgba(0,0,0,.1)
           `,
+        },
+      },
+    },
+
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
         },
       },
     },
@@ -69,6 +151,46 @@ export const theme = createTheme({
             borderRadius: 7,
           },
         },
+      },
+    },
+
+    MuiFormLabel: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          '&.Mui-focused': {
+            color: theme.palette.text.secondary,
+          },
+        }),
+      },
+    },
+
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          '&:hover': {
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: GRAY[200],
+              ...theme.applyStyles('dark', {
+                borderColor: GRAY[600],
+              }),
+            },
+          },
+          '&.Mui-focused': {
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: GRAY[400],
+              ...theme.applyStyles('dark', {
+                borderColor: GRAY[100],
+              }),
+              borderWidth: 1,
+            },
+          },
+        }),
+        notchedOutline: ({ theme }: Props) => ({
+          borderColor: GRAY[200],
+          ...theme.applyStyles('dark', {
+            borderColor: GRAY[600],
+          }),
+        }),
       },
     },
 
@@ -149,15 +271,13 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }: Props) => ({
           [`&.${linearProgressClasses.colorPrimary}`]: {
-            backgroundColor: '#fafafa',
-            ...theme.applyStyles('dark', {
-              backgroundColor: '#09090b',
+            ...theme.applyStyles('light', {
+              backgroundColor: '#fafafa',
             }),
           },
           [`& .${linearProgressClasses.bar}`]: {
-            backgroundColor: '#e4e4e7',
-            ...theme.applyStyles('dark', {
-              backgroundColor: '#18181b',
+            ...theme.applyStyles('light', {
+              backgroundColor: '#e4e4e7',
             }),
           },
         }),

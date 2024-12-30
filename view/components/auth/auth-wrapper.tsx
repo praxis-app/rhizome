@@ -1,10 +1,31 @@
-import { LinearProgress } from '@mui/material';
+import {
+  LinearProgress,
+  linearProgressClasses,
+  LinearProgressProps,
+  styled,
+} from '@mui/material';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useMutation } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
 import { api } from '../../client/api-client';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
+
+const ProgressBar = styled(LinearProgress)<LinearProgressProps>(
+  ({ theme }) => ({
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#09090b',
+      }),
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      ...theme.applyStyles('dark', {
+        backgroundColor: '#18181b',
+      }),
+    },
+    height: '100vh',
+  }),
+);
 
 interface Props {
   children: ReactNode;
@@ -35,9 +56,9 @@ export const AuthWrapper = ({ children }: Props) => {
     return clientId;
   };
 
-  const { mutate: register } = useMutation(async () => {
+  const { mutate: createAnonSession } = useMutation(async () => {
     const clientId = getClientId();
-    const { token } = await api.register(clientId);
+    const { token } = await api.createAnonSession(clientId);
     localStorage.setItem('token', token);
     setToken(token);
   });
@@ -51,9 +72,9 @@ export const AuthWrapper = ({ children }: Props) => {
       setToken(tokenFromStorage);
       return;
     }
-    register();
+    createAnonSession();
     authCalledRef.current = true;
-  }, [token, register, setToken, setIsAppLoading]);
+  }, [token, createAnonSession, setToken, setIsAppLoading]);
 
   useEffect(() => {
     if (meData && token) {
@@ -62,7 +83,7 @@ export const AuthWrapper = ({ children }: Props) => {
   }, [meData, token, setIsAppLoading]);
 
   if (isAppLoading) {
-    return <LinearProgress sx={{ height: '100vh' }} />;
+    return <ProgressBar />;
   }
 
   return <>{children}</>;

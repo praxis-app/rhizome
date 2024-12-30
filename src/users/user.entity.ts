@@ -9,13 +9,39 @@ import {
 import { ChannelMember } from '../channels/models/channel-member.entity';
 import { Message } from '../messages/message.entity';
 
+export enum UserStatus {
+  ANONYMOUS = 'anonymous',
+  UNVERIFIED = 'unverified',
+  VERIFIED = 'verified',
+  BANNED = 'banned',
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  displayName: string | null;
+
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  email: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  password: string | null;
+
+  @Column({ type: 'varchar', nullable: true })
+  bio: string | null;
+
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.ANONYMOUS,
+  })
+  status: UserStatus;
 
   @Column({ unique: true })
   clientId: string;

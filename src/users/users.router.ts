@@ -4,5 +4,5 @@ import { authService } from '../auth/auth.service';
 
 export const usersRouter = express.Router();
 
-usersRouter.use(authService.authenticateUser);
+usersRouter.use(authService.authenticate);
 usersRouter.get('/me', usersController.getCurrentUser);
