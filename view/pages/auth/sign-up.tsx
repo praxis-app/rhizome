@@ -100,6 +100,9 @@ export const SignUp = () => {
     required: t('users.errors.missingPassword'),
   });
 
+  const showPasswordIconSx: SxProps = {
+    color: isDarkMode ? GRAY['300'] : GRAY['900'],
+  };
   const inputBaseSx: SxProps = {
     '&:-webkit-autofill': {
       WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
@@ -133,7 +136,11 @@ export const SignUp = () => {
         onMouseUp={(e) => e.preventDefault()}
         edge="end"
       >
-        {showPassword ? <VisibilityOff /> : <Visibility />}
+        {showPassword ? (
+          <VisibilityOff sx={showPasswordIconSx} />
+        ) : (
+          <Visibility sx={showPasswordIconSx} />
+        )}
       </IconButton>
     </InputAdornment>
   );
