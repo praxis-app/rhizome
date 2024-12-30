@@ -7,6 +7,7 @@ import {
   FormLabel,
   InputBaseComponentProps,
   OutlinedInput,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,6 +22,12 @@ import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { GRAY } from '../../styles/theme';
 import { UserStatus } from '../../types/user.types';
+
+const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+const EMAIL_MAX_LENGTH = 254;
+
+const MIN_PASSWORD_LENGTH = 8;
+const MAX_PASSWORD_LENGTH = 64;
 
 interface FormValues {
   email: string;
@@ -52,8 +59,32 @@ export const SignUp = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const { handleSubmit, register } = useForm<FormValues>({
+  const { handleSubmit, register, formState } = useForm<FormValues>({
     mode: 'onChange',
+  });
+
+  const registerEmailProps = register('email', {
+    pattern: {
+      value: VALID_EMAIL_REGEX,
+      message: t('users.errors.invalidEmail'),
+    },
+    maxLength: {
+      value: EMAIL_MAX_LENGTH,
+      message: t('users.errors.longEmail'),
+    },
+    required: t('users.errors.missingEmail'),
+  });
+
+  const registerPasswordProps = register('password', {
+    minLength: {
+      value: MIN_PASSWORD_LENGTH,
+      message: t('users.errors.passwordTooShort'),
+    },
+    maxLength: {
+      value: MAX_PASSWORD_LENGTH,
+      message: t('users.errors.passwordTooLong'),
+    },
+    required: t('users.errors.missingPassword'),
   });
 
   const inputProps: InputBaseComponentProps = {
@@ -87,8 +118,13 @@ export const SignUp = () => {
               <OutlinedInput
                 autoComplete="off"
                 inputProps={inputProps}
-                {...register('email')}
+                {...registerEmailProps}
               />
+              {!!formState.errors.email && (
+                <Typography color="error" fontSize="small" paddingTop={0.5}>
+                  {formState.errors.email.message}
+                </Typography>
+              )}
             </FormControl>
 
             <FormControl>
@@ -99,8 +135,13 @@ export const SignUp = () => {
                 autoComplete="off"
                 inputProps={inputProps}
                 type="password"
-                {...register('password')}
+                {...registerPasswordProps}
               />
+              {!!formState.errors.password && (
+                <Typography color="error" fontSize="small" paddingTop={0.5}>
+                  {formState.errors.password.message}
+                </Typography>
+              )}
             </FormControl>
           </FormGroup>
 
