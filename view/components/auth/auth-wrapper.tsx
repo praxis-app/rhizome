@@ -56,9 +56,9 @@ export const AuthWrapper = ({ children }: Props) => {
     return clientId;
   };
 
-  const { mutate: registerAnon } = useMutation(async () => {
+  const { mutate: createAnonSession } = useMutation(async () => {
     const clientId = getClientId();
-    const { token } = await api.registerAnon(clientId);
+    const { token } = await api.createAnonSession(clientId);
     localStorage.setItem('token', token);
     setToken(token);
   });
@@ -72,9 +72,9 @@ export const AuthWrapper = ({ children }: Props) => {
       setToken(tokenFromStorage);
       return;
     }
-    registerAnon();
+    createAnonSession();
     authCalledRef.current = true;
-  }, [token, registerAnon, setToken, setIsAppLoading]);
+  }, [token, createAnonSession, setToken, setIsAppLoading]);
 
   useEffect(() => {
     if (meData && token) {

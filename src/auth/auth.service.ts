@@ -26,7 +26,7 @@ class AuthService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  upgrade = async (userId: string, { email, password }: UpgradeReq) => {
+  signUp = async (userId: string, { email, password }: UpgradeReq) => {
     const passwordHash = await hash(password, SALT_ROUNDS);
     await usersService.upgradeUser(userId, email, passwordHash);
   };
@@ -62,7 +62,7 @@ class AuthService {
     next();
   };
 
-  registerAnon = async (clientId: string) => {
+  createAnon = async (clientId: string) => {
     const user = await usersService.createAnonUser(clientId);
     const payload = { userId: user.id };
 
@@ -71,7 +71,7 @@ class AuthService {
     });
   };
 
-  validateRegisterAnon = async (req: Request, res: Response, next: NextFunction) => {
+  validateCreateAnon = async (req: Request, res: Response, next: NextFunction) => {
     const { clientId } = req.body;
     if (!clientId || !uuidValidate(clientId)) {
       res.status(400).send('Invalid client ID');

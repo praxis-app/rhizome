@@ -39,7 +39,7 @@ export const SignUp = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const { setToast } = useAppStore((state) => state);
 
-  const { mutate: signUp, isLoading } = useMutation(api.completeRegistration, {
+  const { mutate: signUp, isLoading } = useMutation(api.signUp, {
     onSuccess: () => {
       queryClient.invalidateQueries('me');
       navigate(NavigationPaths.Home);

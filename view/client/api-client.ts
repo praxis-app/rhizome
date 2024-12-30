@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
 import { CurrentUser } from '../types/user.types';
-import { CompleteRegistrationReq } from '../types/auth.types';
+import { SignUpReq } from '../types/auth.types';
 
 export const API_ROOT = '/api';
 
@@ -13,18 +13,18 @@ class ApiClient {
     this.axiosInstance = axios.create({ baseURL: API_ROOT });
   }
 
-  registerAnon = async (clientId: string) => {
-    return this.executeRequest<{ token: string }>('post', '/auth', {
-      data: { clientId },
-    });
-  };
-
-  completeRegistration = async (data: CompleteRegistrationReq) => {
+  signUp = async (data: SignUpReq) => {
     return this.executeRequest<void>('put', '/auth', { data });
   };
 
   getCurrentUser = async () => {
     return this.executeRequest<{ user: CurrentUser }>('get', '/users/me');
+  };
+
+  createAnonSession = async (clientId: string) => {
+    return this.executeRequest<{ token: string }>('post', '/auth', {
+      data: { clientId },
+    });
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
