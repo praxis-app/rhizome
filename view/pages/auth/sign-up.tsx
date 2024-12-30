@@ -7,14 +7,16 @@ import {
   FormLabel,
   InputBaseComponentProps,
   OutlinedInput,
-  Typography,
 } from '@mui/material';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import PrimaryActionButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
+import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { GRAY } from '../../styles/theme';
@@ -26,18 +28,33 @@ interface FormValues {
 }
 
 export const SignUp = () => {
-  const queryClient = useQueryClient();
-  const { mutate: signUp, isLoading } = useMutation(api.completeRegistration, {
-    onSuccess: () => queryClient.invalidateQueries('me'),
-  });
-  const { data: meData, isLoading: isMeLoading } = useMeQuery();
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const { handleSubmit, register } = useForm<FormValues>({
-    mode: 'onChange',
+  const { mutate: signUp, isLoading } = useMutation(api.completeRegistration, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('me');
+      navigate(NavigationPaths.Home);
+      setIsRedirecting(true);
+    },
+  });
+
+  const { data: meData, isLoading: isMeLoading } = useMeQuery({
+    onSuccess(data) {
+      if (data.user.status !== UserStatus.ANONYMOUS) {
+        navigate(NavigationPaths.Home);
+        setIsRedirecting(true);
+      }
+    },
   });
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { handleSubmit, register } = useForm<FormValues>({
+    mode: 'onChange',
+  });
 
   const inputProps: InputBaseComponentProps = {
     sx: {
@@ -48,12 +65,9 @@ export const SignUp = () => {
     },
   };
 
-  if (isMeLoading || !meData) {
+  const isRegistered = meData?.user.status !== UserStatus.ANONYMOUS;
+  if (isMeLoading || isRedirecting || isRegistered) {
     return <ProgressBar />;
-  }
-
-  if (meData.user.status !== UserStatus.ANONYMOUS) {
-    return <Typography>{t('users.prompts.alreadyRegistered')}</Typography>;
   }
 
   return (
