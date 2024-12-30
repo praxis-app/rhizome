@@ -8,6 +8,7 @@ import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
 import { usersService } from '../users/users.service';
 import {
+  ACCESS_TOKEN_EXPIRES_IN,
   MAX_PASSWORD_LENGTH,
   MIN_PASSWORD_LENGTH,
   SALT_ROUNDS,
@@ -67,7 +68,7 @@ class AuthService {
     const payload = { userId: user.id };
 
     return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
-      expiresIn: '30d',
+      expiresIn: ACCESS_TOKEN_EXPIRES_IN,
     });
   };
 
