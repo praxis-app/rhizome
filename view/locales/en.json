@@ -83,7 +83,6 @@
       "editProfile": "Edit profile",
       "logIn": "Log in",
       "logOut": "Log out",
-      "passwordConfirm": "Confirm password",
       "resetPassword": "Reset Password",
       "sendEmail": "Send Email",
       "signUp": "Sign up"
@@ -107,8 +106,6 @@
     },
     "form": {
       "bio": "Bio",
-      "confirmNewPassword": "Confirm new password",
-      "confirmPassword": "Confirm password",
       "coverPhoto": "Cover photo",
       "displayName": "Display name",
       "email": "Email",
@@ -118,9 +115,7 @@
       "yourEmail": "Your email address"
     },
     "errors": {
-      "confirmPassword": "Passwords do not match",
       "invalidEmail": "Email is invalid.",
-      "missingConfirmPassword": "Confirm password cannot be empty",
       "missingEmail": "Email cannot be empty",
       "missingName": "Username cannot be empty",
       "invalidName": "Usernames cannot contain special characters",

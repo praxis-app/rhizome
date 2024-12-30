@@ -1,3 +1,5 @@
+// TODO: Add support for user updates with validation
+
 import { Repository } from 'typeorm';
 import { colors, NumberDictionary, uniqueNamesGenerator } from 'unique-names-generator';
 import { channelsService } from '../channels/channels.service';
@@ -12,7 +14,7 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  upgradeUser = async (userId: string, name: string, email: string, password: string) => {
+  upgradeUser = async (userId: string, email: string, password: string) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
@@ -22,7 +24,6 @@ class UsersService {
 
     await this.userRepository.update(userId, {
       ...user,
-      name,
       email,
       password,
       isAnonymous: false,

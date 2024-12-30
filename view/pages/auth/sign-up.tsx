@@ -4,7 +4,6 @@ import {
   CardHeader,
   FormControl,
   FormGroup,
-  FormHelperText,
   FormLabel,
   InputBaseComponentProps,
   OutlinedInput,
@@ -12,27 +11,17 @@ import {
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import PrimaryActionButton from '../../components/shared/primary-button';
-import ProgressBar from '../../components/shared/progress-bar';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { useMeQuery } from '../../hooks/user.hooks';
 import { GRAY } from '../../styles/theme';
 
 interface FormValues {
-  name: string;
   email: string;
   password: string;
-  confirmPassword: string;
 }
 
 export const SignUp = () => {
-  const { handleSubmit, register, setValue } = useForm<FormValues>({
+  const { handleSubmit, register } = useForm<FormValues>({
     mode: 'onChange',
-  });
-
-  const { isLoading } = useMeQuery({
-    onSuccess(data) {
-      setValue('name', data.user.name);
-    },
   });
 
   const { t } = useTranslation();
@@ -51,10 +40,6 @@ export const SignUp = () => {
     console.log(values);
   };
 
-  if (isLoading) {
-    return <ProgressBar />;
-  }
-
   return (
     <Card>
       <CardHeader
@@ -65,20 +50,6 @@ export const SignUp = () => {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
-            <FormControl>
-              <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                {t('users.form.username')}
-              </FormLabel>
-              <OutlinedInput
-                autoComplete="off"
-                inputProps={inputProps}
-                {...register('name')}
-              />
-              <FormHelperText sx={{ marginLeft: 0.1 }}>
-                {t('users.prompts.usernameHelper')}
-              </FormHelperText>
-            </FormControl>
-
             <FormControl>
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
                 {t('users.form.email')}
@@ -99,18 +70,6 @@ export const SignUp = () => {
                 inputProps={inputProps}
                 type="password"
                 {...register('password')}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                {t('users.form.confirmPassword')}
-              </FormLabel>
-              <OutlinedInput
-                autoComplete="off"
-                inputProps={inputProps}
-                type="password"
-                {...register('confirmPassword')}
               />
             </FormControl>
           </FormGroup>
