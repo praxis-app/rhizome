@@ -24,7 +24,7 @@ const PrimaryActionButton = ({ isLoading, children, sx, ...props }: Props) => {
       backgroundColor: BLURPLE['400'],
     },
     '&:disabled': {
-      backgroundColor: GRAY['600'],
+      backgroundColor: GRAY['500'],
     },
     color: theme.palette.common.white,
     fontWeight: 600,

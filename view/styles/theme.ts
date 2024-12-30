@@ -8,12 +8,11 @@ export const GRAY = {
   '200': '#d3d5d9',
   '300': '#b1b3b8',
   '400': '#8c8c8d',
-  '500': '#666768',
-  '600': '#505051',
-  '700': '#3a3b3c',
-  '800': '#303233',
-  '900': '#242526',
-  '950': '#18191a',
+  '500': '#505051',
+  '600': '#3a3b3c',
+  '700': '#303233',
+  '800': '#242526',
+  '900': '#18191a',
 } as const;
 
 export const BLURPLE = {
@@ -63,11 +62,11 @@ export const theme = createTheme({
           tertiary: BLURPLE['300'],
         },
         background: {
-          default: GRAY['950'],
-          paper: GRAY['900'],
-          secondary: GRAY['700'],
+          default: GRAY['900'],
+          paper: GRAY['800'],
+          secondary: GRAY['600'],
         },
-        divider: GRAY['700'],
+        divider: GRAY['600'],
       },
     },
   },
