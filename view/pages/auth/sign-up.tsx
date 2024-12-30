@@ -12,7 +12,7 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from 'react-query';
@@ -40,6 +40,7 @@ interface FormValues {
 
 export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isAutofilled, setIsAutofilled] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const { setToast } = useAppStore((state) => state);
 
@@ -105,6 +106,24 @@ export const SignUp = () => {
       WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
     },
   };
+  const passwordInputSx: SxProps | undefined = isAutofilled
+    ? {
+        backgroundColor: isDarkMode ? GRAY['800'] : GRAY['100'],
+      }
+    : undefined;
+
+  useEffect(() => {
+    const handleAnimationStart = (e: AnimationEvent) => {
+      if (e.animationName === 'mui-auto-fill') {
+        setIsAutofilled(true);
+      }
+    };
+    document.addEventListener('animationstart', handleAnimationStart);
+
+    return () => {
+      document.removeEventListener('animationstart', handleAnimationStart);
+    };
+  }, []);
 
   const renderShowPassword = () => (
     <InputAdornment position="end" sx={{ marginRight: 0.5 }}>
@@ -114,7 +133,7 @@ export const SignUp = () => {
         onMouseUp={(e) => e.preventDefault()}
         edge="end"
       >
-        {showPassword ? <Visibility /> : <VisibilityOff />}
+        {showPassword ? <VisibilityOff /> : <Visibility />}
       </IconButton>
     </InputAdornment>
   );
@@ -165,7 +184,7 @@ export const SignUp = () => {
                     ...inputBaseSx,
                   },
                 }}
-                sx={{ backgroundColor: isDarkMode ? GRAY['800'] : GRAY['100'] }}
+                sx={passwordInputSx}
                 {...registerPasswordProps}
               />
               {!!formState.errors.password && (
