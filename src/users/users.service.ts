@@ -6,6 +6,7 @@ import { channelsService } from '../channels/channels.service';
 import { dataSource } from '../database/data-source';
 import { User, UserStatus } from './user.entity';
 import { NATURE_DICTIONARY, SPACE_DICTIONARY } from './users.constants';
+import { normalizeText } from '../common/common.utils';
 
 class UsersService {
   private userRepository: Repository<User>;
@@ -24,9 +25,9 @@ class UsersService {
 
     await this.userRepository.update(userId, {
       ...user,
-      email,
-      password,
       status: UserStatus.UNVERIFIED,
+      email: normalizeText(email),
+      password,
     });
   };
 

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Repository } from 'typeorm';
 import { channelsService } from '../channels/channels.service';
+import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { Image } from '../images/models/image.entity';
 import { pubSubService } from '../pub-sub/pub-sub.service';
@@ -67,8 +68,13 @@ class MessagesService {
     }));
   }
 
-  async createMessage({ imageCount, ...messageData }: CreateMessageReq, user: User) {
-    const message = await this.messageRepository.save({ ...messageData, userId: user.id });
+  async createMessage({ body, imageCount, ...messageData }: CreateMessageReq, user: User) {
+    const sanitizedBody = sanitizeText(body);
+    const message = await this.messageRepository.save({
+      body: sanitizedBody,
+      userId: user.id,
+      ...messageData,
+    });
     let images: Image[] = [];
 
     if (imageCount) {
@@ -121,8 +127,13 @@ class MessagesService {
       res.status(400).send('Message body must be a string');
       return;
     }
-    if (message.body && message.body.length > MESSAGE_BODY_MAX) {
+    const sanitizedBody = sanitizeText(message.body);
+    if (message.body && sanitizedBody.length > MESSAGE_BODY_MAX) {
       res.status(400).send(`Message body cannot exceed ${MESSAGE_BODY_MAX} characters`);
+      return;
+    }
+    if (!sanitizedBody && !message.imageCount) {
+      res.status(400).send('Message body or images are required');
       return;
     }
     next();
