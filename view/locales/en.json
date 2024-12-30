@@ -101,8 +101,7 @@
       "removeUser": "Are you sure you want to permanently delete this member's account? All of their data will be deleted and this cannot be undone.",
       "resetYourPassword": "Reset your password",
       "upgradeAccount": "Turn your anonymous session into a permanent account",
-      "createAccount": "Create an account",
-      "usernameHelper": "Keep your anonymous handle or pick something new."
+      "createAccount": "Create an account"
     },
     "form": {
       "bio": "Bio",
