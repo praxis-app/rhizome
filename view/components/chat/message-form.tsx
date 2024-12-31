@@ -48,7 +48,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     },
   });
 
-  const { mutate: sendMessage } = useMutation(
+  const { mutate: sendMessage, isLoading } = useMutation(
     async ({ body }: FormValues) => {
       validateImageInput(images);
 
@@ -146,6 +146,13 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     transform: 'translateY(5px)',
   };
 
+  const getIsDisabled = () => {
+    if (isLoading) {
+      return true;
+    }
+    return !images.length && !formState.dirtyFields.body;
+  };
+
   const handleInputKeyDown: KeyboardEventHandler = (e) => {
     if (e.code !== KeyCodes.Enter) {
       return;
@@ -199,10 +206,10 @@ const MessageForm = ({ channelId, onSend }: Props) => {
 
           <IconButton
             sx={sendBtnStyles}
-            edge="end"
             onClick={handleSubmit((values) => sendMessage(values))}
-            disabled={!images.length && !formState.dirtyFields.body}
+            disabled={getIsDisabled()}
             disableRipple
+            edge="end"
           >
             <Send sx={{ fontSize: 20, color: 'text.secondary' }} />
           </IconButton>
