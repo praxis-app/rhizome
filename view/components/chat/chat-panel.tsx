@@ -4,6 +4,7 @@ import { useInfiniteQuery, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
+import { useAppStore } from '../../store/app.store';
 import { Message, MessagesQuery } from '../../types/chat.types';
 import { PubSubMessage } from '../../types/shared.types';
 import MessageFeed from './message-feed';
@@ -31,6 +32,8 @@ interface Props {
 }
 
 const ChatPanel = ({ channelId }: Props) => {
+  const { token } = useAppStore((state) => state);
+
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', channelId],
     queryFn: ({ pageParam }) => {
@@ -40,7 +43,7 @@ const ChatPanel = ({ channelId }: Props) => {
       return pages.flatMap((page) => page.messages).length;
     },
   });
-  const { data: meData } = useMeQuery();
+  const { data: meData } = useMeQuery({ enabled: !!token });
 
   const feedBoxRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();

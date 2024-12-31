@@ -16,6 +16,7 @@ import { Image } from '../../types/image.types';
 import { validateImageInput } from '../../utils/image.utils';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
+import { useMeQuery } from '../../hooks/user.hooks';
 
 const MESSAGE_BODY_MAX = 6000;
 
@@ -29,7 +30,7 @@ interface Props {
 }
 
 const MessageForm = ({ channelId, onSend }: Props) => {
-  const { setToast } = useAppStore((state) => state);
+  const { token, setToast } = useAppStore((state) => state);
   const [images, setImages] = useState<File[]>([]);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
 
@@ -48,7 +49,11 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     },
   });
 
-  const { mutate: sendMessage, isLoading } = useMutation(
+  // TODO: Use meData to determine whether to send a message or show anon auth prompt
+  const { data: meData } = useMeQuery({ enabled: !!token });
+  console.log(meData);
+
+  const { mutate: sendMessage, isLoading: isMessageSending } = useMutation(
     async ({ body }: FormValues) => {
       validateImageInput(images);
 
@@ -147,7 +152,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   };
 
   const getIsDisabled = () => {
-    if (isLoading) {
+    if (isMessageSending) {
       return true;
     }
     return !images.length && !formState.dirtyFields.body;
