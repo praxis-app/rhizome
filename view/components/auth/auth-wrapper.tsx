@@ -51,23 +51,6 @@ export const AuthWrapper = ({ children }: Props) => {
 
   // TODO: Uncomment after moving to the new auth flow
 
-  // const getClientId = () => {
-  //   const clientId = localStorage.getItem('clientId');
-  //   if (!clientId) {
-  //     const newClientId = uuidv4();
-  //     localStorage.setItem('clientId', newClientId);
-  //     return newClientId;
-  //   }
-  //   return clientId;
-  // };
-
-  // const { mutate: createAnonSession } = useMutation(async () => {
-  //   const clientId = getClientId();
-  //   const { token } = await api.createAnonSession(clientId);
-  //   localStorage.setItem('token', token);
-  //   setToken(token);
-  // });
-
   // useEffect(() => {
   //   if (token || authCalledRef.current) {
   //     return;

@@ -39,24 +39,45 @@ interface FormValues {
 }
 
 export const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isAutofilled, setIsAutofilled] = useState(false);
+  const { setToast, isLoggedIn, setIsLoggedIn } = useAppStore((state) => state);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const { setToast } = useAppStore((state) => state);
+  const [isAutofilled, setIsAutofilled] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const { mutate: signUp, isLoading } = useMutation(api.signUp, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('me');
-      navigate(NavigationPaths.Home);
-      setIsRedirecting(true);
+  const { mutate: signUp, isLoading: isSignUpLoading } = useMutation(
+    api.signUp,
+    {
+      onSuccess: ({ token }) => {
+        localStorage.setItem('token', token);
+        navigate(NavigationPaths.Home);
+        setIsRedirecting(true);
+        setIsLoggedIn(true);
+      },
+      onError: (error: Error) => {
+        setToast({
+          title: error.message,
+          status: 'error',
+        });
+      },
     },
-    onError: (error: Error) => {
-      setToast({
-        title: error.message,
-        status: 'error',
-      });
+  );
+
+  const { mutate: upgradeAnon, isLoading: isUpgradeAnonLoading } = useMutation(
+    api.upgradeAnonSession,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('me');
+        navigate(NavigationPaths.Home);
+        setIsRedirecting(true);
+      },
+      onError: (error: Error) => {
+        setToast({
+          title: error.message,
+          status: 'error',
+        });
+      },
     },
-  });
+  );
 
   const { data: meData, isLoading: isMeLoading } = useMeQuery({
     onSuccess(data) {
@@ -65,6 +86,7 @@ export const SignUp = () => {
         setIsRedirecting(true);
       }
     },
+    enabled: isLoggedIn,
     retry: false,
   });
 
@@ -146,7 +168,10 @@ export const SignUp = () => {
     </InputAdornment>
   );
 
+  const isLoading = isSignUpLoading || isUpgradeAnonLoading;
+  const isAnon = meData && meData.user.status === UserStatus.ANONYMOUS;
   const isSignedUp = meData && meData.user.status !== UserStatus.ANONYMOUS;
+
   if (isMeLoading || isRedirecting || isSignedUp) {
     return <ProgressBar />;
   }
@@ -159,7 +184,11 @@ export const SignUp = () => {
         sx={{ paddingBottom: 0 }}
       />
       <CardContent>
-        <form onSubmit={handleSubmit((fv) => signUp(fv))}>
+        <form
+          onSubmit={handleSubmit((fv) =>
+            isAnon ? upgradeAnon(fv) : signUp(fv),
+          )}
+        >
           <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
             <FormControl>
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>

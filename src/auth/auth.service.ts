@@ -2,7 +2,6 @@ import { hash } from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
-import { validate as uuidValidate } from 'uuid';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
@@ -30,9 +29,19 @@ class AuthService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  signUp = async (userId: string, { email, password }: SignUpReq) => {
+  signUp = async ({ email, password }: SignUpReq) => {
     const passwordHash = await hash(password, SALT_ROUNDS);
-    await usersService.signUp(userId, email, passwordHash);
+    const user = await usersService.signUp(email, passwordHash);
+    const payload = { userId: user.id };
+
+    return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
+      expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+    });
+  };
+
+  upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
+    const passwordHash = await hash(password, SALT_ROUNDS);
+    await usersService.upgradeAnonUser(email, passwordHash, userId);
   };
 
   validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
@@ -66,27 +75,13 @@ class AuthService {
     next();
   };
 
-  createAnon = async (clientId: string) => {
-    const user = await usersService.createAnonUser(clientId);
+  createAnonSession = async () => {
+    const user = await usersService.createAnonUser();
     const payload = { userId: user.id };
 
     return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
       expiresIn: ACCESS_TOKEN_EXPIRES_IN,
     });
-  };
-
-  validateCreateAnon = async (req: Request, res: Response, next: NextFunction) => {
-    const { clientId } = req.body;
-    if (!clientId || !uuidValidate(clientId)) {
-      res.status(400).send('Invalid client ID');
-      return;
-    }
-    const userExists = await this.userRepository.exist({ where: { clientId } });
-    if (userExists) {
-      res.status(409).send('User already exists');
-      return;
-    }
-    next();
   };
 
   authenticate = async (req: Request, res: Response, next: NextFunction) => {

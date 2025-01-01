@@ -4,5 +4,11 @@ import { authController } from './auth.controller';
 
 export const authRouter = express.Router();
 
-authRouter.post('/', authService.validateCreateAnon, authController.createAnon);
-authRouter.put('/', authService.authenticate, authService.validateSignUp, authController.signUp);
+authRouter.post('/', authService.validateSignUp, authController.signUp);
+authRouter.post('/anon', authController.createAnonSession);
+authRouter.put(
+  '/anon',
+  authService.authenticate,
+  authService.validateSignUp,
+  authController.upgradeAnonSession,
+);

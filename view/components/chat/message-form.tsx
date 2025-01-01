@@ -13,12 +13,9 @@ import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import {
-  KeyCodes,
-  LocalStorageKeys,
-  NavigationPaths,
-} from '../../constants/shared.constants';
+import { KeyCodes, NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -28,8 +25,6 @@ import { validateImageInput } from '../../utils/image.utils';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
 import Modal from '../shared/modal';
-import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
 
 const MESSAGE_BODY_MAX = 6000;
 
@@ -129,14 +124,9 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   );
 
   const { mutate: createAnonSession } = useMutation(async () => {
-    let clientId = localStorage.getItem(LocalStorageKeys.ClientId);
-    if (!clientId) {
-      clientId = uuidv4();
-      localStorage.setItem(LocalStorageKeys.ClientId, clientId);
-    }
     // Create an anonymous session and store the token
-    const { token } = await api.createAnonSession(clientId);
-    localStorage.setItem(LocalStorageKeys.Token, token);
+    const { token } = await api.createAnonSession();
+    localStorage.setItem('token', token);
     setIsLoggedIn(true);
 
     // Send the message after creating the session

@@ -15,25 +15,37 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  signUp = async (userId: string, email: string, password: string) => {
+  signUp = async (email: string, password: string) => {
+    const name = await this.generateName();
+    const user = await this.userRepository.save({
+      email: normalizeText(email),
+      password,
+      name,
+    });
+    await channelsService.addMemberToGeneralChannel(user.id);
+    return user;
+  };
+
+  upgradeAnonUser = async (userId: string, email: string, password: string) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
     if (!user) {
       throw new Error('User not found');
     }
-
+    // Upgrade existing anon user to a registered user
     await this.userRepository.update(userId, {
       ...user,
       status: UserStatus.UNVERIFIED,
       email: normalizeText(email),
       password,
     });
+    return;
   };
 
-  createAnonUser = async (clientId: string) => {
+  createAnonUser = async () => {
     const name = await this.generateName();
-    const user = await this.userRepository.save({ clientId, name });
+    const user = await this.userRepository.save({ name });
     await channelsService.addMemberToGeneralChannel(user.id);
     return user;
   };
