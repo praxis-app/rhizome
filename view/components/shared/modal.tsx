@@ -70,7 +70,6 @@ const Modal = ({
   };
   const contentStyles: SxProps = isDesktop
     ? {
-        minHeight: '60vh',
         width: '600px',
         ...contentSx,
       }

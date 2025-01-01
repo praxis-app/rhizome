@@ -31,6 +31,11 @@ export enum BrowserEvents {
 
 export enum NavigationPaths {
   Home = '/',
-  Login = '/login',
-  SignUp = '/signup',
+  Login = '/auth/login',
+  SignUp = '/auth/signup',
+}
+
+export enum LocalStorageKeys {
+  Token = 'token',
+  ClientId = 'clientId',
 }

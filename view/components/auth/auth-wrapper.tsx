@@ -29,15 +29,22 @@ interface Props {
 }
 
 export const AuthWrapper = ({ children }: Props) => {
-  const { setToken, isAppLoading, setIsAppLoading } = useAppStore(
+  const { isAppLoading, setIsAppLoading, setIsLoggedIn } = useAppStore(
     (state) => state,
   );
 
+  /**
+   * TODO: Move away from onSuccess and onError callbacks
+   * Ref: https://stackoverflow.com/a/76961109/2034099
+   */
   useMeQuery({
+    onSuccess: () => {
+      setIsLoggedIn(true);
+      setIsAppLoading(false);
+    },
     onError: () => {
       localStorage.removeItem('token');
       setIsAppLoading(false);
-      setToken(null);
     },
     retry: false,
   });

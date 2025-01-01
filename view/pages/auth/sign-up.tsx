@@ -65,6 +65,7 @@ export const SignUp = () => {
         setIsRedirecting(true);
       }
     },
+    retry: false,
   });
 
   const { t } = useTranslation();
@@ -145,8 +146,8 @@ export const SignUp = () => {
     </InputAdornment>
   );
 
-  const isRegistered = meData?.user.status !== UserStatus.ANONYMOUS;
-  if (isMeLoading || isRedirecting || isRegistered) {
+  const isSignedUp = meData && meData.user.status !== UserStatus.ANONYMOUS;
+  if (isMeLoading || isRedirecting || isSignedUp) {
     return <ProgressBar />;
   }
 

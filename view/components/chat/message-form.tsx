@@ -1,13 +1,24 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
 import { Send } from '@mui/icons-material';
-import { Box, IconButton, Input, SxProps, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Input,
+  SxProps,
+  Typography,
+} from '@mui/material';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
-import { KeyCodes } from '../../constants/shared.constants';
+import {
+  KeyCodes,
+  LocalStorageKeys,
+  NavigationPaths,
+} from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -16,7 +27,9 @@ import { Image } from '../../types/image.types';
 import { validateImageInput } from '../../utils/image.utils';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
-import { useMeQuery } from '../../hooks/user.hooks';
+import Modal from '../shared/modal';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 const MESSAGE_BODY_MAX = 6000;
 
@@ -30,14 +43,17 @@ interface Props {
 }
 
 const MessageForm = ({ channelId, onSend }: Props) => {
-  const { token, setToast } = useAppStore((state) => state);
-  const [images, setImages] = useState<File[]>([]);
+  const { isLoggedIn, setIsLoggedIn, setToast } = useAppStore((state) => state);
+
+  const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
+  const [images, setImages] = useState<File[]>([]);
 
   const { t } = useTranslation();
   const inputRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const isDarkMode = useIsDarkMode();
+  const navigate = useNavigate();
 
   const { handleSubmit, register, setValue, formState, reset } =
     useForm<FormValues>({ mode: 'onChange' });
@@ -48,10 +64,6 @@ const MessageForm = ({ channelId, onSend }: Props) => {
       message: t('chat.errors.longBody'),
     },
   });
-
-  // TODO: Use meData to determine whether to send a message or show anon auth prompt
-  const { data: meData } = useMeQuery({ enabled: !!token });
-  console.log(meData);
 
   const { mutate: sendMessage, isLoading: isMessageSending } = useMutation(
     async ({ body }: FormValues) => {
@@ -116,6 +128,21 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     },
   );
 
+  const { mutate: createAnonSession } = useMutation(async () => {
+    let clientId = localStorage.getItem(LocalStorageKeys.ClientId);
+    if (!clientId) {
+      clientId = uuidv4();
+      localStorage.setItem(LocalStorageKeys.ClientId, clientId);
+    }
+    // Create an anonymous session and store the token
+    const { token } = await api.createAnonSession(clientId);
+    localStorage.setItem(LocalStorageKeys.Token, token);
+    setIsLoggedIn(true);
+
+    // Send the message after creating the session
+    handleSubmit((values) => sendMessage(values))();
+  });
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (
@@ -158,6 +185,14 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     return !images.length && !formState.dirtyFields.body;
   };
 
+  const handleSendMessage = () => {
+    if (!isLoggedIn) {
+      setIsAuthPromptOpen(true);
+      return;
+    }
+    handleSubmit((values) => sendMessage(values))();
+  };
+
   const handleInputKeyDown: KeyboardEventHandler = (e) => {
     if (e.code !== KeyCodes.Enter) {
       return;
@@ -166,12 +201,17 @@ const MessageForm = ({ channelId, onSend }: Props) => {
       return;
     }
     e.preventDefault();
-    handleSubmit((values) => sendMessage(values))();
+    handleSendMessage();
   };
 
   const handleRemoveSelectedImage = (imageName: string) => {
     setImages(images.filter((image) => image.name !== imageName));
     setImagesInputKey(Date.now());
+  };
+
+  const handleSendAnonMsgBtnClick = () => {
+    setIsAuthPromptOpen(false);
+    createAnonSession();
   };
 
   return (
@@ -211,7 +251,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
 
           <IconButton
             sx={sendBtnStyles}
-            onClick={handleSubmit((values) => sendMessage(values))}
+            onClick={handleSendMessage}
             disabled={getIsDisabled()}
             disableRipple
             edge="end"
@@ -228,6 +268,24 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           sx={{ marginLeft: 1.5 }}
         />
       )}
+
+      <Modal open={isAuthPromptOpen} onClose={() => setIsAuthPromptOpen(false)}>
+        <Typography marginBottom={3}>
+          {t('users.prompts.chooseAuthFlow')}
+        </Typography>
+
+        <Box display="flex" gap={1}>
+          <Button onClick={handleSendAnonMsgBtnClick} variant="contained">
+            {t('chat.actions.sendAnonymous')}
+          </Button>
+          <Button
+            onClick={() => navigate(NavigationPaths.SignUp)}
+            variant="contained"
+          >
+            {t('users.actions.signUp')}
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   );
 };
