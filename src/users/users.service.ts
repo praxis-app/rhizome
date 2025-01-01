@@ -15,12 +15,11 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  signUp = async (email: string, password: string) => {
-    const name = await this.generateName();
+  signUp = async (email: string, name: string | undefined, password: string) => {
     const user = await this.userRepository.save({
+      name: name?.trim() || this.generateName(),
       email: normalizeText(email),
       password,
-      name,
     });
     await channelsService.addMemberToGeneralChannel(user.id);
     return user;
@@ -44,13 +43,13 @@ class UsersService {
   };
 
   createAnonUser = async () => {
-    const name = await this.generateName();
+    const name = this.generateName();
     const user = await this.userRepository.save({ name });
     await channelsService.addMemberToGeneralChannel(user.id);
     return user;
   };
 
-  generateName = async () => {
+  generateName = () => {
     const numberDictionary = NumberDictionary.generate({ min: 10, max: 99 });
     const nounDictionary = Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
 
