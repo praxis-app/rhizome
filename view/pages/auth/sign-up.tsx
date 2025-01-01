@@ -27,14 +27,19 @@ import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { UserStatus } from '../../types/user.types';
 
-const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 const EMAIL_MAX_LENGTH = 254;
 
-const MIN_PASSWORD_LENGTH = 8;
-const MAX_PASSWORD_LENGTH = 64;
+const NAME_REGEX = /^[A-Za-z0-9 ]+$/;
+const NAME_MIN_LENGTH = 3;
+const NAME_MAX_LENGTH = 15;
+
+const PASSWORD_MIN_LENGTH = 8;
+const PASSWORD_MAX_LENGTH = 64;
 
 interface FormValues {
   email: string;
+  name: string;
   password: string;
 }
 
@@ -101,7 +106,7 @@ export const SignUp = () => {
 
   const registerEmailProps = register('email', {
     pattern: {
-      value: VALID_EMAIL_REGEX,
+      value: EMAIL_REGEX,
       message: t('users.errors.invalidEmail'),
     },
     maxLength: {
@@ -111,13 +116,28 @@ export const SignUp = () => {
     required: t('users.errors.missingEmail'),
   });
 
+  const registerNameProps = register('name', {
+    pattern: {
+      value: NAME_REGEX,
+      message: t('users.errors.invalidName'),
+    },
+    minLength: {
+      value: NAME_MIN_LENGTH,
+      message: t('users.errors.shortName'),
+    },
+    maxLength: {
+      value: NAME_MAX_LENGTH,
+      message: t('users.errors.longName'),
+    },
+  });
+
   const registerPasswordProps = register('password', {
     minLength: {
-      value: MIN_PASSWORD_LENGTH,
+      value: PASSWORD_MIN_LENGTH,
       message: t('users.errors.passwordTooShort'),
     },
     maxLength: {
-      value: MAX_PASSWORD_LENGTH,
+      value: PASSWORD_MAX_LENGTH,
       message: t('users.errors.passwordTooLong'),
     },
     required: t('users.errors.missingPassword'),
@@ -138,6 +158,7 @@ export const SignUp = () => {
       }
     : undefined;
 
+  // TODO: Account for user clearing the password field
   useEffect(() => {
     const handleAnimationStart = (e: AnimationEvent) => {
       if (e.animationName === 'mui-auto-fill') {
@@ -205,6 +226,24 @@ export const SignUp = () => {
                 </Typography>
               )}
             </FormControl>
+
+            {!isLoggedIn && (
+              <FormControl>
+                <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
+                  {t('users.form.username')}
+                </FormLabel>
+                <OutlinedInput
+                  autoComplete="off"
+                  inputProps={{ sx: inputBaseSx }}
+                  {...registerNameProps}
+                />
+                {!!formState.errors.name && (
+                  <Typography color="error" fontSize="small" paddingTop={0.5}>
+                    {formState.errors.name.message}
+                  </Typography>
+                )}
+              </FormControl>
+            )}
 
             <FormControl>
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>

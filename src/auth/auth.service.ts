@@ -8,7 +8,12 @@ import { User } from '../users/user.entity';
 import { usersService } from '../users/users.service';
 
 const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+const EMAIL_MAX_LENGTH = 254;
+
 const VALID_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
+const MIN_NAME_LENGTH = 3;
+const MAX_NAME_LENGTH = 15;
+
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 64;
 
@@ -50,7 +55,7 @@ class AuthService {
       res.status(400).send('Invalid email address');
       return;
     }
-    if (email.length > 254) {
+    if (email.length > EMAIL_MAX_LENGTH) {
       res.status(400).send('Email address cannot exceed 254 characters');
       return;
     }
@@ -58,11 +63,11 @@ class AuthService {
       res.status(400).send('User names cannot contain special characters');
       return;
     }
-    if (name && name.length < 2) {
+    if (name && name.length < MIN_NAME_LENGTH) {
       res.status(400).send('Username must be at least 2 characters');
       return;
     }
-    if (name && name.length > 15) {
+    if (name && name.length > MAX_NAME_LENGTH) {
       res.status(400).send('Username cannot exceed 15 characters');
       return;
     }
