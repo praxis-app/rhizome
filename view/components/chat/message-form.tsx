@@ -50,7 +50,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
 
-  const { handleSubmit, register, setValue, formState, reset, getValues } =
+  const { handleSubmit, register, setValue, formState, reset } =
     useForm<FormValues>({ mode: 'onChange' });
 
   const registerBodyProps = register('body', {
@@ -169,8 +169,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   };
 
   const isEmpty = () => {
-    const body = getValues('body')?.trim();
-    return !body && !images.length;
+    return !formState.dirtyFields.body && !images.length;
   };
 
   const isDisabled = () => {
