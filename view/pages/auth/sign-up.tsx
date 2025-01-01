@@ -5,6 +5,7 @@ import {
   CardHeader,
   FormControl,
   FormGroup,
+  FormHelperText,
   FormLabel,
   IconButton,
   InputAdornment,
@@ -173,6 +174,10 @@ export const SignUp = () => {
   const isAnon = meData && meData.user.status === UserStatus.ANONYMOUS;
   const isSignedUp = meData && meData.user.status !== UserStatus.ANONYMOUS;
 
+  const subheader = t(
+    isAnon ? 'users.prompts.upgradeAccount' : 'users.prompts.signUpSubtext',
+  );
+
   if (isMeLoading || isRedirecting || isSignedUp) {
     return <ProgressBar />;
   }
@@ -181,7 +186,7 @@ export const SignUp = () => {
     <Card>
       <CardHeader
         title={t('users.prompts.createAccount')}
-        subheader={t('users.prompts.upgradeAccount')}
+        subheader={subheader}
         sx={{ paddingBottom: 0 }}
       />
       <CardContent>
@@ -191,6 +196,27 @@ export const SignUp = () => {
           )}
         >
           <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
+            {!isLoggedIn && (
+              <FormControl>
+                <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
+                  {t('users.form.username')}
+                </FormLabel>
+                <OutlinedInput
+                  autoComplete="off"
+                  inputProps={{ sx: inputBaseSx }}
+                  {...registerNameProps}
+                />
+                <FormHelperText sx={{ marginLeft: 0.15 }}>
+                  {t('users.prompts.usernameHelper')}
+                </FormHelperText>
+                {!!formState.errors.name && (
+                  <Typography color="error" fontSize="small" paddingTop={0.5}>
+                    {formState.errors.name.message}
+                  </Typography>
+                )}
+              </FormControl>
+            )}
+
             <FormControl>
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
                 {t('users.form.email')}
@@ -206,24 +232,6 @@ export const SignUp = () => {
                 </Typography>
               )}
             </FormControl>
-
-            {!isLoggedIn && (
-              <FormControl>
-                <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                  {t('users.form.username')}
-                </FormLabel>
-                <OutlinedInput
-                  autoComplete="off"
-                  inputProps={{ sx: inputBaseSx }}
-                  {...registerNameProps}
-                />
-                {!!formState.errors.name && (
-                  <Typography color="error" fontSize="small" paddingTop={0.5}>
-                    {formState.errors.name.message}
-                  </Typography>
-                )}
-              </FormControl>
-            )}
 
             <FormControl>
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>

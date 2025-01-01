@@ -101,15 +101,17 @@
       "removeUser": "Are you sure you want to permanently delete this member's account? All of their data will be deleted and this cannot be undone.",
       "resetYourPassword": "Reset your password",
       "upgradeAccount": "Turn your anonymous session into a permanent account",
+      "signUpSubtext": "Sign up to access proposal creation, voting, and more.",
       "chooseAuthFlow": "You can send this message anonymously right now or create an account to unlock more features. Which would you prefer?",
-      "createAccount": "Create an account"
+      "createAccount": "Create an account",
+      "usernameHelper": "Set a username or let us generate one for you."
     },
     "form": {
       "bio": "Bio",
       "coverPhoto": "Cover photo",
       "displayName": "Display name",
       "email": "Email",
-      "username": "Username",
+      "username": "Username (optional)",
       "newPassword": "New password",
       "password": "Password",
       "yourEmail": "Your email address"
