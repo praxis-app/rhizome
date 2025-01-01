@@ -12,7 +12,7 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQueryClient } from 'react-query';
@@ -46,7 +46,6 @@ interface FormValues {
 export const SignUp = () => {
   const { setToast, isLoggedIn, setIsLoggedIn } = useAppStore((state) => state);
   const [isRedirecting, setIsRedirecting] = useState(false);
-  const [isAutofilled, setIsAutofilled] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate: signUp, isLoading: isSignUpLoading } = useMutation(
@@ -152,25 +151,6 @@ export const SignUp = () => {
       WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
     },
   };
-  const passwordInputSx: SxProps | undefined = isAutofilled
-    ? {
-        backgroundColor: isDarkMode ? GRAY['800'] : GRAY['100'],
-      }
-    : undefined;
-
-  // TODO: Account for user clearing the password field
-  useEffect(() => {
-    const handleAnimationStart = (e: AnimationEvent) => {
-      if (e.animationName === 'mui-auto-fill') {
-        setIsAutofilled(true);
-      }
-    };
-    document.addEventListener('animationstart', handleAnimationStart);
-
-    return () => {
-      document.removeEventListener('animationstart', handleAnimationStart);
-    };
-  }, []);
 
   const renderShowPassword = () => (
     <InputAdornment position="end" sx={{ marginRight: 0.5 }}>
@@ -260,7 +240,6 @@ export const SignUp = () => {
                     ...inputBaseSx,
                   },
                 }}
-                sx={passwordInputSx}
                 {...registerPasswordProps}
               />
               {!!formState.errors.password && (
