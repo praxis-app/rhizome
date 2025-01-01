@@ -32,7 +32,11 @@ interface Props {
 }
 
 const ChatPanel = ({ channelId }: Props) => {
-  const { token } = useAppStore((state) => state);
+  const { isLoggedIn } = useAppStore((state) => state);
+
+  const { data: meData } = useMeQuery({
+    enabled: isLoggedIn,
+  });
 
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', channelId],
@@ -43,7 +47,6 @@ const ChatPanel = ({ channelId }: Props) => {
       return pages.flatMap((page) => page.messages).length;
     },
   });
-  const { data: meData } = useMeQuery({ enabled: !!token });
 
   const feedBoxRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
