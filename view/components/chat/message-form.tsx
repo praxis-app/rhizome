@@ -50,7 +50,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
 
-  const { handleSubmit, register, setValue, formState, reset } =
+  const { handleSubmit, register, setValue, formState, reset, getValues } =
     useForm<FormValues>({ mode: 'onChange' });
 
   const registerBodyProps = register('body', {
@@ -168,14 +168,22 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     transform: 'translateY(5px)',
   };
 
-  const getIsDisabled = () => {
+  const isEmpty = () => {
+    const body = getValues('body')?.trim();
+    return !body && !images.length;
+  };
+
+  const isDisabled = () => {
     if (isMessageSending) {
       return true;
     }
-    return !images.length && !formState.dirtyFields.body;
+    return isEmpty();
   };
 
   const handleSendMessage = () => {
+    if (isEmpty()) {
+      return;
+    }
     if (!isLoggedIn) {
       setIsAuthPromptOpen(true);
       return;
@@ -242,7 +250,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           <IconButton
             sx={sendBtnStyles}
             onClick={handleSendMessage}
-            disabled={getIsDisabled()}
+            disabled={isDisabled()}
             disableRipple
             edge="end"
           >
