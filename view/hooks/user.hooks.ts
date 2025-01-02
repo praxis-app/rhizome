@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '../client/api-client';
 import { CurrentUser } from '../types/user.types';
 import { useAppStore } from '../store/app.store';
@@ -8,9 +8,9 @@ export const useMeQuery = (
 ) => {
   const { setIsAppLoading, setIsLoggedIn } = useAppStore((state) => state);
 
-  return useQuery(
-    'me',
-    async () => {
+  return useQuery({
+    queryKey: ['me'],
+    queryFn: async () => {
       try {
         const me = await api.getCurrentUser();
         setIsLoggedIn(true);
@@ -22,6 +22,6 @@ export const useMeQuery = (
         setIsAppLoading(false);
       }
     },
-    options,
-  );
+    ...options,
+  });
 };

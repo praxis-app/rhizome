@@ -1,6 +1,6 @@
 import { Container, CssBaseline, SxProps, ThemeProvider } from '@mui/material';
 import { ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { theme } from '../../styles/theme';
 import { AuthWrapper } from '../auth/auth-wrapper';
 import Toast from '../shared/toast';

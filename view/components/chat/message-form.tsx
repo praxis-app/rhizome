@@ -12,7 +12,7 @@ import {
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { KeyCodes, NavigationPaths } from '../../constants/shared.constants';
@@ -60,8 +60,8 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     },
   });
 
-  const { mutate: sendMessage, isLoading: isMessageSending } = useMutation(
-    async ({ body }: FormValues) => {
+  const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
+    mutationFn: async ({ body }: FormValues) => {
       validateImageInput(images);
 
       const { message } = await api.sendMessage(channelId, body, images.length);
@@ -96,6 +96,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           if (!oldData) {
             return {
               pages: [{ messages: [messageWithImages] }],
+              pageParams: [0],
             };
           }
           const pages = oldData.pages.map((page, index) => {
@@ -106,31 +107,31 @@ const MessageForm = ({ channelId, onSend }: Props) => {
             }
             return page;
           });
-          return { pages };
+          return { pages, pageParams: oldData.pageParams };
         },
       );
       setValue('body', '');
       onSend?.();
       reset();
     },
-    {
-      onError: (error: Error) => {
-        setToast({
-          title: error.message,
-          status: 'error',
-        });
-      },
+    onError: (error: Error) => {
+      setToast({
+        title: error.message,
+        status: 'error',
+      });
     },
-  );
+  });
 
-  const { mutate: createAnonSession } = useMutation(async () => {
-    // Create an anonymous session and store the token
-    const { token } = await api.createAnonSession();
-    localStorage.setItem('token', token);
-    setIsLoggedIn(true);
+  const { mutate: createAnonSession } = useMutation({
+    mutationFn: async () => {
+      // Create an anonymous session and store the token
+      const { token } = await api.createAnonSession();
+      localStorage.setItem('token', token);
+      setIsLoggedIn(true);
 
-    // Send the message after creating the session
-    handleSubmit((values) => sendMessage(values))();
+      // Send the message after creating the session
+      handleSubmit((values) => sendMessage(values))();
+    },
   });
 
   useEffect(() => {

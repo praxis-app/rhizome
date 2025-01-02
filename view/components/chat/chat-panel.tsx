@@ -1,6 +1,6 @@
 import { Box, debounce } from '@mui/material';
 import { useRef } from 'react';
-import { useInfiniteQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../client/api-client';
 import { useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
@@ -46,6 +46,7 @@ const ChatPanel = ({ channelId }: Props) => {
     getNextPageParam: (_lastPage, pages) => {
       return pages.flatMap((page) => page.messages).length;
     },
+    initialPageParam: 0,
   });
 
   const feedBoxRef = useRef<HTMLDivElement>(null);
@@ -73,6 +74,7 @@ const ChatPanel = ({ channelId }: Props) => {
             if (!oldData) {
               return {
                 pages: [{ messages: [body.message] }],
+                pageParams: [0],
               };
             }
             const pages = oldData.pages.map((page, index) => {
@@ -83,7 +85,7 @@ const ChatPanel = ({ channelId }: Props) => {
               }
               return page;
             });
-            return { pages };
+            return { pages, pageParams: oldData.pageParams };
           },
         );
       }
@@ -94,7 +96,7 @@ const ChatPanel = ({ channelId }: Props) => {
           ['messages', channelId],
           (oldData) => {
             if (!oldData) {
-              return { pages: [] };
+              return { pages: [], pageParams: [] };
             }
 
             const pages = oldData.pages.map((page) => {
@@ -113,7 +115,7 @@ const ChatPanel = ({ channelId }: Props) => {
               return { messages };
             });
 
-            return { pages };
+            return { pages, pageParams: oldData.pageParams };
           },
         );
       }

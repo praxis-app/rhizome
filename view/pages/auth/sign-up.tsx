@@ -13,10 +13,10 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import PrimaryButton from '../../components/shared/primary-button';
@@ -49,48 +49,38 @@ export const SignUp = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { mutate: signUp, isLoading: isSignUpLoading } = useMutation(
-    api.signUp,
-    {
-      onSuccess: ({ token }) => {
-        localStorage.setItem('token', token);
-        navigate(NavigationPaths.Home);
-        setIsRedirecting(true);
-        setIsLoggedIn(true);
-      },
-      onError: (error: Error) => {
-        setToast({
-          title: error.message,
-          status: 'error',
-        });
-      },
+  const { mutate: signUp, isPending: isSignUpLoading } = useMutation({
+    mutationFn: api.signUp,
+    onSuccess: ({ token }) => {
+      localStorage.setItem('token', token);
+      navigate(NavigationPaths.Home);
+      setIsRedirecting(true);
+      setIsLoggedIn(true);
     },
-  );
+    onError: (error: Error) => {
+      setToast({
+        title: error.message,
+        status: 'error',
+      });
+    },
+  });
 
-  const { mutate: upgradeAnon, isLoading: isUpgradeAnonLoading } = useMutation(
-    api.upgradeAnonSession,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('me');
-        navigate(NavigationPaths.Home);
-        setIsRedirecting(true);
-      },
-      onError: (error: Error) => {
-        setToast({
-          title: error.message,
-          status: 'error',
-        });
-      },
+  const { mutate: upgradeAnon, isPending: isUpgradeAnonLoading } = useMutation({
+    mutationFn: api.upgradeAnonSession,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: 'me' });
+      navigate(NavigationPaths.Home);
+      setIsRedirecting(true);
     },
-  );
+    onError: (error: Error) => {
+      setToast({
+        title: error.message,
+        status: 'error',
+      });
+    },
+  });
 
   const { data: meData, isLoading: isMeLoading } = useMeQuery({
-    onSuccess(data) {
-      if (data.user.status !== UserStatus.ANONYMOUS) {
-        navigate(NavigationPaths.Home);
-        setIsRedirecting(true);
-      }
-    },
     enabled: isLoggedIn,
     retry: false,
   });
@@ -99,6 +89,13 @@ export const SignUp = () => {
   const isDarkMode = useIsDarkMode();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (meData && meData.user.status !== UserStatus.ANONYMOUS) {
+      navigate(NavigationPaths.Home);
+      setIsRedirecting(true);
+    }
+  }, [meData, navigate, setIsRedirecting]);
 
   const { handleSubmit, register, formState } = useForm<FormValues>({
     mode: 'onChange',
