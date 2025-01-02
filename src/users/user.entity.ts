@@ -43,9 +43,6 @@ export class User {
   })
   status: UserStatus;
 
-  @Column({ unique: true })
-  clientId: string;
-
   @OneToMany(() => Message, (message) => message.user, {
     cascade: true,
   })

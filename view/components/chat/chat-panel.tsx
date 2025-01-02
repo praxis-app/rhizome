@@ -1,9 +1,10 @@
 import { Box, debounce } from '@mui/material';
 import { useRef } from 'react';
-import { useInfiniteQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../client/api-client';
 import { useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
+import { useAppStore } from '../../store/app.store';
 import { Message, MessagesQuery } from '../../types/chat.types';
 import { PubSubMessage } from '../../types/shared.types';
 import MessageFeed from './message-feed';
@@ -31,6 +32,12 @@ interface Props {
 }
 
 const ChatPanel = ({ channelId }: Props) => {
+  const { isLoggedIn } = useAppStore((state) => state);
+
+  const { data: meData } = useMeQuery({
+    enabled: isLoggedIn,
+  });
+
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', channelId],
     queryFn: ({ pageParam }) => {
@@ -39,8 +46,8 @@ const ChatPanel = ({ channelId }: Props) => {
     getNextPageParam: (_lastPage, pages) => {
       return pages.flatMap((page) => page.messages).length;
     },
+    initialPageParam: 0,
   });
-  const { data: meData } = useMeQuery();
 
   const feedBoxRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
@@ -67,6 +74,7 @@ const ChatPanel = ({ channelId }: Props) => {
             if (!oldData) {
               return {
                 pages: [{ messages: [body.message] }],
+                pageParams: [0],
               };
             }
             const pages = oldData.pages.map((page, index) => {
@@ -77,7 +85,7 @@ const ChatPanel = ({ channelId }: Props) => {
               }
               return page;
             });
-            return { pages };
+            return { pages, pageParams: oldData.pageParams };
           },
         );
       }
@@ -88,7 +96,7 @@ const ChatPanel = ({ channelId }: Props) => {
           ['messages', channelId],
           (oldData) => {
             if (!oldData) {
-              return { pages: [] };
+              return { pages: [], pageParams: [] };
             }
 
             const pages = oldData.pages.map((page) => {
@@ -107,7 +115,7 @@ const ChatPanel = ({ channelId }: Props) => {
               return { messages };
             });
 
-            return { pages };
+            return { pages, pageParams: oldData.pageParams };
           },
         );
       }

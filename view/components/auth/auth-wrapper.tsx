@@ -4,10 +4,7 @@ import {
   LinearProgressProps,
   styled,
 } from '@mui/material';
-import { ReactNode, useEffect, useRef } from 'react';
-import { useMutation } from 'react-query';
-import { v4 as uuidv4 } from 'uuid';
-import { api } from '../../client/api-client';
+import { ReactNode } from 'react';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 
@@ -32,55 +29,8 @@ interface Props {
 }
 
 export const AuthWrapper = ({ children }: Props) => {
-  const { token, setToken, isAppLoading, setIsAppLoading } = useAppStore(
-    (state) => state,
-  );
-  const authCalledRef = useRef(false);
-
-  const { data: meData } = useMeQuery({
-    onError: () => {
-      authCalledRef.current = false;
-      localStorage.removeItem('token');
-      setToken(null);
-    },
-    enabled: !!token,
-  });
-
-  const getClientId = () => {
-    const clientId = localStorage.getItem('clientId');
-    if (!clientId) {
-      const newClientId = uuidv4();
-      localStorage.setItem('clientId', newClientId);
-      return newClientId;
-    }
-    return clientId;
-  };
-
-  const { mutate: createAnonSession } = useMutation(async () => {
-    const clientId = getClientId();
-    const { token } = await api.createAnonSession(clientId);
-    localStorage.setItem('token', token);
-    setToken(token);
-  });
-
-  useEffect(() => {
-    if (token || authCalledRef.current) {
-      return;
-    }
-    const tokenFromStorage = localStorage.getItem('token');
-    if (tokenFromStorage) {
-      setToken(tokenFromStorage);
-      return;
-    }
-    createAnonSession();
-    authCalledRef.current = true;
-  }, [token, createAnonSession, setToken, setIsAppLoading]);
-
-  useEffect(() => {
-    if (meData && token) {
-      setIsAppLoading(false);
-    }
-  }, [meData, token, setIsAppLoading]);
+  const { isAppLoading } = useAppStore((state) => state);
+  useMeQuery({ retry: false });
 
   if (isAppLoading) {
     return <ProgressBar />;

@@ -75,7 +75,7 @@ export const useSubscription = (
   channel: string,
   options?: SubscriptionOptions,
 ) => {
-  const token = useAppStore((state) => state.token);
+  const isLoggedIn = useAppStore((state) => state.isLoggedIn);
   const isEnabled = options?.enabled ?? true;
 
   const getOptions = () => {
@@ -102,12 +102,13 @@ export const useSubscription = (
     // Ensure multiple channels can be subscribed to in
     // the same component with `share` set to `true`
     share: true,
-    shouldReconnect: () => !!token,
+    shouldReconnect: () => isLoggedIn,
     ...getOptions(),
   });
 
   useEffect(() => {
-    if (!token) {
+    const token = localStorage.getItem('token');
+    if (!isLoggedIn || !token) {
       return;
     }
 
@@ -120,7 +121,7 @@ export const useSubscription = (
       };
       sendMessage(JSON.stringify(message));
     }
-  }, [channel, isEnabled, readyState, sendMessage, token]);
+  }, [channel, isEnabled, readyState, sendMessage, isLoggedIn]);
 
   return { sendMessage, ...rest };
 };

@@ -14,17 +14,19 @@ class ApiClient {
   }
 
   signUp = async (data: SignUpReq) => {
-    return this.executeRequest<void>('put', '/auth', { data });
+    return this.executeRequest<{ token: string }>('post', '/auth', { data });
   };
 
   getCurrentUser = async () => {
     return this.executeRequest<{ user: CurrentUser }>('get', '/users/me');
   };
 
-  createAnonSession = async (clientId: string) => {
-    return this.executeRequest<{ token: string }>('post', '/auth', {
-      data: { clientId },
-    });
+  createAnonSession = async () => {
+    return this.executeRequest<{ token: string }>('post', '/auth/anon');
+  };
+
+  upgradeAnonSession = async (data: SignUpReq) => {
+    return this.executeRequest<void>('put', '/auth/anon', { data });
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {

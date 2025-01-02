@@ -15,4 +15,5 @@ export interface Channel {
 
 export interface MessagesQuery {
   pages: { messages: Message[] }[];
+  pageParams: number[];
 }

@@ -2,16 +2,18 @@ import { hash } from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
-import { validate as uuidValidate } from 'uuid';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
 import { usersService } from '../users/users.service';
 
-// TODO: Uncomment when ready to use
-// const VALID_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
-
 const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
+const EMAIL_MAX_LENGTH = 254;
+
+const VALID_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
+const MIN_NAME_LENGTH = 3;
+const MAX_NAME_LENGTH = 15;
+
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 64;
 
@@ -20,6 +22,7 @@ const SALT_ROUNDS = 10;
 
 interface SignUpReq {
   email: string;
+  name?: string;
   password: string;
 }
 
@@ -30,20 +33,42 @@ class AuthService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  signUp = async (userId: string, { email, password }: SignUpReq) => {
+  signUp = async ({ email, name, password }: SignUpReq) => {
     const passwordHash = await hash(password, SALT_ROUNDS);
-    await usersService.signUp(userId, email, passwordHash);
+    const user = await usersService.signUp(email, name, passwordHash);
+    const payload = { userId: user.id };
+
+    return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
+      expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+    });
+  };
+
+  upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
+    const passwordHash = await hash(password, SALT_ROUNDS);
+    await usersService.upgradeAnonUser(userId, email, passwordHash);
   };
 
   validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body as SignUpReq;
+    const { email, name, password } = req.body as SignUpReq;
 
     if (!VALID_EMAIL_REGEX.test(email)) {
       res.status(400).send('Invalid email address');
       return;
     }
-    if (email.length > 254) {
+    if (email.length > EMAIL_MAX_LENGTH) {
       res.status(400).send('Email address cannot exceed 254 characters');
+      return;
+    }
+    if (name && !VALID_NAME_REGEX.test(name)) {
+      res.status(400).send('User names cannot contain special characters');
+      return;
+    }
+    if (name && name.length < MIN_NAME_LENGTH) {
+      res.status(400).send('Username must be at least 2 characters');
+      return;
+    }
+    if (name && name.length > MAX_NAME_LENGTH) {
+      res.status(400).send('Username cannot exceed 15 characters');
       return;
     }
     if (password.length < MIN_PASSWORD_LENGTH) {
@@ -66,27 +91,13 @@ class AuthService {
     next();
   };
 
-  createAnon = async (clientId: string) => {
-    const user = await usersService.createAnonUser(clientId);
+  createAnonSession = async () => {
+    const user = await usersService.createAnonUser();
     const payload = { userId: user.id };
 
     return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
       expiresIn: ACCESS_TOKEN_EXPIRES_IN,
     });
-  };
-
-  validateCreateAnon = async (req: Request, res: Response, next: NextFunction) => {
-    const { clientId } = req.body;
-    if (!clientId || !uuidValidate(clientId)) {
-      res.status(400).send('Invalid client ID');
-      return;
-    }
-    const userExists = await this.userRepository.exist({ where: { clientId } });
-    if (userExists) {
-      res.status(409).send('User already exists');
-      return;
-    }
-    next();
   };
 
   authenticate = async (req: Request, res: Response, next: NextFunction) => {

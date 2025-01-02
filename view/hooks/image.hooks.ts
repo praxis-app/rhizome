@@ -1,5 +1,5 @@
 import { RefObject } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '../client/api-client';
 import { useInView } from './shared.hooks';
 
@@ -10,20 +10,20 @@ export const useImageSrc = (
 ) => {
   const { viewed } = useInView(ref, '100px');
 
-  const { data } = useQuery(
-    ['image', imageId],
-    async () => {
-      if (!imageId) {
-        return;
-      }
-      const result = await api.getImage(imageId);
-      const url = URL.createObjectURL(result);
-      return url;
-    },
-    {
-      enabled: enabled && !!imageId && viewed,
-    },
-  );
+  const getImageSrc = async () => {
+    if (!imageId) {
+      return;
+    }
+    const result = await api.getImage(imageId);
+    const url = URL.createObjectURL(result);
+    return url;
+  };
+
+  const { data } = useQuery({
+    queryKey: ['image', imageId],
+    queryFn: getImageSrc,
+    enabled: enabled && !!imageId && viewed,
+  });
 
   return data;
 };

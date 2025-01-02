@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '../client/api-client';
 import ProgressBar from '../components/shared/progress-bar';
 
 export const HealthPage = () => {
   const { data, isLoading } = useQuery({
-    queryKey: 'health',
+    queryKey: ['health'],
     queryFn: api.getHealth,
   });
 

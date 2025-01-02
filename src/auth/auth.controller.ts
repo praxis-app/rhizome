@@ -3,15 +3,19 @@ import { authService } from './auth.service';
 
 class AuthController {
   async signUp(req: Request, res: Response) {
-    const { user } = res.locals;
-    await authService.signUp(user.id, req.body);
-    res.sendStatus(204);
+    const token = await authService.signUp(req.body);
+    res.json({ token });
   }
 
-  async createAnon(req: Request, res: Response) {
-    const { clientId } = req.body;
-    const token = await authService.createAnon(clientId);
+  async createAnonSession(_req: Request, res: Response) {
+    const token = await authService.createAnonSession();
     res.json({ token });
+  }
+
+  async upgradeAnonSession(req: Request, res: Response) {
+    const { user } = res.locals;
+    await authService.upgradeAnonSession(req.body, user.id);
+    res.sendStatus(204);
   }
 }
 

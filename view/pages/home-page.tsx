@@ -1,11 +1,11 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '../client/api-client';
 import ChatPanel from '../components/chat/chat-panel';
 import ProgressBar from '../components/shared/progress-bar';
 
 export const HomePage = () => {
   const { data, isLoading } = useQuery({
-    queryKey: 'channels',
+    queryKey: ['channels'],
     queryFn: api.getChannels,
   });
 

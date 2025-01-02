@@ -1,11 +1,18 @@
 // TODO: Add remaining layout and functionality - below is a WIP
 
 import { Send } from '@mui/icons-material';
-import { Box, IconButton, Input, SxProps, Typography } from '@mui/material';
+import {
+  Box,
+  debounce,
+  IconButton,
+  Input,
+  SxProps,
+  Typography,
+} from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQueryClient } from 'react-query';
 import { api } from '../../client/api-client';
 import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
@@ -14,6 +21,7 @@ import { GRAY } from '../../styles/theme';
 import { MessagesQuery } from '../../types/chat.types';
 import { Image } from '../../types/image.types';
 import { validateImageInput } from '../../utils/image.utils';
+import ChooseAuthModal from '../auth/choose-auth-modal';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
 
@@ -29,9 +37,11 @@ interface Props {
 }
 
 const MessageForm = ({ channelId, onSend }: Props) => {
-  const { setToast } = useAppStore((state) => state);
-  const [images, setImages] = useState<File[]>([]);
+  const { isLoggedIn, setToast } = useAppStore((state) => state);
+
+  const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
+  const [images, setImages] = useState<File[]>([]);
 
   const { t } = useTranslation();
   const inputRef = useRef<HTMLDivElement>(null);
@@ -41,15 +51,18 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const { handleSubmit, register, setValue, formState, reset } =
     useForm<FormValues>({ mode: 'onChange' });
 
-  const registerBodyProps = register('body', {
+  const { onChange, ...registerBodyProps } = register('body', {
     maxLength: {
       value: MESSAGE_BODY_MAX,
       message: t('chat.errors.longBody'),
     },
   });
 
-  const { mutate: sendMessage } = useMutation(
-    async ({ body }: FormValues) => {
+  const draftKey = `message-draft-${channelId}`;
+  const isEmpty = !formState.dirtyFields.body && !images.length;
+
+  const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
+    mutationFn: async ({ body }: FormValues) => {
       validateImageInput(images);
 
       const { message } = await api.sendMessage(channelId, body, images.length);
@@ -84,6 +97,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           if (!oldData) {
             return {
               pages: [{ messages: [messageWithImages] }],
+              pageParams: [0],
             };
           }
           const pages = oldData.pages.map((page, index) => {
@@ -94,22 +108,21 @@ const MessageForm = ({ channelId, onSend }: Props) => {
             }
             return page;
           });
-          return { pages };
+          return { pages, pageParams: oldData.pageParams };
         },
       );
+      localStorage.removeItem(draftKey);
       setValue('body', '');
       onSend?.();
       reset();
     },
-    {
-      onError: (error: Error) => {
-        setToast({
-          title: error.message,
-          status: 'error',
-        });
-      },
+    onError: (error: Error) => {
+      setToast({
+        title: error.message,
+        status: 'error',
+      });
     },
-  );
+  });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -124,6 +137,13 @@ const MessageForm = ({ channelId, onSend }: Props) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    const draft = localStorage.getItem(draftKey);
+    if (draft) {
+      setValue('body', draft);
+    }
+  }, [setValue, draftKey]);
 
   const formStyles: SxProps = {
     borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}`,
@@ -146,6 +166,28 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     transform: 'translateY(5px)',
   };
 
+  const saveDraft = debounce((draft: string) => {
+    localStorage.setItem(draftKey, draft);
+  }, 300);
+
+  const isDisabled = () => {
+    if (isMessageSending) {
+      return true;
+    }
+    return isEmpty;
+  };
+
+  const handleSendMessage = () => {
+    if (isEmpty) {
+      return;
+    }
+    if (!isLoggedIn) {
+      setIsAuthPromptOpen(true);
+      return;
+    }
+    handleSubmit((values) => sendMessage(values))();
+  };
+
   const handleInputKeyDown: KeyboardEventHandler = (e) => {
     if (e.code !== KeyCodes.Enter) {
       return;
@@ -154,7 +196,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
       return;
     }
     e.preventDefault();
-    handleSubmit((values) => sendMessage(values))();
+    handleSendMessage();
   };
 
   const handleRemoveSelectedImage = (imageName: string) => {
@@ -177,6 +219,10 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           autoComplete="off"
           placeholder={t('chat.prompts.sendAMessage')}
           onKeyDown={handleInputKeyDown}
+          onChange={(e) => {
+            saveDraft(e.target.value);
+            onChange(e);
+          }}
           sx={inputStyles}
           inputRef={inputRef}
           disableUnderline
@@ -199,10 +245,10 @@ const MessageForm = ({ channelId, onSend }: Props) => {
 
           <IconButton
             sx={sendBtnStyles}
-            edge="end"
-            onClick={handleSubmit((values) => sendMessage(values))}
-            disabled={!images.length && !formState.dirtyFields.body}
+            onClick={handleSendMessage}
+            disabled={isDisabled()}
             disableRipple
+            edge="end"
           >
             <Send sx={{ fontSize: 20, color: 'text.secondary' }} />
           </IconButton>
@@ -216,6 +262,12 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           sx={{ marginLeft: 1.5 }}
         />
       )}
+
+      <ChooseAuthModal
+        isOpen={isAuthPromptOpen}
+        setIsOpen={setIsAuthPromptOpen}
+        sendMessage={handleSubmit((values) => sendMessage(values))}
+      />
     </Box>
   );
 };

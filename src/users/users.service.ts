@@ -15,30 +15,41 @@ class UsersService {
     this.userRepository = dataSource.getRepository(User);
   }
 
-  signUp = async (userId: string, email: string, password: string) => {
+  signUp = async (email: string, name: string | undefined, password: string) => {
+    const user = await this.userRepository.save({
+      name: name?.trim() || this.generateName(),
+      email: normalizeText(email),
+      password,
+    });
+    await channelsService.addMemberToGeneralChannel(user.id);
+    return user;
+  };
+
+  upgradeAnonUser = async (userId: string, email: string, password: string) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
     });
     if (!user) {
       throw new Error('User not found');
     }
-
+    // Upgrade existing anon user to a registered user
     await this.userRepository.update(userId, {
       ...user,
       status: UserStatus.UNVERIFIED,
       email: normalizeText(email),
       password,
     });
+    return;
   };
 
-  createAnonUser = async (clientId: string) => {
-    const name = await this.generateName();
-    const user = await this.userRepository.save({ clientId, name });
+  createAnonUser = async () => {
+    const name = this.generateName();
+    const user = await this.userRepository.save({ name });
     await channelsService.addMemberToGeneralChannel(user.id);
     return user;
   };
 
-  generateName = async () => {
+  generateName = () => {
     const numberDictionary = NumberDictionary.generate({ min: 10, max: 99 });
     const nounDictionary = Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
 

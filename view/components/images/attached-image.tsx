@@ -1,7 +1,7 @@
 import { BoxProps, SxProps } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { Image } from '../../types/image.types';
 import Modal from '../shared/modal';
