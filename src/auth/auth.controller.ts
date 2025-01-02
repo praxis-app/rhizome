@@ -7,15 +7,15 @@ class AuthController {
     res.json({ token });
   }
 
+  async createAnonSession(_req: Request, res: Response) {
+    const token = await authService.createAnonSession();
+    res.json({ token });
+  }
+
   async upgradeAnonSession(req: Request, res: Response) {
     const { user } = res.locals;
     await authService.upgradeAnonSession(req.body, user.id);
     res.sendStatus(204);
-  }
-
-  async createAnonSession(_req: Request, res: Response) {
-    const token = await authService.createAnonSession();
-    res.json({ token });
   }
 }
 
