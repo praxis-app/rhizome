@@ -45,7 +45,7 @@ class AuthService {
 
   upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
     const passwordHash = await hash(password, SALT_ROUNDS);
-    await usersService.upgradeAnonUser(email, passwordHash, userId);
+    await usersService.upgradeAnonUser(userId, email, passwordHash);
   };
 
   validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
