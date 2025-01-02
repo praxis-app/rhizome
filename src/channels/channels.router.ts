@@ -1,3 +1,5 @@
+// TODO: Guard routes with permission checks
+
 import express from 'express';
 import { messagesRouter } from '../messages/messages.router';
 import { channelsController } from './channels.controller';
