@@ -62,6 +62,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   });
 
   const draftKey = `message-draft-${channelId}`;
+  const isEmpty = !formState.dirtyFields.body && !images.length;
 
   const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
     mutationFn: async ({ body }: FormValues) => {
@@ -184,19 +185,15 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     localStorage.setItem(draftKey, draft);
   }, 300);
 
-  const isEmpty = () => {
-    return !formState.dirtyFields.body && !images.length;
-  };
-
   const isDisabled = () => {
     if (isMessageSending) {
       return true;
     }
-    return isEmpty();
+    return isEmpty;
   };
 
   const handleSendMessage = () => {
-    if (isEmpty()) {
+    if (isEmpty) {
       return;
     }
     if (!isLoggedIn) {
