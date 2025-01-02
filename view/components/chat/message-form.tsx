@@ -4,6 +4,7 @@ import { Send } from '@mui/icons-material';
 import {
   Box,
   Button,
+  debounce,
   IconButton,
   Input,
   SxProps,
@@ -53,12 +54,14 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const { handleSubmit, register, setValue, formState, reset } =
     useForm<FormValues>({ mode: 'onChange' });
 
-  const registerBodyProps = register('body', {
+  const { onChange, ...registerBodyProps } = register('body', {
     maxLength: {
       value: MESSAGE_BODY_MAX,
       message: t('chat.errors.longBody'),
     },
   });
+
+  const draftKey = `message-draft-${channelId}`;
 
   const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
     mutationFn: async ({ body }: FormValues) => {
@@ -110,6 +113,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           return { pages, pageParams: oldData.pageParams };
         },
       );
+      localStorage.removeItem(draftKey);
       setValue('body', '');
       onSend?.();
       reset();
@@ -148,6 +152,13 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     };
   }, []);
 
+  useEffect(() => {
+    const draft = localStorage.getItem(draftKey);
+    if (draft) {
+      setValue('body', draft);
+    }
+  }, [setValue, draftKey]);
+
   const formStyles: SxProps = {
     borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}`,
     transition: 'background-color 0.2s cubic-bezier(.4,0,.2,1)',
@@ -168,6 +179,10 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     height: 40,
     transform: 'translateY(5px)',
   };
+
+  const saveDraft = debounce((draft: string) => {
+    localStorage.setItem(draftKey, draft);
+  }, 300);
 
   const isEmpty = () => {
     return !formState.dirtyFields.body && !images.length;
@@ -227,6 +242,10 @@ const MessageForm = ({ channelId, onSend }: Props) => {
           autoComplete="off"
           placeholder={t('chat.prompts.sendAMessage')}
           onKeyDown={handleInputKeyDown}
+          onChange={(e) => {
+            saveDraft(e.target.value);
+            onChange(e);
+          }}
           sx={inputStyles}
           inputRef={inputRef}
           disableUnderline
