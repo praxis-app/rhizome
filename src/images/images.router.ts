@@ -1,3 +1,5 @@
+// TODO: Guard routes with permission checks
+
 import express from 'express';
 import { imagesController } from './images.controller';
 
