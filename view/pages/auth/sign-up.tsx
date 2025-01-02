@@ -49,7 +49,7 @@ export const SignUp = () => {
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { mutate: signUp, isPending: isSignUpLoading } = useMutation({
+  const { mutate: signUp, isPending: isSignUpPending } = useMutation({
     mutationFn: api.signUp,
     onSuccess: ({ token }) => {
       localStorage.setItem('token', token);
@@ -65,7 +65,7 @@ export const SignUp = () => {
     },
   });
 
-  const { mutate: upgradeAnon, isPending: isUpgradeAnonLoading } = useMutation({
+  const { mutate: upgradeAnon, isPending: isUpgradeAnonPending } = useMutation({
     mutationFn: api.upgradeAnonSession,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: 'me' });
@@ -167,7 +167,7 @@ export const SignUp = () => {
     </InputAdornment>
   );
 
-  const isLoading = isSignUpLoading || isUpgradeAnonLoading;
+  const isPending = isSignUpPending || isUpgradeAnonPending;
   const isAnon = meData && meData.user.status === UserStatus.ANONYMOUS;
   const isSignedUp = meData && meData.user.status !== UserStatus.ANONYMOUS;
 
@@ -258,7 +258,7 @@ export const SignUp = () => {
           <PrimaryButton
             type="submit"
             sx={{ height: 45 }}
-            disabled={isLoading}
+            disabled={isPending}
             fullWidth
           >
             {t('users.actions.signUp')}
