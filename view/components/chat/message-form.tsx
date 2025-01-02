@@ -3,29 +3,27 @@
 import { Send } from '@mui/icons-material';
 import {
   Box,
-  Button,
   debounce,
   IconButton,
   Input,
   SxProps,
   Typography,
 } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import { KeyCodes, NavigationPaths } from '../../constants/shared.constants';
+import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { MessagesQuery } from '../../types/chat.types';
 import { Image } from '../../types/image.types';
 import { validateImageInput } from '../../utils/image.utils';
+import ChooseAuthModal from '../auth/choose-auth-modal';
 import AttachedImagePreview from '../images/attached-image-preview';
 import ImageInput from '../images/image-input';
-import Modal from '../shared/modal';
 
 const MESSAGE_BODY_MAX = 6000;
 
@@ -39,7 +37,7 @@ interface Props {
 }
 
 const MessageForm = ({ channelId, onSend }: Props) => {
-  const { isLoggedIn, setIsLoggedIn, setToast } = useAppStore((state) => state);
+  const { isLoggedIn, setToast } = useAppStore((state) => state);
 
   const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
@@ -49,7 +47,6 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const inputRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const isDarkMode = useIsDarkMode();
-  const navigate = useNavigate();
 
   const { handleSubmit, register, setValue, formState, reset } =
     useForm<FormValues>({ mode: 'onChange' });
@@ -124,18 +121,6 @@ const MessageForm = ({ channelId, onSend }: Props) => {
         title: error.message,
         status: 'error',
       });
-    },
-  });
-
-  const { mutate: createAnonSession } = useMutation({
-    mutationFn: async () => {
-      // Create an anonymous session and store the token
-      const { token } = await api.createAnonSession();
-      localStorage.setItem('token', token);
-      setIsLoggedIn(true);
-
-      // Send the message after creating the session
-      handleSubmit((values) => sendMessage(values))();
     },
   });
 
@@ -219,11 +204,6 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     setImagesInputKey(Date.now());
   };
 
-  const handleSendAnonMsgBtnClick = () => {
-    setIsAuthPromptOpen(false);
-    createAnonSession();
-  };
-
   return (
     <Box sx={formStyles}>
       <Box
@@ -283,23 +263,11 @@ const MessageForm = ({ channelId, onSend }: Props) => {
         />
       )}
 
-      <Modal open={isAuthPromptOpen} onClose={() => setIsAuthPromptOpen(false)}>
-        <Typography marginBottom={3}>
-          {t('users.prompts.chooseAuthFlow')}
-        </Typography>
-
-        <Box display="flex" gap={1}>
-          <Button onClick={handleSendAnonMsgBtnClick} variant="contained">
-            {t('chat.actions.sendAnonymous')}
-          </Button>
-          <Button
-            onClick={() => navigate(NavigationPaths.SignUp)}
-            variant="contained"
-          >
-            {t('users.actions.signUp')}
-          </Button>
-        </Box>
-      </Modal>
+      <ChooseAuthModal
+        isOpen={isAuthPromptOpen}
+        setIsOpen={setIsAuthPromptOpen}
+        sendMessage={handleSubmit((values) => sendMessage(values))}
+      />
     </Box>
   );
 };
