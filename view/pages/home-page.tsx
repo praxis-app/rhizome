@@ -18,7 +18,7 @@ export const HomePage = () => {
   }
 
   // TODO: Add support for multiple channels
-  const channelId = data.channels[0].id;
+  const channel = data.channels[0];
 
-  return <ChatPanel channelId={channelId} />;
+  return <ChatPanel channel={channel} />;
 };
