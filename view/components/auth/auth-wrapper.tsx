@@ -49,27 +49,6 @@ export const AuthWrapper = ({ children }: Props) => {
     retry: false,
   });
 
-  // TODO: Uncomment after moving to the new auth flow
-
-  // useEffect(() => {
-  //   if (token || authCalledRef.current) {
-  //     return;
-  //   }
-  //   const tokenFromStorage = localStorage.getItem('token');
-  //   if (tokenFromStorage) {
-  //     setToken(tokenFromStorage);
-  //     return;
-  //   }
-  //   createAnonSession();
-  //   authCalledRef.current = true;
-  // }, [token, createAnonSession, setToken, setIsAppLoading]);
-
-  // useEffect(() => {
-  //   if (meData && token) {
-  //     setIsAppLoading(false);
-  //   }
-  // }, [meData, token, setIsAppLoading]);
-
   if (isAppLoading) {
     return <ProgressBar />;
   }
