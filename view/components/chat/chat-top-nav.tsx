@@ -1,6 +1,7 @@
 import { ArrowBack, Search, Tag } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useAppStore } from '../../store/app.store';
 import { Channel } from '../../types/chat.types';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const ChatTopNav = ({ channel }: Props) => {
+  const { setIsNavDrawerOpen } = useAppStore((state) => state);
   const { t } = useTranslation();
 
   const buttonSx: SxProps = {
@@ -26,7 +28,11 @@ const ChatTopNav = ({ channel }: Props) => {
       height="55px"
     >
       <Box display="flex" alignItems="center">
-        <IconButton sx={{ ...buttonSx, marginRight: 0.5 }} edge="start">
+        <IconButton
+          onClick={() => setIsNavDrawerOpen(true)}
+          sx={{ ...buttonSx, marginRight: 0.5 }}
+          edge="start"
+        >
           <ArrowBack />
         </IconButton>
 

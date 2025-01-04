@@ -49,6 +49,9 @@ const AttachedImage = ({
       marginBottom: isLarge ? '35px' : 0,
       maxWidth: '760px',
     },
+    '& .MuiBackdrop-root': {
+      backgroundColor: 'rgba(0, 0, 0, 0.915)',
+    },
   };
   const modalAppBarSx: SxProps = {
     borderBottom: 'none',
