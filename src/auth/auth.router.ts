@@ -6,6 +6,7 @@ export const authRouter = express.Router();
 
 authRouter.post('/', authService.validateSignUp, authController.signUp);
 authRouter.post('/anon', authController.createAnonSession);
+authRouter.post('/logout', authController.logOut);
 authRouter.put(
   '/anon',
   authService.authenticate,

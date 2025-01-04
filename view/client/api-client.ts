@@ -29,6 +29,10 @@ class ApiClient {
     return this.executeRequest<void>('put', '/auth/anon', { data });
   };
 
+  logOut = async () => {
+    return this.executeRequest<void>('post', '/auth/logout');
+  };
+
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ message: Message }>('post', path, {

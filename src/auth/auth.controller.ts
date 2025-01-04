@@ -17,6 +17,11 @@ class AuthController {
     await authService.upgradeAnonSession(req.body, user.id);
     res.sendStatus(204);
   }
+
+  async logOut(_req: Request, res: Response) {
+    res.setHeader('Clear-Site-Data', '"storage"');
+    res.sendStatus(204);
+  }
 }
 
 export const authController = new AuthController();
