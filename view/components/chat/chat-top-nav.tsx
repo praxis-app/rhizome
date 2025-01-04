@@ -1,7 +1,9 @@
 import { ArrowBack, Search, Tag } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
+import { GRAY } from '../../styles/theme';
 import { Channel } from '../../types/chat.types';
 
 interface Props {
@@ -10,7 +12,9 @@ interface Props {
 
 const ChatTopNav = ({ channel }: Props) => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
+
   const { t } = useTranslation();
+  const isDarkMode = useIsDarkMode();
 
   const buttonSx: SxProps = {
     width: 38,
@@ -22,6 +26,7 @@ const ChatTopNav = ({ channel }: Props) => {
       display="flex"
       alignItems="center"
       justifyContent="space-between"
+      borderBottom={`1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}`}
       bgcolor="background.paper"
       paddingRight={2.4}
       paddingLeft={2.5}
