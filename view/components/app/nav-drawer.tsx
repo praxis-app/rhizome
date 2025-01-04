@@ -78,26 +78,28 @@ const NavDrawer = () => {
 
       <List>
         {!isLoggedIn && (
-          <ListItemButton
-            onClick={() => {
-              navigate(NavigationPaths.SignUp);
-              setIsNavDrawerOpen(false);
-            }}
-          >
-            <ListItemIcon>
-              <PersonAdd />
-            </ListItemIcon>
-            <ListItemText primary={t('users.actions.signUp')} />
-          </ListItemButton>
-        )}
+          <>
+            <ListItemButton
+              onClick={() => {
+                navigate(NavigationPaths.SignUp);
+                setIsNavDrawerOpen(false);
+              }}
+            >
+              <ListItemIcon>
+                <PersonAdd />
+              </ListItemIcon>
+              <ListItemText primary={t('users.actions.signUp')} />
+            </ListItemButton>
 
-        {!isLoggedIn && (
-          <ListItemButton onClick={() => handleNavigate(NavigationPaths.Login)}>
-            <ListItemIcon>
-              <ExitToApp />
-            </ListItemIcon>
-            <ListItemText primary={t('users.actions.logIn')} />
-          </ListItemButton>
+            <ListItemButton
+              onClick={() => handleNavigate(NavigationPaths.Login)}
+            >
+              <ListItemIcon>
+                <ExitToApp />
+              </ListItemIcon>
+              <ListItemText primary={t('users.actions.logIn')} />
+            </ListItemButton>
+          </>
         )}
 
         {isLoggedIn && (
