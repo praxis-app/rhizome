@@ -20,8 +20,17 @@ const NavDrawer = () => {
       PaperProps={{ sx: { width: '100%' } }}
       sx={drawerSx}
     >
-      <Box display="flex" sx={{ marginY: 0.5, marginRight: 0.5 }}>
-        <IconButton onClick={() => setIsNavDrawerOpen(false)}>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        paddingLeft={1}
+        height="55px"
+      >
+        <IconButton
+          onClick={() => setIsNavDrawerOpen(false)}
+          sx={{ width: 38, height: 38 }}
+        >
           <Close />
         </IconButton>
       </Box>

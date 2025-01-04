@@ -235,6 +235,15 @@ export const theme = createTheme({
       },
     },
 
+    MuiDrawer: {
+      styleOverrides: {
+        paper: ({ theme }: Props) => ({
+          backgroundColor: theme.palette.background.paper,
+          '--Paper-overlay': 'none !important',
+        }),
+      },
+    },
+
     MuiAppBar: {
       styleOverrides: {
         root: {
