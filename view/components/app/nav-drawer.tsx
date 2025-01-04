@@ -47,6 +47,11 @@ const NavDrawer = () => {
     },
   };
 
+  const handleNavigate = (path: string) => {
+    setIsNavDrawerOpen(false);
+    navigate(path);
+  };
+
   return (
     <Drawer
       anchor="left"
@@ -83,6 +88,15 @@ const NavDrawer = () => {
               <PersonAdd />
             </ListItemIcon>
             <ListItemText primary={t('users.actions.signUp')} />
+          </ListItemButton>
+        )}
+
+        {!isLoggedIn && (
+          <ListItemButton onClick={() => handleNavigate(NavigationPaths.Login)}>
+            <ListItemIcon>
+              <ExitToApp />
+            </ListItemIcon>
+            <ListItemText primary={t('users.actions.logIn')} />
           </ListItemButton>
         )}
 
