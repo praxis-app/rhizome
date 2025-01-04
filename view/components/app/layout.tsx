@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { theme } from '../../styles/theme';
 import Toast from '../shared/toast';
 import { AuthWrapper } from '../auth/auth-wrapper';
+import NavDrawer from './nav-drawer';
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ export const Layout = ({ children, sx }: Props) => (
     <ThemeProvider theme={theme} defaultMode="system">
       <CssBaseline />
       <AuthWrapper>
+        <NavDrawer />
         <Container maxWidth="sm" sx={sx}>
           {children}
           <Toast />

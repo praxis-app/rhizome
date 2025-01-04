@@ -22,6 +22,10 @@ export const useMeQuery = (
         setIsAppLoading(false);
       }
     },
+    staleTime: 1000 * 60 * 30,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    retry: 2,
     ...options,
   });
 };

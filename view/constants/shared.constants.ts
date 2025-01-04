@@ -1,16 +1,17 @@
 export const URL_REGEX = /(https?:\/\/[^\s]+)/g;
 
-export enum KeyCodes {
-  Enter = 'Enter',
-  Escape = 'Escape',
-}
-
+/** Time in seconds */
 export enum Time {
   Minute = 60,
   Hour = 3600,
   Day = 86400,
   Week = 604800,
   Month = 2628000,
+}
+
+export enum KeyCodes {
+  Enter = 'Enter',
+  Escape = 'Escape',
 }
 
 export enum TruncationSizes {
