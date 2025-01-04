@@ -1,5 +1,5 @@
 import { ArrowBack, Search, Tag } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, IconButton, SxProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Channel } from '../../types/chat.types';
 
@@ -10,19 +10,26 @@ interface Props {
 const ChatTopNav = ({ channel }: Props) => {
   const { t } = useTranslation();
 
+  const buttonSx: SxProps = {
+    width: 38,
+    height: 38,
+  };
+
   return (
     <Box
       display="flex"
-      height="55px"
-      bgcolor="background.paper"
       alignItems="center"
       justifyContent="space-between"
-      paddingX={2}
+      bgcolor="background.paper"
+      paddingRight={2.4}
+      paddingLeft={2.5}
+      height="55px"
     >
       <Box display="flex" alignItems="center">
-        <IconButton sx={{ marginRight: 0.5 }} edge="start">
+        <IconButton sx={{ ...buttonSx, marginRight: 0.5 }} edge="start">
           <ArrowBack />
         </IconButton>
+
         <Tag
           sx={{ marginRight: '0.25ch', color: 'text.secondary' }}
           fontSize="small"
@@ -32,7 +39,12 @@ const ChatTopNav = ({ channel }: Props) => {
         </Typography>
       </Box>
 
-      <IconButton aria-label={t('labels.menu')} edge="end" size="large">
+      <IconButton
+        sx={buttonSx}
+        aria-label={t('labels.menu')}
+        size="large"
+        edge="end"
+      >
         <Search />
       </IconButton>
     </Box>
