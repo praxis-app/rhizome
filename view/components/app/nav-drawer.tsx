@@ -1,9 +1,27 @@
-import { Close } from '@mui/icons-material';
-import { Box, Divider, Drawer, IconButton, SxProps } from '@mui/material';
+import { Close, PersonAdd } from '@mui/icons-material';
+import {
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  SxProps,
+} from '@mui/material';
 import { useAppStore } from '../../store/app.store';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { NavigationPaths } from '../../constants/shared.constants';
 
 const NavDrawer = () => {
-  const { isNavDrawerOpen, setIsNavDrawerOpen } = useAppStore((state) => state);
+  const { isNavDrawerOpen, setIsNavDrawerOpen, isLoggedIn } = useAppStore(
+    (state) => state,
+  );
+
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const drawerSx: SxProps = {
     '& .MuiBackdrop-root': {
@@ -35,6 +53,22 @@ const NavDrawer = () => {
         </IconButton>
       </Box>
       <Divider />
+
+      <List>
+        {!isLoggedIn && (
+          <ListItemButton
+            onClick={() => {
+              navigate(NavigationPaths.SignUp);
+              setIsNavDrawerOpen(false);
+            }}
+          >
+            <ListItemIcon>
+              <PersonAdd />
+            </ListItemIcon>
+            <ListItemText primary={t('users.actions.signUp')} />
+          </ListItemButton>
+        )}
+      </List>
     </Drawer>
   );
 };
