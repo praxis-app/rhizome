@@ -3,8 +3,8 @@
 import express from 'express';
 import * as authService from '../auth/auth.service';
 import { uploadImage } from '../images/middleware/upload-image.middleware';
-import { messagesController } from './messages.controller';
-import { messagesService } from './messages.service';
+import * as messagesController from './messages.controller';
+import * as messagesService from './messages.service';
 
 const IMAGE_ROUTE = '/:messageId/images/:imageId';
 
