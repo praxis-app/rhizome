@@ -3,7 +3,7 @@ import { createClient } from 'redis';
 
 dotenv.config();
 
-export const cacheClient = createClient({
+const cacheClient = createClient({
   url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
   password: process.env.REDIS_PASSWORD,
 });
@@ -11,6 +11,10 @@ export const cacheClient = createClient({
 cacheClient.on('error', (error) => {
   console.error('Redis error', error);
 });
+
+export const initializeCache = async () => {
+  await cacheClient.connect();
+};
 
 export const getSetMembers = async (key: string) => {
   return cacheClient.sMembers(key);

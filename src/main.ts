@@ -6,7 +6,7 @@ import { createServer } from 'http';
 import morgan from 'morgan';
 import { join } from 'path';
 import { appRouter } from './app.router';
-import { cacheClient } from './cache/cache.service';
+import * as cacheService from './cache/cache.service';
 import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
 import * as pubSubService from './pub-sub/pub-sub.service';
@@ -19,7 +19,7 @@ dotenv.config();
   const webSocketServer = new WebSocketServerWithIds({ path: '/ws', server });
 
   await dataSource.initialize();
-  await cacheClient.connect();
+  await cacheService.initializeCache();
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ limit: '10mb' }));
