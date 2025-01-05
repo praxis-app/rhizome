@@ -13,16 +13,6 @@ export const getChannel = (channelId: string) => {
   });
 };
 
-export const getGeneralChannel = async () => {
-  const generalChannel = await channelRepository.findOne({
-    where: { name: GENERAL_CHANNEL_NAME },
-  });
-  if (!generalChannel) {
-    return initializeGeneralChannel();
-  }
-  return generalChannel;
-};
-
 export const getChannels = async () => {
   const channelCount = await channelRepository.count();
   if (channelCount === 0) {
@@ -45,7 +35,17 @@ export const addMemberToGeneralChannel = async (userId: string) => {
   });
 };
 
-export const initializeGeneralChannel = () => {
+const getGeneralChannel = async () => {
+  const generalChannel = await channelRepository.findOne({
+    where: { name: GENERAL_CHANNEL_NAME },
+  });
+  if (!generalChannel) {
+    return initializeGeneralChannel();
+  }
+  return generalChannel;
+};
+
+const initializeGeneralChannel = () => {
   return channelRepository.save({
     name: GENERAL_CHANNEL_NAME,
   });
