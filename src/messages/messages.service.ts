@@ -130,6 +130,6 @@ export const saveMessageImage = async (
   return image;
 };
 
-export const getChannelKey = (channelId: string, userId: string) => {
+const getChannelKey = (channelId: string, userId: string) => {
   return `channel-${channelId}-${userId}`;
 };
