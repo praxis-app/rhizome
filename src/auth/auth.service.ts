@@ -13,8 +13,6 @@ export interface SignUpReq {
   password: string;
 }
 
-const userRepository = dataSource.getRepository(User);
-
 export const signUp = async ({ email, name, password }: SignUpReq) => {
   const passwordHash = await hash(password, SALT_ROUNDS);
   const user = await usersService.signUp(email, name, passwordHash);
@@ -48,6 +46,7 @@ export const verifyToken = async (token: string) => {
         return;
       }
       const { userId } = payload as { userId: string };
+      const userRepository = dataSource.getRepository(User);
       const user = await userRepository.findOne({
         where: { id: userId },
       });
