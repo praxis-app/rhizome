@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import * as authService from '../auth/auth.service';
-import { cacheService } from '../cache/cache.service';
+import * as cacheService from '../cache/cache.service';
 import { PubSubRequest, PubSubResponse, WebSocketWithId } from './pub-sub.models';
 
 type ChannelHandler = (message: any, publisher: WebSocketWithId) => Promise<void>;
