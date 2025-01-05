@@ -1,32 +1,23 @@
-import { Repository } from 'typeorm';
 import { dataSource } from '../database/data-source';
 import { deleteImageFile } from './images.utils';
 import { Image } from './models/image.entity';
 
-class ImagesService {
-  private imageRepository: Repository<Image>;
+const imageRepository = dataSource.getRepository(Image);
 
-  constructor() {
-    this.imageRepository = dataSource.getRepository(Image);
+export const getImage = async (imageId: string) => {
+  return imageRepository.findOne({
+    where: { id: imageId },
+  });
+};
+
+export const deleteImage = async (imageId: string) => {
+  const image = await imageRepository.findOne({
+    where: { id: imageId },
+    select: ['filename'],
+  });
+  if (!image || !image.filename) {
+    throw new Error('Image not found');
   }
-
-  async getImage(imageId: string) {
-    return this.imageRepository.findOne({
-      where: { id: imageId },
-    });
-  }
-
-  async deleteImage(imageId: string) {
-    const image = await this.imageRepository.findOne({
-      where: { id: imageId },
-      select: ['filename'],
-    });
-    if (!image || !image.filename) {
-      throw new Error('Image not found');
-    }
-    await deleteImageFile(image.filename);
-    this.imageRepository.delete(imageId);
-  }
-}
-
-export const imagesService = new ImagesService();
+  await deleteImageFile(image.filename);
+  await imageRepository.delete(imageId);
+};
