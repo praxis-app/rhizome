@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
-import { usersService } from '../users/users.service';
+import * as usersService from '../users/users.service';
 
 const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 const EMAIL_MAX_LENGTH = 254;
