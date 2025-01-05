@@ -1,8 +1,8 @@
 import express from 'express';
-import { usersController } from './users.controller';
-import { authService } from '../auth/auth.service';
+import { authenticate } from '../auth/middleware/authenticate.middleware';
+import { getCurrentUser } from './users.controller';
 
 export const usersRouter = express.Router();
 
-usersRouter.use(authService.authenticate);
-usersRouter.get('/me', usersController.getCurrentUser);
+usersRouter.use(authenticate);
+usersRouter.get('/me', getCurrentUser);

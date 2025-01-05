@@ -3,13 +3,13 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import { createServer } from 'http';
+import morgan from 'morgan';
 import { join } from 'path';
 import { appRouter } from './app.router';
-import { cacheService } from './cache/cache.service';
+import * as cacheService from './cache/cache.service';
 import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
-import { pubSubService } from './pub-sub/pub-sub.service';
-import morgan from 'morgan';
+import * as pubSubService from './pub-sub/pub-sub.service';
 
 dotenv.config();
 
@@ -18,8 +18,8 @@ dotenv.config();
   const server = createServer(app);
   const webSocketServer = new WebSocketServerWithIds({ path: '/ws', server });
 
-  await cacheService.initializeCache();
   await dataSource.initialize();
+  await cacheService.initializeCache();
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ limit: '10mb' }));

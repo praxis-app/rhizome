@@ -1,37 +1,29 @@
 import * as dotenv from 'dotenv';
-import { createClient, RedisClientType } from 'redis';
+import { createClient } from 'redis';
 
 dotenv.config();
 
-class CacheService {
-  private client: RedisClientType;
+const cacheClient = createClient({
+  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+  password: process.env.REDIS_PASSWORD,
+});
 
-  constructor() {
-    this.client = createClient({
-      url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
-      password: process.env.REDIS_PASSWORD,
-    });
+cacheClient.on('error', (error) => {
+  console.error('Redis error', error);
+});
 
-    this.client.on('error', (error) => {
-      console.error('Redis error', error);
-    });
-  }
+export const initializeCache = async () => {
+  await cacheClient.connect();
+};
 
-  async initializeCache() {
-    await this.client.connect();
-  }
+export const getSetMembers = async (key: string) => {
+  return cacheClient.sMembers(key);
+};
 
-  async getSetMembers(key: string) {
-    return this.client.sMembers(key);
-  }
+export const addSetMember = async (key: string, value: string) => {
+  return cacheClient.sAdd(key, value);
+};
 
-  async addSetMember(key: string, value: string) {
-    return this.client.sAdd(key, value);
-  }
-
-  async removeSetMember(key: string, value: string) {
-    return this.client.sRem(key, value);
-  }
-}
-
-export const cacheService = new CacheService();
+export const removeSetMember = async (key: string, value: string) => {
+  return cacheClient.sRem(key, value);
+};

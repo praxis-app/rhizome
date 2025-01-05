@@ -1,15 +1,11 @@
 import express from 'express';
-import { authService } from './auth.service';
-import { authController } from './auth.controller';
+import { createAnonSession, logOut, signUp, upgradeAnonSession } from './auth.controller';
+import { authenticate } from './middleware/authenticate.middleware';
+import { validateSignUp } from './middleware/validate-sign-up.middleware';
 
 export const authRouter = express.Router();
 
-authRouter.post('/', authService.validateSignUp, authController.signUp);
-authRouter.post('/anon', authController.createAnonSession);
-authRouter.post('/logout', authController.logOut);
-authRouter.put(
-  '/anon',
-  authService.authenticate,
-  authService.validateSignUp,
-  authController.upgradeAnonSession,
-);
+authRouter.post('/anon', createAnonSession);
+authRouter.put('/anon', authenticate, validateSignUp, upgradeAnonSession);
+authRouter.post('/', validateSignUp, signUp);
+authRouter.post('/logout', logOut);

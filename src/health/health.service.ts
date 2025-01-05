@@ -1,10 +1,6 @@
-class HealthService {
-  getHealth() {
-    return {
-      status: 'healthy',
-      timestamp: new Date().toLocaleString(),
-    };
-  }
-}
-
-export const healthService = new HealthService();
+export const getHealth = () => {
+  return {
+    status: 'healthy',
+    timestamp: new Date().toLocaleString(),
+  };
+};
