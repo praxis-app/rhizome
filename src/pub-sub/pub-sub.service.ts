@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { authService } from '../auth/auth.service';
+import * as authService from '../auth/auth.service';
 import { cacheService } from '../cache/cache.service';
 import { PubSubRequest, PubSubResponse, WebSocketWithId } from './pub-sub.models';
 

@@ -1,10 +1,10 @@
 // TODO: Guard routes with permission checks
 
 import express from 'express';
+import * as authService from '../auth/auth.service';
 import { uploadImage } from '../images/middleware/upload-image.middleware';
 import { messagesController } from './messages.controller';
 import { messagesService } from './messages.service';
-import { authService } from '../auth/auth.service';
 
 const IMAGE_ROUTE = '/:messageId/images/:imageId';
 

@@ -1,7 +1,6 @@
 import { hash } from 'bcrypt';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { Repository } from 'typeorm';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
@@ -26,112 +25,104 @@ interface SignUpReq {
   password: string;
 }
 
-class AuthService {
-  private userRepository: Repository<User>;
+const userRepository = dataSource.getRepository(User);
 
-  constructor() {
-    this.userRepository = dataSource.getRepository(User);
+export const signUp = async ({ email, name, password }: SignUpReq) => {
+  const passwordHash = await hash(password, SALT_ROUNDS);
+  const user = await usersService.signUp(email, name, passwordHash);
+  const payload = { userId: user.id };
+
+  return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
+    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+  });
+};
+
+export const upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
+  const passwordHash = await hash(password, SALT_ROUNDS);
+  await usersService.upgradeAnonUser(userId, email, passwordHash);
+};
+
+export const validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
+  const { email, name, password } = req.body as SignUpReq;
+
+  if (!VALID_EMAIL_REGEX.test(email)) {
+    res.status(400).send('Invalid email address');
+    return;
+  }
+  if (email.length > EMAIL_MAX_LENGTH) {
+    res.status(400).send('Email address cannot exceed 254 characters');
+    return;
+  }
+  if (name && !VALID_NAME_REGEX.test(name)) {
+    res.status(400).send('User names cannot contain special characters');
+    return;
+  }
+  if (name && name.length < MIN_NAME_LENGTH) {
+    res.status(400).send('Username must be at least 2 characters');
+    return;
+  }
+  if (name && name.length > MAX_NAME_LENGTH) {
+    res.status(400).send('Username cannot exceed 15 characters');
+    return;
+  }
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    res.status(400).send(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+    return;
+  }
+  if (password.length > MAX_PASSWORD_LENGTH) {
+    res.status(400).send(`Password must be at most ${MAX_PASSWORD_LENGTH} characters long`);
+    return;
   }
 
-  signUp = async ({ email, name, password }: SignUpReq) => {
-    const passwordHash = await hash(password, SALT_ROUNDS);
-    const user = await usersService.signUp(email, name, passwordHash);
-    const payload = { userId: user.id };
+  const usersWithEmailCount = await userRepository.count({
+    where: { email: normalizeText(email) },
+  });
+  if (usersWithEmailCount > 0) {
+    res.status(409).send('Email address is already in use');
+    return;
+  }
 
-    return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
-      expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-    });
-  };
+  next();
+};
 
-  upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
-    const passwordHash = await hash(password, SALT_ROUNDS);
-    await usersService.upgradeAnonUser(userId, email, passwordHash);
-  };
+export const createAnonSession = async () => {
+  const user = await usersService.createAnonUser();
+  const payload = { userId: user.id };
 
-  validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, name, password } = req.body as SignUpReq;
+  return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
+    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
+  });
+};
 
-    if (!VALID_EMAIL_REGEX.test(email)) {
-      res.status(400).send('Invalid email address');
-      return;
-    }
-    if (email.length > EMAIL_MAX_LENGTH) {
-      res.status(400).send('Email address cannot exceed 254 characters');
-      return;
-    }
-    if (name && !VALID_NAME_REGEX.test(name)) {
-      res.status(400).send('User names cannot contain special characters');
-      return;
-    }
-    if (name && name.length < MIN_NAME_LENGTH) {
-      res.status(400).send('Username must be at least 2 characters');
-      return;
-    }
-    if (name && name.length > MAX_NAME_LENGTH) {
-      res.status(400).send('Username cannot exceed 15 characters');
-      return;
-    }
-    if (password.length < MIN_PASSWORD_LENGTH) {
-      res.status(400).send(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
-      return;
-    }
-    if (password.length > MAX_PASSWORD_LENGTH) {
-      res.status(400).send(`Password must be at most ${MAX_PASSWORD_LENGTH} characters long`);
-      return;
-    }
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+  const { authorization } = req.headers;
+  const [type, token] = authorization?.split(' ') ?? [];
+  if (type !== 'Bearer' || !token) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
+  const user = await verifyToken(token);
+  if (!user) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
+  res.locals.user = user;
+  next();
+};
 
-    const usersWithEmailCount = await this.userRepository.count({
-      where: { email: normalizeText(email) },
-    });
-    if (usersWithEmailCount > 0) {
-      res.status(409).send('Email address is already in use');
-      return;
-    }
-
-    next();
-  };
-
-  createAnonSession = async () => {
-    const user = await usersService.createAnonUser();
-    const payload = { userId: user.id };
-
-    return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
-      expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-    });
-  };
-
-  authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    const { authorization } = req.headers;
-    const [type, token] = authorization?.split(' ') ?? [];
-    if (type !== 'Bearer' || !token) {
-      res.status(401).send('Unauthorized');
-      return;
-    }
-    const user = await this.verifyToken(token);
-    if (!user) {
-      res.status(401).send('Unauthorized');
-      return;
-    }
-    res.locals.user = user;
-    next();
-  };
-
-  verifyToken = async (token: string) => {
-    return new Promise<User | null>((resolve) => {
-      const secret = process.env.TOKEN_SECRET as string;
-      jwt.verify(token, secret, async (err, payload) => {
-        if (err) {
-          resolve(null);
-          return;
-        }
-        const { userId } = payload as { userId: string };
-        const user = await this.userRepository.findOne({
-          where: { id: userId },
-        });
-        resolve(user);
+export const verifyToken = async (token: string) => {
+  return new Promise<User | null>((resolve) => {
+    const secret = process.env.TOKEN_SECRET as string;
+    jwt.verify(token, secret, async (err, payload) => {
+      if (err) {
+        resolve(null);
+        return;
+      }
+      const { userId } = payload as { userId: string };
+      const user = await userRepository.findOne({
+        where: { id: userId },
       });
+      resolve(user);
     });
-  };
-}
-
-export const authService = new AuthService();
+  });
+};
