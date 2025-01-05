@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAppStore } from '../../store/app.store';
 import Modal from '../shared/modal';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../client/api-client';
 
 const NavDrawer = () => {
@@ -28,12 +28,15 @@ const NavDrawer = () => {
   const { isNavDrawerOpen, setIsNavDrawerOpen, isLoggedIn, setIsLoggedIn } =
     useAppStore((state) => state);
 
+  const queryClient = useQueryClient();
+
   const { mutate: logOut, isPending } = useMutation({
     mutationFn: async () => {
       await api.logOut();
       setIsLogOutModalOpen(false);
       setIsNavDrawerOpen(false);
       setIsLoggedIn(false);
+      queryClient.clear();
     },
   });
 
