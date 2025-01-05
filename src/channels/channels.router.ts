@@ -2,7 +2,7 @@
 
 import express from 'express';
 import { messagesRouter } from '../messages/messages.router';
-import { channelsController } from './channels.controller';
+import * as channelsController from './channels.controller';
 
 export const channelsRouter = express.Router();
 

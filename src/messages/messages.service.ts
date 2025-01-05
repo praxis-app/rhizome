@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Repository } from 'typeorm';
-import { channelsService } from '../channels/channels.service';
+import * as channelsService from '../channels/channels.service';
 import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { Image } from '../images/models/image.entity';

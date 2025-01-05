@@ -1,7 +1,7 @@
 // TODO: Add support for user updates with validation
 
 import { colors, NumberDictionary, uniqueNamesGenerator } from 'unique-names-generator';
-import { channelsService } from '../channels/channels.service';
+import * as channelsService from '../channels/channels.service';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User, UserStatus } from './user.entity';
