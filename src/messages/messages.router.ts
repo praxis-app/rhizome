@@ -1,7 +1,7 @@
 // TODO: Guard routes with permission checks
 
 import express from 'express';
-import * as authService from '../auth/auth.service';
+import { authenticate } from '../auth/middleware/authenticate.middleware';
 import { uploadImage } from '../images/middleware/upload-image.middleware';
 import * as messagesController from './messages.controller';
 import * as messagesService from './messages.service';
@@ -16,6 +16,6 @@ export const messagesRouter = express.Router({
 messagesRouter.get('/', messagesController.getMessages);
 
 // Protected routes
-messagesRouter.use(authService.authenticate);
+messagesRouter.use(authenticate);
 messagesRouter.post('/', messagesService.validateMessage, messagesController.createMessage);
 messagesRouter.post(`${IMAGE_ROUTE}/upload`, uploadImage, messagesController.uploadMessageImage);

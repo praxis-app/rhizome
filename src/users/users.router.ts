@@ -1,8 +1,8 @@
 import express from 'express';
-import * as authService from '../auth/auth.service';
+import { authenticate } from '../auth/middleware/authenticate.middleware';
 import { getCurrentUser } from './users.controller';
 
 export const usersRouter = express.Router();
 
-usersRouter.use(authService.authenticate);
+usersRouter.use(authenticate);
 usersRouter.get('/me', getCurrentUser);

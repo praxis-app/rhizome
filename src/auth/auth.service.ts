@@ -94,22 +94,6 @@ export const createAnonSession = async () => {
   });
 };
 
-export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
-  const { authorization } = req.headers;
-  const [type, token] = authorization?.split(' ') ?? [];
-  if (type !== 'Bearer' || !token) {
-    res.status(401).send('Unauthorized');
-    return;
-  }
-  const user = await verifyToken(token);
-  if (!user) {
-    res.status(401).send('Unauthorized');
-    return;
-  }
-  res.locals.user = user;
-  next();
-};
-
 export const verifyToken = async (token: string) => {
   return new Promise<User | null>((resolve) => {
     const secret = process.env.TOKEN_SECRET as string;
