@@ -3,7 +3,7 @@ import * as channelsService from '../channels/channels.service';
 import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { Image } from '../images/models/image.entity';
-import { pubSubService } from '../pub-sub/pub-sub.service';
+import * as pubSubService from '../pub-sub/pub-sub.service';
 import { User } from '../users/user.entity';
 import { Message } from './message.entity';
 

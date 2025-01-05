@@ -9,7 +9,7 @@ import { appRouter } from './app.router';
 import * as cacheService from './cache/cache.service';
 import { dataSource } from './database/data-source';
 import { WebSocketServerWithIds } from './pub-sub/pub-sub.models';
-import { pubSubService } from './pub-sub/pub-sub.service';
+import * as pubSubService from './pub-sub/pub-sub.service';
 
 dotenv.config();
 
