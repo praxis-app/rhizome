@@ -2,35 +2,49 @@ import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
 import { CurrentUser } from '../types/user.types';
-import { SignUpReq } from '../types/auth.types';
-
-export const API_ROOT = '/api';
+import { LoginReq, SignUpReq } from '../types/auth.types';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;
 
   constructor() {
-    this.axiosInstance = axios.create({ baseURL: API_ROOT });
+    this.axiosInstance = axios.create({ baseURL: '/api' });
   }
 
+  login = async (data: LoginReq) => {
+    const path = '/auth/login';
+    return this.executeRequest<{ token: string }>('post', path, {
+      data,
+    });
+  };
+
   signUp = async (data: SignUpReq) => {
-    return this.executeRequest<{ token: string }>('post', '/auth', { data });
-  };
-
-  getCurrentUser = async () => {
-    return this.executeRequest<{ user: CurrentUser }>('get', '/users/me');
-  };
-
-  createAnonSession = async () => {
-    return this.executeRequest<{ token: string }>('post', '/auth/anon');
-  };
-
-  upgradeAnonSession = async (data: SignUpReq) => {
-    return this.executeRequest<void>('put', '/auth/anon', { data });
+    const path = '/auth/signup';
+    return this.executeRequest<{ token: string }>('post', path, {
+      data,
+    });
   };
 
   logOut = async () => {
-    return this.executeRequest<void>('post', '/auth/logout');
+    const path = '/auth/logout';
+    return this.executeRequest<void>('delete', path);
+  };
+
+  createAnonSession = async () => {
+    const path = '/auth/anon';
+    return this.executeRequest<{ token: string }>('post', path);
+  };
+
+  upgradeAnonSession = async (data: SignUpReq) => {
+    const path = '/auth/anon';
+    return this.executeRequest<void>('put', path, {
+      data,
+    });
+  };
+
+  getCurrentUser = async () => {
+    const path = '/users/me';
+    return this.executeRequest<{ user: CurrentUser }>('get', path);
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
@@ -53,7 +67,8 @@ class ApiClient {
   };
 
   getChannels = async () => {
-    return this.executeRequest<{ channels: Channel[] }>('get', '/channels');
+    const path = '/channels';
+    return this.executeRequest<{ channels: Channel[] }>('get', path);
   };
 
   getChannelMessages = async (
@@ -69,7 +84,9 @@ class ApiClient {
 
   getImage = (imageId: string) => {
     const path = `/images/${imageId}`;
-    return this.executeRequest<any>('get', path, { responseType: 'blob' });
+    return this.executeRequest<any>('get', path, {
+      responseType: 'blob',
+    });
   };
 
   getHealth = async () => {

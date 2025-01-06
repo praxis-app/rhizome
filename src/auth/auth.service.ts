@@ -13,14 +13,15 @@ export interface SignUpReq {
   password: string;
 }
 
+export interface LoginReq {
+  email: string;
+  password: string;
+}
+
 export const signUp = async ({ email, name, password }: SignUpReq) => {
   const passwordHash = await hash(password, SALT_ROUNDS);
   const user = await usersService.signUp(email, name, passwordHash);
-  const payload = { userId: user.id };
-
-  return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
-    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-  });
+  return generateAccessToken(user.id);
 };
 
 export const upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
@@ -30,11 +31,7 @@ export const upgradeAnonSession = async ({ email, password }: SignUpReq, userId:
 
 export const createAnonSession = async () => {
   const user = await usersService.createAnonUser();
-  const payload = { userId: user.id };
-
-  return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
-    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
-  });
+  return generateAccessToken(user.id);
 };
 
 export const verifyToken = async (token: string) => {
@@ -52,5 +49,12 @@ export const verifyToken = async (token: string) => {
       });
       resolve(user);
     });
+  });
+};
+
+export const generateAccessToken = (userId: string) => {
+  const payload = { userId };
+  return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
+    expiresIn: ACCESS_TOKEN_EXPIRES_IN,
   });
 };
