@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '../client/api-client';
-import { CurrentUser } from '../types/user.types';
 import { useAppStore } from '../store/app.store';
+import { CurrentUser } from '../types/user.types';
 
 export const useMeQuery = (
   options?: Omit<UseQueryOptions<{ user: CurrentUser }>, 'queryKey'>,
@@ -16,7 +16,7 @@ export const useMeQuery = (
         setIsLoggedIn(true);
         return me;
       } catch (error) {
-        localStorage.removeItem('token');
+        localStorage.removeItem('access_token');
         throw error;
       } finally {
         setIsAppLoading(false);

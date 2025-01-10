@@ -107,7 +107,7 @@ export const useSubscription = (
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if (!isLoggedIn || !token) {
       return;
     }

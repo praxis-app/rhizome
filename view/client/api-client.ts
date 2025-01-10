@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
 import { CurrentUser } from '../types/user.types';
-import { LoginReq, SignUpReq } from '../types/auth.types';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;
@@ -13,26 +13,21 @@ class ApiClient {
 
   login = async (data: LoginReq) => {
     const path = '/auth/login';
-    return this.executeRequest<{ token: string }>('post', path, {
+    return this.executeRequest<AuthRes>('post', path, {
       data,
     });
   };
 
   signUp = async (data: SignUpReq) => {
     const path = '/auth/signup';
-    return this.executeRequest<{ token: string }>('post', path, {
+    return this.executeRequest<AuthRes>('post', path, {
       data,
     });
   };
 
-  logOut = async () => {
-    const path = '/auth/logout';
-    return this.executeRequest<void>('delete', path);
-  };
-
   createAnonSession = async () => {
     const path = '/auth/anon';
-    return this.executeRequest<{ token: string }>('post', path);
+    return this.executeRequest<AuthRes>('post', path);
   };
 
   upgradeAnonSession = async (data: SignUpReq) => {
@@ -40,6 +35,11 @@ class ApiClient {
     return this.executeRequest<void>('put', path, {
       data,
     });
+  };
+
+  logOut = async () => {
+    const path = '/auth/logout';
+    return this.executeRequest<void>('delete', path);
   };
 
   getCurrentUser = async () => {
@@ -99,7 +99,7 @@ class ApiClient {
     options?: { data?: any; params?: any; responseType?: any },
   ): Promise<T> {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('access_token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const response: AxiosResponse<T> = await this.axiosInstance.request<T>({

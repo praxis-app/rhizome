@@ -35,8 +35,8 @@ const Login = () => {
 
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationFn: api.login,
-    onSuccess({ token }) {
-      localStorage.setItem('token', token);
+    onSuccess({ access_token }) {
+      localStorage.setItem('access_token', access_token);
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
       setIsLoggedIn(true);

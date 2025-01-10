@@ -51,8 +51,8 @@ const SignUp = () => {
 
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
     mutationFn: api.signUp,
-    onSuccess: ({ token }) => {
-      localStorage.setItem('token', token);
+    onSuccess: ({ access_token }) => {
+      localStorage.setItem('access_token', access_token);
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
       setIsLoggedIn(true);

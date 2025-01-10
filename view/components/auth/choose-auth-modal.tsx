@@ -18,8 +18,8 @@ const ChooseAuthModal = ({ isOpen, setIsOpen, sendMessage }: Props) => {
 
   const { mutate: createAnonSession } = useMutation({
     mutationFn: async () => {
-      const { token } = await api.createAnonSession();
-      localStorage.setItem('token', token);
+      const { access_token } = await api.createAnonSession();
+      localStorage.setItem('access_token', access_token);
       setIsLoggedIn(true);
       sendMessage();
     },
