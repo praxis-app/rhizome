@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import useWebSocket from 'react-use-websocket';
-import { BrowserEvents } from '../constants/shared.constants';
+import { BrowserEvents, LocalStorageKeys } from '../constants/shared.constants';
 import { useAppStore } from '../store/app.store';
 import { PubSubMessage, SubscriptionOptions } from '../types/shared.types';
 import { getWebSocketURL } from '../utils/shared.utils';
@@ -107,7 +107,7 @@ export const useSubscription = (
   });
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(LocalStorageKeys.AccessToken);
     if (!isLoggedIn || !token) {
       return;
     }

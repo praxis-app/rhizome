@@ -35,3 +35,7 @@ export enum NavigationPaths {
   Login = '/auth/login',
   SignUp = '/auth/signup',
 }
+
+export enum LocalStorageKeys {
+  AccessToken = 'access_token',
+}

@@ -1,36 +1,51 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { LocalStorageKeys } from '../constants/shared.constants';
+import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
 import { CurrentUser } from '../types/user.types';
-import { SignUpReq } from '../types/auth.types';
-
-export const API_ROOT = '/api';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;
 
   constructor() {
-    this.axiosInstance = axios.create({ baseURL: API_ROOT });
+    this.axiosInstance = axios.create({ baseURL: '/api' });
   }
 
-  signUp = async (data: SignUpReq) => {
-    return this.executeRequest<{ token: string }>('post', '/auth', { data });
+  login = async (data: LoginReq) => {
+    const path = '/auth/login';
+    return this.executeRequest<AuthRes>('post', path, {
+      data,
+    });
   };
 
-  getCurrentUser = async () => {
-    return this.executeRequest<{ user: CurrentUser }>('get', '/users/me');
+  signUp = async (data: SignUpReq) => {
+    const path = '/auth/signup';
+    return this.executeRequest<AuthRes>('post', path, {
+      data,
+    });
   };
 
   createAnonSession = async () => {
-    return this.executeRequest<{ token: string }>('post', '/auth/anon');
+    const path = '/auth/anon';
+    return this.executeRequest<AuthRes>('post', path);
   };
 
   upgradeAnonSession = async (data: SignUpReq) => {
-    return this.executeRequest<void>('put', '/auth/anon', { data });
+    const path = '/auth/anon';
+    return this.executeRequest<void>('put', path, {
+      data,
+    });
   };
 
   logOut = async () => {
-    return this.executeRequest<void>('post', '/auth/logout');
+    const path = '/auth/logout';
+    return this.executeRequest<void>('delete', path);
+  };
+
+  getCurrentUser = async () => {
+    const path = '/users/me';
+    return this.executeRequest<{ user: CurrentUser }>('get', path);
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
@@ -53,7 +68,8 @@ class ApiClient {
   };
 
   getChannels = async () => {
-    return this.executeRequest<{ channels: Channel[] }>('get', '/channels');
+    const path = '/channels';
+    return this.executeRequest<{ channels: Channel[] }>('get', path);
   };
 
   getChannelMessages = async (
@@ -69,7 +85,9 @@ class ApiClient {
 
   getImage = (imageId: string) => {
     const path = `/images/${imageId}`;
-    return this.executeRequest<any>('get', path, { responseType: 'blob' });
+    return this.executeRequest<any>('get', path, {
+      responseType: 'blob',
+    });
   };
 
   getHealth = async () => {
@@ -82,7 +100,7 @@ class ApiClient {
     options?: { data?: any; params?: any; responseType?: any },
   ): Promise<T> {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem(LocalStorageKeys.AccessToken);
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const response: AxiosResponse<T> = await this.axiosInstance.request<T>({

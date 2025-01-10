@@ -82,13 +82,15 @@
     "actions": {
       "editProfile": "Edit profile",
       "logIn": "Log in",
+      "signIn": "Sign in",
       "logOut": "Log out",
       "resetPassword": "Reset Password",
       "sendEmail": "Send Email",
       "signUp": "Sign up"
     },
     "headers": {
-      "forgotPassword": "Forgot your password?"
+      "forgotPassword": "Forgot your password?",
+      "signIn": "Sign in to join the conversation..."
     },
     "prompts": {
       "alreadyLoggedIn": "You're already signed in.",
