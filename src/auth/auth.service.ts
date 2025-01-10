@@ -42,10 +42,10 @@ export const verifyToken = async (token: string) => {
         resolve(null);
         return;
       }
-      const { userId } = payload as { userId: string };
+      const { sub } = payload as { sub: string };
       const userRepository = dataSource.getRepository(User);
       const user = await userRepository.findOne({
-        where: { id: userId },
+        where: { id: sub },
       });
       resolve(user);
     });
@@ -53,7 +53,7 @@ export const verifyToken = async (token: string) => {
 };
 
 export const generateAccessToken = (userId: string) => {
-  const payload = { userId };
+  const payload = { sub: userId };
   return jwt.sign(payload, process.env.TOKEN_SECRET || '', {
     expiresIn: ACCESS_TOKEN_EXPIRES_IN,
   });
