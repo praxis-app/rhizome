@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import * as authService from './auth.service';
 
-export const login = async (_req: Request, res: Response) => {
-  const access_token = authService.generateAccessToken(res.locals.user.id);
+export const login = async (req: Request, res: Response) => {
+  const access_token = await authService.login(req.body);
   res.json({ access_token });
 };
 

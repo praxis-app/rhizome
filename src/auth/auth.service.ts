@@ -1,5 +1,6 @@
-import { hash } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
 import * as usersService from '../users/users.service';
@@ -17,6 +18,32 @@ export interface LoginReq {
   email: string;
   password: string;
 }
+
+const userRepository = dataSource.getRepository(User);
+
+export const login = async ({ email, password }: LoginReq) => {
+  if (!email) {
+    throw new Error('Email is required');
+  }
+  if (!password) {
+    throw new Error('Password is required');
+  }
+
+  const normalizedEmail = normalizeText(email);
+  const user = await userRepository.findOne({
+    where: { email: normalizedEmail },
+  });
+  if (!user) {
+    throw new Error('Incorrect username or password');
+  }
+
+  const passwordMatch = await compare(password, user.password!);
+  if (!passwordMatch) {
+    throw new Error('Incorrect username or password');
+  }
+
+  return generateAccessToken(user.id);
+};
 
 export const signUp = async ({ email, name, password }: SignUpReq) => {
   const passwordHash = await hash(password, SALT_ROUNDS);
@@ -43,7 +70,6 @@ export const verifyToken = async (token: string) => {
         return;
       }
       const { sub } = payload as { sub: string };
-      const userRepository = dataSource.getRepository(User);
       const user = await userRepository.findOne({
         where: { id: sub },
       });
