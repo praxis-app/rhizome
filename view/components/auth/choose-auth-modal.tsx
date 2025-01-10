@@ -3,7 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import { NavigationPaths } from '../../constants/shared.constants';
+import {
+  LocalStorageKeys,
+  NavigationPaths,
+} from '../../constants/shared.constants';
 import { useAppStore } from '../../store/app.store';
 import Modal from '../shared/modal';
 
@@ -19,7 +22,7 @@ const ChooseAuthModal = ({ isOpen, setIsOpen, sendMessage }: Props) => {
   const { mutate: createAnonSession } = useMutation({
     mutationFn: async () => {
       const { access_token } = await api.createAnonSession();
-      localStorage.setItem('access_token', access_token);
+      localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       setIsLoggedIn(true);
       sendMessage();
     },

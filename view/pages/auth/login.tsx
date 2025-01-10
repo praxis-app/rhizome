@@ -22,7 +22,10 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
-import { NavigationPaths } from '../../constants/shared.constants';
+import {
+  LocalStorageKeys,
+  NavigationPaths,
+} from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -36,7 +39,7 @@ const Login = () => {
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationFn: api.login,
     onSuccess({ access_token }) {
-      localStorage.setItem('access_token', access_token);
+      localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
       setIsLoggedIn(true);

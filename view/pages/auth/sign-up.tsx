@@ -13,15 +13,18 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
-import { NavigationPaths } from '../../constants/shared.constants';
+import {
+  LocalStorageKeys,
+  NavigationPaths,
+} from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
@@ -52,7 +55,7 @@ const SignUp = () => {
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
     mutationFn: api.signUp,
     onSuccess: ({ access_token }) => {
-      localStorage.setItem('access_token', access_token);
+      localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
       setIsLoggedIn(true);

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
@@ -99,7 +100,7 @@ class ApiClient {
     options?: { data?: any; params?: any; responseType?: any },
   ): Promise<T> {
     try {
-      const token = localStorage.getItem('access_token');
+      const token = localStorage.getItem(LocalStorageKeys.AccessToken);
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const response: AxiosResponse<T> = await this.axiosInstance.request<T>({

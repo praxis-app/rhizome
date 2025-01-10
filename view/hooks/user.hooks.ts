@@ -1,5 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { api } from '../client/api-client';
+import { LocalStorageKeys } from '../constants/shared.constants';
 import { useAppStore } from '../store/app.store';
 import { CurrentUser } from '../types/user.types';
 
@@ -16,7 +17,7 @@ export const useMeQuery = (
         setIsLoggedIn(true);
         return me;
       } catch (error) {
-        localStorage.removeItem('access_token');
+        localStorage.removeItem(LocalStorageKeys.AccessToken);
         throw error;
       } finally {
         setIsAppLoading(false);
