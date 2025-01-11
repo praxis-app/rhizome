@@ -4,9 +4,9 @@ import { dataSource } from '../../database/data-source';
 import { User } from '../../users/user.entity';
 import { normalizeText } from '../../common/common.utils';
 
-const handleLoginRateLimit = async (req: Request, res: Response) => {
-  console.log('Login rate limit exceeded');
+const TEN_MINUTES = 60 * 1000 * 10;
 
+const handleLoginRateLimit = async (req: Request, res: Response) => {
   const userRepository = dataSource.getRepository(User);
   const { email } = req.body;
 
@@ -17,14 +17,13 @@ const handleLoginRateLimit = async (req: Request, res: Response) => {
 
   if (user && !user.locked) {
     await userRepository.update(user.id, { locked: true });
-    console.log(`Locked user account: ${user.id}`);
   }
-
+  // Do not reveal if the user exists or not
   res.status(429).send('Incorrect username or password');
 };
 
 export const loginRateLimiter = rateLimit({
   handler: handleLoginRateLimit,
-  windowMs: 60 * 1000 * 10,
+  windowMs: TEN_MINUTES,
   limit: 5,
 });
