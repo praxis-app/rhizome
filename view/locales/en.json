@@ -83,10 +83,10 @@
     "actions": {
       "editProfile": "Edit profile",
       "logIn": "Log in",
-      "signIn": "Sign in",
       "logOut": "Log out",
       "resetPassword": "Reset Password",
       "sendEmail": "Send Email",
+      "signIn": "Sign in",
       "signUp": "Sign up"
     },
     "headers": {

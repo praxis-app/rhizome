@@ -2,7 +2,6 @@ import { Chat, Close, ExitToApp, PersonAdd } from '@mui/icons-material';
 import {
   Box,
   Button,
-  CircularProgress,
   Divider,
   Drawer,
   IconButton,
@@ -13,20 +12,25 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import Modal from '../shared/modal';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../client/api-client';
 
 const NavDrawer = () => {
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
 
   const { isNavDrawerOpen, setIsNavDrawerOpen, isLoggedIn, setIsLoggedIn } =
     useAppStore((state) => state);
+
+  const { data } = useMeQuery();
+  const isAnon = !!data?.user.anonymous;
+  const showSignUp = !isLoggedIn || isAnon;
 
   const queryClient = useQueryClient();
 
@@ -80,41 +84,31 @@ const NavDrawer = () => {
       <Divider />
 
       <List sx={{ paddingTop: '16px' }}>
-        <ListItemButton
-          onClick={() => {
-            navigate(NavigationPaths.Home);
-            setIsNavDrawerOpen(false);
-          }}
-        >
+        <ListItemButton onClick={() => handleNavigate(NavigationPaths.Home)}>
           <ListItemIcon>
             <Chat />
           </ListItemIcon>
           <ListItemText primary={t('navigation.chat')} />
         </ListItemButton>
 
-        {!isLoggedIn && (
-          <>
-            <ListItemButton
-              onClick={() => {
-                navigate(NavigationPaths.SignUp);
-                setIsNavDrawerOpen(false);
-              }}
-            >
-              <ListItemIcon>
-                <PersonAdd />
-              </ListItemIcon>
-              <ListItemText primary={t('users.actions.signUp')} />
-            </ListItemButton>
+        {showSignUp && (
+          <ListItemButton
+            onClick={() => handleNavigate(NavigationPaths.SignUp)}
+          >
+            <ListItemIcon>
+              <PersonAdd />
+            </ListItemIcon>
+            <ListItemText primary={t('users.actions.signUp')} />
+          </ListItemButton>
+        )}
 
-            <ListItemButton
-              onClick={() => handleNavigate(NavigationPaths.Login)}
-            >
-              <ListItemIcon>
-                <ExitToApp />
-              </ListItemIcon>
-              <ListItemText primary={t('users.actions.logIn')} />
-            </ListItemButton>
-          </>
+        {!isLoggedIn && (
+          <ListItemButton onClick={() => handleNavigate(NavigationPaths.Login)}>
+            <ListItemIcon>
+              <ExitToApp />
+            </ListItemIcon>
+            <ListItemText primary={t('users.actions.logIn')} />
+          </ListItemButton>
         )}
 
         {isLoggedIn && (
@@ -137,15 +131,7 @@ const NavDrawer = () => {
           <Button
             variant="contained"
             onClick={() => logOut()}
-            startIcon={
-              isPending && (
-                <CircularProgress
-                  size={13}
-                  color="inherit"
-                  sx={{ marginRight: 0.75 }}
-                />
-              )
-            }
+            disabled={isPending}
           >
             {t('users.actions.logOut')}
           </Button>

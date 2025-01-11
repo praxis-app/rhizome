@@ -29,7 +29,6 @@ import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
-import { UserStatus } from '../../types/user.types';
 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 const EMAIL_MAX_LENGTH = 254;
@@ -71,7 +70,9 @@ const SignUp = () => {
   const { mutate: upgradeAnon, isPending: isUpgradeAnonPending } = useMutation({
     mutationFn: api.upgradeAnonSession,
     onSuccess: () => {
+      // TODO: Determine why this isn't working
       queryClient.invalidateQueries({ queryKey: 'me' });
+
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
     },
@@ -94,7 +95,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (meData && meData.user.status !== UserStatus.ANONYMOUS) {
+    if (meData && !meData.user.anonymous) {
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
     }
@@ -171,8 +172,8 @@ const SignUp = () => {
   );
 
   const isPending = isSignUpPending || isUpgradeAnonPending;
-  const isAnon = meData && meData.user.status === UserStatus.ANONYMOUS;
-  const isSignedUp = meData && meData.user.status !== UserStatus.ANONYMOUS;
+  const isSignedUp = meData && meData.user.anonymous === false;
+  const isAnon = meData && meData.user.anonymous === true;
 
   const subheader = t(
     isAnon ? 'users.prompts.upgradeAccount' : 'users.prompts.signUpSubtext',
