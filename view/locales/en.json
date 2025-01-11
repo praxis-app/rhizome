@@ -44,8 +44,9 @@
   },
 
   "navigation": {
-    "activity": "Activity",
     "about": "About",
+    "activity": "Activity",
+    "chat": "Chat",
     "docs": "Docs",
     "events": "Events",
     "home": "Home",
