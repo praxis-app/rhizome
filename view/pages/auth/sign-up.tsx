@@ -70,9 +70,7 @@ const SignUp = () => {
   const { mutate: upgradeAnon, isPending: isUpgradeAnonPending } = useMutation({
     mutationFn: api.upgradeAnonSession,
     onSuccess: () => {
-      // TODO: Determine why this isn't working
-      queryClient.invalidateQueries({ queryKey: 'me' });
-
+      queryClient.removeQueries({ queryKey: ['me'] });
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
     },
