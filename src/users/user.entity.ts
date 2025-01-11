@@ -2,12 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ChannelMember } from '../channels/models/channel-member.entity';
 import { Message } from '../messages/message.entity';
+import { Role } from '../roles/role.entity';
 
 @Entity()
 export class User {
@@ -44,6 +46,11 @@ export class User {
     cascade: true,
   })
   channelMembers: ChannelMember[];
+
+  @ManyToMany(() => Role, (role) => role.members, {
+    onDelete: 'CASCADE',
+  })
+  roles: Role[];
 
   @CreateDateColumn()
   createdAt: Date;
