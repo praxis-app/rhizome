@@ -1,4 +1,4 @@
-import { Close, ExitToApp, PersonAdd } from '@mui/icons-material';
+import { Chat, Close, ExitToApp, PersonAdd } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -79,7 +79,19 @@ const NavDrawer = () => {
       </Box>
       <Divider />
 
-      <List>
+      <List sx={{ paddingTop: '16px' }}>
+        <ListItemButton
+          onClick={() => {
+            navigate(NavigationPaths.Home);
+            setIsNavDrawerOpen(false);
+          }}
+        >
+          <ListItemIcon>
+            <Chat />
+          </ListItemIcon>
+          <ListItemText primary={t('navigation.chat')} />
+        </ListItemButton>
+
         {!isLoggedIn && (
           <>
             <ListItemButton

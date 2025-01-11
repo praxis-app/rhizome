@@ -1,27 +1,21 @@
 import { ArrowBack, Search } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
 const TopNav = () => {
+  const { setIsNavDrawerOpen } = useAppStore((state) => state);
+
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const buttonSx: SxProps = {
     width: 38,
     height: 38,
-  };
-
-  const handleBackBtnClick = async () => {
-    if (location.key !== 'default') {
-      await navigate(-1);
-    } else {
-      await navigate('/');
-    }
   };
 
   return (
@@ -40,7 +34,7 @@ const TopNav = () => {
     >
       <Box display="flex" alignItems="center">
         <IconButton
-          onClick={handleBackBtnClick}
+          onClick={() => setIsNavDrawerOpen(true)}
           sx={{ ...buttonSx, marginRight: 0.5 }}
           edge="start"
         >

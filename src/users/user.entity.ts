@@ -36,12 +36,16 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   bio: string | null;
 
+  // TODO: Replace with dedicated boolean columns
   @Column({
     type: 'enum',
     enum: UserStatus,
     default: UserStatus.ANONYMOUS,
   })
   status: UserStatus;
+
+  @Column({ default: false })
+  locked: boolean;
 
   @OneToMany(() => Message, (message) => message.user, {
     cascade: true,
