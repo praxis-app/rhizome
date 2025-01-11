@@ -30,11 +30,14 @@ import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { LoginReq } from '../../types/auth.types';
+import { AxiosError } from 'axios';
 
 const Login = () => {
   const { isLoggedIn, setIsLoggedIn, setToast } = useAppStore((state) => state);
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { t } = useTranslation();
 
   const { mutate: login, isPending: isLoginPending } = useMutation({
     mutationFn: api.login,
@@ -44,9 +47,12 @@ const Login = () => {
       setIsRedirecting(true);
       setIsLoggedIn(true);
     },
-    onError(error: Error) {
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
       setToast({
-        title: error.message,
+        title: errorMessage,
         status: 'error',
       });
     },
@@ -55,8 +61,6 @@ const Login = () => {
   const { register, formState, handleSubmit } = useForm<LoginReq>({
     mode: 'onChange',
   });
-
-  const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
 
