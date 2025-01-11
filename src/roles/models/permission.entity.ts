@@ -6,31 +6,20 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ABILITY_ACTIONS, ABILITY_SUBJECTS } from '../role.constants';
 import { Role } from './role.entity';
-
-export enum PermissionAction {
-  CREATE = 'create',
-  READ = 'read',
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
-
-export enum PermissionSubject {
-  CHANNEL = 'channel',
-  MESSAGE = 'message',
-  ROLE = 'role',
-}
+import { AbilityAction, AbilitySubject } from './role.types';
 
 @Entity()
 export class Permission {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: PermissionAction })
-  action: PermissionAction;
+  @Column({ type: 'enum', enum: ABILITY_ACTIONS })
+  action: AbilityAction;
 
-  @Column({ type: 'enum', enum: PermissionSubject })
-  subject: PermissionSubject;
+  @Column({ type: 'enum', enum: ABILITY_SUBJECTS })
+  subject: AbilitySubject;
 
   @ManyToOne(() => Role, (role) => role.permissions, {
     onDelete: 'CASCADE',

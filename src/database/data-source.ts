@@ -4,8 +4,8 @@ import { ChannelMember } from '../channels/models/channel-member.entity';
 import { Channel } from '../channels/models/channel.entity';
 import { Image } from '../images/models/image.entity';
 import { Message } from '../messages/message.entity';
-import { Permission } from '../roles/permission.entity';
-import { Role } from '../roles/role.entity';
+import { Permission } from '../roles/models/permission.entity';
+import { Role } from '../roles/models/role.entity';
 import { User } from '../users/user.entity';
 import { AddUserTable1733010289874 } from './migrations/1733010289874-AddUserTable';
 

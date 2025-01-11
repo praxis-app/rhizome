@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { ChannelMember } from '../channels/models/channel-member.entity';
 import { Message } from '../messages/message.entity';
-import { Role } from '../roles/role.entity';
+import { Role } from '../roles/models/role.entity';
 
 @Entity()
 export class User {
