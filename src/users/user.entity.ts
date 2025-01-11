@@ -9,13 +9,6 @@ import {
 import { ChannelMember } from '../channels/models/channel-member.entity';
 import { Message } from '../messages/message.entity';
 
-export enum UserStatus {
-  ANONYMOUS = 'anonymous',
-  UNVERIFIED = 'unverified',
-  VERIFIED = 'verified',
-  BANNED = 'banned',
-}
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -36,13 +29,8 @@ export class User {
   @Column({ type: 'varchar', nullable: true })
   bio: string | null;
 
-  // TODO: Replace with dedicated boolean columns
-  @Column({
-    type: 'enum',
-    enum: UserStatus,
-    default: UserStatus.ANONYMOUS,
-  })
-  status: UserStatus;
+  @Column({ default: false })
+  anonymous: boolean;
 
   @Column({ default: false })
   locked: boolean;

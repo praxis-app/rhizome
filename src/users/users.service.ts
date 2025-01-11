@@ -4,7 +4,7 @@ import { colors, NumberDictionary, uniqueNamesGenerator } from 'unique-names-gen
 import * as channelsService from '../channels/channels.service';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
-import { User, UserStatus } from './user.entity';
+import { User } from './user.entity';
 import { NATURE_DICTIONARY, SPACE_DICTIONARY } from './users.constants';
 
 const userRepository = dataSource.getRepository(User);
@@ -29,7 +29,7 @@ export const upgradeAnonUser = async (userId: string, email: string, password: s
   // Upgrade existing anon user to a registered user
   await userRepository.update(userId, {
     ...user,
-    status: UserStatus.UNVERIFIED,
+    anonymous: false,
     email: normalizeText(email),
     password,
   });
@@ -37,8 +37,10 @@ export const upgradeAnonUser = async (userId: string, email: string, password: s
 };
 
 export const createAnonUser = async () => {
-  const name = generateName();
-  const user = await userRepository.save({ name });
+  const user = await userRepository.save({
+    name: generateName(),
+    anonymous: true,
+  });
   await channelsService.addMemberToGeneralChannel(user.id);
   return user;
 };
