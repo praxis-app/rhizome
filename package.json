@@ -28,6 +28,7 @@
     "dotenv": "^16.4.5",
     "express": "^5.0.1",
     "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
     "i18next": "^21.6.7",
     "jsonwebtoken": "^9.0.2",
     "marked": "^15.0.3",

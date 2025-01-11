@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
+import helmet from 'helmet';
 import { createServer } from 'http';
 import morgan from 'morgan';
 import { join } from 'path';
@@ -20,6 +21,18 @@ dotenv.config();
 
   await dataSource.initialize();
   await cacheService.initializeCache();
+
+  app.use(
+    helmet({
+      crossOriginEmbedderPolicy: true,
+      contentSecurityPolicy: {
+        directives: {
+          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+          'img-src': ["'self'", 'data:', 'blob:', 'https:'],
+        },
+      },
+    }),
+  );
 
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ limit: '10mb' }));
