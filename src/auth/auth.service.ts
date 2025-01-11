@@ -33,7 +33,7 @@ export const login = async ({ email, password }: LoginReq) => {
   const user = await userRepository.findOne({
     where: { email: normalizedEmail },
   });
-  if (!user) {
+  if (!user || user.locked) {
     throw new Error('Incorrect username or password');
   }
 
