@@ -5,5 +5,10 @@ type Abilities = [AbilityAction, AbilitySubject | ForcedSubject<Exclude<AbilityS
 
 type AppAbility = MongoAbility<Abilities>;
 
+// TODO: Uncomment when no longer needed
+// const testRules: RawRuleOf<AppAbility>[] = [
+//   { action: ['read', 'create'], subject: 'Channel' },
+// ];
+
 export const createAbility = (rules: RawRuleOf<AppAbility>[]) =>
   createMongoAbility<AppAbility>(rules);
