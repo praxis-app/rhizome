@@ -34,6 +34,7 @@ export enum NavigationPaths {
   Home = '/',
   Login = '/auth/login',
   SignUp = '/auth/signup',
+  Settings = '/settings',
 }
 
 export enum LocalStorageKeys {

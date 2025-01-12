@@ -7,15 +7,28 @@ import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
 const TopNav = () => {
-  const { setIsNavDrawerOpen } = useAppStore((state) => state);
+  const { navHeader, setIsNavDrawerOpen } = useAppStore((state) => state);
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
 
+  const headerSx: SxProps = {
+    color: 'white',
+    cursor: navHeader ? 'default' : 'pointer',
+    fontSize: navHeader ? '17px' : '18px',
+    fontWeight: navHeader ? 600 : 700,
+    paddingLeft: 0.5,
+  };
   const buttonSx: SxProps = {
     width: 38,
     height: 38,
+  };
+
+  const handleHeaderClick = () => {
+    if (!navHeader) {
+      navigate('/');
+    }
   };
 
   return (
@@ -41,15 +54,8 @@ const TopNav = () => {
           <ArrowBack />
         </IconButton>
 
-        <Typography
-          sx={{ color: 'white', cursor: 'pointer' }}
-          onClick={() => navigate('/')}
-          fontWeight={700}
-          fontSize="18px"
-          paddingLeft={0.5}
-          variant="h1"
-        >
-          {t('brand')}
+        <Typography variant="h1" sx={headerSx} onClick={handleHeaderClick}>
+          {navHeader || t('brand')}
         </Typography>
       </Box>
 
