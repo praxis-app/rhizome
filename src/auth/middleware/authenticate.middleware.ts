@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { verifyToken } from '../auth.service';
+import { getUserPermisions } from '../../roles/roles.service';
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
@@ -13,6 +14,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     res.status(401).send('Unauthorized');
     return;
   }
-  res.locals.user = user;
+  const permissions = await getUserPermisions(user.id);
+  res.locals.user = { ...user, permissions };
   next();
 };
