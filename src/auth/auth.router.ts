@@ -1,5 +1,11 @@
 import express from 'express';
-import { createAnonSession, login, logOut, signUp, upgradeAnonSession } from './auth.controller';
+import {
+  createAnonSession,
+  login,
+  logOut,
+  signUp,
+  upgradeAnonSession,
+} from './auth.controller';
 import { authenticate } from './middleware/authenticate.middleware';
 import { loginRateLimiter } from './middleware/login-rate-limiter.middleware';
 import { validateSignUp } from './middleware/validate-sign-up.middleware';

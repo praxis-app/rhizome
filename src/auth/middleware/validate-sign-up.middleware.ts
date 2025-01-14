@@ -14,7 +14,11 @@ const MAX_NAME_LENGTH = 15;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 64;
 
-export const validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
+export const validateSignUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { email, name, password } = req.body as SignUpReq;
 
   if (!VALID_EMAIL_REGEX.test(email)) {
@@ -38,11 +42,15 @@ export const validateSignUp = async (req: Request, res: Response, next: NextFunc
     return;
   }
   if (password.length < MIN_PASSWORD_LENGTH) {
-    res.status(400).send(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+    res
+      .status(400)
+      .send(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
     return;
   }
   if (password.length > MAX_PASSWORD_LENGTH) {
-    res.status(400).send(`Password must be at most ${MAX_PASSWORD_LENGTH} characters long`);
+    res
+      .status(400)
+      .send(`Password must be at most ${MAX_PASSWORD_LENGTH} characters long`);
     return;
   }
 

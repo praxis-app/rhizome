@@ -1,4 +1,9 @@
-import { createMongoAbility, ForcedSubject, MongoAbility, RawRuleOf } from '@casl/ability';
+import {
+  createMongoAbility,
+  ForcedSubject,
+  MongoAbility,
+  RawRuleOf,
+} from '@casl/ability';
 import { AbilityAction, AbilitySubject } from './models/role.types';
 
 export type Abilities = [
