@@ -13,7 +13,9 @@ const roleRepository = dataSource.getRepository(Role);
 //   { action: ['read', 'create'], subject: 'Channel' },
 // ];
 
-export const getUserPermisions = async (userId: string): Promise<RawRuleOf<AppAbility>[]> => {
+export const getUserPermisions = async (
+  userId: string,
+): Promise<RawRuleOf<AppAbility>[]> => {
   const roles = await roleRepository.find({
     relations: ['permissions'],
     where: {
@@ -33,10 +35,12 @@ export const getUserPermisions = async (userId: string): Promise<RawRuleOf<AppAb
     return result;
   }, {});
 
-  const permissions = Object.entries(permissionsMap).map(([subject, actions]) => ({
-    subject: subject as AbilitySubject,
-    action: actions,
-  }));
+  const permissions = Object.entries(permissionsMap).map(
+    ([subject, actions]) => ({
+      subject: subject as AbilitySubject,
+      action: actions,
+    }),
+  );
 
   return permissions;
 };

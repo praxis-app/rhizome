@@ -56,10 +56,13 @@ dotenv.config();
 
   // Handle web socket connections with pub-sub service
   webSocketServer.on('connection', (webSocket) => {
-    webSocket.on('message', (data) => pubSubService.handleMessage(webSocket, data));
+    webSocket.on('message', (data) =>
+      pubSubService.handleMessage(webSocket, data),
+    );
     webSocket.on('error', console.error);
   });
 
   server.listen(process.env.SERVER_PORT);
-  console.log(`Server running at http://localhost:${process.env.SERVER_PORT} 🚀`);
+  const url = `http://localhost:${process.env.SERVER_PORT}`;
+  console.log(`Server running at ${url} 🚀`);
 })();
