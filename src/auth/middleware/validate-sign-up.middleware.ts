@@ -14,11 +14,7 @@ const MAX_NAME_LENGTH = 15;
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 64;
 
-export const validateSignUp = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const validateSignUp = async (req: Request, res: Response, next: NextFunction) => {
   const { email, name, password } = req.body as SignUpReq;
 
   if (!VALID_EMAIL_REGEX.test(email)) {
