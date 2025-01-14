@@ -35,10 +35,12 @@ export const getUserPermisions = async (
     return result;
   }, {});
 
-  const permissions = Object.entries(permissionsMap).map(([subject, actions]) => ({
-    subject: subject as AbilitySubject,
-    action: actions,
-  }));
+  const permissions = Object.entries(permissionsMap).map(
+    ([subject, actions]) => ({
+      subject: subject as AbilitySubject,
+      action: actions,
+    }),
+  );
 
   return permissions;
 };

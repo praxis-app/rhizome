@@ -1,9 +1,16 @@
 import WebSocket from 'ws';
 import * as authService from '../auth/auth.service';
 import * as cacheService from '../cache/cache.service';
-import { PubSubRequest, PubSubResponse, WebSocketWithId } from './pub-sub.models';
+import {
+  PubSubRequest,
+  PubSubResponse,
+  WebSocketWithId,
+} from './pub-sub.models';
 
-type ChannelHandler = (message: any, publisher: WebSocketWithId) => Promise<void>;
+type ChannelHandler = (
+  message: any,
+  publisher: WebSocketWithId,
+) => Promise<void>;
 
 /** Local mapping of subscriber IDs to websockets */
 const subscribers: Record<string, WebSocketWithId> = {};
@@ -12,7 +19,10 @@ const subscribers: Record<string, WebSocketWithId> = {};
 const channelHandlers: Record<string, ChannelHandler> = {};
 
 // TODO: Determine if this is still needed
-export const registerChannelHandler = (channel: string, handler: ChannelHandler) => {
+export const registerChannelHandler = (
+  channel: string,
+  handler: ChannelHandler,
+) => {
   channelHandlers[channel] = handler;
 };
 
@@ -20,7 +30,9 @@ export const handleMessage = async (
   webSocket: WebSocketWithId,
   data: WebSocket.RawData,
 ) => {
-  const { channel, body, request, token }: PubSubRequest = JSON.parse(data.toString());
+  const { channel, body, request, token }: PubSubRequest = JSON.parse(
+    data.toString(),
+  );
 
   const user = await authService.verifyToken(token);
   if (!user) {
@@ -80,7 +92,11 @@ export const publish = async (
   }
 };
 
-const subscribe = async (channel: string, token: string, subscriber: WebSocketWithId) => {
+const subscribe = async (
+  channel: string,
+  token: string,
+  subscriber: WebSocketWithId,
+) => {
   subscriber.id = token;
 
   // Add subscriber to Redis set and local map

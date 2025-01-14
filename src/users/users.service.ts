@@ -1,6 +1,10 @@
 // TODO: Add support for user updates with validation
 
-import { colors, NumberDictionary, uniqueNamesGenerator } from 'unique-names-generator';
+import {
+  colors,
+  NumberDictionary,
+  uniqueNamesGenerator,
+} from 'unique-names-generator';
 import * as channelsService from '../channels/channels.service';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
@@ -55,7 +59,8 @@ export const createAnonUser = async () => {
 
 const generateName = () => {
   const numberDictionary = NumberDictionary.generate({ min: 10, max: 99 });
-  const nounDictionary = Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
+  const nounDictionary =
+    Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
 
   const name = uniqueNamesGenerator({
     dictionaries: [colors, nounDictionary, numberDictionary],
