@@ -63,7 +63,6 @@ dotenv.config();
   });
 
   server.listen(process.env.SERVER_PORT);
-  console.log(
-    `Server running at http://localhost:${process.env.SERVER_PORT} 🚀`,
-  );
+  const url = `http://localhost:${process.env.SERVER_PORT}`;
+  console.log(`Server running at ${url} 🚀`);
 })();
