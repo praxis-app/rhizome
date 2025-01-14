@@ -1,5 +1,6 @@
 import { ArrowBack, Search } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
@@ -8,9 +9,11 @@ import { GRAY } from '../../styles/theme';
 
 interface Props {
   header?: string;
+  onBackClick?: () => void;
+  backBtnIcon?: ReactNode;
 }
 
-const TopNav = ({ header }: Props) => {
+const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
 
   const { t } = useTranslation();
@@ -35,6 +38,15 @@ const TopNav = ({ header }: Props) => {
     }
   };
 
+  const handleBackClick = () => {
+    if (onBackClick) {
+      onBackClick();
+      return;
+    }
+    // Show nav drawer as default behavior
+    setIsNavDrawerOpen(true);
+  };
+
   return (
     <Box
       display="flex"
@@ -52,11 +64,11 @@ const TopNav = ({ header }: Props) => {
     >
       <Box display="flex" alignItems="center">
         <IconButton
-          onClick={() => setIsNavDrawerOpen(true)}
+          onClick={handleBackClick}
           sx={{ ...buttonSx, marginRight: 0.5 }}
           edge="start"
         >
-          <ArrowBack />
+          {backBtnIcon || <ArrowBack />}
         </IconButton>
 
         <Typography variant="h1" sx={headerSx} onClick={handleHeaderClick}>

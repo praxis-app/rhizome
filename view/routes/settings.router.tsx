@@ -1,5 +1,5 @@
 import { RouteObject } from 'react-router-dom';
-import RolesPage from '../pages/settings/roles-page';
+import ServerRoles from '../pages/settings/server-roles';
 import ServerSettings from '../pages/settings/server-settings';
 
 export const settingsRouter: RouteObject = {
@@ -11,7 +11,7 @@ export const settingsRouter: RouteObject = {
     },
     {
       path: 'roles',
-      element: <RolesPage />,
+      element: <ServerRoles />,
     },
   ],
 };
