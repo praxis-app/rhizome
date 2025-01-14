@@ -42,15 +42,13 @@ export const validateSignUp = async (
     return;
   }
   if (password.length < MIN_PASSWORD_LENGTH) {
-    res
-      .status(400)
-      .send(`Password must be at least ${MIN_PASSWORD_LENGTH} characters long`);
+    const message = `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`;
+    res.status(400).send(message);
     return;
   }
   if (password.length > MAX_PASSWORD_LENGTH) {
-    res
-      .status(400)
-      .send(`Password must be at most ${MAX_PASSWORD_LENGTH} characters long`);
+    const message = `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`;
+    res.status(400).send(message);
     return;
   }
 

@@ -20,9 +20,8 @@ export const validateMessage = (
     return;
   }
   if (message.imageCount < 0 || message.imageCount > MESSAGE_IMAGE_COUNT_MAX) {
-    res
-      .status(400)
-      .send(`Image count must be between 0 and ${MESSAGE_IMAGE_COUNT_MAX}`);
+    const message = `Image count must be between 0 and ${MESSAGE_IMAGE_COUNT_MAX}`;
+    res.status(400).send(message);
     return;
   }
   if (message.body && typeof message.body !== 'string') {
@@ -31,9 +30,8 @@ export const validateMessage = (
   }
   const sanitizedBody = sanitizeText(message.body);
   if (message.body && sanitizedBody.length > MESSAGE_BODY_MAX) {
-    res
-      .status(400)
-      .send(`Message body cannot exceed ${MESSAGE_BODY_MAX} characters`);
+    const message = `Message body cannot exceed ${MESSAGE_BODY_MAX} characters`;
+    res.status(400).send(message);
     return;
   }
   if (!sanitizedBody && !message.imageCount) {
