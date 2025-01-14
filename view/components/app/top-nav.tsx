@@ -6,8 +6,12 @@ import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
-const TopNav = () => {
-  const { navHeader, setIsNavDrawerOpen } = useAppStore((state) => state);
+interface Props {
+  header?: string;
+}
+
+const TopNav = ({ header }: Props) => {
+  const { setIsNavDrawerOpen } = useAppStore((state) => state);
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
@@ -15,9 +19,9 @@ const TopNav = () => {
 
   const headerSx: SxProps = {
     color: 'white',
-    cursor: navHeader ? 'default' : 'pointer',
-    fontSize: navHeader ? '17px' : '18px',
-    fontWeight: navHeader ? 600 : 700,
+    cursor: header ? 'default' : 'pointer',
+    fontSize: header ? '17px' : '18px',
+    fontWeight: header ? 600 : 700,
     paddingLeft: 0.5,
   };
   const buttonSx: SxProps = {
@@ -26,7 +30,7 @@ const TopNav = () => {
   };
 
   const handleHeaderClick = () => {
-    if (!navHeader) {
+    if (!header) {
       navigate('/');
     }
   };
@@ -41,7 +45,8 @@ const TopNav = () => {
       paddingRight={2.4}
       paddingLeft={2.5}
       height="55px"
-      position="sticky"
+      position="fixed"
+      width="100%"
       top={0}
       left={0}
     >
@@ -55,7 +60,7 @@ const TopNav = () => {
         </IconButton>
 
         <Typography variant="h1" sx={headerSx} onClick={handleHeaderClick}>
-          {navHeader || t('brand')}
+          {header || t('brand')}
         </Typography>
       </Box>
 

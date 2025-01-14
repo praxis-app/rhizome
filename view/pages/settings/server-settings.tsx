@@ -1,26 +1,18 @@
 import { AdminPanelSettings, ChevronRight } from '@mui/icons-material';
 import { Box } from '@mui/material';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '../../store/app.store';
+import TopNav from '../../components/app/top-nav';
 import { NavigationPaths } from '../../constants/shared.constants';
 
 const ServerSettings = () => {
-  const { setNavHeader } = useAppStore((state) => state);
-
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setNavHeader(t('navigation.serverSettings'));
-    return () => {
-      setNavHeader(null);
-    };
-  }, [setNavHeader, t]);
-
   return (
     <>
+      <TopNav header={t('navigation.serverSettings')} />
+
       <Box
         onClick={() => navigate(NavigationPaths.Roles)}
         sx={{ cursor: 'pointer', userSelect: 'none' }}

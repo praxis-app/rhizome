@@ -5,18 +5,15 @@ interface AppState {
   isLoggedIn: boolean;
   isAppLoading: boolean;
   isNavDrawerOpen: boolean;
-  navHeader: string | null;
   toast: ToastNotification | null;
   setIsLoggedIn(isLoggedIn: boolean): void;
   setIsAppLoading(isAppLoading: boolean): void;
   setToast(toast: ToastNotification | null): void;
   setIsNavDrawerOpen(isNavDrawerOpen: boolean): void;
-  setNavHeader(navHeader: string | null): void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
   toast: null,
-  navHeader: null,
   isLoggedIn: false,
   isAppLoading: true,
   isNavDrawerOpen: false,
@@ -29,9 +26,6 @@ export const useAppStore = create<AppState>((set) => ({
   },
   setIsLoggedIn(isLoggedIn) {
     set({ isLoggedIn });
-  },
-  setNavHeader(navHeader) {
-    set({ navHeader });
   },
   setToast(toast) {
     set({ toast });
