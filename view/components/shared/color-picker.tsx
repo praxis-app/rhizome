@@ -16,7 +16,7 @@ const COLOR_OPTIONS = [
   '#9e2757',
   '#eac545',
   '#d8833b',
-  '#d85846',
+  '#f44336',
   '#99a6a3',
   '#657c8a',
   '#bc7f2f',
@@ -49,7 +49,7 @@ const ColorPicker = ({ label, color, onChange, sx }: Props) => {
         display="flex"
         justifyContent="space-between"
         onClick={() => setOpen(!open)}
-        sx={{ cursor: 'pointer', marginBottom: 0.25 }}
+        sx={{ cursor: 'pointer', marginBottom: 0.25, userSelect: 'none' }}
       >
         <Typography color="text.secondary" fontWeight={500}>
           {label}
