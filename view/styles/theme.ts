@@ -80,7 +80,7 @@ export const theme = createTheme({
 
           // Tablet
           [theme.breakpoints.up('sm')]: {
-            paddingTop: 115,
+            paddingTop: 102.5,
           },
 
           // Desktop
