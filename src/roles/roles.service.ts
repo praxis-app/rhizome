@@ -6,7 +6,22 @@ import { AbilityAction, AbilitySubject } from './models/role.types';
 
 type PermissionsMap = Record<string, AbilityAction[]>;
 
+interface CreateRoleReq {
+  name: string;
+  color: string;
+}
+
 const roleRepository = dataSource.getRepository(Role);
+
+export const getRoles = async () => {
+  return roleRepository.find({
+    order: { updatedAt: 'DESC' },
+  });
+};
+
+export const createRole = async ({ name, color }: CreateRoleReq) => {
+  return roleRepository.save({ name, color });
+};
 
 // TODO: Uncomment when no longer needed
 // const testRules: RawRuleOf<AppAbility>[] = [
