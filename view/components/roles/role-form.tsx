@@ -24,20 +24,20 @@ const CardContent = styled(MuiCardContent)(() => ({
   },
 }));
 
-// TODO: Move color into the form state
-
 const RoleForm = () => {
-  const [color, setColor] = useState(ROLE_COLOR_OPTIONS[12]);
   const [colorPickerKey] = useState('');
-
-  const { handleSubmit, register } = useForm<CreateRoleReq>({
-    mode: 'onChange',
-  });
 
   const { mutate: createRole, isPending } = useMutation({
     mutationFn: async (data: CreateRoleReq) => {
       api.createRole(data);
     },
+  });
+
+  const { handleSubmit, register, setValue, watch } = useForm<CreateRoleReq>({
+    defaultValues: {
+      color: ROLE_COLOR_OPTIONS[12],
+    },
+    mode: 'onChange',
   });
 
   const { t } = useTranslation();
@@ -55,10 +55,10 @@ const RoleForm = () => {
             </FormControl>
 
             <ColorPicker
-              color={color}
+              color={watch('color')}
               key={colorPickerKey}
               label={t('roles.form.colorPickerLabel')}
-              onChange={(color: string) => setColor(color)}
+              onChange={(color) => setValue('color', color)}
               sx={{ marginBottom: 1.25 }}
             />
           </FormGroup>
