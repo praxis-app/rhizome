@@ -2,6 +2,7 @@ import { ArrowForwardIos } from '@mui/icons-material';
 import { Box, SxProps, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 
 const COLOR_OPTIONS = [
   '#59b99d',
@@ -33,7 +34,9 @@ interface Props {
 
 const ColorPicker = ({ label, color, onChange, sx }: Props) => {
   const [open, setOpen] = useState(false);
+
   const { t } = useTranslation();
+  const isAboveSm = useAboveBreakpoint('sm');
 
   const colorBoxSx: SxProps = {
     backgroundColor: color,
@@ -77,15 +80,27 @@ const ColorPicker = ({ label, color, onChange, sx }: Props) => {
           </Typography>
 
           <Box display="flex" gap="16px" flexWrap="wrap" width="250px">
-            {COLOR_OPTIONS.map((color) => (
+            {COLOR_OPTIONS.map((colorOption) => (
               <Box
-                key={color}
-                bgcolor={color}
+                key={colorOption}
+                bgcolor={colorOption}
                 width="28px"
                 height="28px"
                 borderRadius="60px"
-                sx={{ cursor: 'pointer' }}
-                onClick={() => onChange(color)}
+                boxShadow={
+                  colorOption === color
+                    ? `${colorOption} 0px 0px 0px 15px inset, ${colorOption} 0px 0px 5px`
+                    : 'none'
+                }
+                sx={{
+                  cursor: 'pointer',
+                  transition: 'transform 200ms cubic-bezier(.4,0,.2,1)',
+
+                  '&:hover': {
+                    transform: isAboveSm ? 'scale(1.2)' : 'none',
+                  },
+                }}
+                onClick={() => onChange(colorOption)}
               />
             ))}
           </Box>
