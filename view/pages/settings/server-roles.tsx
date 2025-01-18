@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import TopNav from '../../components/app/top-nav';
 import { useNavigate } from 'react-router-dom';
+import TopNav from '../../components/app/top-nav';
+import RoleForm from '../../components/roles/role-form';
 
 const ServerRoles = () => {
   const { t } = useTranslation();
@@ -9,9 +10,11 @@ const ServerRoles = () => {
   return (
     <>
       <TopNav
-        header={t('navigation.serverSettings')}
+        header={t('roles.headers.serverRoles')}
         onBackClick={() => navigate('/settings')}
       />
+
+      <RoleForm />
     </>
   );
 };
