@@ -46,6 +46,23 @@ const ColorPicker = ({ label, color, onChange, sx }: Props) => {
     width: 24,
   };
 
+  const colorOptionSx = (colorOption: string): SxProps => ({
+    backgroundColor: colorOption,
+    width: 28,
+    height: 28,
+    borderRadius: 60,
+    cursor: 'pointer',
+    transition: 'transform 200ms cubic-bezier(.4,0,.2,1)',
+    boxShadow:
+      colorOption === color
+        ? `${colorOption} 0px 0px 0px 15px inset, ${colorOption} 0px 0px 5px`
+        : 'none',
+
+    '&:hover': {
+      transform: isAboveSm ? 'scale(1.2)' : 'none',
+    },
+  });
+
   return (
     <Box sx={sx}>
       <Box
@@ -83,23 +100,7 @@ const ColorPicker = ({ label, color, onChange, sx }: Props) => {
             {COLOR_OPTIONS.map((colorOption) => (
               <Box
                 key={colorOption}
-                bgcolor={colorOption}
-                width="28px"
-                height="28px"
-                borderRadius="60px"
-                boxShadow={
-                  colorOption === color
-                    ? `${colorOption} 0px 0px 0px 15px inset, ${colorOption} 0px 0px 5px`
-                    : 'none'
-                }
-                sx={{
-                  cursor: 'pointer',
-                  transition: 'transform 200ms cubic-bezier(.4,0,.2,1)',
-
-                  '&:hover': {
-                    transform: isAboveSm ? 'scale(1.2)' : 'none',
-                  },
-                }}
+                sx={colorOptionSx(colorOption)}
                 onClick={() => onChange(colorOption)}
               />
             ))}
