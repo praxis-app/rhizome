@@ -3,6 +3,7 @@ import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
+import { CreateRoleReq, Role } from '../types/role.types';
 import { CurrentUser } from '../types/user.types';
 
 class ApiClient {
@@ -46,6 +47,18 @@ class ApiClient {
   getCurrentUser = async () => {
     const path = '/users/me';
     return this.executeRequest<{ user: CurrentUser }>('get', path);
+  };
+
+  getRoles = async () => {
+    const path = '/roles';
+    return this.executeRequest<{ roles: Role[] }>('get', path);
+  };
+
+  createRole = async (data: CreateRoleReq) => {
+    const path = '/roles';
+    return this.executeRequest<{ role: Role }>('post', path, {
+      data,
+    });
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
