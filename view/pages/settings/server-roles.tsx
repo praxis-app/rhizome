@@ -14,6 +14,10 @@ import RoleForm from '../../components/roles/role-form';
 import ProgressBar from '../../components/shared/progress-bar';
 
 const CardContent = styled(MuiCardContent)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 4,
+
   padding: 10,
   '&:last-child': {
     paddingBottom: 10,

@@ -8,13 +8,13 @@ import {
   OutlinedInput,
   styled,
 } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
 import { ROLE_COLOR_OPTIONS } from '../../constants/role.constants';
-import { CreateRoleReq } from '../../types/role.types';
+import { CreateRoleReq, Role } from '../../types/role.types';
 import ColorPicker from '../shared/color-picker';
 import PrimaryButton from '../shared/primary-button';
 
@@ -25,19 +25,32 @@ const CardContent = styled(MuiCardContent)(() => ({
 }));
 
 const RoleForm = () => {
-  const [colorPickerKey] = useState('');
+  const [colorPickerKey, setColorPickerKey] = useState(0);
 
+  const { handleSubmit, register, setValue, watch, reset } =
+    useForm<CreateRoleReq>({
+      defaultValues: {
+        color: ROLE_COLOR_OPTIONS[12],
+      },
+      mode: 'onChange',
+    });
+
+  const queryClient = useQueryClient();
   const { mutate: createRole, isPending } = useMutation({
     mutationFn: async (data: CreateRoleReq) => {
-      api.createRole(data);
-    },
-  });
+      const { role } = await api.createRole(data);
 
-  const { handleSubmit, register, setValue, watch } = useForm<CreateRoleReq>({
-    defaultValues: {
-      color: ROLE_COLOR_OPTIONS[12],
+      queryClient.setQueryData<{ roles: Role[] }>(['roles'], (oldData) => {
+        if (!oldData) {
+          return { roles: [] };
+        }
+        return { roles: [role, ...oldData.roles] };
+      });
     },
-    mode: 'onChange',
+    onSuccess: () => {
+      setColorPickerKey(Date.now());
+      reset();
+    },
   });
 
   const { t } = useTranslation();

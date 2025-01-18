@@ -12,11 +12,10 @@ import { Role as RoleType } from '../../types/role.types';
 import { Link } from '../shared/link';
 
 interface Props {
-  gutterBottom?: boolean;
   role: RoleType;
 }
 
-const Role = ({ role: { color, name }, gutterBottom }: Props) => {
+const Role = ({ role: { color, name } }: Props) => {
   const { t } = useTranslation();
 
   const theme = useTheme();
@@ -41,10 +40,7 @@ const Role = ({ role: { color, name }, gutterBottom }: Props) => {
   };
 
   return (
-    <Link
-      to={'/'}
-      sx={{ display: 'block', marginBottom: gutterBottom ? 0.5 : 0 }}
-    >
+    <Link to={'/'}>
       <CardActionArea sx={actionAreaStyles}>
         <Box display="flex" justifyContent="space-between">
           <Box display="flex">

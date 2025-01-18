@@ -7,6 +7,6 @@ export const getRoles = async (_req: Request, res: Response) => {
 };
 
 export const createRole = async (req: Request, res: Response) => {
-  const payload = await rolesService.createRole(req.body);
-  res.json(payload);
+  const role = await rolesService.createRole(req.body);
+  res.json({ role });
 };
