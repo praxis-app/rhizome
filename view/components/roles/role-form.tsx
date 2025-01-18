@@ -13,11 +13,10 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
+import { ROLE_COLOR_OPTIONS } from '../../constants/role.constants';
 import { CreateRoleReq } from '../../types/role.types';
 import ColorPicker from '../shared/color-picker';
 import PrimaryButton from '../shared/primary-button';
-
-export const DEFAULT_ROLE_COLOR = '#f44336';
 
 const CardContent = styled(MuiCardContent)(() => ({
   '&:last-child': {
@@ -28,7 +27,7 @@ const CardContent = styled(MuiCardContent)(() => ({
 // TODO: Move color into the form state
 
 const RoleForm = () => {
-  const [color, setColor] = useState(DEFAULT_ROLE_COLOR);
+  const [color, setColor] = useState(ROLE_COLOR_OPTIONS[12]);
   const [colorPickerKey] = useState('');
 
   const { handleSubmit, register } = useForm<CreateRoleReq>({
