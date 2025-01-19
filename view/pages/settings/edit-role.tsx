@@ -1,14 +1,25 @@
-import { Typography } from '@mui/material';
+import { Card, Tab, Tabs, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import TopNav from '../../components/app/top-nav';
+import RoleForm from '../../components/roles/role-form';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
-import RoleForm from '../../components/roles/role-form';
+import { useAboveBreakpoint } from '../../hooks/shared.hooks';
+
+export enum EditRoleTabName {
+  Permissions = 'permissions',
+  Members = 'members',
+}
 
 const EditRole = () => {
+  const [tab, setTab] = useState(0);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isAboveSmall = useAboveBreakpoint('sm');
   const { roleId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -18,6 +29,35 @@ const EditRole = () => {
     queryFn: () => api.getRole(roleId!),
     enabled: !!roleId,
   });
+
+  const tabParam = searchParams.get('tab');
+
+  useEffect(() => {
+    if (tabParam === EditRoleTabName.Permissions) {
+      setTab(1);
+      return;
+    }
+    if (tabParam === EditRoleTabName.Members) {
+      setTab(2);
+      return;
+    }
+    setTab(0);
+  }, [tabParam, setTab]);
+
+  const handleTabChange = (
+    _: SyntheticEvent<Element, Event>,
+    value: number,
+  ) => {
+    if (value === 1) {
+      setSearchParams({ tab: EditRoleTabName.Permissions });
+      return;
+    }
+    if (value === 2) {
+      setSearchParams({ tab: EditRoleTabName.Members });
+      return;
+    }
+    setSearchParams({});
+  };
 
   if (isPending) {
     return <ProgressBar />;
@@ -34,7 +74,20 @@ const EditRole = () => {
         onBackClick={() => navigate(NavigationPaths.Roles)}
       />
 
-      <RoleForm editRole={data.role} />
+      <Card sx={{ marginBottom: 6 }}>
+        <Tabs
+          onChange={handleTabChange}
+          value={tab}
+          variant={isAboveSmall ? 'standard' : 'fullWidth'}
+          centered
+        >
+          <Tab label={t('roles.tabs.display')} />
+          <Tab label={t('roles.tabs.permissions')} />
+          <Tab label={t('roles.tabs.members')} />
+        </Tabs>
+      </Card>
+
+      {tab === 0 && <RoleForm editRole={data.role} />}
     </>
   );
 };
