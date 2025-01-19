@@ -89,6 +89,9 @@ export const updateRolePermissions = async (
     throw new Error('Role not found');
   }
 
+  // Ensure that the permissions are unique
+  // Remove any existing permissions that are not in the new permissions
+
   // TODO: Remove when no longer needed
   console.log('permissions', permissions);
 };
