@@ -1,14 +1,19 @@
-import { Box, Switch, Typography } from '@mui/material';
+import { Box, Switch, SwitchProps, Typography } from '@mui/material';
 import { t } from 'i18next';
 import { PermissionName } from '../../types/role.types';
 import { getPermissionText } from '../../utils/role.utils';
 
 interface Props {
   permissionName: PermissionName;
+  switchProps: SwitchProps;
   isEnabled: boolean;
 }
 
-const PermissionToggle = ({ permissionName, isEnabled }: Props) => {
+const PermissionToggle = ({
+  permissionName,
+  isEnabled,
+  switchProps,
+}: Props) => {
   const { displayName, description } = getPermissionText(permissionName);
 
   return (
@@ -24,6 +29,7 @@ const PermissionToggle = ({ permissionName, isEnabled }: Props) => {
       <Switch
         inputProps={{ 'aria-label': displayName || t('labels.switch') }}
         checked={isEnabled}
+        {...switchProps}
       />
     </Box>
   );
