@@ -24,13 +24,18 @@ const CardContent = styled(MuiCardContent)(() => ({
   },
 }));
 
-const RoleForm = () => {
+interface Props {
+  editRole?: Role;
+}
+
+const RoleForm = ({ editRole }: Props) => {
   const [colorPickerKey, setColorPickerKey] = useState(0);
 
-  const { handleSubmit, register, setValue, watch, reset } =
+  const { handleSubmit, register, setValue, watch, reset, formState } =
     useForm<CreateRoleReq>({
       defaultValues: {
-        color: ROLE_COLOR_OPTIONS[12],
+        color: editRole?.color || ROLE_COLOR_OPTIONS[12],
+        name: editRole?.name || '',
       },
       mode: 'onChange',
     });
@@ -55,6 +60,23 @@ const RoleForm = () => {
 
   const { t } = useTranslation();
 
+  const unsavedColorChange = () => {
+    if (!editRole) {
+      return false;
+    }
+    return editRole.color !== watch('color');
+  };
+
+  const isSubmitButtonDisabled = () => {
+    if (isPending) {
+      return true;
+    }
+    if (unsavedColorChange()) {
+      return false;
+    }
+    return !formState.isDirty;
+  };
+
   return (
     <Card>
       <CardContent>
@@ -78,11 +100,11 @@ const RoleForm = () => {
 
           <Box display="flex" justifyContent="end">
             <PrimaryButton
+              disabled={isSubmitButtonDisabled()}
               sx={{ marginTop: 1.5 }}
               type="submit"
-              disabled={isPending}
             >
-              {t('actions.create')}
+              {editRole ? t('actions.save') : t('actions.create')}
             </PrimaryButton>
           </Box>
         </form>

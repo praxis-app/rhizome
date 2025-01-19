@@ -6,6 +6,7 @@ import { api } from '../../client/api-client';
 import TopNav from '../../components/app/top-nav';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
+import RoleForm from '../../components/roles/role-form';
 
 const EditRole = () => {
   const { id } = useParams();
@@ -32,6 +33,8 @@ const EditRole = () => {
         header={data.role.name}
         onBackClick={() => navigate(NavigationPaths.Roles)}
       />
+
+      <RoleForm editRole={data.role} />
     </>
   );
 };
