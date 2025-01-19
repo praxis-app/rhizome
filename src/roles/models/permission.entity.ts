@@ -6,9 +6,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ABILITY_ACTIONS, ABILITY_SUBJECTS } from '../role.constants';
 import { Role } from './role.entity';
-import { AbilityAction, AbilitySubject } from './role.types';
+import {
+  ABILITY_ACTIONS,
+  ABILITY_SUBJECTS,
+  AbilityAction,
+  AbilitySubject,
+} from '../app-ability';
 
 @Entity()
 export class Permission {

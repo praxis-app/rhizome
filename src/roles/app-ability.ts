@@ -4,7 +4,12 @@ import {
   MongoAbility,
   RawRuleOf,
 } from '@casl/ability';
-import { AbilityAction, AbilitySubject } from './models/role.types';
+
+export const ABILITY_ACTIONS = ['create', 'read', 'update', 'delete'] as const;
+export const ABILITY_SUBJECTS = ['Channel', 'Message', 'Role', 'all'] as const;
+
+export type AbilityAction = (typeof ABILITY_ACTIONS)[number];
+export type AbilitySubject = (typeof ABILITY_SUBJECTS)[number];
 
 export type Abilities = [
   AbilityAction,

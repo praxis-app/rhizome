@@ -1,8 +1,7 @@
 import { RawRuleOf } from '@casl/ability';
 import { dataSource } from '../database/data-source';
-import { AppAbility } from './create-ability.util';
+import { AbilityAction, AbilitySubject, AppAbility } from './app-ability';
 import { Role } from './models/role.entity';
-import { AbilityAction, AbilitySubject } from './models/role.types';
 
 // TODO: Uncomment when no longer needed
 // const testRules: RawRuleOf<AppAbility>[] = [
