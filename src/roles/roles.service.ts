@@ -16,6 +16,10 @@ interface CreateRoleReq {
   color: string;
 }
 
+interface UpdateRolePermissionsReq {
+  permissions: PermissionsMap;
+}
+
 const roleRepository = dataSource.getRepository(Role);
 
 export const getRole = async (id: string) => {
@@ -72,6 +76,22 @@ export const updateRole = async (
   { name, color }: CreateRoleReq,
 ) => {
   return roleRepository.update(id, { name, color });
+};
+
+export const updateRolePermissions = async (
+  id: string,
+  { permissions }: UpdateRolePermissionsReq,
+) => {
+  const role = await roleRepository.findOne({
+    where: { id },
+    relations: ['permissions'],
+  });
+  if (!role) {
+    throw new Error('Role not found');
+  }
+
+  // TODO: Uncomment when no longer needed
+  console.log('permissions', permissions);
 };
 
 export const deleteRole = async (id: string) => {
