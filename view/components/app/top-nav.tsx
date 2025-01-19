@@ -59,6 +59,7 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
       height="55px"
       position="fixed"
       width="100%"
+      zIndex={1}
       top={0}
       left={0}
     >

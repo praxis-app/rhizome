@@ -1,5 +1,5 @@
 import { RouteObject } from 'react-router-dom';
-import EditRole from '../pages/settings/edit-role';
+import EditRolePage from '../pages/settings/edit-role-page';
 import ServerRoles from '../pages/settings/server-roles';
 import ServerSettings from '../pages/settings/server-settings';
 
@@ -19,7 +19,7 @@ export const settingsRouter: RouteObject = {
         },
         {
           path: ':roleId/edit',
-          element: <EditRole />,
+          element: <EditRolePage />,
         },
       ],
     },

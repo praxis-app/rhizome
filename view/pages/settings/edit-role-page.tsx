@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import TopNav from '../../components/app/top-nav';
+import PermissionsForm from '../../components/roles/permissions-form';
 import RoleForm from '../../components/roles/role-form';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
@@ -15,7 +16,7 @@ export enum EditRoleTabName {
   Members = 'members',
 }
 
-const EditRole = () => {
+const EditRolePage = () => {
   const [tab, setTab] = useState(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -88,8 +89,10 @@ const EditRole = () => {
       </Card>
 
       {tab === 0 && <RoleForm editRole={data.role} />}
+
+      {tab === 1 && <PermissionsForm />}
     </>
   );
 };
 
-export default EditRole;
+export default EditRolePage;

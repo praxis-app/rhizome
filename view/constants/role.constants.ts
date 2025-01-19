@@ -21,15 +21,7 @@ export const ROLE_COLOR_OPTIONS = [
 
 export const PERMISSION_NAMES = [
   'manageSettings',
-  'createEvents',
   'createInvites',
-  'manageEvents',
   'manageInvites',
-  'managePosts',
   'manageRoles',
-  'removeMembers',
-  'removeProposals',
-  'manageRules',
-  'manageQuestions',
-  'manageQuestionnaireTickets',
 ] as const;
