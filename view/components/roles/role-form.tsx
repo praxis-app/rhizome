@@ -31,6 +31,9 @@ interface Props {
 const RoleForm = ({ editRole }: Props) => {
   const [colorPickerKey, setColorPickerKey] = useState(0);
 
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+
   const { handleSubmit, register, setValue, watch, reset, formState } =
     useForm<CreateRoleReq>({
       defaultValues: {
@@ -40,8 +43,7 @@ const RoleForm = ({ editRole }: Props) => {
       mode: 'onChange',
     });
 
-  const queryClient = useQueryClient();
-  const { mutate: createRole, isPending } = useMutation({
+  const { mutate: createRole, isPending: isCreatePending } = useMutation({
     mutationFn: async (data: CreateRoleReq) => {
       const { role } = await api.createRole(data);
 
@@ -58,7 +60,43 @@ const RoleForm = ({ editRole }: Props) => {
     },
   });
 
-  const { t } = useTranslation();
+  const { mutate: updateRole, isPending: isUpdatePending } = useMutation({
+    mutationFn: async (data: CreateRoleReq) => {
+      if (!editRole) {
+        return;
+      }
+      await api.updateRole(editRole.id, data);
+
+      const role = { ...editRole, ...data };
+      queryClient.setQueryData<{ role: Role }>(['role', editRole.id], {
+        role,
+      });
+      queryClient.setQueryData<{ roles: Role[] }>(['roles'], (oldData) => {
+        if (!oldData) {
+          return { roles: [] };
+        }
+        return {
+          roles: oldData.roles.map((r) => {
+            return r.id === role.id ? role : r;
+          }),
+        };
+      });
+
+      return role;
+    },
+    onSuccess: (data) => {
+      setColorPickerKey(Date.now());
+      reset(data);
+    },
+  });
+
+  const handleSubmitForm = (data: CreateRoleReq) => {
+    if (editRole) {
+      updateRole(data);
+    } else {
+      createRole(data);
+    }
+  };
 
   const unsavedColorChange = () => {
     if (!editRole) {
@@ -68,7 +106,7 @@ const RoleForm = ({ editRole }: Props) => {
   };
 
   const isSubmitButtonDisabled = () => {
-    if (isPending) {
+    if (isCreatePending || isUpdatePending) {
       return true;
     }
     if (unsavedColorChange()) {
@@ -80,7 +118,7 @@ const RoleForm = ({ editRole }: Props) => {
   return (
     <Card>
       <CardContent>
-        <form onSubmit={handleSubmit((fv) => createRole(fv))}>
+        <form onSubmit={handleSubmit((fv) => handleSubmitForm(fv))}>
           <FormGroup>
             <FormControl sx={{ paddingBottom: 1.8 }}>
               <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
