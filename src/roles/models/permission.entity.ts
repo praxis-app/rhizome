@@ -4,17 +4,19 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { Role } from './role.entity';
 import {
   ABILITY_ACTIONS,
   ABILITY_SUBJECTS,
   AbilityAction,
   AbilitySubject,
 } from '../app-ability';
+import { Role } from './role.entity';
 
 @Entity()
+@Unique(['roleId', 'action', 'subject'])
 export class Permission {
   @PrimaryGeneratedColumn()
   id: number;
