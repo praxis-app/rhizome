@@ -90,7 +90,7 @@ export const updateRolePermissions = async (
     throw new Error('Role not found');
   }
 
-  // TODO: Uncomment when no longer needed
+  // TODO: Remove when no longer needed
   console.log('permissions', permissions);
 };
 
