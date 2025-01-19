@@ -1,6 +1,10 @@
+import { PERMISSION_NAMES } from '../constants/role.constants';
+
 export type AbilityAction = 'delete' | 'create' | 'read' | 'update';
 
 export type PermissionsMap = Record<string, AbilityAction[]>;
+
+export type PermissionName = (typeof PERMISSION_NAMES)[number];
 
 export interface Role {
   id: string;

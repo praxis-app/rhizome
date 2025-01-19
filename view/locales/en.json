@@ -209,5 +209,51 @@
       "members": "Members",
       "permissions": "Permissions"
     }
+  },
+
+  "permissions": {
+    "names": {
+      "createEvents": "Create Events",
+      "createInvites": "Create Invites",
+      "manageEvents": "Manage Events",
+      "manageInvites": "Manage Invites",
+      "managePosts": "Manage Posts",
+      "manageQuestionnaires": "Manage Questionnaires",
+      "manageQuestions": "Manage Questions",
+      "manageRoles": "Manage Roles",
+      "manageRules": "Manage Rules",
+      "manageSettings": "Manage Settings",
+      "removeMembers": "Remove Members",
+      "removeProposals": "Remove Proposals"
+    },
+    "descriptions": {
+      "createEvents": "Allows members to create and plan events.",
+      "createInvites": "Allows members to invite new people to the server.",
+      "manageComments": "Allows members to remove or hide comments by other members.",
+      "manageEvents": "Allows members to remove or edit events created by other members.",
+      "manageInvites": "Allows members to create or delete invite links for the server.",
+      "managePosts": "Allows members to remove or hide posts by other members.",
+      "manageQuestionnaires": "Allows members vote on, review, and delete questionnaire tickets.",
+      "manageQuestions": "Allows members to create, edit, or delete membership questions.",
+      "manageRoles": "Allows members to create new roles as well as edit or delete other roles.",
+      "manageRules": "Allows members to create, edit, or delete rules for the server.",
+      "manageServerSettings": "Allows members to make changes to the server's settings.",
+      "removeMembers": "Allows members to remove other members from the server.",
+      "removeProposals": "Allows members to remove proposals posted by other members."
+    },
+    "states": {
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "labels": {
+      "permissions": "Permissions"
+    },
+    "headers": {
+      "deniedPermissions": "Denied permissions",
+      "grantedPermissions": "Granted permissions",
+      "membersWithPermission": "Members with permission",
+      "permission": "Permission",
+      "rolesWithPermission": "Roles with permission"
+    }
   }
 }
