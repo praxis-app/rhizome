@@ -1,6 +1,7 @@
 import { RawRuleOf } from '@casl/ability';
 import { dataSource } from '../database/data-source';
 import { AbilityAction, AbilitySubject, AppAbility } from './app-ability';
+import { Permission } from './models/permission.entity';
 import { Role } from './models/role.entity';
 
 // TODO: Uncomment when no longer needed
@@ -20,6 +21,7 @@ interface UpdateRolePermissionsReq {
 }
 
 const roleRepository = dataSource.getRepository(Role);
+const permissionRepository = dataSource.getRepository(Permission);
 
 export const getRole = async (id: string) => {
   return roleRepository.findOne({
@@ -89,11 +91,28 @@ export const updateRolePermissions = async (
     throw new Error('Role not found');
   }
 
-  // Ensure that the permissions are unique
-  // Remove any existing permissions that are not in the new permissions
+  const newPermissions = Object.entries(permissions).flatMap(
+    ([subject, actions]) =>
+      actions.map((action) => {
+        const existingPerm = role.permissions.find(
+          (p) => p.subject === subject && p.action === action,
+        );
+        return {
+          id: existingPerm?.id,
+          subject: subject as AbilitySubject,
+          action,
+          role,
+        };
+      }),
+  );
+  const permissionsToDelete = role.permissions.filter(
+    (permission) =>
+      !permissions[permission.subject] ||
+      !permissions[permission.subject].includes(permission.action),
+  );
 
-  // TODO: Remove when no longer needed
-  console.log('permissions', permissions);
+  await permissionRepository.save(newPermissions);
+  await permissionRepository.delete(permissionsToDelete.map((p) => p.id));
 };
 
 export const deleteRole = async (id: string) => {

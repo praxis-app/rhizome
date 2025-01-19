@@ -18,8 +18,8 @@ import { Role } from './role.entity';
 @Entity()
 @Unique(['roleId', 'action', 'subject'])
 export class Permission {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'enum', enum: ABILITY_ACTIONS })
   action: AbilityAction;
