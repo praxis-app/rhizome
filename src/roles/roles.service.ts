@@ -4,6 +4,11 @@ import { AppAbility } from './create-ability.util';
 import { Role } from './models/role.entity';
 import { AbilityAction, AbilitySubject } from './models/role.types';
 
+// TODO: Uncomment when no longer needed
+// const testRules: RawRuleOf<AppAbility>[] = [
+//   { action: ['read', 'create'], subject: 'Channel' },
+// ];
+
 type PermissionsMap = Record<string, AbilityAction[]>;
 
 interface CreateRoleReq {
@@ -30,10 +35,16 @@ export const createRole = async ({ name, color }: CreateRoleReq) => {
   return roleRepository.save({ name, color });
 };
 
-// TODO: Uncomment when no longer needed
-// const testRules: RawRuleOf<AppAbility>[] = [
-//   { action: ['read', 'create'], subject: 'Channel' },
-// ];
+export const updateRole = async (
+  id: string,
+  { name, color }: CreateRoleReq,
+) => {
+  return roleRepository.update(id, { name, color });
+};
+
+export const deleteRole = async (id: string) => {
+  return roleRepository.delete(id);
+};
 
 export const getUserPermisions = async (
   userId: string,

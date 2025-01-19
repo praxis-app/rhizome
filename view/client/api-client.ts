@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { DeleteResult, UpdateResult } from 'typeorm';
 import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import { Channel, Message } from '../types/chat.types';
@@ -64,6 +65,18 @@ class ApiClient {
     return this.executeRequest<{ role: Role }>('post', path, {
       data,
     });
+  };
+
+  updateRole = async (id: string, data: CreateRoleReq) => {
+    const path = `/roles/${id}`;
+    return this.executeRequest<UpdateResult>('put', path, {
+      data,
+    });
+  };
+
+  deleteRole = async (id: string) => {
+    const path = `/roles/${id}`;
+    return this.executeRequest<DeleteResult>('delete', path);
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
