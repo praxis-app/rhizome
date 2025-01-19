@@ -31,21 +31,6 @@ export const getRoles = async () => {
   });
 };
 
-export const createRole = async ({ name, color }: CreateRoleReq) => {
-  return roleRepository.save({ name, color });
-};
-
-export const updateRole = async (
-  id: string,
-  { name, color }: CreateRoleReq,
-) => {
-  return roleRepository.update(id, { name, color });
-};
-
-export const deleteRole = async (id: string) => {
-  return roleRepository.delete(id);
-};
-
 export const getUserPermisions = async (
   userId: string,
 ): Promise<RawRuleOf<AppAbility>[]> => {
@@ -76,4 +61,19 @@ export const getUserPermisions = async (
   );
 
   return permissions;
+};
+
+export const createRole = async ({ name, color }: CreateRoleReq) => {
+  return roleRepository.save({ name, color });
+};
+
+export const updateRole = async (
+  id: string,
+  { name, color }: CreateRoleReq,
+) => {
+  return roleRepository.update(id, { name, color });
+};
+
+export const deleteRole = async (id: string) => {
+  return roleRepository.delete(id);
 };
