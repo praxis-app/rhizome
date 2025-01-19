@@ -9,14 +9,14 @@ import { NavigationPaths } from '../../constants/shared.constants';
 import RoleForm from '../../components/roles/role-form';
 
 const EditRole = () => {
-  const { id } = useParams();
+  const { roleId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { data, isPending, error } = useQuery({
-    queryKey: ['role', id],
-    queryFn: () => api.getRole(id!),
-    enabled: !!id,
+    queryKey: ['role', roleId],
+    queryFn: () => api.getRole(roleId!),
+    enabled: !!roleId,
   });
 
   if (isPending) {

@@ -18,7 +18,7 @@ export const settingsRouter: RouteObject = {
           element: <ServerRoles />,
         },
         {
-          path: ':id/edit',
+          path: ':roleId/edit',
           element: <EditRole />,
         },
       ],
