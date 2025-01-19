@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as rolesService from './roles.service';
 
 export const getRole = async (req: Request, res: Response) => {
-  const role = await rolesService.getRole(req.params.id);
+  const role = await rolesService.getRole(req.params.roleId);
   res.json({ role });
 };
 
@@ -17,19 +17,16 @@ export const createRole = async (req: Request, res: Response) => {
 };
 
 export const updateRole = async (req: Request, res: Response) => {
-  const result = await rolesService.updateRole(req.params.id, req.body);
+  const result = await rolesService.updateRole(req.params.roleId, req.body);
   res.json(result);
 };
 
 export const updateRolePermissions = async (req: Request, res: Response) => {
-  const result = await rolesService.updateRolePermissions(
-    req.params.id,
-    req.body,
-  );
-  res.json(result);
+  await rolesService.updateRolePermissions(req.params.roleId, req.body);
+  res.sendStatus(204);
 };
 
 export const deleteRole = async (req: Request, res: Response) => {
-  const result = await rolesService.deleteRole(req.params.id);
+  const result = await rolesService.deleteRole(req.params.roleId);
   res.json(result);
 };
