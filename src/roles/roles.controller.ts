@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import * as rolesService from './roles.service';
 
+export const getRole = async (req: Request, res: Response) => {
+  const role = await rolesService.getRole(req.params.id);
+  res.json({ role });
+};
+
 export const getRoles = async (_req: Request, res: Response) => {
   const roles = await rolesService.getRoles();
   res.json({ roles });

@@ -49,6 +49,11 @@ class ApiClient {
     return this.executeRequest<{ user: CurrentUser }>('get', path);
   };
 
+  getRole = async (id: string) => {
+    const path = `/roles/${id}`;
+    return this.executeRequest<{ role: Role }>('get', path);
+  };
+
   getRoles = async () => {
     const path = '/roles';
     return this.executeRequest<{ roles: Role[] }>('get', path);

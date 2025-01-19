@@ -12,6 +12,7 @@ import TopNav from '../../components/app/top-nav';
 import Role from '../../components/roles/role';
 import RoleForm from '../../components/roles/role-form';
 import ProgressBar from '../../components/shared/progress-bar';
+import { NavigationPaths } from '../../constants/shared.constants';
 
 const CardContent = styled(MuiCardContent)(() => ({
   display: 'flex',
@@ -41,7 +42,7 @@ const ServerRoles = () => {
     <>
       <TopNav
         header={t('roles.headers.serverRoles')}
-        onBackClick={() => navigate('/settings')}
+        onBackClick={() => navigate(NavigationPaths.Settings)}
       />
 
       <RoleForm />

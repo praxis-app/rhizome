@@ -7,6 +7,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { NavigationPaths } from '../../constants/shared.constants';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { Role as RoleType } from '../../types/role.types';
 import { Link } from '../shared/link';
@@ -15,11 +16,13 @@ interface Props {
   role: RoleType;
 }
 
-const Role = ({ role: { color, name } }: Props) => {
+const Role = ({ role: { id, color, name } }: Props) => {
   const { t } = useTranslation();
 
   const theme = useTheme();
   const isAboveMd = useAboveBreakpoint('md');
+
+  const editRolePath = `${NavigationPaths.Roles}/${id}/edit`;
 
   const actionAreaStyles = {
     borderRadius: 2,
@@ -40,7 +43,7 @@ const Role = ({ role: { color, name } }: Props) => {
   };
 
   return (
-    <Link to={'/'}>
+    <Link to={editRolePath}>
       <CardActionArea sx={actionAreaStyles}>
         <Box display="flex" justifyContent="space-between">
           <Box display="flex">

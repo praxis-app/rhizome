@@ -13,6 +13,13 @@ interface CreateRoleReq {
 
 const roleRepository = dataSource.getRepository(Role);
 
+export const getRole = async (id: string) => {
+  return roleRepository.findOne({
+    where: { id },
+    relations: ['permissions'],
+  });
+};
+
 export const getRoles = async () => {
   return roleRepository.find({
     order: { updatedAt: 'DESC' },
