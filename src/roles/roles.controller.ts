@@ -21,6 +21,14 @@ export const updateRole = async (req: Request, res: Response) => {
   res.json(result);
 };
 
+export const updateRolePermissions = async (req: Request, res: Response) => {
+  const result = await rolesService.updateRolePermissions(
+    req.params.id,
+    req.body,
+  );
+  res.json(result);
+};
+
 export const deleteRole = async (req: Request, res: Response) => {
   const result = await rolesService.deleteRole(req.params.id);
   res.json(result);

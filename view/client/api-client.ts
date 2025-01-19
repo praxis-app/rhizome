@@ -1,10 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
-import { DeleteResult, UpdateResult } from 'typeorm';
 import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
-import { CreateRoleReq, Role } from '../types/role.types';
+import {
+  CreateRoleReq,
+  Role,
+  UpdateRolePermissionsReq,
+} from '../types/role.types';
 import { CurrentUser } from '../types/user.types';
 
 class ApiClient {
@@ -69,14 +72,24 @@ class ApiClient {
 
   updateRole = async (id: string, data: CreateRoleReq) => {
     const path = `/roles/${id}`;
-    return this.executeRequest<UpdateResult>('put', path, {
+    return this.executeRequest<void>('put', path, {
+      data,
+    });
+  };
+
+  updateRolePermissions = async (
+    id: string,
+    data: UpdateRolePermissionsReq,
+  ) => {
+    const path = `/roles/${id}/permissions`;
+    return this.executeRequest<void>('put', path, {
       data,
     });
   };
 
   deleteRole = async (id: string) => {
     const path = `/roles/${id}`;
-    return this.executeRequest<DeleteResult>('delete', path);
+    return this.executeRequest<void>('delete', path);
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
