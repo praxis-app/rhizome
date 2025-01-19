@@ -91,7 +91,7 @@ export const updateRolePermissions = async (
     throw new Error('Role not found');
   }
 
-  const newPermissions = Object.entries(permissions).flatMap(
+  const permissionsToSave = Object.entries(permissions).flatMap(
     ([subject, actions]) =>
       actions.map((action) => {
         const existingPerm = role.permissions.find(
@@ -105,14 +105,21 @@ export const updateRolePermissions = async (
         };
       }),
   );
-  const permissionsToDelete = role.permissions.filter(
-    (permission) =>
-      !permissions[permission.subject] ||
-      !permissions[permission.subject].includes(permission.action),
+  const permissionsToDelete = role.permissions.reduce<string[]>(
+    (result, permission) => {
+      if (
+        !permissions[permission.subject] ||
+        !permissions[permission.subject].includes(permission.action)
+      ) {
+        result.push(permission.id);
+      }
+      return result;
+    },
+    [],
   );
 
-  await permissionRepository.save(newPermissions);
-  await permissionRepository.delete(permissionsToDelete.map((p) => p.id));
+  await permissionRepository.save(permissionsToSave);
+  await permissionRepository.delete(permissionsToDelete);
 };
 
 export const deleteRole = async (id: string) => {
