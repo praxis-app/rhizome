@@ -12,7 +12,7 @@ interface CreateRoleReq {
 }
 
 interface UpdateRolePermissionsReq {
-  permissions: PermissionsMap;
+  permissions: RawRuleOf<AppAbility>[];
 }
 
 const roleRepository = dataSource.getRepository(Role);
@@ -92,27 +92,31 @@ export const updateRolePermissions = async (
     throw new Error('Role not found');
   }
 
-  const permissionsToSave = Object.entries(permissions).flatMap(
-    ([subject, actions]) =>
-      actions.map((action) => {
-        const existingPerm = role.permissions.find(
-          (p) => p.subject === subject && p.action === action,
-        );
-        return {
-          id: existingPerm?.id,
+  const permissionsToSave = permissions.reduce<Partial<Permission>[]>(
+    (result, { action, subject }) => {
+      const actions = Array.isArray(action) ? action : [action];
+
+      for (const a of actions) {
+        result.push({
           subject: subject as AbilitySubject,
-          action,
+          action: a,
           role,
-        };
-      }),
+        });
+      }
+      return result;
+    },
+    [],
   );
+
   const permissionsToDelete = role.permissions.reduce<string[]>(
-    (result, permission) => {
-      if (
-        !permissions[permission.subject] ||
-        !permissions[permission.subject].includes(permission.action)
-      ) {
-        result.push(permission.id);
+    (result, currentPermission) => {
+      const found = permissions.find(
+        (p) =>
+          p.subject === currentPermission.subject &&
+          p.action.includes(currentPermission.action),
+      );
+      if (!found) {
+        result.push(currentPermission.id);
       }
       return result;
     },

@@ -1,8 +1,8 @@
-import { PermissionsMap } from './role.types';
+import { Permission } from './role.types';
 
 export interface CurrentUser {
   id: string;
   name: string;
   anonymous: boolean;
-  permissions: PermissionsMap;
+  permissions: Permission[];
 }

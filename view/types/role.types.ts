@@ -1,10 +1,7 @@
 import { PERMISSION_NAMES } from '../constants/role.constants';
 
-export type AbilityAction = 'delete' | 'create' | 'read' | 'update';
-
-export type PermissionsMap = Record<string, AbilityAction[]>;
-
-export type PermissionName = (typeof PERMISSION_NAMES)[number];
+type AbilityAction = 'delete' | 'create' | 'read' | 'update';
+type AbilitySubject = 'Channel' | 'Message' | 'Role' | 'all';
 
 export interface Role {
   id: string;
@@ -13,11 +10,18 @@ export interface Role {
   permissions: any[];
 }
 
+export interface Permission {
+  subject: AbilitySubject;
+  action: AbilityAction[];
+}
+
 export interface CreateRoleReq {
   name: string;
   color: string;
 }
 
 export interface UpdateRolePermissionsReq {
-  permissions: PermissionsMap;
+  permissions: Permission[];
 }
+
+export type PermissionName = (typeof PERMISSION_NAMES)[number];
