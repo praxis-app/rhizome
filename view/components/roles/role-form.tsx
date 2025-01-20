@@ -116,7 +116,7 @@ const RoleForm = ({ editRole }: Props) => {
   };
 
   return (
-    <Card>
+    <Card sx={{ marginBottom: '12px' }}>
       <CardContent>
         <form onSubmit={handleSubmit((fv) => handleSubmitForm(fv))}>
           <FormGroup>

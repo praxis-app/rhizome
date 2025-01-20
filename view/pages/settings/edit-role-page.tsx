@@ -20,11 +20,13 @@ import AddRoleMemberOption from '../../components/roles/add-role-member-option';
 import PermissionsForm from '../../components/roles/permissions-form';
 import RoleForm from '../../components/roles/role-form';
 import RoleMember from '../../components/roles/role-member';
+import DeleteButton from '../../components/shared/delete-button';
 import Modal from '../../components/shared/modal';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
+import { Role } from '../../types/role.types';
 
 const CardContent = styled(MuiCardContent)(() => ({
   '&:last-child': {
@@ -109,6 +111,25 @@ const EditRolePage = () => {
     },
   });
 
+  const { mutate: deleteRole } = useMutation({
+    mutationFn: async () => {
+      if (!roleId) {
+        return;
+      }
+      await api.deleteRole(roleId);
+
+      queryClient.setQueryData<{ roles: Role[] }>(['roles'], (oldData) => {
+        if (!oldData) {
+          return { roles: [] };
+        }
+        return {
+          roles: oldData.roles.filter((role) => role.id !== roleId),
+        };
+      });
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+  });
+
   const tabParam = searchParams.get('tab');
 
   useEffect(() => {
@@ -138,6 +159,15 @@ const EditRolePage = () => {
     setSearchParams({});
   };
 
+  const handleDeleteBtnClick = async () => {
+    await navigate(NavigationPaths.Roles);
+    deleteRole();
+  };
+
+  const handleDeleteBtnClickWithConfirm = () =>
+    window.confirm(t('prompts.deleteItem', { itemType: 'role' })) &&
+    handleDeleteBtnClick();
+
   if (isRolePending) {
     return <ProgressBar />;
   }
@@ -166,7 +196,14 @@ const EditRolePage = () => {
         </Tabs>
       </Card>
 
-      {tab === 0 && <RoleForm editRole={roleData.role} />}
+      {tab === 0 && (
+        <>
+          <RoleForm editRole={roleData.role} />
+          <DeleteButton onClick={handleDeleteBtnClickWithConfirm}>
+            {t('roles.actions.delete')}
+          </DeleteButton>
+        </>
+      )}
 
       {tab === 1 && <PermissionsForm role={roleData.role} />}
 
