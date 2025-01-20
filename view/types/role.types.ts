@@ -14,7 +14,7 @@ export interface Role {
   id: string;
   name: string;
   color: string;
-  permissions: any[];
+  permissions: Permission[];
 }
 
 export interface Permission {

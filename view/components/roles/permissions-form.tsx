@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
@@ -19,7 +19,54 @@ interface Props {
   role: Role;
 }
 
+const getPermissionValues = (permissions: Permission[]) =>
+  PERMISSION_KEYS.map((name) => {
+    if (name === 'manageSettings') {
+      return {
+        value: permissions.some(
+          (p) => p.subject === 'ServerConfig' && p.action.includes('manage'),
+        ),
+        name,
+      };
+    }
+    if (name === 'manageRoles') {
+      return {
+        value: permissions.some(
+          (p) => p.subject === 'Role' && p.action.includes('manage'),
+        ),
+        name,
+      };
+    }
+    if (name === 'createInvites') {
+      return {
+        value: permissions.some(
+          (p) => p.subject === 'Invite' && p.action.includes('create'),
+        ),
+        name,
+      };
+    }
+    if (name === 'manageInvites') {
+      return {
+        value: permissions.some(
+          (p) => p.subject === 'Invite' && p.action.includes('manage'),
+        ),
+        name,
+      };
+    }
+    return {
+      value: false,
+      name,
+    };
+  });
+
 const PermissionsForm = ({ role }: Props) => {
+  const { control, handleSubmit, formState, reset } = useForm({
+    defaultValues: {
+      permissions: getPermissionValues(role.permissions),
+    },
+  });
+
+  const queryClient = useQueryClient();
   const { mutate: updatePermissions, isPending } = useMutation({
     mutationFn: async (values: FormValues) => {
       const permissions = values.permissions.reduce<Permission[]>(
@@ -46,50 +93,14 @@ const PermissionsForm = ({ role }: Props) => {
       await api.updateRolePermissions(role.id, {
         permissions,
       });
-    },
-  });
 
-  const { control, handleSubmit, formState } = useForm({
-    defaultValues: {
-      permissions: PERMISSION_KEYS.map((name) => {
-        if (name === 'manageSettings') {
-          return {
-            value: role.permissions.some(
-              (p) =>
-                p.subject === 'ServerConfig' && p.action.includes('manage'),
-            ),
-            name,
-          };
+      queryClient.setQueryData<{ role: Role }>(['role', role.id], (oldData) => {
+        if (!oldData) {
+          return { role };
         }
-        if (name === 'manageRoles') {
-          return {
-            value: role.permissions.some(
-              (p) => p.subject === 'Role' && p.action.includes('manage'),
-            ),
-            name,
-          };
-        }
-        if (name === 'createInvites') {
-          return {
-            value: role.permissions.some(
-              (p) => p.subject === 'Invite' && p.action.includes('create'),
-            ),
-            name,
-          };
-        }
-        if (name === 'manageInvites') {
-          return {
-            value: role.permissions.some(
-              (p) => p.subject === 'Invite' && p.action.includes('manage'),
-            ),
-            name,
-          };
-        }
-        return {
-          value: false,
-          name,
-        };
-      }),
+        return { role: { ...oldData.role, permissions } };
+      });
+      reset({ permissions: getPermissionValues(permissions) });
     },
   });
 
