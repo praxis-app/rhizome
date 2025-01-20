@@ -19,10 +19,32 @@ const roleRepository = dataSource.getRepository(Role);
 const permissionRepository = dataSource.getRepository(Permission);
 
 export const getRole = async (id: string) => {
-  return roleRepository.findOne({
+  const role = await roleRepository.findOne({
     where: { id },
     relations: ['permissions'],
   });
+  if (!role) {
+    throw new Error('Role not found');
+  }
+
+  const permissionsMap = role.permissions.reduce<PermissionsMap>(
+    (result, permission) => {
+      if (!result[permission.subject]) {
+        result[permission.subject] = [];
+      }
+      result[permission.subject].push(permission.action);
+      return result;
+    },
+    {},
+  );
+  const permissions = Object.entries(permissionsMap).map(
+    ([subject, actions]) => ({
+      subject: subject as AbilitySubject,
+      action: actions,
+    }),
+  );
+
+  return { ...role, permissions };
 };
 
 export const getRoles = async () => {
