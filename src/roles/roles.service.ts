@@ -18,9 +18,9 @@ interface UpdateRolePermissionsReq {
 const roleRepository = dataSource.getRepository(Role);
 const permissionRepository = dataSource.getRepository(Permission);
 
-export const getRole = async (id: string) => {
+export const getRole = async (roleId: string) => {
   const role = await roleRepository.findOne({
-    where: { id },
+    where: { id: roleId },
     relations: ['permissions'],
   });
   if (!role) {
@@ -63,11 +63,11 @@ export const updateRole = async (
 };
 
 export const updateRolePermissions = async (
-  id: string,
+  roleId: string,
   { permissions }: UpdateRolePermissionsReq,
 ) => {
   const role = await roleRepository.findOne({
-    where: { id },
+    where: { id: roleId },
     relations: ['permissions'],
   });
   if (!role) {
@@ -116,9 +116,9 @@ export const updateRolePermissions = async (
   await permissionRepository.save(permissionsToSave);
 };
 
-export const addRoleMembers = async (id: string, userIds: string[]) => {
+export const addRoleMembers = async (roleId: string, userIds: string[]) => {
   const role = await roleRepository.findOne({
-    where: { id },
+    where: { id: roleId },
     relations: ['members'],
   });
   if (!role) {
@@ -131,6 +131,18 @@ export const addRoleMembers = async (id: string, userIds: string[]) => {
     ...role,
     members: membersToAdd.map((id) => ({ id })),
   });
+};
+
+export const deleteRoleMember = async (roleId: string, userId: string) => {
+  const role = await roleRepository.findOne({
+    where: { id: roleId },
+    relations: ['members'],
+  });
+  if (!role) {
+    throw new Error('Role not found');
+  }
+  role.members = role.members.filter((member) => member.id !== userId);
+  await roleRepository.save(role);
 };
 
 export const deleteRole = async (id: string) => {

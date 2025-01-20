@@ -3,6 +3,7 @@ import {
   addRoleMembers,
   createRole,
   deleteRole,
+  deleteRoleMember,
   getRole,
   getRoles,
   updateRole,
@@ -17,5 +18,6 @@ rolesRouter.post('/', createRole);
 rolesRouter.put('/:roleId', updateRole);
 rolesRouter.delete('/:roleId', deleteRole);
 
-rolesRouter.put('/:roleId/permissions', updateRolePermissions);
 rolesRouter.post('/:roleId/members', addRoleMembers);
+rolesRouter.delete('/:roleId/members/:userId', deleteRoleMember);
+rolesRouter.put('/:roleId/permissions', updateRolePermissions);

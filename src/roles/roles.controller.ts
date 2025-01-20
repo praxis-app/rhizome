@@ -31,6 +31,11 @@ export const addRoleMembers = async (req: Request, res: Response) => {
   res.sendStatus(204);
 };
 
+export const deleteRoleMember = async (req: Request, res: Response) => {
+  await rolesService.deleteRoleMember(req.params.roleId, req.params.userId);
+  res.sendStatus(204);
+};
+
 export const deleteRole = async (req: Request, res: Response) => {
   const result = await rolesService.deleteRole(req.params.roleId);
   res.json(result);
