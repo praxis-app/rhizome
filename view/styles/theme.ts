@@ -242,6 +242,19 @@ export const theme = createTheme({
       },
     },
 
+    MuiTab: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          fontSize: 16,
+          textTransform: 'none',
+
+          [theme.breakpoints.up('sm')]: {
+            minWidth: 160,
+          },
+        }),
+      },
+    },
+
     MuiDrawer: {
       styleOverrides: {
         paper: ({ theme }: Props) => ({
