@@ -4,6 +4,7 @@ import {
   createRole,
   deleteRole,
   deleteRoleMember,
+  getUsersEligibleForRole,
   getRole,
   getRoles,
   updateRole,
@@ -20,4 +21,5 @@ rolesRouter.delete('/:roleId', deleteRole);
 
 rolesRouter.post('/:roleId/members', addRoleMembers);
 rolesRouter.delete('/:roleId/members/:userId', deleteRoleMember);
+rolesRouter.get('/:roleId/members/eligible', getUsersEligibleForRole);
 rolesRouter.put('/:roleId/permissions', updateRolePermissions);

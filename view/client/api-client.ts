@@ -53,14 +53,19 @@ class ApiClient {
     return this.executeRequest<{ user: CurrentUser }>('get', path);
   };
 
-  getRole = async (id: string) => {
-    const path = `/roles/${id}`;
+  getRole = async (roleId: string) => {
+    const path = `/roles/${roleId}`;
     return this.executeRequest<{ role: Role }>('get', path);
   };
 
   getRoles = async () => {
     const path = '/roles';
     return this.executeRequest<{ roles: Role[] }>('get', path);
+  };
+
+  getUsersEligibleForRole = async (roleId: string) => {
+    const path = `/roles/${roleId}/members/eligible`;
+    return this.executeRequest<{ users: CurrentUser[] }>('get', path);
   };
 
   createRole = async (data: CreateRoleReq) => {
@@ -70,25 +75,25 @@ class ApiClient {
     });
   };
 
-  updateRole = async (id: string, data: CreateRoleReq) => {
-    const path = `/roles/${id}`;
+  updateRole = async (roleId: string, data: CreateRoleReq) => {
+    const path = `/roles/${roleId}`;
     return this.executeRequest<void>('put', path, {
       data,
     });
   };
 
   updateRolePermissions = async (
-    id: string,
+    roleId: string,
     data: UpdateRolePermissionsReq,
   ) => {
-    const path = `/roles/${id}/permissions`;
+    const path = `/roles/${roleId}/permissions`;
     return this.executeRequest<void>('put', path, {
       data,
     });
   };
 
-  addRoleMembers = async (id: string, userIds: string[]) => {
-    const path = `/roles/${id}/members`;
+  addRoleMembers = async (roleId: string, userIds: string[]) => {
+    const path = `/roles/${roleId}/members`;
     return this.executeRequest<void>('post', path, {
       data: { userIds },
     });
@@ -99,8 +104,8 @@ class ApiClient {
     return this.executeRequest<void>('delete', path);
   };
 
-  deleteRole = async (id: string) => {
-    const path = `/roles/${id}`;
+  deleteRole = async (roleId: string) => {
+    const path = `/roles/${roleId}`;
     return this.executeRequest<void>('delete', path);
   };
 

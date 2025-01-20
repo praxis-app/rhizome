@@ -11,6 +11,11 @@ export const getRoles = async (_req: Request, res: Response) => {
   res.json({ roles });
 };
 
+export const getUsersEligibleForRole = async (req: Request, res: Response) => {
+  const users = await rolesService.getUsersEligibleForRole(req.params.roleId);
+  res.json({ users });
+};
+
 export const createRole = async (req: Request, res: Response) => {
   const role = await rolesService.createRole(req.body);
   res.json({ role });

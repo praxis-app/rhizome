@@ -1,5 +1,7 @@
 import { RawRuleOf } from '@casl/ability';
+import { In, Not } from 'typeorm';
 import { dataSource } from '../database/data-source';
+import { User } from '../users/user.entity';
 import { AbilityAction, AbilitySubject, AppAbility } from './app-ability';
 import { Permission } from './models/permission.entity';
 import { Role } from './models/role.entity';
@@ -15,6 +17,7 @@ interface UpdateRolePermissionsReq {
   permissions: RawRuleOf<AppAbility>[];
 }
 
+const userRepository = dataSource.getRepository(User);
 const roleRepository = dataSource.getRepository(Role);
 const permissionRepository = dataSource.getRepository(Permission);
 
@@ -49,6 +52,24 @@ export const getUserPermissions = async (
     },
   });
   return mapRolesToRules(roles);
+};
+
+export const getUsersEligibleForRole = async (roleId: string) => {
+  const role = await roleRepository.findOne({
+    where: { id: roleId },
+    relations: ['members'],
+  });
+  if (!role) {
+    throw new Error('Role not found');
+  }
+  const userIds = role.members.map(({ id }) => id);
+  return userRepository.find({
+    where: {
+      id: Not(In(userIds)),
+      anonymous: false,
+      locked: false,
+    },
+  });
 };
 
 export const createRole = async ({ name, color }: CreateRoleReq) => {
