@@ -4,7 +4,7 @@ import { AbilityAction, AbilitySubject, AppAbility } from './app-ability';
 import { Permission } from './models/permission.entity';
 import { Role } from './models/role.entity';
 
-type PermissionsMap = Record<string, AbilityAction[]>;
+type PermissionMap = Record<string, AbilityAction[]>;
 
 interface CreateRoleReq {
   name: string;
@@ -27,22 +27,8 @@ export const getRole = async (id: string) => {
     throw new Error('Role not found');
   }
 
-  const permissionsMap = role.permissions.reduce<PermissionsMap>(
-    (result, permission) => {
-      if (!result[permission.subject]) {
-        result[permission.subject] = [];
-      }
-      result[permission.subject].push(permission.action);
-      return result;
-    },
-    {},
-  );
-  const permissions = Object.entries(permissionsMap).map(
-    ([subject, actions]) => ({
-      subject: subject as AbilitySubject,
-      action: actions,
-    }),
-  );
+  const permissionMap = buildPermissionMap([role]);
+  const permissions = mapPermissionsToRules(permissionMap);
 
   return { ...role, permissions };
 };
@@ -70,25 +56,8 @@ export const getUserPermisions = async (
       },
     },
   });
-
-  const permissionsMap = roles.reduce<PermissionsMap>((result, role) => {
-    for (const permission of role.permissions) {
-      if (!result[permission.subject]) {
-        result[permission.subject] = [];
-      }
-      result[permission.subject].push(permission.action);
-    }
-    return result;
-  }, {});
-
-  const permissions = Object.entries(permissionsMap).map(
-    ([subject, actions]) => ({
-      subject: subject as AbilitySubject,
-      action: actions,
-    }),
-  );
-
-  return permissions;
+  const permissionMap = buildPermissionMap(roles);
+  return mapPermissionsToRules(permissionMap);
 };
 
 export const createRole = async ({ name, color }: CreateRoleReq) => {
@@ -153,4 +122,25 @@ export const updateRolePermissions = async (
 
 export const deleteRole = async (id: string) => {
   return roleRepository.delete(id);
+};
+
+const buildPermissionMap = (roles: Role[]) => {
+  return roles.reduce<PermissionMap>((result, role) => {
+    for (const permission of role.permissions) {
+      if (!result[permission.subject]) {
+        result[permission.subject] = [];
+      }
+      result[permission.subject].push(permission.action);
+    }
+    return result;
+  }, {});
+};
+
+const mapPermissionsToRules = (
+  permissions: PermissionMap,
+): RawRuleOf<AppAbility>[] => {
+  return Object.entries(permissions).map(([subject, action]) => ({
+    subject: subject as AbilitySubject,
+    action,
+  }));
 };
