@@ -16,7 +16,7 @@ interface Props {
   role: RoleType;
 }
 
-const Role = ({ role: { id, color, name } }: Props) => {
+const Role = ({ role: { id, color, name, memberCount } }: Props) => {
   const { t } = useTranslation();
 
   const theme = useTheme();
@@ -67,7 +67,7 @@ const Role = ({ role: { id, color, name } }: Props) => {
                 }}
               >
                 <Person sx={memberIconStyles} />
-                {t('roles.labels.membersCount', { count: 0 })}
+                {t('roles.labels.membersCount', { count: memberCount })}
               </Typography>
             </Box>
           </Box>

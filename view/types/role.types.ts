@@ -15,6 +15,7 @@ export interface Role {
   name: string;
   color: string;
   permissions: Permission[];
+  memberCount: number;
   members: any[];
 }
 

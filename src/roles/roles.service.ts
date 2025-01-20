@@ -34,9 +34,22 @@ export const getRole = async (roleId: string) => {
 };
 
 export const getRoles = async () => {
-  return roleRepository.find({
-    order: { updatedAt: 'DESC' },
-  });
+  const roles = await dataSource
+    .createQueryBuilder()
+    .select('role.id', 'id')
+    .addSelect('role.name', 'name')
+    .addSelect('role.color', 'color')
+    .addSelect('COUNT(member.id)', 'memberCount')
+    .from(Role, 'role')
+    .leftJoin('role.members', 'member')
+    .groupBy('role.id')
+    .orderBy('role.updatedAt', 'DESC')
+    .getRawMany<Role & { memberCount: string }>();
+
+  return roles.map((role) => ({
+    ...role,
+    memberCount: parseInt(role.memberCount),
+  }));
 };
 
 /** Get permissions from assigned roles */
