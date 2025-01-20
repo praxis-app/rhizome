@@ -118,7 +118,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }: Props) => ({
           backgroundImage: 'none',
-          borderRadius: '12px',
+          borderRadius: '8px',
 
           ...theme.applyStyles('light', {
             boxShadow:

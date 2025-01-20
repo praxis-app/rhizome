@@ -1,5 +1,4 @@
 import { AddCircle, ArrowForwardIos } from '@mui/icons-material';
-import { AxiosError } from 'axios';
 import {
   Box,
   Card,
@@ -11,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -19,11 +19,18 @@ import TopNav from '../../components/app/top-nav';
 import AddRoleMemberOption from '../../components/roles/add-role-member-option';
 import PermissionsForm from '../../components/roles/permissions-form';
 import RoleForm from '../../components/roles/role-form';
+import RoleMember from '../../components/roles/role-member';
 import Modal from '../../components/shared/modal';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
+
+const CardContent = styled(MuiCardContent)(() => ({
+  '&:last-child': {
+    paddingBottom: 16,
+  },
+}));
 
 const FlexCardContent = styled(MuiCardContent)(() => ({
   display: 'flex',
@@ -169,7 +176,7 @@ const EditRolePage = () => {
 
       {tab === 2 && (
         <>
-          <Card sx={{ cursor: 'pointer' }}>
+          <Card sx={{ cursor: 'pointer', marginBottom: '12px' }}>
             <CardActionArea onClick={() => setIsModalOpen(true)}>
               <FlexCardContent>
                 <Box display="flex">
@@ -190,6 +197,16 @@ const EditRolePage = () => {
               </FlexCardContent>
             </CardActionArea>
           </Card>
+
+          {!!roleData.role.members.length && (
+            <Card>
+              <CardContent>
+                {roleData.role.members.map((member) => (
+                  <RoleMember roleMember={member} key={member.id} />
+                ))}
+              </CardContent>
+            </Card>
+          )}
 
           <Modal
             title={t('roles.actions.addMembers')}
