@@ -26,10 +26,7 @@ export const getRole = async (id: string) => {
   if (!role) {
     throw new Error('Role not found');
   }
-
-  const permissionMap = buildPermissionMap([role]);
-  const permissions = mapPermissionsToRules(permissionMap);
-
+  const permissions = mapRolesToRules([role]);
   return { ...role, permissions };
 };
 
@@ -40,11 +37,12 @@ export const getRoles = async () => {
 };
 
 /**
- * Returns permissions for a given user
+ * Gets user permissions based on the roles assigned to the user.
+ * Permissions are returned in the format that can be used by `@casl/ability`
  *
  * Example output: `[ { subject: 'Channel', action: ['read', 'create'] } ]`
  */
-export const getUserPermisions = async (
+export const getUserPermissions = async (
   userId: string,
 ): Promise<RawRuleOf<AppAbility>[]> => {
   const roles = await roleRepository.find({
@@ -55,8 +53,7 @@ export const getUserPermisions = async (
       },
     },
   });
-  const permissionMap = buildPermissionMap(roles);
-  return mapPermissionsToRules(permissionMap);
+  return mapRolesToRules(roles);
 };
 
 export const createRole = async ({ name, color }: CreateRoleReq) => {
@@ -123,8 +120,8 @@ export const deleteRole = async (id: string) => {
   return roleRepository.delete(id);
 };
 
-const buildPermissionMap = (roles: Role[]) => {
-  return roles.reduce<PermissionMap>((result, role) => {
+const mapRolesToRules = (roles: Role[]): RawRuleOf<AppAbility>[] => {
+  const permissionMap = roles.reduce<PermissionMap>((result, role) => {
     for (const permission of role.permissions) {
       if (!result[permission.subject]) {
         result[permission.subject] = [];
@@ -133,12 +130,8 @@ const buildPermissionMap = (roles: Role[]) => {
     }
     return result;
   }, {});
-};
 
-const mapPermissionsToRules = (
-  permissions: PermissionMap,
-): RawRuleOf<AppAbility>[] => {
-  return Object.entries(permissions).map(([subject, action]) => ({
+  return Object.entries(permissionMap).map(([subject, action]) => ({
     subject: subject as AbilitySubject,
     action,
   }));
