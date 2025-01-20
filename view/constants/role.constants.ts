@@ -19,7 +19,7 @@ export const ROLE_COLOR_OPTIONS = [
   '#8c3528',
 ];
 
-export const PERMISSION_NAMES = [
+export const PERMISSION_KEYS = [
   'manageSettings',
   'createInvites',
   'manageInvites',

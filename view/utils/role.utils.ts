@@ -1,8 +1,8 @@
 import { t } from 'i18next';
 import { Namespace, TFunction } from 'react-i18next';
-import { PermissionName } from '../types/role.types';
+import { PermissionKeys } from '../types/role.types';
 
-export const getPermissionText = (name: PermissionName) => {
+export const getPermissionText = (name: PermissionKeys) => {
   const _t: TFunction<Namespace<'ns1'>, undefined> = t;
   switch (name) {
     case 'manageSettings':

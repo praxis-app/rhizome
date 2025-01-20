@@ -90,7 +90,7 @@ const EditRolePage = () => {
 
       {tab === 0 && <RoleForm editRole={data.role} />}
 
-      {tab === 1 && <PermissionsForm />}
+      {tab === 1 && <PermissionsForm roleId={data.role.id} />}
     </>
   );
 };

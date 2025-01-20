@@ -1,10 +1,10 @@
 import { Box, Switch, SwitchProps, Typography } from '@mui/material';
 import { t } from 'i18next';
-import { PermissionName } from '../../types/role.types';
+import { PermissionKeys } from '../../types/role.types';
 import { getPermissionText } from '../../utils/role.utils';
 
 interface Props {
-  permissionName: PermissionName;
+  permissionName: PermissionKeys;
   checked: boolean;
   onChange: SwitchProps['onChange'];
 }

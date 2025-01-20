@@ -1,7 +1,14 @@
-import { PERMISSION_NAMES } from '../constants/role.constants';
+import { PERMISSION_KEYS } from '../constants/role.constants';
 
-type AbilityAction = 'delete' | 'create' | 'read' | 'update';
-type AbilitySubject = 'Channel' | 'Message' | 'Role' | 'all';
+type AbilityAction = 'delete' | 'create' | 'read' | 'update' | 'manage';
+
+type AbilitySubject =
+  | 'Channel'
+  | 'Invite'
+  | 'Message'
+  | 'Settings'
+  | 'Role'
+  | 'all';
 
 export interface Role {
   id: string;
@@ -24,4 +31,4 @@ export interface UpdateRolePermissionsReq {
   permissions: Permission[];
 }
 
-export type PermissionName = (typeof PERMISSION_NAMES)[number];
+export type PermissionKeys = (typeof PERMISSION_KEYS)[number];
