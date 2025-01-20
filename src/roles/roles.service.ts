@@ -29,7 +29,7 @@ export const getRole = async (roleId: string) => {
   if (!role) {
     throw new Error('Role not found');
   }
-  const permissions = mapRolesToRules([role]);
+  const permissions = buildPermissionRules([role]);
   return { ...role, permissions };
 };
 
@@ -64,7 +64,7 @@ export const getUserPermissions = async (
       },
     },
   });
-  return mapRolesToRules(roles);
+  return buildPermissionRules(roles);
 };
 
 export const getUsersEligibleForRole = async (roleId: string) => {
@@ -191,7 +191,7 @@ export const deleteRole = async (id: string) => {
  * Example output:
  * `[ { subject: 'Channel', action: ['read', 'create'] } ]`
  */
-const mapRolesToRules = (roles: Role[]): RawRuleOf<AppAbility>[] => {
+const buildPermissionRules = (roles: Role[]): RawRuleOf<AppAbility>[] => {
   const permissionMap = roles.reduce<PermissionMap>((result, role) => {
     for (const permission of role.permissions) {
       if (!result[permission.subject]) {

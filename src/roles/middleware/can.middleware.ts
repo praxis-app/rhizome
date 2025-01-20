@@ -6,8 +6,11 @@ export const can =
   (actions: AbilityAction[], subject: AbilitySubject) =>
   (_req: Request, res: Response, next: NextFunction) => {
     const permissions = res.locals.user?.permissions || [];
-
     const currentUserAbility = createAbility(permissions);
+
+    if (currentUserAbility.can('manage', subject)) {
+      return next();
+    }
 
     for (const action of actions) {
       ForbiddenError.from(currentUserAbility).throwUnlessCan(action, subject);
