@@ -1,4 +1,5 @@
 import { AddCircle, ArrowForwardIos } from '@mui/icons-material';
+import { AxiosError } from 'axios';
 import {
   Box,
   Card,
@@ -9,7 +10,7 @@ import {
   Tabs,
   Typography,
 } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -22,6 +23,7 @@ import Modal from '../../components/shared/modal';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
+import { useAppStore } from '../../store/app.store';
 
 const FlexCardContent = styled(MuiCardContent)(() => ({
   display: 'flex',
@@ -37,11 +39,13 @@ export enum EditRoleTabName {
 
 const EditRolePage = () => {
   const [tab, setTab] = useState(0);
-  const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { setToast } = useAppStore((state) => state);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const isAboveSmall = useAboveBreakpoint('sm');
+  const queryClient = useQueryClient();
   const { roleId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -64,6 +68,42 @@ const EditRolePage = () => {
     queryKey: ['role', roleId, 'members', 'eligible'],
     queryFn: () => api.getUsersEligibleForRole(roleId!),
     enabled: !!roleId && tab === 2,
+  });
+
+  const { mutate: addMembers } = useMutation({
+    mutationFn: async () => {
+      if (!roleId || !roleData || !eligibleUsersData) {
+        return;
+      }
+      await api.addRoleMembers(roleId, selectedUserIds);
+
+      const membersToAdd = selectedUserIds.map(
+        (id) => eligibleUsersData.users.find((u) => u.id === id)!,
+      );
+      queryClient.setQueryData(['role', roleId], {
+        role: {
+          ...roleData.role,
+          members: roleData.role.members.concat(membersToAdd),
+        },
+      });
+      queryClient.setQueryData(['role', roleId, 'members', 'eligible'], {
+        users: eligibleUsersData?.users.filter(
+          (user) => !selectedUserIds.includes(user.id),
+        ),
+      });
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+      setSelectedUserIds([]);
+      setIsModalOpen(false);
+    },
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
+      setToast({
+        title: errorMessage,
+        status: 'error',
+      });
+    },
   });
 
   const tabParam = searchParams.get('tab');
@@ -154,8 +194,8 @@ const EditRolePage = () => {
           <Modal
             title={t('roles.actions.addMembers')}
             actionLabel={t('roles.actions.add')}
-            closingAction={() => setIsModalOpen(false)}
             onClose={() => setIsModalOpen(false)}
+            closingAction={addMembers}
             open={isModalOpen}
           >
             {eligibleUsersData?.users.map((user) => (

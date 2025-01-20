@@ -1,8 +1,8 @@
 import RoleMemberOption from './role-member-option';
 
 interface Props {
-  selectedUserIds: number[];
-  setSelectedUserIds(selectedUsers: number[]): void;
+  selectedUserIds: string[];
+  setSelectedUserIds(selectedUsers: string[]): void;
   user: any;
 }
 
