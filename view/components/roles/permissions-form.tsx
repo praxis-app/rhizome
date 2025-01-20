@@ -1,33 +1,46 @@
 import { Box } from '@mui/material';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { PERMISSION_NAMES } from '../../constants/role.constants';
 import PrimaryButton from '../shared/primary-button';
 import PermissionToggle from './permission-toggle';
 
 const PermissionsForm = () => {
-  const { control, register } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       permissions: PERMISSION_NAMES.map(() => ({ value: false })),
     },
-  });
-  const { fields } = useFieldArray({
-    name: 'permissions',
-    control,
   });
 
   const { t } = useTranslation();
 
   return (
-    <Box component="form">
-      {fields.map((field, index) => (
-        <PermissionToggle
-          key={field.id}
-          switchProps={register(`permissions.${index}.value`)}
-          permissionName={PERMISSION_NAMES[index]}
-          isEnabled={false}
-        />
-      ))}
+    <Box
+      component="form"
+      onSubmit={handleSubmit((data) => {
+        console.log(data);
+      })}
+    >
+      <Controller
+        name="permissions"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <>
+            {PERMISSION_NAMES.map((permissionName, index) => (
+              <PermissionToggle
+                key={permissionName}
+                permissionName={permissionName}
+                checked={value[index].value}
+                onChange={(e) => {
+                  const newPermissions = [...value];
+                  newPermissions[index].value = e.target.checked;
+                  onChange(newPermissions);
+                }}
+              />
+            ))}
+          </>
+        )}
+      />
 
       <Box display="flex" justifyContent="end" sx={{ marginTop: 6 }}>
         <PrimaryButton type="submit">{t('actions.save')}</PrimaryButton>

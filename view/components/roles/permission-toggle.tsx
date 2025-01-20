@@ -5,15 +5,11 @@ import { getPermissionText } from '../../utils/role.utils';
 
 interface Props {
   permissionName: PermissionName;
-  switchProps: SwitchProps;
-  isEnabled: boolean;
+  checked: boolean;
+  onChange: SwitchProps['onChange'];
 }
 
-const PermissionToggle = ({
-  permissionName,
-  isEnabled,
-  switchProps,
-}: Props) => {
+const PermissionToggle = ({ permissionName, checked, onChange }: Props) => {
   const { displayName, description } = getPermissionText(permissionName);
 
   return (
@@ -28,8 +24,8 @@ const PermissionToggle = ({
 
       <Switch
         inputProps={{ 'aria-label': displayName || t('labels.switch') }}
-        checked={isEnabled}
-        {...switchProps}
+        checked={checked}
+        onChange={onChange}
       />
     </Box>
   );

@@ -15,7 +15,6 @@ export const useMeQuery = (
     queryFn: async () => {
       try {
         const me = await api.getCurrentUser();
-        console.log(me);
         setIsLoggedIn(true);
         return me;
       } catch (error) {
