@@ -79,7 +79,12 @@ export const updateRolePermissions = async (
       const actions = Array.isArray(action) ? action : [action];
 
       for (const a of actions) {
+        // Account for existing permissions
+        const permission = role.permissions.find(
+          (p) => p.subject === subject && p.action === a,
+        );
         result.push({
+          id: permission?.id,
           subject: subject as AbilitySubject,
           action: a,
           role,
