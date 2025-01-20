@@ -42,8 +42,7 @@ export const getRoles = async () => {
 /**
  * Returns permissions for a given user
  *
- * Example output:
- * `[ { subject: 'Channel', action: ['read', 'create'] } ]`
+ * Example output: `[ { subject: 'Channel', action: ['read', 'create'] } ]`
  */
 export const getUserPermisions = async (
   userId: string,
