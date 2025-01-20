@@ -36,12 +36,7 @@ export const getRoles = async () => {
   });
 };
 
-/**
- * Gets user permissions based on the roles assigned to the user.
- * Permissions are returned in the format that can be used by `@casl/ability`
- *
- * Example output: `[ { subject: 'Channel', action: ['read', 'create'] } ]`
- */
+/** Get permissions from assigned roles */
 export const getUserPermissions = async (
   userId: string,
 ): Promise<RawRuleOf<AppAbility>[]> => {
@@ -120,6 +115,10 @@ export const deleteRole = async (id: string) => {
   return roleRepository.delete(id);
 };
 
+/**
+ * Example output:
+ * `[ { subject: 'Channel', action: ['read', 'create'] } ]`
+ */
 const mapRolesToRules = (roles: Role[]): RawRuleOf<AppAbility>[] => {
   const permissionMap = roles.reduce<PermissionMap>((result, role) => {
     for (const permission of role.permissions) {
