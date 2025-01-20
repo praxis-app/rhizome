@@ -123,8 +123,10 @@ export const updateRolePermissions = async (
     [],
   );
 
+  if (permissionsToDelete.length) {
+    await permissionRepository.delete(permissionsToDelete);
+  }
   await permissionRepository.save(permissionsToSave);
-  await permissionRepository.delete(permissionsToDelete);
 };
 
 export const deleteRole = async (id: string) => {

@@ -5,8 +5,22 @@ import {
   RawRuleOf,
 } from '@casl/ability';
 
-export const ABILITY_ACTIONS = ['create', 'read', 'update', 'delete'] as const;
-export const ABILITY_SUBJECTS = ['Channel', 'Message', 'Role', 'all'] as const;
+export const ABILITY_ACTIONS = [
+  'create',
+  'read',
+  'update',
+  'delete',
+  'manage',
+] as const;
+
+export const ABILITY_SUBJECTS = [
+  'ServerConfig',
+  'Channel',
+  'Message',
+  'Invite',
+  'Role',
+  'all',
+] as const;
 
 export type AbilityAction = (typeof ABILITY_ACTIONS)[number];
 export type AbilitySubject = (typeof ABILITY_SUBJECTS)[number];
