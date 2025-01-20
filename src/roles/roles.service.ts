@@ -158,12 +158,16 @@ export const addRoleMembers = async (roleId: string, userIds: string[]) => {
   if (!role) {
     throw new Error('Role not found');
   }
-  const membersToAdd = userIds.filter(
-    (id) => !role.members.some((member) => member.id === id),
-  );
+  const newMembers = await userRepository.find({
+    where: {
+      id: In(userIds),
+      anonymous: false,
+      locked: false,
+    },
+  });
   return roleRepository.save({
     ...role,
-    members: membersToAdd.map((id) => ({ id })),
+    members: [...role.members, ...newMembers],
   });
 };
 

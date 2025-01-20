@@ -67,11 +67,7 @@ const EditRolePage = () => {
     enabled: !!roleId,
   });
 
-  const {
-    data: eligibleUsersData,
-    isPending: isEligibleUsersPending,
-    error: eligibleUsersError,
-  } = useQuery({
+  const { data: eligibleUsersData, error: eligibleUsersError } = useQuery({
     queryKey: ['role', roleId, 'members', 'eligible'],
     queryFn: () => api.getUsersEligibleForRole(roleId!),
     enabled: !!roleId && tab === 2,
@@ -142,7 +138,7 @@ const EditRolePage = () => {
     setSearchParams({});
   };
 
-  if (isRolePending || isEligibleUsersPending) {
+  if (isRolePending) {
     return <ProgressBar />;
   }
 
