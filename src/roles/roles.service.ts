@@ -116,6 +116,23 @@ export const updateRolePermissions = async (
   await permissionRepository.save(permissionsToSave);
 };
 
+export const addRoleMembers = async (id: string, userIds: string[]) => {
+  const role = await roleRepository.findOne({
+    where: { id },
+    relations: ['members'],
+  });
+  if (!role) {
+    throw new Error('Role not found');
+  }
+  const membersToAdd = userIds.filter(
+    (id) => !role.members.some((member) => member.id === id),
+  );
+  return roleRepository.save({
+    ...role,
+    members: membersToAdd.map((id) => ({ id })),
+  });
+};
+
 export const deleteRole = async (id: string) => {
   return roleRepository.delete(id);
 };

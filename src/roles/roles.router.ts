@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  addRoleMembers,
   createRole,
   deleteRole,
   getRole,
@@ -17,3 +18,4 @@ rolesRouter.put('/:roleId', updateRole);
 rolesRouter.delete('/:roleId', deleteRole);
 
 rolesRouter.put('/:roleId/permissions', updateRolePermissions);
+rolesRouter.post('/:roleId/members', addRoleMembers);
