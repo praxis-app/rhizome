@@ -4,11 +4,6 @@ import { AbilityAction, AbilitySubject, AppAbility } from './app-ability';
 import { Permission } from './models/permission.entity';
 import { Role } from './models/role.entity';
 
-// TODO: Uncomment when no longer needed
-// const testRules: RawRuleOf<AppAbility>[] = [
-//   { action: ['read', 'create'], subject: 'Channel' },
-// ];
-
 type PermissionsMap = Record<string, AbilityAction[]>;
 
 interface CreateRoleReq {
@@ -36,6 +31,12 @@ export const getRoles = async () => {
   });
 };
 
+/**
+ * Returns permissions for a given user
+ *
+ * Example output:
+ * `[ { subject: 'Channel', action: ['read', 'create'] } ]`
+ */
 export const getUserPermisions = async (
   userId: string,
 ): Promise<RawRuleOf<AppAbility>[]> => {
