@@ -21,7 +21,7 @@ const permissionRepository = dataSource.getRepository(Permission);
 export const getRole = async (roleId: string) => {
   const role = await roleRepository.findOne({
     where: { id: roleId },
-    relations: ['permissions'],
+    relations: ['permissions', 'members'],
   });
   if (!role) {
     throw new Error('Role not found');

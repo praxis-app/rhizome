@@ -206,7 +206,7 @@ export const theme = createTheme({
         root: ({ theme }: Props) => ({
           color: theme.palette.common.black,
           ...theme.applyStyles('dark', {
-            color: theme.palette.common.white,
+            color: theme.palette.text.primary,
           }),
         }),
       },
