@@ -1,17 +1,20 @@
 import express from 'express';
+import { authenticate } from '../auth/middleware/authenticate.middleware';
 import {
   addRoleMembers,
   createRole,
   deleteRole,
   deleteRoleMember,
-  getUsersEligibleForRole,
   getRole,
   getRoles,
+  getUsersEligibleForRole,
   updateRole,
   updateRolePermissions,
 } from './roles.controller';
 
 export const rolesRouter = express.Router();
+
+rolesRouter.use(authenticate);
 
 rolesRouter.get('/:roleId', getRole);
 rolesRouter.get('/', getRoles);
