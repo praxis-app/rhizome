@@ -20,7 +20,11 @@ export interface CreateMessageReq {
 const messageRepository = dataSource.getRepository(Message);
 const imageRepository = dataSource.getRepository(Image);
 
-export const getMessages = async (channelId: string, offset?: number, limit?: number) => {
+export const getMessages = async (
+  channelId: string,
+  offset?: number,
+  limit?: number,
+) => {
   const messages = await messageRepository.find({
     where: { channelId },
     relations: ['user', 'images'],
@@ -114,7 +118,9 @@ export const saveMessageImage = async (
   }
 
   const image = await imageRepository.save({ id: imageId, filename });
-  const channelMembers = await channelsService.getChannelMembers(message.channelId);
+  const channelMembers = await channelsService.getChannelMembers(
+    message.channelId,
+  );
   for (const member of channelMembers) {
     if (member.userId === user.id) {
       continue;

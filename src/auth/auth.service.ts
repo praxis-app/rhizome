@@ -51,7 +51,10 @@ export const signUp = async ({ email, name, password }: SignUpReq) => {
   return generateAccessToken(user.id);
 };
 
-export const upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
+export const upgradeAnonSession = async (
+  { email, password }: SignUpReq,
+  userId: string,
+) => {
   const passwordHash = await hash(password, SALT_ROUNDS);
   await usersService.upgradeAnonUser(userId, email, passwordHash);
 };

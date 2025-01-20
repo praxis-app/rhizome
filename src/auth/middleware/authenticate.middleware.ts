@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { verifyToken } from '../auth.service';
+import { getUserPermissions } from '../../roles/roles.service';
 
-export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { authorization } = req.headers;
   const [type, token] = authorization?.split(' ') ?? [];
   if (type !== 'Bearer' || !token) {
@@ -13,6 +18,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     res.status(401).send('Unauthorized');
     return;
   }
-  res.locals.user = user;
+  const permissions = await getUserPermissions(user.id);
+  res.locals.user = { ...user, permissions };
   next();
 };

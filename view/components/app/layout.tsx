@@ -5,7 +5,6 @@ import { theme } from '../../styles/theme';
 import { AuthWrapper } from '../auth/auth-wrapper';
 import Toast from '../shared/toast';
 import NavDrawer from './nav-drawer';
-import TopNav from './top-nav';
 
 const queryClient = new QueryClient();
 
@@ -19,7 +18,6 @@ export const Layout = ({ children, sx }: Props) => (
     <ThemeProvider theme={theme} defaultMode="system">
       <CssBaseline />
       <AuthWrapper>
-        <TopNav />
         <NavDrawer />
         <Container maxWidth="sm" sx={sx}>
           {children}

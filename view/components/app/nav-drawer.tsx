@@ -1,4 +1,10 @@
-import { Chat, Close, ExitToApp, PersonAdd } from '@mui/icons-material';
+import {
+  Chat,
+  Close,
+  ExitToApp,
+  PersonAdd,
+  Settings,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -30,7 +36,8 @@ const NavDrawer = () => {
 
   const { data } = useMeQuery();
   const isAnon = !!data?.user.anonymous;
-  const showSignUp = !isLoggedIn || isAnon;
+  const isRegistered = !!(data && !data.user.anonymous);
+  const showSignUp = !data?.user || isAnon;
 
   const queryClient = useQueryClient();
 
@@ -90,6 +97,17 @@ const NavDrawer = () => {
           </ListItemIcon>
           <ListItemText primary={t('navigation.chat')} />
         </ListItemButton>
+
+        {isRegistered && (
+          <ListItemButton
+            onClick={() => handleNavigate(NavigationPaths.Settings)}
+          >
+            <ListItemIcon>
+              <Settings />
+            </ListItemIcon>
+            <ListItemText primary={t('navigation.settings')} />
+          </ListItemButton>
+        )}
 
         {showSignUp && (
           <ListItemButton

@@ -15,11 +15,13 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import TopNav from '../../components/app/top-nav';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import {
@@ -30,7 +32,6 @@ import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { LoginReq } from '../../types/auth.types';
-import { AxiosError } from 'axios';
 
 const Login = () => {
   const { isLoggedIn, setIsLoggedIn, setToast } = useAppStore((state) => state);
@@ -100,71 +101,75 @@ const Login = () => {
   }
 
   return (
-    <Card>
-      <CardHeader
-        subheader={t('users.headers.signIn')}
-        subheaderTypographyProps={{
-          sx: { fontWeight: 500 },
-        }}
-        sx={{ paddingBottom: 0, paddingTop: 1.8 }}
-      />
+    <>
+      <TopNav />
 
-      <CardContent>
-        <form onSubmit={handleSubmit((fv) => login(fv))}>
-          <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
-            <FormControl>
-              <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                {t('users.form.email')}
-              </FormLabel>
-              <OutlinedInput
-                autoComplete="off"
-                inputProps={{ sx: inputBaseSx }}
-                {...register('email')}
-              />
-              {!!formState.errors.email && (
-                <Typography color="error" fontSize="small" paddingTop={0.5}>
-                  {formState.errors.email.message}
-                </Typography>
-              )}
-            </FormControl>
+      <Card>
+        <CardHeader
+          subheader={t('users.headers.signIn')}
+          subheaderTypographyProps={{
+            sx: { fontWeight: 500 },
+          }}
+          sx={{ paddingBottom: 0, paddingTop: 1.8 }}
+        />
 
-            <FormControl>
-              <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                {t('users.form.password')}
-              </FormLabel>
-              <OutlinedInput
-                autoComplete="off"
-                type={showPassword ? 'text' : 'password'}
-                endAdornment={renderShowPassword()}
-                inputProps={{
-                  sx: {
-                    borderTopRightRadius: '0 !important',
-                    borderBottomRightRadius: '0 !important',
-                    ...inputBaseSx,
-                  },
-                }}
-                {...register('password')}
-              />
-              {!!formState.errors.password && (
-                <Typography color="error" fontSize="small" paddingTop={0.5}>
-                  {formState.errors.password.message}
-                </Typography>
-              )}
-            </FormControl>
-          </FormGroup>
+        <CardContent>
+          <form onSubmit={handleSubmit((fv) => login(fv))}>
+            <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
+              <FormControl>
+                <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
+                  {t('users.form.email')}
+                </FormLabel>
+                <OutlinedInput
+                  autoComplete="off"
+                  inputProps={{ sx: inputBaseSx }}
+                  {...register('email')}
+                />
+                {!!formState.errors.email && (
+                  <Typography color="error" fontSize="small" paddingTop={0.5}>
+                    {formState.errors.email.message}
+                  </Typography>
+                )}
+              </FormControl>
 
-          <PrimaryButton
-            type="submit"
-            sx={{ height: 45 }}
-            disabled={isLoginPending}
-            isLoading={isLoginPending}
-            fullWidth
-          >
-            {t('users.actions.logIn')}
-          </PrimaryButton>
-        </form>
-      </CardContent>
-    </Card>
+              <FormControl>
+                <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
+                  {t('users.form.password')}
+                </FormLabel>
+                <OutlinedInput
+                  autoComplete="off"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={renderShowPassword()}
+                  inputProps={{
+                    sx: {
+                      borderTopRightRadius: '0 !important',
+                      borderBottomRightRadius: '0 !important',
+                      ...inputBaseSx,
+                    },
+                  }}
+                  {...register('password')}
+                />
+                {!!formState.errors.password && (
+                  <Typography color="error" fontSize="small" paddingTop={0.5}>
+                    {formState.errors.password.message}
+                  </Typography>
+                )}
+              </FormControl>
+            </FormGroup>
+
+            <PrimaryButton
+              type="submit"
+              sx={{ height: 45 }}
+              disabled={isLoginPending}
+              isLoading={isLoginPending}
+              fullWidth
+            >
+              {t('users.actions.logIn')}
+            </PrimaryButton>
+          </form>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

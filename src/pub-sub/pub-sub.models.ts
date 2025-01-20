@@ -29,4 +29,6 @@ export class WebSocketWithId extends WebSocket {
   id!: string;
 }
 
-export class WebSocketServerWithIds extends WebSocketServer<typeof WebSocketWithId> {}
+export class WebSocketServerWithIds extends WebSocketServer<
+  typeof WebSocketWithId
+> {}

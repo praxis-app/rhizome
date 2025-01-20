@@ -5,6 +5,7 @@ import { HealthPage } from '../pages/health-page';
 import { HomePage } from '../pages/home-page';
 import { PageNotFound } from '../pages/page-not-found';
 import { authRouter } from './auth.router';
+import { settingsRouter } from './settings.router';
 
 export const appRouter = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ export const appRouter = createBrowserRouter([
         path: 'health',
         element: <HealthPage />,
       },
+      settingsRouter,
       authRouter,
     ],
   },
