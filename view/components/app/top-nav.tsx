@@ -7,13 +7,13 @@ import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
-interface Props {
+export interface TopNavProps {
   header?: string;
   onBackClick?: () => void;
   backBtnIcon?: ReactNode;
 }
 
-const TopNav = ({ header, onBackClick, backBtnIcon }: Props) => {
+const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
 
   const { t } = useTranslation();

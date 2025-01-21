@@ -16,7 +16,7 @@
   "prompts": {
     "deleteItem": "Are you sure you want to delete this {{itemType}}? This cannot be undone.",
     "inDev": "This feature is still in development.",
-    "permissionDenied": "Permission denied.",
+    "permissionDenied": "Access denied.",
     "removeItem": "Are you sure you want to remove this {{itemType}}?",
     "welcomeToPraxis": "Welcome to Praxis",
     "noContent": "No content to display."
