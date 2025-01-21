@@ -5,6 +5,7 @@ import {
   SxProps,
   useTheme,
 } from '@mui/material';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { BLURPLE, GRAY } from '../../styles/theme';
 
 interface Props extends ButtonProps {
@@ -13,6 +14,7 @@ interface Props extends ButtonProps {
 }
 
 const PrimaryButton = ({ isLoading, children, sx, ...props }: Props) => {
+  const isDarkMode = useIsDarkMode();
   const theme = useTheme();
 
   const buttonStyles: SxProps = {
@@ -24,7 +26,7 @@ const PrimaryButton = ({ isLoading, children, sx, ...props }: Props) => {
       backgroundColor: BLURPLE['400'],
     },
     '&:disabled': {
-      backgroundColor: GRAY['500'],
+      backgroundColor: isDarkMode ? GRAY['500'] : GRAY['100'],
     },
     color: theme.palette.common.white,
     fontWeight: 600,
