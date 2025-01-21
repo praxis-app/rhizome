@@ -9,10 +9,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import TopNav from '../../components/app/top-nav';
+import PermissionDenied from '../../components/roles/permission-denied';
 import Role from '../../components/roles/role';
 import RoleForm from '../../components/roles/role-form';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 
 const CardContent = styled(MuiCardContent)(() => ({
   display: 'flex',
@@ -33,6 +35,18 @@ const ServerRoles = () => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ability = useAbility();
+
+  if (!ability.can('manage', 'ServerConfig')) {
+    return (
+      <PermissionDenied
+        topNavProps={{
+          header: t('roles.headers.serverRoles'),
+          onBackClick: () => navigate(NavigationPaths.Settings),
+        }}
+      />
+    );
+  }
 
   if (isPending) {
     return <ProgressBar />;

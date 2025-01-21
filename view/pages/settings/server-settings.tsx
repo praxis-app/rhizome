@@ -15,7 +15,10 @@ const ServerSettings = () => {
   if (!ability.can('manage', 'ServerConfig')) {
     return (
       <PermissionDenied
-        topNavProps={{ header: t('navigation.serverSettings') }}
+        topNavProps={{
+          header: t('navigation.serverSettings'),
+          onBackClick: () => navigate(NavigationPaths.Home),
+        }}
       />
     );
   }
