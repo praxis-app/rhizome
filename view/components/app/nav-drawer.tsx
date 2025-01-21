@@ -39,20 +39,20 @@ const NavDrawer = () => {
   const isRegistered = !!(data && !data.user.anonymous);
   const showSignUp = !data?.user || isAnon;
 
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: logOut, isPending } = useMutation({
-    mutationFn: async () => {
-      await api.logOut();
+    mutationFn: api.logOut,
+    onSuccess: async () => {
+      await navigate(NavigationPaths.Home);
       setIsLogOutModalOpen(false);
       setIsNavDrawerOpen(false);
       setIsLoggedIn(false);
       queryClient.clear();
     },
   });
-
-  const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const drawerSx: SxProps = {
     '& .MuiBackdrop-root': {
