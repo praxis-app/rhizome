@@ -6,9 +6,11 @@ import TopNav from '../../components/app/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
 
 const ServerSettings = () => {
   const { t } = useTranslation();
+  const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
   const ability = useAbility();
 
@@ -29,7 +31,13 @@ const ServerSettings = () => {
 
       <Box
         onClick={() => navigate(NavigationPaths.Roles)}
-        sx={{ cursor: 'pointer', userSelect: 'none' }}
+        sx={{
+          cursor: 'pointer',
+          userSelect: 'none',
+          boxShadow: isDarkMode
+            ? 'none'
+            : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
+        }}
         display="flex"
         justifyContent="space-between"
         bgcolor="background.paper"
