@@ -1,13 +1,19 @@
 import { AdminPanelSettings, ChevronRight } from '@mui/icons-material';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../../components/app/top-nav';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 
 const ServerSettings = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ability = useAbility();
+
+  if (!ability.can('manage', 'ServerConfig')) {
+    return <Typography>{t('prompts.permissionDenied')}</Typography>;
+  }
 
   return (
     <>
