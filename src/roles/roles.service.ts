@@ -177,7 +177,7 @@ export const addRoleMembers = async (roleId: string, userIds: string[]) => {
   });
 };
 
-export const deleteRoleMember = async (roleId: string, userId: string) => {
+export const removeRoleMember = async (roleId: string, userId: string) => {
   const role = await roleRepository.findOne({
     where: { id: roleId },
     relations: ['members'],

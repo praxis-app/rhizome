@@ -13,7 +13,7 @@ roleMembersRouter.post(
 roleMembersRouter.delete(
   '/:userId',
   can(['update'], 'Role'),
-  rolesController.deleteRoleMember,
+  rolesController.removeRoleMember,
 );
 
 roleMembersRouter.get(

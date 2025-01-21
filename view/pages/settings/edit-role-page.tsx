@@ -235,7 +235,11 @@ const EditRolePage = () => {
             <Card>
               <CardContent>
                 {roleData.role.members.map((member) => (
-                  <RoleMember roleMember={member} key={member.id} />
+                  <RoleMember
+                    roleId={roleData.role.id}
+                    roleMember={member}
+                    key={member.id}
+                  />
                 ))}
               </CardContent>
             </Card>

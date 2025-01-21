@@ -99,7 +99,7 @@ class ApiClient {
     });
   };
 
-  deleteRoleMember = async (roleId: string, userId: string) => {
+  removeRoleMember = async (roleId: string, userId: string) => {
     const path = `/roles/${roleId}/members/${userId}`;
     return this.executeRequest<void>('delete', path);
   };
