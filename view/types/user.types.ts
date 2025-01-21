@@ -6,3 +6,9 @@ export interface CurrentUser {
   anonymous: boolean;
   permissions: Permission[];
 }
+
+export interface User {
+  id: string;
+  name: string;
+  displayName?: string;
+}

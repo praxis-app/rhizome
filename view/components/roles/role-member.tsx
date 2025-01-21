@@ -2,6 +2,7 @@
 
 import { RemoveCircle } from '@mui/icons-material';
 import { Box, IconButton, Typography, styled } from '@mui/material';
+import { User } from '../../types/user.types';
 import { Link } from '../shared/link';
 import UserAvatar from '../users/user-avatar';
 
@@ -14,7 +15,7 @@ const OuterFlex = styled(Box)(() => ({
 }));
 
 interface Props {
-  roleMember: any;
+  roleMember: User;
 }
 
 const RoleMember = ({ roleMember }: Props) => {

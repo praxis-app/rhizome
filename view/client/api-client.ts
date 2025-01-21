@@ -8,7 +8,7 @@ import {
   Role,
   UpdateRolePermissionsReq,
 } from '../types/role.types';
-import { CurrentUser } from '../types/user.types';
+import { CurrentUser, User } from '../types/user.types';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;
@@ -65,7 +65,7 @@ class ApiClient {
 
   getUsersEligibleForRole = async (roleId: string) => {
     const path = `/roles/${roleId}/members/eligible`;
-    return this.executeRequest<{ users: CurrentUser[] }>('get', path);
+    return this.executeRequest<{ users: User[] }>('get', path);
   };
 
   createRole = async (data: CreateRoleReq) => {

@@ -1,9 +1,10 @@
+import { User } from '../../types/user.types';
 import RoleMemberOption from './role-member-option';
 
 interface Props {
   selectedUserIds: string[];
   setSelectedUserIds(selectedUsers: string[]): void;
-  user: any;
+  user: User;
 }
 
 const AddRoleMemberOption = ({

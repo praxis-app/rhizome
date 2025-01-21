@@ -6,6 +6,7 @@ import {
   Typography,
   styled,
 } from '@mui/material';
+import { User } from '../../types/user.types';
 import UserAvatar from '../users/user-avatar';
 
 const ROLE_MEMBER_OPTION_STYLES: SxProps = {
@@ -27,7 +28,7 @@ const CardActionArea = styled(MuiCardActionArea)(() => ({
 interface Props {
   handleChange(): void;
   checked: boolean;
-  user: any;
+  user: User;
 }
 
 const RoleMemberOption = ({ handleChange, user, checked }: Props) => (

@@ -24,13 +24,18 @@ const permissionRepository = dataSource.getRepository(Permission);
 export const getRole = async (roleId: string) => {
   const role = await roleRepository.findOne({
     where: { id: roleId },
-    relations: ['permissions', 'members'],
+    relations: ['permissions'],
   });
   if (!role) {
     throw new Error('Role not found');
   }
+  const members = await userRepository.find({
+    where: { roles: { id: roleId } },
+    select: ['id', 'name', 'displayName'],
+  });
   const permissions = buildPermissionRules([role]);
-  return { ...role, permissions };
+
+  return { ...role, permissions, members };
 };
 
 export const getRoles = async () => {
@@ -82,6 +87,7 @@ export const getUsersEligibleForRole = async (roleId: string) => {
       anonymous: false,
       locked: false,
     },
+    select: ['id', 'name', 'displayName'],
   });
 };
 

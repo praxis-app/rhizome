@@ -41,7 +41,7 @@ const FlexCardContent = styled(MuiCardContent)(() => ({
   paddingTop: 13,
 }));
 
-export enum EditRoleTabName {
+enum EditRoleTabName {
   Permissions = 'permissions',
   Members = 'members',
 }
