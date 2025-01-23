@@ -7,6 +7,7 @@ import PermissionDenied from '../../components/roles/permission-denied';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { GRAY } from '../../styles/theme';
 
 const ServerSettings = () => {
   const { t } = useTranslation();
@@ -37,6 +38,7 @@ const ServerSettings = () => {
           boxShadow: isDarkMode
             ? 'none'
             : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
+          border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
         }}
         display="flex"
         justifyContent="space-between"
