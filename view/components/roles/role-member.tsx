@@ -43,11 +43,10 @@ const RoleMember = ({ roleId, roleMember }: Props) => {
           memberCount: Math.max(0, role.memberCount - 1),
         })),
       }));
-      // TODO: Resolve issue with undefined error
       queryClient.setQueryData(
         ['role', roleId, 'members', 'eligible'],
         (data: { users: User[] }) => {
-          return [roleMember, ...data.users];
+          return { users: [roleMember, ...data.users] };
         },
       );
     },
