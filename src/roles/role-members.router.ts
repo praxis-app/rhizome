@@ -2,7 +2,9 @@ import express from 'express';
 import { can } from './middleware/can.middleware';
 import * as rolesController from './roles.controller';
 
-export const roleMembersRouter = express.Router();
+export const roleMembersRouter = express.Router({
+  mergeParams: true,
+});
 
 roleMembersRouter.post(
   '/',
