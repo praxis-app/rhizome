@@ -1,6 +1,7 @@
 import { AddCircle, ArrowForwardIos } from '@mui/icons-material';
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent as MuiCardContent,
@@ -49,7 +50,8 @@ enum EditRoleTabName {
 const EditRolePage = () => {
   const [tab, setTab] = useState(0);
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { setToast } = useAppStore((state) => state);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -98,7 +100,7 @@ const EditRolePage = () => {
       });
       queryClient.invalidateQueries({ queryKey: ['me'] });
       setSelectedUserIds([]);
-      setIsModalOpen(false);
+      setIsAddMemberModalOpen(false);
     },
     onError(error: AxiosError) {
       const errorMessage =
@@ -111,7 +113,7 @@ const EditRolePage = () => {
     },
   });
 
-  const { mutate: deleteRole } = useMutation({
+  const { mutate: deleteRole, isPending: isDeletePending } = useMutation({
     mutationFn: async () => {
       if (!roleId) {
         return;
@@ -164,10 +166,6 @@ const EditRolePage = () => {
     deleteRole();
   };
 
-  const handleDeleteBtnClickWithConfirm = () =>
-    window.confirm(t('prompts.deleteItem', { itemType: 'role' })) &&
-    handleDeleteBtnClick();
-
   if (isRolePending) {
     return <ProgressBar />;
   }
@@ -199,9 +197,36 @@ const EditRolePage = () => {
       {tab === 0 && (
         <>
           <RoleForm editRole={roleData.role} />
-          <DeleteButton onClick={handleDeleteBtnClickWithConfirm}>
+
+          <DeleteButton onClick={() => setIsConfirmModalOpen(true)}>
             {t('roles.actions.delete')}
           </DeleteButton>
+
+          <Modal
+            open={isConfirmModalOpen}
+            onClose={() => setIsConfirmModalOpen(false)}
+          >
+            <Typography marginBottom={3}>
+              {t('prompts.deleteItem', { itemType: 'role' })}
+            </Typography>
+
+            <Box display="flex" gap={1}>
+              <Button
+                variant="contained"
+                onClick={() => setIsConfirmModalOpen(false)}
+              >
+                {t('actions.cancel')}
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ color: '#f44336' }}
+                onClick={handleDeleteBtnClick}
+                disabled={isDeletePending}
+              >
+                {t('actions.delete')}
+              </Button>
+            </Box>
+          </Modal>
         </>
       )}
 
@@ -210,7 +235,7 @@ const EditRolePage = () => {
       {tab === 2 && (
         <>
           <Card sx={{ cursor: 'pointer', marginBottom: '12px' }}>
-            <CardActionArea onClick={() => setIsModalOpen(true)}>
+            <CardActionArea onClick={() => setIsAddMemberModalOpen(true)}>
               <FlexCardContent>
                 <Box display="flex">
                   <AddCircle
@@ -248,9 +273,9 @@ const EditRolePage = () => {
           <Modal
             title={t('roles.actions.addMembers')}
             actionLabel={t('roles.actions.add')}
-            onClose={() => setIsModalOpen(false)}
+            onClose={() => setIsAddMemberModalOpen(false)}
             closingAction={addMembers}
-            open={isModalOpen}
+            open={isAddMemberModalOpen}
           >
             {eligibleUsersData?.users.map((user) => (
               <AddRoleMemberOption

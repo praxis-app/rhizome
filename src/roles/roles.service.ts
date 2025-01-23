@@ -92,7 +92,8 @@ export const getUsersEligibleForRole = async (roleId: string) => {
 };
 
 export const createRole = async ({ name, color }: CreateRoleReq) => {
-  return roleRepository.save({ name, color });
+  const role = await roleRepository.save({ name, color });
+  return { ...role, memberCount: 0 };
 };
 
 export const updateRole = async (
