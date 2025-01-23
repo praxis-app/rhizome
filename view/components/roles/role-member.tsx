@@ -1,13 +1,15 @@
 // TODO: Determine whether to split RoleMember between server and group
 
 import { RemoveCircle } from '@mui/icons-material';
-import { Box, IconButton, Typography, styled } from '@mui/material';
+import { Box, Button, IconButton, Typography, styled } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
 import { Role } from '../../types/role.types';
 import { User } from '../../types/user.types';
 import { Link } from '../shared/link';
+import Modal from '../shared/modal';
 import UserAvatar from '../users/user-avatar';
 
 const OuterFlex = styled(Box)(() => ({
@@ -24,12 +26,15 @@ interface Props {
 }
 
 const RoleMember = ({ roleId, roleMember }: Props) => {
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const { mutate: removeMember } = useMutation({
+  const { mutate: removeMember, isPending } = useMutation({
     async mutationFn() {
       await api.removeRoleMember(roleId, roleMember.id);
+      setIsConfirmModalOpen(false);
 
       queryClient.setQueryData(['role', roleId], (data: { role: Role }) => {
         const filteredMembers = data.role.members.filter(
@@ -52,10 +57,6 @@ const RoleMember = ({ roleId, roleMember }: Props) => {
     },
   });
 
-  const handleRemoveBtnClick = () =>
-    window.confirm(t('prompts.removeItem', { itemType: 'role member' })) &&
-    removeMember();
-
   return (
     <OuterFlex justifyContent="space-between">
       <Link to="/">
@@ -71,9 +72,35 @@ const RoleMember = ({ roleId, roleMember }: Props) => {
         </Box>
       </Link>
 
-      <IconButton onClick={handleRemoveBtnClick}>
+      <IconButton onClick={() => setIsConfirmModalOpen(true)}>
         <RemoveCircle />
       </IconButton>
+
+      <Modal
+        open={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+      >
+        <Typography marginBottom={3}>
+          {t('prompts.removeItem', { itemType: 'role member' })}
+        </Typography>
+
+        <Box display="flex" gap={1}>
+          <Button
+            variant="contained"
+            onClick={() => setIsConfirmModalOpen(false)}
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => removeMember()}
+            sx={{ color: '#f44336' }}
+            disabled={isPending}
+          >
+            {t('actions.remove')}
+          </Button>
+        </Box>
+      </Modal>
     </OuterFlex>
   );
 };
