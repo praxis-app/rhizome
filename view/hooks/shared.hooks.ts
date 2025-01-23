@@ -127,12 +127,13 @@ export const useSubscription = (
 };
 
 export const useIsDarkMode = () => {
-  const [prefersDarkMode, setPrefersDarkMode] = useState(true);
+  const [prefersDarkMode, setPrefersDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches,
+  );
   const { mode } = useColorScheme();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    setPrefersDarkMode(mediaQuery.matches);
 
     const handleChange = (e: MediaQueryListEvent) =>
       setPrefersDarkMode(e.matches);
