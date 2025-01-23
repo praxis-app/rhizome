@@ -116,7 +116,11 @@ const Modal = ({
           <Close />
         </IconButton>
         <Box sx={titleBoxStyles}>
-          <Typography variant="h6" lineHeight={subtext ? 0.9 : 1.6}>
+          <Typography
+            color="textPrimary"
+            variant="h6"
+            lineHeight={subtext ? 0.9 : 1.6}
+          >
             {title}
           </Typography>
 
@@ -130,6 +134,7 @@ const Modal = ({
           <Button
             disabled={isClosingActionDisabled || isLoading}
             onClick={closingAction}
+            sx={{ color: 'text.primary' }}
             startIcon={
               isLoading && (
                 <CircularProgress

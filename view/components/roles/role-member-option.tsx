@@ -39,7 +39,7 @@ const RoleMemberOption = ({ handleChange, user, checked }: Props) => (
         userName={user.name}
         sx={{ marginRight: 1.5 }}
       />
-      <Typography color="primary" sx={{ marginTop: 1, userSelect: 'none' }}>
+      <Typography sx={{ marginTop: 1, userSelect: 'none' }}>
         {user.displayName || user.name}
       </Typography>
     </Box>

@@ -21,7 +21,7 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
   const navigate = useNavigate();
 
   const headerSx: SxProps = {
-    color: 'white',
+    color: isDarkMode ? 'white' : 'black',
     cursor: header ? 'default' : 'pointer',
     fontSize: header ? '17px' : '18px',
     fontWeight: header ? 600 : 700,
