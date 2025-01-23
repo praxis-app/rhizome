@@ -127,7 +127,7 @@ export const useSubscription = (
 };
 
 export const useIsDarkMode = () => {
-  const [prefersDarkMode, setPrefersDarkMode] = useState(false);
+  const [prefersDarkMode, setPrefersDarkMode] = useState(true);
   const { mode } = useColorScheme();
 
   useEffect(() => {
