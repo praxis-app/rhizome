@@ -66,7 +66,7 @@ const RoleMember = ({ roleId, roleMember }: Props) => {
             userName={roleMember.name}
             sx={{ marginRight: 1.5 }}
           />
-          <Typography color="primary" sx={{ marginTop: 1 }}>
+          <Typography sx={{ marginTop: 1 }}>
             {roleMember.displayName || roleMember.name}
           </Typography>
         </Box>

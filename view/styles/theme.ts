@@ -242,16 +242,6 @@ export const theme = createTheme({
       },
     },
 
-    MuiTabs: {
-      styleOverrides: {
-        indicator: ({ theme }: Props) => ({
-          ...theme.applyStyles('light', {
-            backgroundColor: BLURPLE[500],
-          }),
-        }),
-      },
-    },
-
     MuiTab: {
       styleOverrides: {
         root: ({ theme }: Props) => ({
@@ -260,12 +250,6 @@ export const theme = createTheme({
 
           [theme.breakpoints.up('sm')]: {
             minWidth: 160,
-          },
-
-          '&.Mui-selected': {
-            ...theme.applyStyles('light', {
-              color: BLURPLE[500],
-            }),
           },
         }),
       },

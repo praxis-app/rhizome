@@ -244,9 +244,7 @@ const EditRolePage = () => {
                       marginRight: 1.25,
                     }}
                   />
-                  <Typography color="primary">
-                    {t('roles.actions.addMembers')}
-                  </Typography>
+                  <Typography>{t('roles.actions.addMembers')}</Typography>
                 </Box>
                 <ArrowForwardIos
                   fontSize="small"
