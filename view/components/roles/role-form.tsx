@@ -37,7 +37,7 @@ const RoleForm = ({ editRole }: Props) => {
   const { handleSubmit, register, setValue, watch, reset, formState } =
     useForm<CreateRoleReq>({
       defaultValues: {
-        color: editRole?.color || ROLE_COLOR_OPTIONS[12],
+        color: editRole?.color || ROLE_COLOR_OPTIONS[0],
         name: editRole?.name || '',
       },
       mode: 'onChange',

@@ -76,7 +76,7 @@ const ColorPicker = ({ label, color, onChange, sx }: Props) => {
             {t('roles.form.pickColor')}
           </Typography>
 
-          <Box display="flex" gap="16px" flexWrap="wrap" width="250px">
+          <Box display="flex" gap="14px" flexWrap="wrap" width="250px">
             {ROLE_COLOR_OPTIONS.map((colorOption) => (
               <Box
                 key={colorOption}
