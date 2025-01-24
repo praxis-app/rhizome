@@ -1,4 +1,4 @@
-import { AdminPanelSettings, ChevronRight } from '@mui/icons-material';
+import { AdminPanelSettings, ChevronRight, Close } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,11 @@ const ServerSettings = () => {
 
   return (
     <>
-      <TopNav header={t('navigation.serverSettings')} />
+      <TopNav
+        backBtnIcon={<Close />}
+        onBackClick={() => navigate(NavigationPaths.Home)}
+        header={t('navigation.serverSettings')}
+      />
 
       <Box
         onClick={() => navigate(NavigationPaths.Roles)}
