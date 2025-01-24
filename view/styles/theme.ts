@@ -76,11 +76,11 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }: Props) => ({
           // Mobile (first priority)
-          paddingTop: 80,
+          padding: '80px 10px 150px 10px',
 
           // Tablet
           [theme.breakpoints.up('sm')]: {
-            paddingTop: 102.5,
+            padding: '102.5px 24px 150px 24px',
           },
 
           // Desktop
