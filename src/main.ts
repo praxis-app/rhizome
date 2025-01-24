@@ -45,7 +45,11 @@ dotenv.config();
 
   // Add error handling middleware for all routes
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-    res.status(500).send(err.message);
+    if (err.name === 'ForbiddenError') {
+      res.status(403).send(err.message);
+    } else {
+      res.status(500).send(err.message);
+    }
     console.error(err);
   });
 
