@@ -4,4 +4,4 @@ import { updateRolePermissions } from './roles.controller';
 
 export const rolePermissionsRouter = express.Router();
 
-rolePermissionsRouter.put('/', can(['update'], 'Role'), updateRolePermissions);
+rolePermissionsRouter.put('/', can('update', 'Role'), updateRolePermissions);

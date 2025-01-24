@@ -15,11 +15,11 @@ export const rolesRouter = express.Router();
 
 rolesRouter.use(authenticate);
 
-rolesRouter.get('/:roleId', can(['read'], 'Role'), getRole);
-rolesRouter.get('/', can(['read'], 'Role'), getRoles);
-rolesRouter.post('/', can(['create'], 'Role'), createRole);
-rolesRouter.put('/:roleId', can(['update'], 'Role'), updateRole);
-rolesRouter.delete('/:roleId', can(['delete'], 'Role'), deleteRole);
+rolesRouter.get('/:roleId', can('read', 'Role'), getRole);
+rolesRouter.get('/', can('read', 'Role'), getRoles);
+rolesRouter.post('/', can('create', 'Role'), createRole);
+rolesRouter.put('/:roleId', can('update', 'Role'), updateRole);
+rolesRouter.delete('/:roleId', can('delete', 'Role'), deleteRole);
 
 rolesRouter.use('/:roleId/permissions', rolePermissionsRouter);
 rolesRouter.use('/:roleId/members', roleMembersRouter);

@@ -8,18 +8,18 @@ export const roleMembersRouter = express.Router({
 
 roleMembersRouter.post(
   '/',
-  can(['update'], 'Role'),
+  can('update', 'Role'),
   rolesController.addRoleMembers,
 );
 
 roleMembersRouter.delete(
   '/:userId',
-  can(['update'], 'Role'),
+  can('update', 'Role'),
   rolesController.removeRoleMember,
 );
 
 roleMembersRouter.get(
   '/eligible',
-  can(['read'], 'Role'),
+  can('read', 'Role'),
   rolesController.getUsersEligibleForRole,
 );
