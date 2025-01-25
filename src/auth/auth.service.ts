@@ -2,6 +2,7 @@ import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
+import { getUserPermissions } from '../roles/roles.service';
 import { User } from '../users/user.entity';
 import * as usersService from '../users/users.service';
 
@@ -65,7 +66,7 @@ export const createAnonSession = async () => {
 };
 
 export const verifyToken = async (token: string) => {
-  return new Promise<User | null>((resolve) => {
+  return new Promise<string | null>((resolve) => {
     const secret = process.env.TOKEN_SECRET as string;
     jwt.verify(token, secret, async (err, payload) => {
       if (err) {
@@ -73,12 +74,15 @@ export const verifyToken = async (token: string) => {
         return;
       }
       const { sub } = payload as { sub: string };
-      const user = await userRepository.findOne({
-        where: { id: sub },
-      });
-      resolve(user);
+      resolve(sub);
     });
   });
+};
+
+export const getAuthedUser = async (userId: string) => {
+  const user = await userRepository.findOne({ where: { id: userId } });
+  const permissions = await getUserPermissions(userId);
+  return { ...user, permissions };
 };
 
 export const generateAccessToken = (userId: string) => {
