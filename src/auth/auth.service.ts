@@ -65,18 +65,14 @@ export const createAnonSession = async () => {
   return generateAccessToken(user.id);
 };
 
-export const verifyToken = async (token: string) => {
-  return new Promise<string>((resolve) => {
+export const verifyToken = (token: string) => {
+  try {
     const secret = process.env.TOKEN_SECRET as string;
-    jwt.verify(token, secret, async (err, payload) => {
-      if (err) {
-        resolve('');
-        return;
-      }
-      const { sub } = payload as { sub: string };
-      resolve(sub);
-    });
-  });
+    const { sub } = jwt.verify(token, secret) as { sub: string };
+    return sub;
+  } catch {
+    return '';
+  }
 };
 
 export const getAuthedUser = async (userId: string) => {

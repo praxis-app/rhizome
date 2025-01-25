@@ -12,7 +12,7 @@ export const authenticate = async (
     res.status(401).send('Unauthorized');
     return;
   }
-  const userId = await verifyToken(token);
+  const userId = verifyToken(token);
   if (!userId) {
     res.status(401).send('Unauthorized');
     return;
