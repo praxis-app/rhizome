@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import Modal from '../shared/modal';
@@ -35,9 +36,11 @@ const NavDrawer = () => {
     useAppStore((state) => state);
 
   const { data } = useMeQuery();
+  const ability = useAbility();
+
   const isAnon = !!data?.user.anonymous;
-  const isRegistered = !!(data && !data.user.anonymous);
   const showSignUp = !data?.user || isAnon;
+  const showSettings = ability.can('manage', 'ServerConfig');
 
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -98,7 +101,7 @@ const NavDrawer = () => {
           <ListItemText primary={t('navigation.chat')} />
         </ListItemButton>
 
-        {isRegistered && (
+        {showSettings && (
           <ListItemButton
             onClick={() => handleNavigate(NavigationPaths.Settings)}
           >
