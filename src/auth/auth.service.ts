@@ -75,10 +75,13 @@ export const verifyAccessToken = (token: string) => {
   }
 };
 
-export const getAuthedUser = async (userId: string) => {
+export const getAuthedUser = async (userId: string, includePerms = true) => {
   const user = await userRepository.findOne({ where: { id: userId } });
   if (!user) {
     return null;
+  }
+  if (!includePerms) {
+    return user;
   }
   const permissions = await getUserPermissions(userId);
   return { ...user, permissions };

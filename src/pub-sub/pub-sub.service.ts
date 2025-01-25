@@ -35,7 +35,7 @@ export const handleMessage = async (
   );
 
   const sub = authService.verifyAccessToken(token);
-  const user = await authService.getAuthedUser(sub);
+  const user = await authService.getAuthedUser(sub, false);
 
   if (!user) {
     const response: PubSubResponse = {
