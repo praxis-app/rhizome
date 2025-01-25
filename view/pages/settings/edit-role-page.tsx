@@ -62,7 +62,9 @@ const EditRolePage = () => {
   const { roleId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const ability = useAbility();
+  const canManageRoles = ability.can('manage', 'Role');
 
   const {
     data: roleData,
@@ -71,13 +73,13 @@ const EditRolePage = () => {
   } = useQuery({
     queryKey: ['role', roleId],
     queryFn: () => api.getRole(roleId!),
-    enabled: !!roleId,
+    enabled: !!roleId && canManageRoles,
   });
 
   const { data: eligibleUsersData, error: eligibleUsersError } = useQuery({
     queryKey: ['role', roleId, 'members', 'eligible'],
     queryFn: () => api.getUsersEligibleForRole(roleId!),
-    enabled: !!roleId && tab === 2,
+    enabled: !!roleId && tab === 2 && canManageRoles,
   });
 
   const { mutate: addMembers } = useMutation({
@@ -169,7 +171,7 @@ const EditRolePage = () => {
     deleteRole();
   };
 
-  if (!ability.can('manage', 'Role')) {
+  if (!canManageRoles) {
     return (
       <PermissionDenied
         topNavProps={{
