@@ -33,7 +33,7 @@ export class Permission {
   role: Role;
 
   @Column()
-  roleId: number;
+  roleId: string;
 
   @CreateDateColumn()
   createdAt: Date;
