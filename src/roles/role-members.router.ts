@@ -1,25 +1,16 @@
 import express from 'express';
 import { can } from './middleware/can.middleware';
-import * as rolesController from './roles.controller';
+import {
+  addRoleMembers,
+  getUsersEligibleForRole,
+  removeRoleMember,
+} from './roles.controller';
 
 export const roleMembersRouter = express.Router({
   mergeParams: true,
 });
 
-roleMembersRouter.post(
-  '/',
-  can('update', 'Role'),
-  rolesController.addRoleMembers,
-);
-
-roleMembersRouter.delete(
-  '/:userId',
-  can('update', 'Role'),
-  rolesController.removeRoleMember,
-);
-
-roleMembersRouter.get(
-  '/eligible',
-  can('read', 'Role'),
-  rolesController.getUsersEligibleForRole,
-);
+roleMembersRouter
+  .post('/', can('update', 'Role'), addRoleMembers)
+  .delete('/:userId', can('update', 'Role'), removeRoleMember)
+  .get('/eligible', can('read', 'Role'), getUsersEligibleForRole);
