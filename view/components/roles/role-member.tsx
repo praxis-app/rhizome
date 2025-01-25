@@ -1,5 +1,3 @@
-// TODO: Determine whether to split RoleMember between server and group
-
 import { RemoveCircle } from '@mui/icons-material';
 import { Box, Button, IconButton, Typography, styled } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
