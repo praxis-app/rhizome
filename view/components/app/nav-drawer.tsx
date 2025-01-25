@@ -1,4 +1,10 @@
-import { Chat, Close, ExitToApp, PersonAdd } from '@mui/icons-material';
+import {
+  Chat,
+  Close,
+  ExitToApp,
+  PersonAdd,
+  Settings,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -18,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import Modal from '../shared/modal';
@@ -29,23 +36,26 @@ const NavDrawer = () => {
     useAppStore((state) => state);
 
   const { data } = useMeQuery();
-  const isAnon = !!data?.user.anonymous;
-  const showSignUp = !isLoggedIn || isAnon;
+  const ability = useAbility();
 
+  const isAnon = !!data?.user.anonymous;
+  const showSignUp = !data?.user || isAnon;
+  const showSettings = ability.can('manage', 'ServerConfig');
+
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: logOut, isPending } = useMutation({
-    mutationFn: async () => {
-      await api.logOut();
+    mutationFn: api.logOut,
+    onSuccess: async () => {
+      await navigate(NavigationPaths.Home);
       setIsLogOutModalOpen(false);
       setIsNavDrawerOpen(false);
       setIsLoggedIn(false);
       queryClient.clear();
     },
   });
-
-  const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const drawerSx: SxProps = {
     '& .MuiBackdrop-root': {
@@ -90,6 +100,17 @@ const NavDrawer = () => {
           </ListItemIcon>
           <ListItemText primary={t('navigation.chat')} />
         </ListItemButton>
+
+        {showSettings && (
+          <ListItemButton
+            onClick={() => handleNavigate(NavigationPaths.Settings)}
+          >
+            <ListItemIcon>
+              <Settings />
+            </ListItemIcon>
+            <ListItemText primary={t('navigation.settings')} />
+          </ListItemButton>
+        )}
 
         {showSignUp && (
           <ListItemButton

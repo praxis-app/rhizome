@@ -2,6 +2,7 @@ import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
+import { getUserPermissions } from '../roles/roles.service';
 import { User } from '../users/user.entity';
 import * as usersService from '../users/users.service';
 
@@ -51,7 +52,10 @@ export const signUp = async ({ email, name, password }: SignUpReq) => {
   return generateAccessToken(user.id);
 };
 
-export const upgradeAnonSession = async ({ email, password }: SignUpReq, userId: string) => {
+export const upgradeAnonSession = async (
+  { email, password }: SignUpReq,
+  userId: string,
+) => {
   const passwordHash = await hash(password, SALT_ROUNDS);
   await usersService.upgradeAnonUser(userId, email, passwordHash);
 };
@@ -61,21 +65,26 @@ export const createAnonSession = async () => {
   return generateAccessToken(user.id);
 };
 
-export const verifyToken = async (token: string) => {
-  return new Promise<User | null>((resolve) => {
+export const verifyAccessToken = (token: string) => {
+  try {
     const secret = process.env.TOKEN_SECRET as string;
-    jwt.verify(token, secret, async (err, payload) => {
-      if (err) {
-        resolve(null);
-        return;
-      }
-      const { sub } = payload as { sub: string };
-      const user = await userRepository.findOne({
-        where: { id: sub },
-      });
-      resolve(user);
-    });
-  });
+    const { sub } = jwt.verify(token, secret) as { sub: string };
+    return sub;
+  } catch {
+    return '';
+  }
+};
+
+export const getAuthedUser = async (userId: string, includePerms = true) => {
+  const user = await userRepository.findOne({ where: { id: userId } });
+  if (!user) {
+    return null;
+  }
+  if (!includePerms) {
+    return user;
+  }
+  const permissions = await getUserPermissions(userId);
+  return { ...user, permissions };
 };
 
 export const generateAccessToken = (userId: string) => {

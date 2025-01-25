@@ -76,21 +76,21 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }: Props) => ({
           // Mobile (first priority)
-          paddingTop: 18,
+          padding: '80px 10px 150px 10px',
 
           // Tablet
           [theme.breakpoints.up('sm')]: {
-            paddingTop: 50,
+            padding: '102.5px 24px 150px 24px',
           },
 
           // Desktop
           [theme.breakpoints.up('md')]: {
-            paddingTop: 70,
+            paddingTop: 120,
           },
 
           // Larger devices
           [theme.breakpoints.up('lg')]: {
-            paddingTop: 75,
+            paddingTop: 150,
           },
         }),
         maxWidthSm: ({ theme }: Props) => ({
@@ -118,7 +118,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: ({ theme }: Props) => ({
           backgroundImage: 'none',
-          borderRadius: '12px',
+          borderRadius: '8px',
 
           ...theme.applyStyles('light', {
             boxShadow:
@@ -206,7 +206,7 @@ export const theme = createTheme({
         root: ({ theme }: Props) => ({
           color: theme.palette.common.black,
           ...theme.applyStyles('dark', {
-            color: theme.palette.common.white,
+            color: theme.palette.text.primary,
           }),
         }),
       },
@@ -237,6 +237,19 @@ export const theme = createTheme({
             ...theme.applyStyles('dark', {
               backgroundColor: 'rgb(205, 205, 255, 0.1)',
             }),
+          },
+        }),
+      },
+    },
+
+    MuiTab: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          fontSize: 16,
+          textTransform: 'none',
+
+          [theme.breakpoints.up('sm')]: {
+            minWidth: 160,
           },
         }),
       },

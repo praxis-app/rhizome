@@ -3,7 +3,12 @@ import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import { Channel, Message } from '../types/chat.types';
 import { Image } from '../types/image.types';
-import { CurrentUser } from '../types/user.types';
+import {
+  CreateRoleReq,
+  Role,
+  UpdateRolePermissionsReq,
+} from '../types/role.types';
+import { CurrentUser, User } from '../types/user.types';
 
 class ApiClient {
   private axiosInstance: AxiosInstance;
@@ -46,6 +51,62 @@ class ApiClient {
   getCurrentUser = async () => {
     const path = '/users/me';
     return this.executeRequest<{ user: CurrentUser }>('get', path);
+  };
+
+  getRole = async (roleId: string) => {
+    const path = `/roles/${roleId}`;
+    return this.executeRequest<{ role: Role }>('get', path);
+  };
+
+  getRoles = async () => {
+    const path = '/roles';
+    return this.executeRequest<{ roles: Role[] }>('get', path);
+  };
+
+  getUsersEligibleForRole = async (roleId: string) => {
+    const path = `/roles/${roleId}/members/eligible`;
+    return this.executeRequest<{ users: User[] }>('get', path);
+  };
+
+  createRole = async (data: CreateRoleReq) => {
+    const path = '/roles';
+    return this.executeRequest<{ role: Role }>('post', path, {
+      data,
+    });
+  };
+
+  updateRole = async (roleId: string, data: CreateRoleReq) => {
+    const path = `/roles/${roleId}`;
+    return this.executeRequest<void>('put', path, {
+      data,
+    });
+  };
+
+  updateRolePermissions = async (
+    roleId: string,
+    data: UpdateRolePermissionsReq,
+  ) => {
+    const path = `/roles/${roleId}/permissions`;
+    return this.executeRequest<void>('put', path, {
+      data,
+    });
+  };
+
+  addRoleMembers = async (roleId: string, userIds: string[]) => {
+    const path = `/roles/${roleId}/members`;
+    return this.executeRequest<void>('post', path, {
+      data: { userIds },
+    });
+  };
+
+  removeRoleMember = async (roleId: string, userId: string) => {
+    const path = `/roles/${roleId}/members/${userId}`;
+    return this.executeRequest<void>('delete', path);
+  };
+
+  deleteRole = async (roleId: string) => {
+    const path = `/roles/${roleId}`;
+    return this.executeRequest<void>('delete', path);
   };
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {

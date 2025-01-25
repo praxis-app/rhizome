@@ -45,7 +45,11 @@ dotenv.config();
 
   // Add error handling middleware for all routes
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-    res.status(500).send(err.message);
+    if (err.name === 'ForbiddenError') {
+      res.status(403).send(err.message);
+    } else {
+      res.status(500).send(err.message);
+    }
     console.error(err);
   });
 
@@ -56,10 +60,13 @@ dotenv.config();
 
   // Handle web socket connections with pub-sub service
   webSocketServer.on('connection', (webSocket) => {
-    webSocket.on('message', (data) => pubSubService.handleMessage(webSocket, data));
+    webSocket.on('message', (data) =>
+      pubSubService.handleMessage(webSocket, data),
+    );
     webSocket.on('error', console.error);
   });
 
   server.listen(process.env.SERVER_PORT);
-  console.log(`Server running at http://localhost:${process.env.SERVER_PORT} 🚀`);
+  const url = `http://localhost:${process.env.SERVER_PORT}`;
+  console.log(`Server running at ${url} 🚀`);
 })();

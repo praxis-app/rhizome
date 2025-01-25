@@ -48,7 +48,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const queryClient = useQueryClient();
   const isDarkMode = useIsDarkMode();
 
-  const { handleSubmit, register, setValue, formState, reset } =
+  const { handleSubmit, register, setValue, formState, reset, getValues } =
     useForm<FormValues>({ mode: 'onChange' });
 
   const { onChange, ...registerBodyProps } = register('body', {
@@ -58,8 +58,9 @@ const MessageForm = ({ channelId, onSend }: Props) => {
     },
   });
 
+  const isEmptyBody = !getValues('body') && !formState.dirtyFields.body;
+  const isEmpty = isEmptyBody && !images.length;
   const draftKey = `message-draft-${channelId}`;
-  const isEmpty = !formState.dirtyFields.body && !images.length;
 
   const { mutate: sendMessage, isPending: isMessageSending } = useMutation({
     mutationFn: async ({ body }: FormValues) => {
@@ -168,7 +169,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
 
   const saveDraft = debounce((draft: string) => {
     localStorage.setItem(draftKey, draft);
-  }, 300);
+  }, 100);
 
   const isDisabled = () => {
     if (isMessageSending) {

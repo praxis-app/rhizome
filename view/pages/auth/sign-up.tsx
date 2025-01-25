@@ -19,6 +19,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import TopNav from '../../components/app/top-nav';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import {
@@ -182,92 +183,96 @@ const SignUp = () => {
   }
 
   return (
-    <Card>
-      <CardHeader
-        title={t('users.prompts.createAccount')}
-        subheader={subheader}
-        sx={{ paddingBottom: 0 }}
-      />
-      <CardContent>
-        <form
-          onSubmit={handleSubmit((fv) =>
-            isAnon ? upgradeAnon(fv) : signUp(fv),
-          )}
-        >
-          <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
-            {!isLoggedIn && (
+    <>
+      <TopNav />
+
+      <Card>
+        <CardHeader
+          title={t('users.prompts.createAccount')}
+          subheader={subheader}
+          sx={{ paddingBottom: 0 }}
+        />
+        <CardContent>
+          <form
+            onSubmit={handleSubmit((fv) =>
+              isAnon ? upgradeAnon(fv) : signUp(fv),
+            )}
+          >
+            <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
+              {!isLoggedIn && (
+                <FormControl>
+                  <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
+                    {t('users.form.username')}
+                  </FormLabel>
+                  <OutlinedInput
+                    autoComplete="off"
+                    inputProps={{ sx: inputBaseSx }}
+                    {...registerNameProps}
+                  />
+                  <FormHelperText sx={{ marginLeft: 0.15 }}>
+                    {t('users.prompts.usernameHelper')}
+                  </FormHelperText>
+                  {!!formState.errors.name && (
+                    <Typography color="error" fontSize="small" paddingTop={0.5}>
+                      {formState.errors.name.message}
+                    </Typography>
+                  )}
+                </FormControl>
+              )}
+
               <FormControl>
                 <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                  {t('users.form.username')}
+                  {t('users.form.email')}
                 </FormLabel>
                 <OutlinedInput
                   autoComplete="off"
                   inputProps={{ sx: inputBaseSx }}
-                  {...registerNameProps}
+                  {...registerEmailProps}
                 />
-                <FormHelperText sx={{ marginLeft: 0.15 }}>
-                  {t('users.prompts.usernameHelper')}
-                </FormHelperText>
-                {!!formState.errors.name && (
+                {!!formState.errors.email && (
                   <Typography color="error" fontSize="small" paddingTop={0.5}>
-                    {formState.errors.name.message}
+                    {formState.errors.email.message}
                   </Typography>
                 )}
               </FormControl>
-            )}
 
-            <FormControl>
-              <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                {t('users.form.email')}
-              </FormLabel>
-              <OutlinedInput
-                autoComplete="off"
-                inputProps={{ sx: inputBaseSx }}
-                {...registerEmailProps}
-              />
-              {!!formState.errors.email && (
-                <Typography color="error" fontSize="small" paddingTop={0.5}>
-                  {formState.errors.email.message}
-                </Typography>
-              )}
-            </FormControl>
+              <FormControl>
+                <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
+                  {t('users.form.password')}
+                </FormLabel>
+                <OutlinedInput
+                  autoComplete="off"
+                  type={showPassword ? 'text' : 'password'}
+                  endAdornment={renderShowPassword()}
+                  inputProps={{
+                    sx: {
+                      borderTopRightRadius: '0 !important',
+                      borderBottomRightRadius: '0 !important',
+                      ...inputBaseSx,
+                    },
+                  }}
+                  {...registerPasswordProps}
+                />
+                {!!formState.errors.password && (
+                  <Typography color="error" fontSize="small" paddingTop={0.5}>
+                    {formState.errors.password.message}
+                  </Typography>
+                )}
+              </FormControl>
+            </FormGroup>
 
-            <FormControl>
-              <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                {t('users.form.password')}
-              </FormLabel>
-              <OutlinedInput
-                autoComplete="off"
-                type={showPassword ? 'text' : 'password'}
-                endAdornment={renderShowPassword()}
-                inputProps={{
-                  sx: {
-                    borderTopRightRadius: '0 !important',
-                    borderBottomRightRadius: '0 !important',
-                    ...inputBaseSx,
-                  },
-                }}
-                {...registerPasswordProps}
-              />
-              {!!formState.errors.password && (
-                <Typography color="error" fontSize="small" paddingTop={0.5}>
-                  {formState.errors.password.message}
-                </Typography>
-              )}
-            </FormControl>
-          </FormGroup>
-
-          <PrimaryButton
-            type="submit"
-            sx={{ height: 45 }}
-            disabled={isPending}
-            fullWidth
-          >
-            {t('users.actions.signUp')}
-          </PrimaryButton>
-        </form>
-      </CardContent>
-    </Card>
+            <PrimaryButton
+              type="submit"
+              sx={{ height: 45 }}
+              disabled={isPending}
+              fullWidth
+            >
+              {t('users.actions.signUp')}
+            </PrimaryButton>
+          </form>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

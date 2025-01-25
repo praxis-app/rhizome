@@ -1,4 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { api } from '../client/api-client';
 import { LocalStorageKeys } from '../constants/shared.constants';
 import { useAppStore } from '../store/app.store';
@@ -17,7 +18,10 @@ export const useMeQuery = (
         setIsLoggedIn(true);
         return me;
       } catch (error) {
-        localStorage.removeItem(LocalStorageKeys.AccessToken);
+        if ((error as AxiosError).response?.status === 401) {
+          localStorage.removeItem(LocalStorageKeys.AccessToken);
+          setIsLoggedIn(false);
+        }
         throw error;
       } finally {
         setIsAppLoading(false);

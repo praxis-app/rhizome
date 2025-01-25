@@ -1,6 +1,10 @@
 // TODO: Add support for user updates with validation
 
-import { colors, NumberDictionary, uniqueNamesGenerator } from 'unique-names-generator';
+import {
+  colors,
+  NumberDictionary,
+  uniqueNamesGenerator,
+} from 'unique-names-generator';
 import * as channelsService from '../channels/channels.service';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
@@ -9,7 +13,11 @@ import { NATURE_DICTIONARY, SPACE_DICTIONARY } from './users.constants';
 
 const userRepository = dataSource.getRepository(User);
 
-export const signUp = async (email: string, name: string | undefined, password: string) => {
+export const signUp = async (
+  email: string,
+  name: string | undefined,
+  password: string,
+) => {
   const user = await userRepository.save({
     name: name?.trim() || generateName(),
     email: normalizeText(email),
@@ -19,7 +27,11 @@ export const signUp = async (email: string, name: string | undefined, password: 
   return user;
 };
 
-export const upgradeAnonUser = async (userId: string, email: string, password: string) => {
+export const upgradeAnonUser = async (
+  userId: string,
+  email: string,
+  password: string,
+) => {
   const user = await userRepository.findOne({
     where: { id: userId },
   });
@@ -47,7 +59,8 @@ export const createAnonUser = async () => {
 
 const generateName = () => {
   const numberDictionary = NumberDictionary.generate({ min: 10, max: 99 });
-  const nounDictionary = Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
+  const nounDictionary =
+    Math.random() >= 0.5 ? SPACE_DICTIONARY : NATURE_DICTIONARY;
 
   const name = uniqueNamesGenerator({
     dictionaries: [colors, nounDictionary, numberDictionary],
