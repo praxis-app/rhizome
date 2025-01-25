@@ -34,7 +34,9 @@ export const handleMessage = async (
     data.toString(),
   );
 
-  const user = await authService.verifyToken(token);
+  const sub = authService.verifyAccessToken(token);
+  const user = await authService.getAuthedUser(sub);
+
   if (!user) {
     const response: PubSubResponse = {
       error: { code: 'UNAUTHORIZED', message: 'Invalid token' },

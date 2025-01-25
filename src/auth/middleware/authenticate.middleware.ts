@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { getAuthedUser, verifyToken } from '../auth.service';
+import { getAuthedUser, verifyAccessToken } from '../auth.service';
 
 export const authenticate = async (
   req: Request,
@@ -12,12 +12,12 @@ export const authenticate = async (
     res.status(401).send('Unauthorized');
     return;
   }
-  const userId = verifyToken(token);
-  if (!userId) {
+  const sub = verifyAccessToken(token);
+  const user = await getAuthedUser(sub);
+  if (!user) {
     res.status(401).send('Unauthorized');
     return;
   }
-  const user = await getAuthedUser(userId);
   res.locals.user = user;
   next();
 };

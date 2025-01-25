@@ -65,7 +65,7 @@ export const createAnonSession = async () => {
   return generateAccessToken(user.id);
 };
 
-export const verifyToken = (token: string) => {
+export const verifyAccessToken = (token: string) => {
   try {
     const secret = process.env.TOKEN_SECRET as string;
     const { sub } = jwt.verify(token, secret) as { sub: string };
@@ -77,6 +77,9 @@ export const verifyToken = (token: string) => {
 
 export const getAuthedUser = async (userId: string) => {
   const user = await userRepository.findOne({ where: { id: userId } });
+  if (!user) {
+    return null;
+  }
   const permissions = await getUserPermissions(userId);
   return { ...user, permissions };
 };
