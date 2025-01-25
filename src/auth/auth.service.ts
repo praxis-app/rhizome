@@ -66,11 +66,11 @@ export const createAnonSession = async () => {
 };
 
 export const verifyToken = async (token: string) => {
-  return new Promise<string | null>((resolve) => {
+  return new Promise<string>((resolve) => {
     const secret = process.env.TOKEN_SECRET as string;
     jwt.verify(token, secret, async (err, payload) => {
       if (err) {
-        resolve(null);
+        resolve('');
         return;
       }
       const { sub } = payload as { sub: string };
