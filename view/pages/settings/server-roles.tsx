@@ -37,7 +37,7 @@ const ServerRoles = () => {
   const navigate = useNavigate();
   const ability = useAbility();
 
-  if (!ability.can('manage', 'ServerConfig')) {
+  if (!ability.can('manage', 'Role')) {
     return (
       <PermissionDenied
         topNavProps={{

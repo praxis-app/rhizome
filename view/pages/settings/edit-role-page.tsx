@@ -18,6 +18,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import TopNav from '../../components/app/top-nav';
 import AddRoleMemberOption from '../../components/roles/add-role-member-option';
+import PermissionDenied from '../../components/roles/permission-denied';
 import PermissionsForm from '../../components/roles/permissions-form';
 import RoleForm from '../../components/roles/role-form';
 import RoleMember from '../../components/roles/role-member';
@@ -25,6 +26,7 @@ import DeleteButton from '../../components/shared/delete-button';
 import Modal from '../../components/shared/modal';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Role } from '../../types/role.types';
@@ -60,6 +62,7 @@ const EditRolePage = () => {
   const { roleId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ability = useAbility();
 
   const {
     data: roleData,
@@ -165,6 +168,17 @@ const EditRolePage = () => {
     await navigate(NavigationPaths.Roles);
     deleteRole();
   };
+
+  if (!ability.can('manage', 'Role')) {
+    return (
+      <PermissionDenied
+        topNavProps={{
+          header: t('roles.headers.serverRoles'),
+          onBackClick: () => navigate(NavigationPaths.Settings),
+        }}
+      />
+    );
+  }
 
   if (isRolePending) {
     return <ProgressBar />;

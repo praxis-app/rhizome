@@ -15,7 +15,8 @@ const ServerSettings = () => {
   const navigate = useNavigate();
   const ability = useAbility();
 
-  if (!ability.can('manage', 'ServerConfig')) {
+  // TODO: Update to check for ServerConfig after adding more settings
+  if (!ability.can('manage', 'Role')) {
     return (
       <PermissionDenied
         topNavProps={{
