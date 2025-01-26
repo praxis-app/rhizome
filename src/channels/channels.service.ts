@@ -7,6 +7,10 @@ export interface CreateChannelReq {
   name: string;
 }
 
+export interface UpdateChannelReq {
+  name: string;
+}
+
 const GENERAL_CHANNEL_NAME = 'general';
 
 const channelRepository = dataSource.getRepository(Channel);
@@ -56,6 +60,15 @@ export const createChannel = (
 ) => {
   return channelRepository.save({
     members: [{ userId: currentUserId }],
+    name: sanitizeText(name),
+  });
+};
+
+export const updateChannel = async (
+  channelId: string,
+  { name }: UpdateChannelReq,
+) => {
+  return channelRepository.update(channelId, {
     name: sanitizeText(name),
   });
 };

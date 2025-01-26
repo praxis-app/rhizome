@@ -18,3 +18,11 @@ export const createChannel = async (req: Request, res: Response) => {
   );
   res.json({ channel });
 };
+
+export const updateChannel = async (req: Request, res: Response) => {
+  const result = await channelsService.updateChannel(
+    req.params.channelId,
+    req.body,
+  );
+  res.json(result);
+};
