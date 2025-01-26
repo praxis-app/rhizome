@@ -1,6 +1,11 @@
+import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { ChannelMember } from './models/channel-member.entity';
 import { Channel } from './models/channel.entity';
+
+export interface CreateChannelReq {
+  name: string;
+}
 
 const GENERAL_CHANNEL_NAME = 'general';
 
@@ -43,6 +48,16 @@ const getGeneralChannel = async () => {
     return initializeGeneralChannel();
   }
   return generalChannel;
+};
+
+export const createChannel = (
+  { name }: CreateChannelReq,
+  currentUserId: string,
+) => {
+  return channelRepository.save({
+    members: [{ userId: currentUserId }],
+    name: sanitizeText(name),
+  });
 };
 
 const initializeGeneralChannel = () => {

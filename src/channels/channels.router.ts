@@ -1,11 +1,14 @@
-// TODO: Guard routes with permission checks
+// TODO: Ensure all routes are protected by the appropriate permissions
 
 import express from 'express';
 import { messagesRouter } from '../messages/messages.router';
-import * as channelsController from './channels.controller';
+import { can } from '../roles/middleware/can.middleware';
+import { createChannel, getChannel, getChannels } from './channels.controller';
 
 export const channelsRouter = express.Router();
 
-channelsRouter.get('/', channelsController.getChannels);
-channelsRouter.get('/:channelId', channelsController.getChannel);
-channelsRouter.use('/:channelId/messages', messagesRouter);
+channelsRouter
+  .get('/', getChannels)
+  .get('/:channelId', getChannel)
+  .post('/', can('create', 'Channel'), createChannel)
+  .use('/:channelId/messages', messagesRouter);
