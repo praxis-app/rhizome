@@ -5,6 +5,7 @@ import { messagesRouter } from '../messages/messages.router';
 import { can } from '../roles/middleware/can.middleware';
 import {
   createChannel,
+  deleteChannel,
   getChannel,
   getChannels,
   updateChannel,
@@ -18,4 +19,5 @@ channelsRouter
   .get('/:channelId', getChannel)
   .post('/', can('create', 'Channel'), validateChannel, createChannel)
   .put('/:channelId', can('update', 'Channel'), validateChannel, updateChannel)
+  .delete('/:channelId', can('delete', 'Channel'), deleteChannel)
   .use('/:channelId/messages', messagesRouter);

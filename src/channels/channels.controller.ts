@@ -26,3 +26,8 @@ export const updateChannel = async (req: Request, res: Response) => {
   );
   res.json(result);
 };
+
+export const deleteChannel = async (req: Request, res: Response) => {
+  const result = await channelsService.deleteChannel(req.params.channelId);
+  res.json(result);
+};

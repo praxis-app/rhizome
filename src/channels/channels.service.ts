@@ -73,6 +73,10 @@ export const updateChannel = async (
   });
 };
 
+export const deleteChannel = async (channelId: string) => {
+  return channelRepository.delete(channelId);
+};
+
 const initializeGeneralChannel = () => {
   return channelRepository.save({
     name: GENERAL_CHANNEL_NAME,
