@@ -11,13 +11,13 @@ export const validateChannel = (
 ) => {
   const channel = req.body as CreateChannelReq;
   if (typeof channel.name !== 'string') {
-    res.status(400).send('Channel name must be a string');
+    res.status(422).send('Channel name must be a string');
     return;
   }
   const sanitizedName = sanitizeText(channel.name);
   if (sanitizedName.length > CHANNEL_NAME_MAX) {
     const message = `Channel name cannot exceed ${CHANNEL_NAME_MAX} characters`;
-    res.status(400).send(message);
+    res.status(422).send(message);
     return;
   }
   next();
