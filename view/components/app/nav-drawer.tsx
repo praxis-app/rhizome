@@ -1,16 +1,8 @@
-import {
-  Chat,
-  Close,
-  ExitToApp,
-  PersonAdd,
-  Settings,
-} from '@mui/icons-material';
+import { Chat, ExitToApp, PersonAdd, Settings } from '@mui/icons-material';
 import {
   Box,
   Button,
-  Divider,
   Drawer,
-  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -22,12 +14,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import appIconImg from '../../assets/images/app-icon.png';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
+import { GRAY } from '../../styles/theme';
+import LazyLoadImage from '../images/lazy-load-image';
 import Modal from '../shared/modal';
+import UserAvatar from '../users/user-avatar';
 
 const NavDrawer = () => {
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
@@ -74,26 +70,52 @@ const NavDrawer = () => {
       anchor="left"
       open={isNavDrawerOpen}
       onClose={() => setIsNavDrawerOpen(false)}
-      PaperProps={{ sx: { width: '100%' } }}
+      PaperProps={{ sx: { width: '100%', bgcolor: GRAY['950'] } }}
       sx={drawerSx}
     >
       <Box
         display="flex"
         alignItems="center"
-        justifyContent="space-between"
         paddingLeft={1}
         height="55px"
+        justifyContent="space-between"
+        paddingX="16px"
+        paddingTop="12px"
       >
-        <IconButton
-          onClick={() => setIsNavDrawerOpen(false)}
-          sx={{ width: 38, height: 38 }}
-        >
-          <Close />
-        </IconButton>
-      </Box>
-      <Divider />
+        <Box display="flex" alignItems="center" gap="8px">
+          <LazyLoadImage
+            alt="App icon"
+            width="35px"
+            height="auto"
+            src={appIconImg}
+            sx={{ cursor: 'pointer' }}
+            skipAnimation
+          />
+          <Typography fontWeight={700} fontSize="18px">
+            {t('brand')}
+          </Typography>
+        </Box>
 
-      <List sx={{ paddingTop: '16px' }}>
+        {data && (
+          <UserAvatar
+            userId={data.user.id}
+            userName={data.user.name}
+            size={35}
+            sx={{ fontSize: '16px' }}
+          />
+        )}
+      </Box>
+
+      <List
+        sx={{
+          paddingTop: '16px',
+          backgroundColor: 'background.paper',
+          borderTopRightRadius: '16px',
+          borderTopLeftRadius: '16px',
+          marginTop: '12px',
+          height: '100%',
+        }}
+      >
         <ListItemButton onClick={() => handleNavigate(NavigationPaths.Home)}>
           <ListItemIcon>
             <Chat />
