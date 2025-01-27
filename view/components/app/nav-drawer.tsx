@@ -108,7 +108,7 @@ const NavDrawer = () => {
 
       <List
         sx={{
-          paddingTop: '16px',
+          paddingTop: '8px',
           backgroundColor: 'background.paper',
           borderTopRightRadius: '16px',
           borderTopLeftRadius: '16px',
