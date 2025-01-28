@@ -1,7 +1,6 @@
 import { ExitToApp, PersonAdd, Settings } from '@mui/icons-material';
 import {
   Box,
-  Button,
   Drawer,
   IconButton,
   List,
@@ -14,27 +13,26 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
-import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
+import ConfirmLogoutModal from '../auth/confirm-logout-modal';
 import LazyLoadImage from '../images/lazy-load-image';
-import Modal from '../shared/modal';
 import UserAvatar from '../users/user-avatar';
 
 const NavDrawer = () => {
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
-  const { isNavDrawerOpen, setIsNavDrawerOpen, isLoggedIn, setIsLoggedIn } =
-    useAppStore((state) => state);
+  const { isNavDrawerOpen, setIsNavDrawerOpen, isLoggedIn } = useAppStore(
+    (state) => state,
+  );
 
   const { data } = useMeQuery();
   const ability = useAbility();
@@ -44,19 +42,7 @@ const NavDrawer = () => {
   const showSettings = ability.can('manage', 'ServerConfig');
 
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  const { mutate: logOut, isPending } = useMutation({
-    mutationFn: api.logOut,
-    onSuccess: async () => {
-      await navigate(NavigationPaths.Home);
-      setIsLogOutModalOpen(false);
-      setIsNavDrawerOpen(false);
-      setIsLoggedIn(false);
-      queryClient.clear();
-    },
-  });
 
   const drawerSx: SxProps = {
     '& .MuiBackdrop-root': {
@@ -208,22 +194,10 @@ const NavDrawer = () => {
         )}
       </Box>
 
-      <Modal
-        open={isLogOutModalOpen}
-        onClose={() => setIsLogOutModalOpen(false)}
-      >
-        <Typography marginBottom={3}>{t('users.prompts.logOut')}</Typography>
-        <Box display="flex" gap={1}>
-          <Button variant="contained">{t('actions.cancel')}</Button>
-          <Button
-            variant="contained"
-            onClick={() => logOut()}
-            disabled={isPending}
-          >
-            {t('users.actions.logOut')}
-          </Button>
-        </Box>
-      </Modal>
+      <ConfirmLogoutModal
+        isOpen={isLogOutModalOpen}
+        setIsOpen={setIsLogOutModalOpen}
+      />
     </Drawer>
   );
 };
