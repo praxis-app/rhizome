@@ -1,6 +1,6 @@
 import { Box, BoxProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import TopNav, { TopNavProps } from '../app/top-nav';
+import TopNav, { TopNavProps } from '../nav/top-nav';
 
 interface Props extends BoxProps {
   topNavProps?: TopNavProps;

@@ -21,7 +21,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import TopNav from '../../components/app/top-nav';
+import TopNav from '../../components/nav/top-nav';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import {

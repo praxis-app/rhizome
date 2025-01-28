@@ -2,7 +2,7 @@ import { AdminPanelSettings, ChevronRight, Close } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import TopNav from '../../components/app/top-nav';
+import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';

@@ -3,8 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { theme } from '../../styles/theme';
 import { AuthWrapper } from '../auth/auth-wrapper';
+import NavDrawer from '../nav/nav-drawer';
 import Toast from '../shared/toast';
-import NavDrawer from './nav-drawer';
 
 const queryClient = new QueryClient();
 
