@@ -90,7 +90,7 @@ const NavDrawer = () => {
       anchor="left"
       open={isNavDrawerOpen}
       onClose={() => setIsNavDrawerOpen(false)}
-      PaperProps={{ sx: { width: '100%', bgcolor: GRAY['950'] } }}
+      PaperProps={{ sx: { width: '100%', bgcolor: GRAY['900'] } }}
       sx={drawerSx}
     >
       <Box
@@ -172,7 +172,7 @@ const NavDrawer = () => {
 
       <Box
         paddingTop="8px"
-        bgcolor={GRAY['900']}
+        bgcolor={GRAY['800']}
         sx={{ borderTopRightRadius: '16px', borderTopLeftRadius: '16px' }}
         marginTop="12px"
         height="100%"

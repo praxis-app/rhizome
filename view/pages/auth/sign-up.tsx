@@ -144,12 +144,12 @@ const SignUp = () => {
   });
 
   const showPasswordIconSx: SxProps = {
-    color: isDarkMode ? GRAY['300'] : GRAY['900'],
+    color: isDarkMode ? GRAY['300'] : GRAY['800'],
   };
   const inputBaseSx: SxProps = {
     '&:-webkit-autofill': {
-      WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
-      WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['1000'],
+      WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['750'] : GRAY['100']} inset`,
+      WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
     },
   };
 
