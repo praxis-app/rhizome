@@ -68,7 +68,7 @@ const Login = () => {
   const inputBaseSx: SxProps = {
     '&:-webkit-autofill': {
       WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
-      WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
+      WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['1000'],
     },
   };
   const showPasswordIconSx: SxProps = {

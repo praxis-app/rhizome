@@ -172,7 +172,7 @@ const NavDrawer = () => {
 
       <Box
         paddingTop="8px"
-        bgcolor="background.paper"
+        bgcolor={GRAY['900']}
         sx={{ borderTopRightRadius: '16px', borderTopLeftRadius: '16px' }}
         marginTop="12px"
         height="100%"

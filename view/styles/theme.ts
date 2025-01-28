@@ -12,7 +12,8 @@ export const GRAY = {
   '700': '#3a3b3c',
   '800': '#303233',
   '900': '#242526',
-  '950': '#18191a',
+  '950': '#1c1d21',
+  '1000': '#18191a',
 } as const;
 
 export const BLURPLE = {
@@ -62,7 +63,7 @@ export const theme = createTheme({
           tertiary: BLURPLE['300'],
         },
         background: {
-          default: GRAY['950'],
+          default: GRAY['1000'],
           paper: GRAY['900'],
           secondary: GRAY['700'],
         },
