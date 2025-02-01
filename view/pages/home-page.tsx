@@ -1,24 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../client/api-client';
-import ChatPanel from '../components/chat/chat-panel';
 import ProgressBar from '../components/shared/progress-bar';
 
+/**
+ * Home page component. Redirects to the general channel page.
+ */
 export const HomePage = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ['channels'],
-    queryFn: api.getChannels,
+  // TODO: Use `redirect` instead of `navigate`
+  const navigate = useNavigate();
+
+  useQuery({
+    queryKey: ['general-channel'],
+    queryFn: async () => {
+      const result = await api.getGeneralChannel();
+      navigate(`/channels/${result.channel.id}`);
+      return result;
+    },
   });
 
-  if (isLoading) {
-    return <ProgressBar />;
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  // TODO: Add support for multiple channels
-  const channel = data.channels[0];
-
-  return <ChatPanel channel={channel} />;
+  return <ProgressBar />;
 };

@@ -8,6 +8,7 @@ import {
   deleteChannel,
   getChannel,
   getChannels,
+  getGeneralChannel,
   updateChannel,
 } from './channels.controller';
 import { validateChannel } from './middleware/validate-channel.middleware';
@@ -16,6 +17,7 @@ export const channelsRouter = express.Router();
 
 channelsRouter
   .get('/', getChannels)
+  .get('/general', getGeneralChannel)
   .get('/:channelId', getChannel)
   .post('/', can('create', 'Channel'), validateChannel, createChannel)
   .put('/:channelId', can('update', 'Channel'), validateChannel, updateChannel)

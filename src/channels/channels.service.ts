@@ -44,7 +44,7 @@ export const addMemberToGeneralChannel = async (userId: string) => {
   });
 };
 
-const getGeneralChannel = async () => {
+export const getGeneralChannel = async () => {
   const generalChannel = await channelRepository.findOne({
     where: { name: GENERAL_CHANNEL_NAME },
   });

@@ -11,6 +11,11 @@ export const getChannel = async (req: Request, res: Response) => {
   res.json({ channel });
 };
 
+export const getGeneralChannel = async (_: Request, res: Response) => {
+  const channel = await channelsService.getGeneralChannel();
+  res.json({ channel });
+};
+
 export const createChannel = async (req: Request, res: Response) => {
   const channel = await channelsService.createChannel(
     req.body,
