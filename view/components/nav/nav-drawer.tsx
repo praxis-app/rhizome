@@ -1,6 +1,7 @@
-import { ExitToApp, PersonAdd, Settings } from '@mui/icons-material';
+import { ExitToApp, PersonAdd, Settings, Tag } from '@mui/icons-material';
 import {
   Box,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -13,10 +14,12 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
+import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
@@ -34,15 +37,21 @@ const NavDrawer = () => {
     (state) => state,
   );
 
-  const { data } = useMeQuery();
-  const ability = useAbility();
+  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
+    queryKey: ['channels'],
+    queryFn: api.getChannels,
+  });
 
-  const isAnon = !!data?.user.anonymous;
-  const showSignUp = !isLoggedIn || isAnon;
-  const showSettings = ability.can('manage', 'ServerConfig');
+  const { data: meData } = useMeQuery();
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ability = useAbility();
+
+  const me = meData?.user;
+  const isAnon = !!me?.anonymous;
+  const showSignUp = !isLoggedIn || isAnon;
+  const showSettings = ability.can('manage', 'ServerConfig');
 
   const drawerSx: SxProps = {
     '& .MuiBackdrop-root': {
@@ -102,12 +111,12 @@ const NavDrawer = () => {
           </Typography>
         </Box>
 
-        {data && (
+        {me && (
           <>
             <IconButton onClick={handleMenuButtonClick}>
               <UserAvatar
-                userId={data.user.id}
-                userName={data.user.name}
+                userId={me.id}
+                userName={me.name}
                 sx={{ fontSize: '16px' }}
                 size={35}
               />
@@ -130,12 +139,12 @@ const NavDrawer = () => {
             >
               <MenuItem sx={{ gap: 1 }}>
                 <UserAvatar
-                  userId={data.user.id}
-                  userName={data.user.name}
+                  userId={me.id}
+                  userName={me.name}
                   sx={{ fontSize: '10px' }}
                   size={20}
                 />
-                <Typography>{data.user.name}</Typography>
+                <Typography>{me.name}</Typography>
               </MenuItem>
 
               {showSettings && (
@@ -163,10 +172,26 @@ const NavDrawer = () => {
         marginTop="12px"
         height="100%"
       >
-        {/* TODO: List channels here when logged in */}
+        {!isChannalsLoading && channelsData && (
+          <List>
+            {channelsData.channels.map((channel) => (
+              <ListItemButton
+                key={channel.id}
+                onClick={() => handleNavigate(`/channels/${channel.id}`)}
+              >
+                <ListItemIcon>
+                  <Tag />
+                </ListItemIcon>
+                <ListItemText primary={channel.name} />
+              </ListItemButton>
+            ))}
+          </List>
+        )}
 
         {(showSignUp || !isLoggedIn) && (
           <List>
+            <Divider sx={{ marginX: '16px' }} />
+
             {/* TODO: Show link to general channel here */}
 
             {showSignUp && (
