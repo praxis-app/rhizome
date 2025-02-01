@@ -7,14 +7,13 @@ import ProgressBar from '../components/shared/progress-bar';
  * Home page component. Redirects to the general channel page.
  */
 export const HomePage = () => {
-  // TODO: Use `redirect` instead of `navigate`
   const navigate = useNavigate();
 
   useQuery({
     queryKey: ['general-channel'],
     queryFn: async () => {
       const result = await api.getGeneralChannel();
-      navigate(`/channels/${result.channel.id}`);
+      navigate(`/channels/${result.channel.id}`, { replace: true });
       return result;
     },
   });
