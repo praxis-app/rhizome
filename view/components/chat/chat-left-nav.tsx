@@ -107,8 +107,8 @@ const ChatLeftNav = () => {
           vertical: 'bottom',
         }}
         transformOrigin={{
-          horizontal: 'right',
-          vertical: -10,
+          horizontal: -18,
+          vertical: -15,
         }}
         keepMounted
       >
