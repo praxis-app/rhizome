@@ -6,15 +6,16 @@ import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { GRAY } from '../../styles/theme';
+import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
+import { GRAY } from '../../styles/theme';
 
 const ServerSettings = () => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+  const isAboveMd = useAboveBreakpoint('md');
   const navigate = useNavigate();
   const ability = useAbility();
 
@@ -30,11 +31,19 @@ const ServerSettings = () => {
     );
   }
 
+  const handleBackClick = () => {
+    if (isAboveMd) {
+      navigate(NavigationPaths.Home);
+      return;
+    }
+    setIsNavDrawerOpen(true);
+  };
+
   return (
     <>
       <TopNav
         header={t('navigation.serverSettings')}
-        onBackClick={() => setIsNavDrawerOpen(true)}
+        onBackClick={handleBackClick}
         backBtnIcon={<Close />}
       />
 
