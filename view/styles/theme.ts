@@ -104,6 +104,9 @@ export const theme = createTheme({
 
     MuiPaper: {
       styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+        },
         elevation: {
           boxShadow: `
             0 0 #0000,
@@ -220,7 +223,6 @@ export const theme = createTheme({
           border: `1px solid ${theme.palette.divider}`,
           padding: 4,
           ...theme.applyStyles('dark', {
-            backgroundColor: theme.palette.background.default,
             borderColor: theme.palette.divider,
           }),
         }),

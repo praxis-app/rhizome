@@ -51,7 +51,11 @@ const ChatTopNav = ({ channel }: Props) => {
           }}
           fontSize={isAboveMd ? 'medium' : 'small'}
         />
-        <Typography fontWeight={700} fontSize="15px">
+        <Typography
+          sx={{ userSelect: 'none' }}
+          fontWeight={700}
+          fontSize="15px"
+        >
           {channel.name}
         </Typography>
       </Box>
