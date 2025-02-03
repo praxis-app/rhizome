@@ -85,6 +85,10 @@ const NavDrawer = () => {
     setMenuAnchorEl(null);
   };
 
+  if (isAboveMd) {
+    return null;
+  }
+
   return (
     <Drawer
       anchor="left"
