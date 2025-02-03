@@ -188,7 +188,7 @@ const NavDrawer = () => {
                 key={channel.id}
                 onClick={() => handleNavigate(`/channels/${channel.id}`)}
               >
-                <ListItemIcon>
+                <ListItemIcon sx={{ minWidth: '33px' }}>
                   <Tag />
                 </ListItemIcon>
                 <ListItemText primary={channel.name} />
