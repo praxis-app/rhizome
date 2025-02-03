@@ -11,8 +11,8 @@ import { redirect } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
-import ProgressBar from '../shared/progress-bar';
 
+/** Left panel navigation for desktop */
 const ChatLeftNav = () => {
   const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
     queryKey: ['channels'],
