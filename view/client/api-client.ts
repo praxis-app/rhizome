@@ -154,6 +154,25 @@ class ApiClient {
     });
   };
 
+  createChannel = async (data: { name: string }) => {
+    const path = '/channels';
+    return this.executeRequest<{ channel: Channel }>('post', path, {
+      data,
+    });
+  };
+
+  updateChannel = async (channelId: string, data: { name: string }) => {
+    const path = `/channels/${channelId}`;
+    return this.executeRequest<void>('put', path, {
+      data,
+    });
+  };
+
+  deleteChannel = async (channelId: string) => {
+    const path = `/channels/${channelId}`;
+    return this.executeRequest<void>('delete', path);
+  };
+
   getImage = (imageId: string) => {
     const path = `/images/${imageId}`;
     return this.executeRequest<any>('get', path, {
