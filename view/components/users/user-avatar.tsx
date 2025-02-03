@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import LazyLoadImage from '../images/lazy-load-image';
 import { Link } from '../shared/link';
 
+// TODO: Update to take `user` as a prop
+
 interface Props extends AvatarProps {
   imageFile?: File;
   userName: string;

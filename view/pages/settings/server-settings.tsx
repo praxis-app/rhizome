@@ -2,14 +2,17 @@ import { AdminPanelSettings, ChevronRight, Close } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import TopNav from '../../components/app/top-nav';
+import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
+import { useAppStore } from '../../store/app.store';
 
 const ServerSettings = () => {
+  const { setIsNavDrawerOpen } = useAppStore((state) => state);
+
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
@@ -30,9 +33,9 @@ const ServerSettings = () => {
   return (
     <>
       <TopNav
-        backBtnIcon={<Close />}
-        onBackClick={() => navigate(NavigationPaths.Home)}
         header={t('navigation.serverSettings')}
+        onBackClick={() => setIsNavDrawerOpen(true)}
+        backBtnIcon={<Close />}
       />
 
       <Box

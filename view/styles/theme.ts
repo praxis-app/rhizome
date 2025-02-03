@@ -10,8 +10,9 @@ export const GRAY = {
   '500': '#505051',
   '600': '#424242',
   '700': '#3a3b3c',
-  '800': '#303233',
-  '900': '#242526',
+  '750': '#303233',
+  '800': '#242526',
+  '900': '#1c1d21',
   '950': '#18191a',
 } as const;
 
@@ -63,7 +64,7 @@ export const theme = createTheme({
         },
         background: {
           default: GRAY['950'],
-          paper: GRAY['900'],
+          paper: GRAY['800'],
           secondary: GRAY['700'],
         },
         divider: GRAY['700'],

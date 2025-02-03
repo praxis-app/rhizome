@@ -2,11 +2,12 @@ import { Box, debounce } from '@mui/material';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { api } from '../../client/api-client';
-import { useSubscription } from '../../hooks/shared.hooks';
+import { useAboveBreakpoint, useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Channel, Message, MessagesQuery } from '../../types/chat.types';
 import { PubSubMessage } from '../../types/shared.types';
+import ChatLeftNav from './chat-left-nav';
 import ChatTopNav from './chat-top-nav';
 import MessageFeed from './message-feed';
 import MessageForm from './message-form';
@@ -52,6 +53,7 @@ const ChatPanel = ({ channel }: Props) => {
 
   const queryClient = useQueryClient();
   const feedBoxRef = useRef<HTMLDivElement>(null);
+  const isAboveMd = useAboveBreakpoint('md');
 
   const scrollToBottom = () => {
     if (feedBoxRef.current && feedBoxRef.current.scrollTop >= -200) {
@@ -131,22 +133,18 @@ const ChatPanel = ({ channel }: Props) => {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      position="fixed"
-      top={0}
-      left={0}
-      bottom={0}
-      right={0}
-    >
-      <ChatTopNav channel={channel} />
-      <MessageFeed
-        feedBoxRef={feedBoxRef}
-        onLoadMore={debounce(fetchNextPage, 500)}
-        messages={messagesData.pages.flatMap((page) => page.messages)}
-      />
-      <MessageForm channelId={channel.id} onSend={scrollToBottom} />
+    <Box display="flex" position="fixed" top={0} left={0} bottom={0} right={0}>
+      {isAboveMd && <ChatLeftNav />}
+
+      <Box display="flex" flexDirection="column" flex={1}>
+        <ChatTopNav channel={channel} />
+        <MessageFeed
+          feedBoxRef={feedBoxRef}
+          onLoadMore={debounce(fetchNextPage, 500)}
+          messages={messagesData.pages.flatMap((page) => page.messages)}
+        />
+        <MessageForm channelId={channel.id} onSend={scrollToBottom} />
+      </Box>
     </Box>
   );
 };

@@ -128,9 +128,19 @@ class ApiClient {
     });
   };
 
+  getChannel = async (channelId: string) => {
+    const path = `/channels/${channelId}`;
+    return this.executeRequest<{ channel: Channel }>('get', path);
+  };
+
   getChannels = async () => {
     const path = '/channels';
     return this.executeRequest<{ channels: Channel[] }>('get', path);
+  };
+
+  getGeneralChannel = async () => {
+    const path = '/channels/general';
+    return this.executeRequest<{ channel: Channel }>('get', path);
   };
 
   getChannelMessages = async (

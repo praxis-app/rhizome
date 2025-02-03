@@ -27,7 +27,7 @@ export const createMessage = async (req: Request, res: Response) => {
 
 export const uploadMessageImage = async (req: Request, res: Response) => {
   if (!req.file) {
-    res.status(400).send('No image uploaded');
+    res.status(422).send('No image uploaded');
     return;
   }
   const { user } = res.locals;
