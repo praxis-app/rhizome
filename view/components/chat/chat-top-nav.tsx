@@ -45,10 +45,13 @@ const ChatTopNav = ({ channel }: Props) => {
         )}
 
         <Tag
-          sx={{ marginRight: '0.25ch', color: 'text.secondary' }}
-          fontSize="small"
+          sx={{
+            marginRight: '0.4ch',
+            color: 'text.secondary',
+          }}
+          fontSize={isAboveMd ? 'medium' : 'small'}
         />
-        <Typography fontWeight={600} fontSize="15px">
+        <Typography fontWeight={700} fontSize="15px">
           {channel.name}
         </Typography>
       </Box>

@@ -5,6 +5,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SxProps,
   Typography,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
@@ -25,6 +26,15 @@ const ChatLeftNav = () => {
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+
+  const listItemBtnSx: SxProps = {
+    borderRadius: '4px',
+    marginRight: '6px',
+    marginLeft: '8px',
+    paddingRight: '10px',
+    paddingLeft: '8px',
+    height: '30px',
+  };
 
   return (
     <Box
@@ -64,11 +74,20 @@ const ChatLeftNav = () => {
             <ListItemButton
               key={channel.id}
               onClick={() => redirect(`/channels/${channel.id}`)}
+              sx={listItemBtnSx}
             >
               <ListItemIcon sx={{ minWidth: '33px' }}>
                 <Tag />
               </ListItemIcon>
-              <ListItemText primary={channel.name} />
+              <ListItemText
+                primary={channel.name}
+                primaryTypographyProps={{
+                  sx: {
+                    fontWeight: 600,
+                    fontSize: '15px',
+                  },
+                }}
+              />
             </ListItemButton>
           ))}
         </List>
