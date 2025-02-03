@@ -1,7 +1,7 @@
 import { ArrowBack, Search, Tag } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { Channel } from '../../types/chat.types';
@@ -15,6 +15,7 @@ const ChatTopNav = ({ channel }: Props) => {
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+  const isAboveMd = useAboveBreakpoint('md');
 
   const buttonSx: SxProps = {
     width: 38,
@@ -33,13 +34,15 @@ const ChatTopNav = ({ channel }: Props) => {
       height="55px"
     >
       <Box display="flex" alignItems="center">
-        <IconButton
-          onClick={() => setIsNavDrawerOpen(true)}
-          sx={{ ...buttonSx, marginRight: 0.5 }}
-          edge="start"
-        >
-          <ArrowBack />
-        </IconButton>
+        {!isAboveMd && (
+          <IconButton
+            onClick={() => setIsNavDrawerOpen(true)}
+            sx={{ ...buttonSx, marginRight: 0.5 }}
+            edge="start"
+          >
+            <ArrowBack />
+          </IconButton>
+        )}
 
         <Tag
           sx={{ marginRight: '0.25ch', color: 'text.secondary' }}

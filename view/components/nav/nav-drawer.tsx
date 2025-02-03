@@ -22,6 +22,7 @@ import appIconImg from '../../assets/images/app-icon.png';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
+import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -37,16 +38,20 @@ const NavDrawer = () => {
     (state) => state,
   );
 
-  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
-    queryKey: ['channels'],
-    queryFn: api.getChannels,
-  });
-
-  const { data: meData } = useMeQuery();
-
   const { t } = useTranslation();
   const navigate = useNavigate();
   const ability = useAbility();
+  const isAboveMd = useAboveBreakpoint('md');
+
+  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
+    queryKey: ['channels'],
+    queryFn: api.getChannels,
+    enabled: !isAboveMd,
+  });
+
+  const { data: meData } = useMeQuery({
+    enabled: !isAboveMd,
+  });
 
   const me = meData?.user;
   const isAnon = !!me?.anonymous;
