@@ -15,12 +15,13 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
+import { Channel } from '../../types/chat.types';
 import LazyLoadImage from '../images/lazy-load-image';
 import CreateChannelModal from './create-channel-modal';
 
@@ -35,10 +36,12 @@ const ChatLeftNav = () => {
   });
 
   const { t } = useTranslation();
+  const { channelId } = useParams();
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
 
   const listItemBtnSx: SxProps = {
+    color: 'text.secondary',
     borderRadius: '4px',
     marginRight: '6px',
     marginLeft: '8px',
@@ -46,7 +49,6 @@ const ChatLeftNav = () => {
     paddingLeft: '8px',
     height: '30px',
   };
-
   const menuButtonSx: SxProps = {
     cursor: 'pointer',
     userSelect: 'none',
@@ -62,10 +64,20 @@ const ChatLeftNav = () => {
     textTransform: 'none',
     width: '100%',
   };
-
   const menuItemIconProps: SvgIconProps = {
     sx: { marginRight: 1 },
     fontSize: 'small',
+  };
+
+  const getChannelNameTextProps = (channel: Channel) => {
+    const selectedColor = isDarkMode ? 'white' : 'black';
+    return {
+      sx: {
+        color: channelId === channel.id ? selectedColor : 'text.secondary',
+        fontWeight: channelId === channel.id ? 600 : 500,
+        fontSize: '15px',
+      },
+    };
   };
 
   const handleMenuButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -145,16 +157,11 @@ const ChatLeftNav = () => {
               sx={listItemBtnSx}
             >
               <ListItemIcon sx={{ minWidth: '33px' }}>
-                <Tag />
+                <Tag sx={{ color: 'text.secondary' }} />
               </ListItemIcon>
               <ListItemText
+                primaryTypographyProps={getChannelNameTextProps(channel)}
                 primary={channel.name}
-                primaryTypographyProps={{
-                  sx: {
-                    fontWeight: 600,
-                    fontSize: '15px',
-                  },
-                }}
               />
             </ListItemButton>
           ))}

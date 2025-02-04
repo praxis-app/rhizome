@@ -5,12 +5,12 @@ import ProgressBar from '../../components/shared/progress-bar';
 import { useParams } from 'react-router-dom';
 
 export const ChannelPage = () => {
-  const { roleId } = useParams();
+  const { channelId } = useParams();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['channel', roleId],
-    queryFn: () => api.getChannel(roleId!),
-    enabled: !!roleId,
+    queryKey: ['channel', channelId],
+    queryFn: () => api.getChannel(channelId!),
+    enabled: !!channelId,
   });
 
   if (isLoading) {

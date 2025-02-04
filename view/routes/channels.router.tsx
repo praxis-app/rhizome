@@ -5,7 +5,7 @@ export const channelsRouter: RouteObject = {
   path: '/channels',
   children: [
     {
-      path: ':roleId',
+      path: ':channelId',
       element: <ChannelPage />,
     },
   ],
