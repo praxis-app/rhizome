@@ -47,7 +47,11 @@ const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
         </FormGroup>
 
         <Box display="flex" justifyContent="right" gap="16px">
-          <Button variant="text" sx={{ textTransform: 'none' }}>
+          <Button
+            variant="text"
+            sx={{ textTransform: 'none' }}
+            onClick={() => setIsOpen(false)}
+          >
             {t('actions.cancel')}
           </Button>
           <PrimaryButton
