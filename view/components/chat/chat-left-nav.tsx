@@ -1,4 +1,4 @@
-import { ExpandMore, Settings, Tag } from '@mui/icons-material';
+import { AddCircle, ExpandMore, Settings, Tag } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -22,10 +22,12 @@ import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
 import LazyLoadImage from '../images/lazy-load-image';
+import CreateChannelModal from './create-channel-modal';
 
 /** Left panel navigation for desktop */
 const ChatLeftNav = () => {
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
+  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
 
   const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
     queryKey: ['channels'],
@@ -116,7 +118,17 @@ const ChatLeftNav = () => {
           <Settings {...menuItemIconProps} />
           {t('navigation.serverSettings')}
         </MenuItem>
+
+        <MenuItem onClick={() => setShowCreateChannelModal(true)}>
+          <AddCircle {...menuItemIconProps} />
+          {t('chat.actions.createChannel')}
+        </MenuItem>
       </Menu>
+
+      <CreateChannelModal
+        isOpen={showCreateChannelModal}
+        setIsOpen={setShowCreateChannelModal}
+      />
 
       {!isChannalsLoading && channelsData && (
         <List>

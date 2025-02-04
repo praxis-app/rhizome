@@ -29,7 +29,7 @@ const PrimaryButton = ({ isLoading, children, sx, ...props }: Props) => {
       backgroundColor: isDarkMode ? GRAY['500'] : GRAY['100'],
     },
     color: theme.palette.common.white,
-    fontWeight: 600,
+    fontWeight: 500,
     letterSpacing: '0.2px',
     textTransform: 'none',
     borderRadius: 9999,

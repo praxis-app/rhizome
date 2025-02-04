@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogProps,
   IconButton,
+  IconButtonProps,
   SxProps,
   Toolbar,
   Typography,
@@ -57,9 +58,11 @@ const Modal = ({
   const isDesktop = useAboveBreakpoint('md');
   const theme = useTheme();
 
+  const showClosingAction = closingAction && actionLabel;
+
   const titleBoxStyles: SxProps = {
     flex: 1,
-    marginLeft: 1.25,
+    marginLeft: showClosingAction ? 1.25 : 0,
     marginTop: subtext ? 0.6 : 0,
   };
   const appBarStyles: SxProps = {
@@ -81,6 +84,17 @@ const Modal = ({
     }
     onClose?.();
   };
+
+  const renderCloseBtn = (edge: IconButtonProps['edge'] = 'start') => (
+    <IconButton
+      aria-label="close"
+      color="primary"
+      edge={edge}
+      onClick={onClose}
+    >
+      <Close />
+    </IconButton>
+  );
 
   const renderAppBarContent = () => {
     if (appBarContent) {
@@ -107,14 +121,8 @@ const Modal = ({
     }
     return (
       <Toolbar>
-        <IconButton
-          aria-label="close"
-          color="primary"
-          edge="start"
-          onClick={onClose}
-        >
-          <Close />
-        </IconButton>
+        {showClosingAction && renderCloseBtn()}
+
         <Box sx={titleBoxStyles}>
           <Typography
             color="textPrimary"
@@ -130,7 +138,8 @@ const Modal = ({
             </Typography>
           )}
         </Box>
-        {closingAction && actionLabel && (
+
+        {showClosingAction ? (
           <Button
             disabled={isClosingActionDisabled || isLoading}
             onClick={closingAction}
@@ -146,6 +155,8 @@ const Modal = ({
           >
             {actionLabel}
           </Button>
+        ) : (
+          renderCloseBtn('end')
         )}
       </Toolbar>
     );

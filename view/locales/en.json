@@ -162,7 +162,11 @@
 
   "chat": {
     "actions": {
-      "sendAnonymous": "Send anonymously"
+      "sendAnonymous": "Send anonymously",
+      "createChannel": "Create channel"
+    },
+    "form": {
+      "name": "Name"
     },
     "prompts": {
       "sendAMessage": "Send a message...",
