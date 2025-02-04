@@ -127,6 +127,14 @@ const MessageForm = ({ channelId, onSend }: Props) => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const activeElement = document.activeElement;
+      if (
+        activeElement &&
+        (activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA')
+      ) {
+        return;
+      }
       if (
         ['Space', 'Enter', 'Key', 'Digit'].some((key) => e.code.includes(key))
       ) {
