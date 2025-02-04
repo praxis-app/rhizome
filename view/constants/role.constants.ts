@@ -20,6 +20,7 @@ export const ROLE_COLOR_OPTIONS = [
 ];
 
 export const PERMISSION_KEYS = [
+  'manageChannels',
   'manageSettings',
   'createInvites',
   'manageInvites',

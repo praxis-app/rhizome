@@ -221,6 +221,7 @@
     "names": {
       "createEvents": "Create Events",
       "createInvites": "Create Invites",
+      "manageChannels": "Manage Channels",
       "manageEvents": "Manage Events",
       "manageInvites": "Manage Invites",
       "managePosts": "Manage Posts",
@@ -236,6 +237,7 @@
       "createEvents": "Allows members to create and plan events.",
       "createInvites": "Allows members to invite new people to the server.",
       "manageComments": "Allows members to remove or hide comments by other members.",
+      "manageChannels": "Allows members to create, edit, or delete channels.",
       "manageEvents": "Allows members to remove or edit events created by other members.",
       "manageInvites": "Allows members to create or delete invite links for the server.",
       "managePosts": "Allows members to remove or hide posts by other members.",

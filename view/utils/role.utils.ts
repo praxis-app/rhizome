@@ -5,6 +5,11 @@ import { PermissionKeys } from '../types/role.types';
 export const getPermissionText = (name: PermissionKeys) => {
   const _t: TFunction<Namespace<'ns1'>, undefined> = t;
   switch (name) {
+    case 'manageChannels':
+      return {
+        displayName: _t('permissions.names.manageChannels'),
+        description: _t('permissions.descriptions.manageChannels'),
+      };
     case 'manageSettings':
       return {
         displayName: _t('permissions.names.manageSettings'),
