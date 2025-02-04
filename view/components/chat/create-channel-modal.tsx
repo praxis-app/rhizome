@@ -13,6 +13,7 @@ import { api } from '../../client/api-client';
 import { Channel, CreateChannelReq } from '../../types/chat.types';
 import Modal from '../shared/modal';
 import PrimaryButton from '../shared/primary-button';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   isOpen: boolean;
@@ -21,6 +22,7 @@ interface Props {
 
 const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: createChannel, isPending } = useMutation({
     mutationFn: async (values: CreateChannelReq) => {
@@ -35,7 +37,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
           return { channels: [...oldData.channels, channel] };
         },
       );
-      setIsOpen(false);
+      navigate(`/channels/${channel.id}`);
     },
   });
 
