@@ -15,7 +15,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
@@ -141,7 +141,7 @@ const ChatLeftNav = () => {
           {channelsData.channels.map((channel) => (
             <ListItemButton
               key={channel.id}
-              onClick={() => redirect(`/channels/${channel.id}`)}
+              onClick={() => navigate(`/channels/${channel.id}`)}
               sx={listItemBtnSx}
             >
               <ListItemIcon sx={{ minWidth: '33px' }}>

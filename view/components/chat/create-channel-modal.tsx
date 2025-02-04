@@ -6,11 +6,11 @@ import {
   FormLabel,
   OutlinedInput,
 } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
-import { CreateChannelReq } from '../../types/chat.types';
+import { Channel, CreateChannelReq } from '../../types/chat.types';
 import Modal from '../shared/modal';
 import PrimaryButton from '../shared/primary-button';
 
@@ -20,8 +20,23 @@ interface Props {
 }
 
 const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
+  const queryClient = useQueryClient();
+
   const { mutate: createChannel, isPending } = useMutation({
-    mutationFn: api.createChannel,
+    mutationFn: async (values: CreateChannelReq) => {
+      const { channel } = await api.createChannel(values);
+
+      queryClient.setQueryData<{ channels: Channel[] }>(
+        ['channels'],
+        (oldData) => {
+          if (!oldData) {
+            return { channels: [] };
+          }
+          return { channels: [...oldData.channels, channel] };
+        },
+      );
+      setIsOpen(false);
+    },
   });
 
   const { register, formState, handleSubmit } = useForm<CreateChannelReq>({
