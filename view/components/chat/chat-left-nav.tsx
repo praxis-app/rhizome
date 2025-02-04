@@ -53,6 +53,7 @@ const ChatLeftNav = () => {
     height: '55px',
     borderBottom: '1px solid',
     borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50],
+    color: 'text.primary',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft: '16px',
@@ -69,6 +70,11 @@ const ChatLeftNav = () => {
 
   const handleMenuButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCreateChannelBtnClick = () => {
+    setShowCreateChannelModal(true);
+    setMenuAnchorEl(null);
   };
 
   const handleClose = () => {
@@ -119,7 +125,7 @@ const ChatLeftNav = () => {
           {t('navigation.serverSettings')}
         </MenuItem>
 
-        <MenuItem onClick={() => setShowCreateChannelModal(true)}>
+        <MenuItem onClick={handleCreateChannelBtnClick}>
           <AddCircle {...menuItemIconProps} />
           {t('chat.actions.createChannel')}
         </MenuItem>

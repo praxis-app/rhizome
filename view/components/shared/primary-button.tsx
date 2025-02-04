@@ -26,7 +26,8 @@ const PrimaryButton = ({ isLoading, children, sx, ...props }: Props) => {
       backgroundColor: BLURPLE['400'],
     },
     '&:disabled': {
-      backgroundColor: isDarkMode ? GRAY['500'] : GRAY['100'],
+      backgroundColor: isDarkMode ? BLURPLE['700'] : GRAY['100'],
+      color: isDarkMode ? GRAY['400'] : undefined,
     },
     color: theme.palette.common.white,
     fontWeight: 500,

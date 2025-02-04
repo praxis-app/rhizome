@@ -13,6 +13,10 @@ export interface Channel {
   name: string;
 }
 
+export interface CreateChannelReq {
+  name: string;
+}
+
 export interface MessagesQuery {
   pages: { messages: Message[] }[];
   pageParams: number[];

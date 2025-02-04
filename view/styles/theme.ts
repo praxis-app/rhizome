@@ -20,6 +20,7 @@ export const BLURPLE = {
   '300': '#7D95E3',
   '400': '#6573CF',
   '500': '#5868CB',
+  '700': '#43498e',
 } as const;
 
 declare module '@mui/material/styles/createPalette' {

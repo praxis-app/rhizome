@@ -6,7 +6,11 @@ import {
   FormLabel,
   OutlinedInput,
 } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { api } from '../../client/api-client';
+import { CreateChannelReq } from '../../types/chat.types';
 import Modal from '../shared/modal';
 import PrimaryButton from '../shared/primary-button';
 
@@ -16,6 +20,14 @@ interface Props {
 }
 
 const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
+  const { mutate: createChannel, isPending } = useMutation({
+    mutationFn: api.createChannel,
+  });
+
+  const { register, formState, handleSubmit } = useForm<CreateChannelReq>({
+    mode: 'onChange',
+  });
+
   const { t } = useTranslation();
 
   return (
@@ -24,13 +36,13 @@ const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
       onClose={() => setIsOpen(false)}
       open={isOpen}
     >
-      <form>
+      <form onSubmit={handleSubmit((fv) => createChannel(fv))}>
         <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
           <FormControl>
             <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
               {t('chat.form.name')}
             </FormLabel>
-            <OutlinedInput autoComplete="off" />
+            <OutlinedInput autoComplete="off" {...register('name')} />
           </FormControl>
         </FormGroup>
 
@@ -38,7 +50,11 @@ const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
           <Button variant="text" sx={{ textTransform: 'none' }}>
             {t('actions.cancel')}
           </Button>
-          <PrimaryButton type="submit" sx={{ borderRadius: '4px' }}>
+          <PrimaryButton
+            type="submit"
+            sx={{ borderRadius: '4px' }}
+            disabled={isPending || !formState.dirtyFields.name}
+          >
             {t('actions.create')}
           </PrimaryButton>
         </Box>
