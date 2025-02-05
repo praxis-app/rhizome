@@ -35,11 +35,13 @@ import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import ConfirmLogoutModal from '../auth/confirm-logout-modal';
+import CreateChannelModal from '../chat/create-channel-modal';
 import LazyLoadImage from '../images/lazy-load-image';
 import UserAvatar from '../users/user-avatar';
 
 const NavDrawer = () => {
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
+  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
   const [isBottomDrawerOpen, setIsBottomDrawerOpen] = useState(false);
 
@@ -269,8 +271,7 @@ const NavDrawer = () => {
         PaperProps={bottomDrawerProps}
       >
         <List>
-          {/* TODO: Show create channel modal on click */}
-          <ListItemButton>
+          <ListItemButton onClick={() => setShowCreateChannelModal(true)}>
             <ListItemIcon>
               <AddCircle />
             </ListItemIcon>
@@ -288,6 +289,15 @@ const NavDrawer = () => {
             </ListItemButton>
           )}
         </List>
+
+        <CreateChannelModal
+          isOpen={showCreateChannelModal}
+          setIsOpen={setShowCreateChannelModal}
+          onSubmit={() => {
+            setIsBottomDrawerOpen(false);
+            setIsNavDrawerOpen(false);
+          }}
+        />
       </Drawer>
     </>
   );

@@ -18,9 +18,10 @@ import { useNavigate } from 'react-router-dom';
 interface Props {
   isOpen: boolean;
   setIsOpen(isOpen: boolean): void;
+  onSubmit?(): void;
 }
 
-const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
+const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -37,6 +38,10 @@ const CreateChannelModal = ({ isOpen, setIsOpen }: Props) => {
           return { channels: [...oldData.channels, channel] };
         },
       );
+
+      setIsOpen(false);
+      onSubmit?.();
+
       navigate(`/channels/${channel.id}`);
     },
   });
