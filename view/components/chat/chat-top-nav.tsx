@@ -1,5 +1,5 @@
-import { ArrowBack, Search, Tag } from '@mui/icons-material';
-import { Box, IconButton, SxProps, Typography } from '@mui/material';
+import { ArrowBack, ChevronRight, Search, Tag } from '@mui/icons-material';
+import { Box, Button, IconButton, SxProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
@@ -44,20 +44,38 @@ const ChatTopNav = ({ channel }: Props) => {
           </IconButton>
         )}
 
-        <Tag
+        <Button
           sx={{
-            marginRight: '0.4ch',
-            color: 'text.secondary',
+            '&:hover': {
+              backgroundColor: isAboveMd ? 'transparent' : undefined,
+              cursor: isAboveMd ? 'default' : undefined,
+            },
+            textTransform: 'none',
           }}
-          fontSize={isAboveMd ? 'medium' : 'small'}
-        />
-        <Typography
-          sx={{ userSelect: 'none' }}
-          fontWeight={700}
-          fontSize="15px"
+          disableRipple={isAboveMd}
         >
-          {channel.name}
-        </Typography>
+          <Tag
+            sx={{
+              marginRight: '0.4ch',
+              color: 'text.secondary',
+            }}
+            fontSize={isAboveMd ? 'medium' : 'small'}
+          />
+          <Typography
+            sx={{ userSelect: 'none' }}
+            fontWeight={700}
+            fontSize="15px"
+          >
+            {channel.name}
+          </Typography>
+
+          {!isAboveMd && (
+            <ChevronRight
+              sx={{ color: 'text.secondary', marginTop: '1px' }}
+              fontSize="small"
+            />
+          )}
+        </Button>
       </Box>
 
       <IconButton
