@@ -1,4 +1,5 @@
 import {
+  AddCircle,
   ChevronRight,
   ExitToApp,
   PersonAdd,
@@ -7,6 +8,7 @@ import {
 } from '@mui/icons-material';
 import {
   Box,
+  Button,
   Divider,
   Drawer,
   IconButton,
@@ -39,6 +41,7 @@ import UserAvatar from '../users/user-avatar';
 const NavDrawer = () => {
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
+  const [isBottomDrawerOpen, setIsBottomDrawerOpen] = useState(false);
 
   const { isNavDrawerOpen, setIsNavDrawerOpen, isLoggedIn } = useAppStore(
     (state) => state,
@@ -64,7 +67,7 @@ const NavDrawer = () => {
   const showSignUp = !isLoggedIn || isAnon;
   const showSettings = ability.can('manage', 'ServerConfig');
 
-  const drawerSx: SxProps = {
+  const leftDrawerSx: SxProps = {
     '& .MuiBackdrop-root': {
       backgroundColor: 'rgba(0, 0, 0, 0.1)',
       backdropFilter: 'blur(25px)',
@@ -78,7 +81,19 @@ const NavDrawer = () => {
     },
   };
 
-  const handleNavigate = (path: string) => {
+  const bottomDrawerProps = {
+    sx: {
+      height: 'calc(100% - 68px)',
+      bgcolor: GRAY['900'],
+      borderTopLeftRadius: '16px',
+      borderTopRightRadius: '16px',
+      paddingTop: '12px',
+      paddingX: '16px',
+    },
+  };
+
+  const handleNavigate = async (path: string) => {
+    setIsBottomDrawerOpen(false);
     setIsNavDrawerOpen(false);
     navigate(path);
   };
@@ -96,153 +111,185 @@ const NavDrawer = () => {
   }
 
   return (
-    <Drawer
-      anchor="left"
-      open={isNavDrawerOpen}
-      onClose={() => setIsNavDrawerOpen(false)}
-      PaperProps={{ sx: { width: '100%', bgcolor: GRAY['900'] } }}
-      sx={drawerSx}
-    >
-      <Box
-        display="flex"
-        alignItems="center"
-        paddingLeft={1}
-        height="55px"
-        justifyContent="space-between"
-        paddingX="16px"
-        paddingTop="12px"
+    <>
+      <Drawer
+        anchor="left"
+        open={isNavDrawerOpen}
+        onClose={() => {
+          setIsBottomDrawerOpen(false);
+          setIsNavDrawerOpen(false);
+        }}
+        PaperProps={{ sx: { width: '100%', bgcolor: GRAY['900'] } }}
+        sx={leftDrawerSx}
       >
-        <Box display="flex" alignItems="center" gap="8px">
-          <LazyLoadImage
-            alt="App icon"
-            width="35px"
-            height="auto"
-            src={appIconImg}
-            sx={{ cursor: 'pointer' }}
-            skipAnimation
-          />
-          <Typography fontWeight={700} fontSize="18px">
-            {t('brand')}
-          </Typography>
-          <ChevronRight
-            sx={{ color: 'text.secondary', marginTop: '2px' }}
-            fontSize="small"
-          />
-        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          paddingLeft={1}
+          height="55px"
+          justifyContent="space-between"
+          paddingX="16px"
+          paddingTop="12px"
+        >
+          <Button
+            sx={{
+              gap: '8px',
+              alignItems: 'center',
+              textTransform: 'none',
+              borderRadius: '8px',
+            }}
+            onClick={() => setIsBottomDrawerOpen(true)}
+          >
+            <LazyLoadImage
+              alt="App icon"
+              width="35px"
+              height="auto"
+              src={appIconImg}
+              sx={{ cursor: 'pointer' }}
+              skipAnimation
+            />
+            <Typography fontWeight={700} fontSize="18px">
+              {t('brand')}
+            </Typography>
+            <ChevronRight
+              sx={{ color: 'text.secondary', marginTop: '2px' }}
+              fontSize="small"
+            />
+          </Button>
 
-        {me && (
-          <>
-            <IconButton onClick={handleMenuButtonClick}>
-              <UserAvatar
-                userId={me.id}
-                userName={me.name}
-                sx={{ fontSize: '16px' }}
-                size={35}
-              />
-            </IconButton>
-
-            <Menu
-              anchorEl={menuAnchorEl}
-              onClick={handleClose}
-              onClose={handleClose}
-              open={Boolean(menuAnchorEl)}
-              anchorOrigin={{
-                horizontal: 'right',
-                vertical: 'bottom',
-              }}
-              transformOrigin={{
-                horizontal: 'right',
-                vertical: -4,
-              }}
-              keepMounted
-            >
-              <MenuItem sx={{ gap: 1 }}>
+          {me && (
+            <>
+              <IconButton onClick={handleMenuButtonClick}>
                 <UserAvatar
                   userId={me.id}
                   userName={me.name}
-                  sx={{ fontSize: '10px' }}
-                  size={20}
+                  sx={{ fontSize: '16px' }}
+                  size={35}
                 />
-                <Typography>{me.name}</Typography>
-              </MenuItem>
+              </IconButton>
 
-              {showSettings && (
-                <MenuItem
-                  onClick={() => handleNavigate(NavigationPaths.Settings)}
-                >
-                  <Settings {...menuItemIconProps} />
-                  {t('navigation.serverSettings')}
+              <Menu
+                anchorEl={menuAnchorEl}
+                onClick={handleClose}
+                onClose={handleClose}
+                open={Boolean(menuAnchorEl)}
+                anchorOrigin={{
+                  horizontal: 'right',
+                  vertical: 'bottom',
+                }}
+                transformOrigin={{
+                  horizontal: 'right',
+                  vertical: -4,
+                }}
+                keepMounted
+              >
+                <MenuItem sx={{ gap: 1 }}>
+                  <UserAvatar
+                    userId={me.id}
+                    userName={me.name}
+                    sx={{ fontSize: '10px' }}
+                    size={20}
+                  />
+                  <Typography>{me.name}</Typography>
                 </MenuItem>
+
+                <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
+                  <ExitToApp {...menuItemIconProps} />
+                  {t('users.actions.logOut')}
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+        </Box>
+
+        <Box
+          paddingTop="8px"
+          bgcolor={GRAY['800']}
+          sx={{ borderTopRightRadius: '16px', borderTopLeftRadius: '16px' }}
+          marginTop="12px"
+          height="100%"
+        >
+          {!isChannalsLoading && channelsData && (
+            <List>
+              {channelsData.channels.map((channel) => (
+                <ListItemButton
+                  key={channel.id}
+                  onClick={() => handleNavigate(`/channels/${channel.id}`)}
+                >
+                  <ListItemIcon sx={{ minWidth: '33px' }}>
+                    <Tag />
+                  </ListItemIcon>
+                  <ListItemText primary={channel.name} />
+                </ListItemButton>
+              ))}
+            </List>
+          )}
+
+          {(showSignUp || !isLoggedIn) && (
+            <List>
+              <Divider sx={{ marginX: '16px' }} />
+
+              {/* TODO: Show link to general channel here */}
+
+              {showSignUp && (
+                <ListItemButton
+                  onClick={() => handleNavigate(NavigationPaths.SignUp)}
+                >
+                  <ListItemIcon>
+                    <PersonAdd />
+                  </ListItemIcon>
+                  <ListItemText primary={t('users.actions.signUp')} />
+                </ListItemButton>
               )}
 
-              <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
-                <ExitToApp {...menuItemIconProps} />
-                {t('users.actions.logOut')}
-              </MenuItem>
-            </Menu>
-          </>
-        )}
-      </Box>
+              {!isLoggedIn && (
+                <ListItemButton
+                  onClick={() => handleNavigate(NavigationPaths.Login)}
+                >
+                  <ListItemIcon>
+                    <ExitToApp />
+                  </ListItemIcon>
+                  <ListItemText primary={t('users.actions.logIn')} />
+                </ListItemButton>
+              )}
+            </List>
+          )}
+        </Box>
 
-      <Box
-        paddingTop="8px"
-        bgcolor={GRAY['800']}
-        sx={{ borderTopRightRadius: '16px', borderTopLeftRadius: '16px' }}
-        marginTop="12px"
-        height="100%"
+        <ConfirmLogoutModal
+          isOpen={isLogOutModalOpen}
+          setIsOpen={setIsLogOutModalOpen}
+        />
+      </Drawer>
+
+      <Drawer
+        anchor="bottom"
+        open={isBottomDrawerOpen}
+        onClose={() => setIsBottomDrawerOpen(false)}
+        PaperProps={bottomDrawerProps}
       >
-        {!isChannalsLoading && channelsData && (
-          <List>
-            {channelsData.channels.map((channel) => (
-              <ListItemButton
-                key={channel.id}
-                onClick={() => handleNavigate(`/channels/${channel.id}`)}
-              >
-                <ListItemIcon sx={{ minWidth: '33px' }}>
-                  <Tag />
-                </ListItemIcon>
-                <ListItemText primary={channel.name} />
-              </ListItemButton>
-            ))}
-          </List>
-        )}
+        <List>
+          {/* TODO: Show create channel modal on click */}
+          <ListItemButton>
+            <ListItemIcon>
+              <AddCircle />
+            </ListItemIcon>
+            <ListItemText primary={t('chat.actions.createChannel')} />
+          </ListItemButton>
 
-        {(showSignUp || !isLoggedIn) && (
-          <List>
-            <Divider sx={{ marginX: '16px' }} />
-
-            {/* TODO: Show link to general channel here */}
-
-            {showSignUp && (
-              <ListItemButton
-                onClick={() => handleNavigate(NavigationPaths.SignUp)}
-              >
-                <ListItemIcon>
-                  <PersonAdd />
-                </ListItemIcon>
-                <ListItemText primary={t('users.actions.signUp')} />
-              </ListItemButton>
-            )}
-
-            {!isLoggedIn && (
-              <ListItemButton
-                onClick={() => handleNavigate(NavigationPaths.Login)}
-              >
-                <ListItemIcon>
-                  <ExitToApp />
-                </ListItemIcon>
-                <ListItemText primary={t('users.actions.logIn')} />
-              </ListItemButton>
-            )}
-          </List>
-        )}
-      </Box>
-
-      <ConfirmLogoutModal
-        isOpen={isLogOutModalOpen}
-        setIsOpen={setIsLogOutModalOpen}
-      />
-    </Drawer>
+          {showSettings && (
+            <ListItemButton
+              onClick={() => handleNavigate(NavigationPaths.Settings)}
+            >
+              <ListItemIcon>
+                <Settings />
+              </ListItemIcon>
+              <ListItemText primary={t('navigation.serverSettings')} />
+            </ListItemButton>
+          )}
+        </List>
+      </Drawer>
+    </>
   );
 };
 
