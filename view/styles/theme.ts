@@ -136,6 +136,9 @@ export const theme = createTheme({
 
     MuiButton: {
       styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
         contained: ({ theme }: Props) => ({
           textTransform: 'none',
           backgroundColor: 'rgb(0, 0, 0, 0.04)',

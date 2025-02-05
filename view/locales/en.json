@@ -163,7 +163,8 @@
   "chat": {
     "actions": {
       "sendAnonymous": "Send anonymously",
-      "createChannel": "Create channel"
+      "createChannel": "Create Channel",
+      "deleteChannel": "Delete Channel"
     },
     "form": {
       "name": "Name"
@@ -173,7 +174,7 @@
       "noMessagesYet": "No messages yet"
     },
     "headers": {
-      "channelSettings": "Channel settings"
+      "channelSettings": "Channel Settings"
     },
     "errors": {
       "longBody": "Message body cannot exceed 6000 characters",
@@ -185,7 +186,7 @@
     "actions": {
       "add": "Add",
       "addMembers": "Add members",
-      "delete": "Delete role",
+      "delete": "Delete Role",
       "manageRoles": "Manage roles",
       "viewRoles": "View roles"
     },

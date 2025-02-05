@@ -13,11 +13,16 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import { NavigationPaths } from '../../constants/shared.constants';
 import { BLURPLE, GRAY } from '../../styles/theme';
 import { Channel, CreateChannelReq } from '../../types/chat.types';
+import DeleteButton from '../shared/delete-button';
+import Modal from '../shared/modal';
 
 interface Props {
   isOpen: boolean;
@@ -26,9 +31,11 @@ interface Props {
 }
 
 const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+
   const queryClient = useQueryClient();
 
-  const { mutate: createChannel, isPending } = useMutation({
+  const { mutate: updateChannel, isPending } = useMutation({
     mutationFn: async (values: CreateChannelReq) => {
       await api.updateChannel(editChannel.id, values);
 
@@ -55,6 +62,27 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
     },
   });
 
+  const { mutate: deleteChannel, isPending: isDeletePending } = useMutation({
+    mutationFn: async () => {
+      await api.deleteChannel(editChannel.id);
+
+      queryClient.setQueryData<{ channels: Channel[] }>(
+        ['channels'],
+        (oldData) => {
+          if (!oldData) {
+            return { channels: [] };
+          }
+          return {
+            channels: oldData.channels.filter(
+              (role) => role.id !== editChannel.id,
+            ),
+          };
+        },
+      );
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+  });
+
   const { register, formState, handleSubmit } = useForm<CreateChannelReq>({
     defaultValues: {
       name: editChannel.name,
@@ -63,6 +91,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   });
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const paperProps: PaperProps = {
     sx: {
@@ -74,6 +103,11 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
     },
   };
 
+  const handleDeleteBtnClick = async () => {
+    await navigate(NavigationPaths.Home);
+    deleteChannel();
+  };
+
   return (
     <Drawer
       open={isOpen}
@@ -81,7 +115,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
       anchor="bottom"
       PaperProps={paperProps}
     >
-      <form onSubmit={handleSubmit((fv) => createChannel(fv))}>
+      <form onSubmit={handleSubmit((fv) => updateChannel(fv))}>
         <Box
           display="flex"
           justifyContent="space-between"
@@ -110,7 +144,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
 
         <Divider sx={{ marginBottom: '16px' }} />
 
-        <FormGroup sx={{ gap: 1.5, paddingBottom: 3, paddingX: '16px' }}>
+        <FormGroup sx={{ gap: 1.5, paddingBottom: 3.5, paddingX: '16px' }}>
           <FormControl>
             <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
               {t('chat.form.name')}
@@ -119,6 +153,40 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
           </FormControl>
         </FormGroup>
       </form>
+
+      <DeleteButton
+        onClick={() => setIsConfirmDeleteOpen(true)}
+        sx={{ marginX: '16px' }}
+        fullWidth={false}
+      >
+        {t('chat.actions.deleteChannel')}
+      </DeleteButton>
+
+      <Modal
+        open={isConfirmDeleteOpen}
+        onClose={() => setIsConfirmDeleteOpen(false)}
+      >
+        <Typography marginBottom={3}>
+          {t('prompts.deleteItem', { itemType: 'channel' })}
+        </Typography>
+
+        <Box display="flex" gap={1}>
+          <Button
+            variant="contained"
+            onClick={() => setIsConfirmDeleteOpen(false)}
+          >
+            {t('actions.cancel')}
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ color: '#f44336' }}
+            onClick={handleDeleteBtnClick}
+            disabled={isDeletePending}
+          >
+            {t('actions.delete')}
+          </Button>
+        </Box>
+      </Modal>
     </Drawer>
   );
 };
