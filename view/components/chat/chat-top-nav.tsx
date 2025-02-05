@@ -1,10 +1,12 @@
 import { ArrowBack, ChevronRight, Search, Tag } from '@mui/icons-material';
 import { Box, Button, IconButton, SxProps, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { Channel } from '../../types/chat.types';
+import EditChannelDrawer from './edit-channel-drawer';
 
 interface Props {
   channel: Channel;
@@ -12,6 +14,7 @@ interface Props {
 
 const ChatTopNav = ({ channel }: Props) => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
+  const [isEditChannelDrawerOpen, setIsEditChannelDrawerOpen] = useState(false);
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
@@ -53,6 +56,11 @@ const ChatTopNav = ({ channel }: Props) => {
             textTransform: 'none',
           }}
           disableRipple={isAboveMd}
+          onClick={() => {
+            if (!isAboveMd) {
+              setIsEditChannelDrawerOpen(true);
+            }
+          }}
         >
           <Tag
             sx={{
@@ -77,6 +85,14 @@ const ChatTopNav = ({ channel }: Props) => {
           )}
         </Button>
       </Box>
+
+      {!isAboveMd && (
+        <EditChannelDrawer
+          editChannel={channel}
+          isOpen={isEditChannelDrawerOpen}
+          setIsOpen={setIsEditChannelDrawerOpen}
+        />
+      )}
 
       <IconButton
         sx={buttonSx}

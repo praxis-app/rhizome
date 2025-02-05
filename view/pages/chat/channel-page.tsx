@@ -8,7 +8,7 @@ export const ChannelPage = () => {
   const { channelId } = useParams();
 
   const { data, isLoading } = useQuery({
-    queryKey: ['channel', channelId],
+    queryKey: ['channels', channelId],
     queryFn: () => api.getChannel(channelId!),
     enabled: !!channelId,
   });

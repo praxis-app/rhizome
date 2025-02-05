@@ -18,6 +18,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  PaperProps,
   SvgIconProps,
   SxProps,
   Typography,
@@ -83,7 +84,7 @@ const NavDrawer = () => {
     },
   };
 
-  const bottomDrawerProps = {
+  const bottomDrawerProps: PaperProps = {
     sx: {
       height: 'calc(100% - 68px)',
       bgcolor: GRAY['900'],
