@@ -53,6 +53,9 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   });
 
   const { register, formState, handleSubmit } = useForm<CreateChannelReq>({
+    defaultValues: {
+      name: editChannel.name,
+    },
     mode: 'onChange',
   });
 
