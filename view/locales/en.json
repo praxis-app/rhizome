@@ -172,6 +172,9 @@
       "sendAMessage": "Send a message...",
       "noMessagesYet": "No messages yet"
     },
+    "headers": {
+      "channelSettings": "Channel settings"
+    },
     "errors": {
       "longBody": "Message body cannot exceed 6000 characters",
       "couldNotSend": "Message could not be sent"

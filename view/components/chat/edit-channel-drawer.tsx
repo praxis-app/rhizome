@@ -1,20 +1,23 @@
+import { Close } from '@mui/icons-material';
 import {
   Box,
   Button,
+  Divider,
   Drawer,
   FormControl,
   FormGroup,
   FormLabel,
+  IconButton,
   OutlinedInput,
   PaperProps,
+  Typography,
 } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
-import { GRAY } from '../../styles/theme';
+import { BLURPLE, GRAY } from '../../styles/theme';
 import { Channel, CreateChannelReq } from '../../types/chat.types';
-import PrimaryButton from '../shared/primary-button';
 
 interface Props {
   isOpen: boolean;
@@ -68,7 +71,6 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
       borderTopLeftRadius: '16px',
       borderTopRightRadius: '16px',
       paddingTop: '12px',
-      paddingX: '16px',
     },
   };
 
@@ -80,7 +82,35 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
       PaperProps={paperProps}
     >
       <form onSubmit={handleSubmit((fv) => createChannel(fv))}>
-        <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          padding="0 16px 12px"
+        >
+          <IconButton
+            onClick={() => setIsOpen(false)}
+            sx={{ marginRight: '24px' }}
+            edge="start"
+          >
+            <Close />
+          </IconButton>
+
+          <Typography alignSelf="center" fontWeight="600">
+            {t('chat.headers.channelSettings')}
+          </Typography>
+
+          <Button
+            type="submit"
+            sx={{ textTransform: 'none', color: BLURPLE['300'] }}
+            disabled={isPending || !formState.dirtyFields.name}
+          >
+            {t('actions.save')}
+          </Button>
+        </Box>
+
+        <Divider sx={{ marginBottom: '16px' }} />
+
+        <FormGroup sx={{ gap: 1.5, paddingBottom: 3, paddingX: '16px' }}>
           <FormControl>
             <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
               {t('chat.form.name')}
@@ -88,23 +118,6 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
             <OutlinedInput autoComplete="off" {...register('name')} />
           </FormControl>
         </FormGroup>
-
-        <Box display="flex" justifyContent="right" gap="16px">
-          <Button
-            variant="text"
-            sx={{ textTransform: 'none' }}
-            onClick={() => setIsOpen(false)}
-          >
-            {t('actions.cancel')}
-          </Button>
-          <PrimaryButton
-            type="submit"
-            sx={{ borderRadius: '4px' }}
-            disabled={isPending || !formState.dirtyFields.name}
-          >
-            {t('actions.save')}
-          </PrimaryButton>
-        </Box>
       </form>
     </Drawer>
   );
