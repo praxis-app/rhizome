@@ -1,4 +1,10 @@
-import { ExitToApp, PersonAdd, Settings, Tag } from '@mui/icons-material';
+import {
+  ChevronRight,
+  ExitToApp,
+  PersonAdd,
+  Settings,
+  Tag,
+} from '@mui/icons-material';
 import {
   Box,
   Divider,
@@ -118,6 +124,10 @@ const NavDrawer = () => {
           <Typography fontWeight={700} fontSize="18px">
             {t('brand')}
           </Typography>
+          <ChevronRight
+            sx={{ color: 'text.secondary', marginTop: '2px' }}
+            fontSize="small"
+          />
         </Box>
 
         {me && (

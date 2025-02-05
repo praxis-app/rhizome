@@ -27,8 +27,8 @@ import CreateChannelModal from './create-channel-modal';
 
 /** Left panel navigation for desktop */
 const ChatLeftNav = () => {
-  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
     queryKey: ['channels'],
