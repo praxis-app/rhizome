@@ -1,11 +1,8 @@
-import { AddCircle, ExpandMore, Settings, Tag } from '@mui/icons-material';
+import { AddCircle, ExpandMore, Settings } from '@mui/icons-material';
 import {
   Box,
   Button,
   List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Menu,
   MenuItem,
   SvgIconProps,
@@ -21,8 +18,8 @@ import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
-import { Channel } from '../../types/chat.types';
 import LazyLoadImage from '../images/lazy-load-image';
+import ChannelListItem from './channel-list-item';
 import CreateChannelModal from './create-channel-modal';
 
 /** Left panel navigation for desktop */
@@ -40,15 +37,6 @@ const ChatLeftNav = () => {
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
 
-  const listItemBtnSx: SxProps = {
-    color: 'text.secondary',
-    borderRadius: '4px',
-    marginRight: '6px',
-    marginLeft: '8px',
-    paddingRight: '10px',
-    paddingLeft: '8px',
-    height: '30px',
-  };
   const menuButtonSx: SxProps = {
     cursor: 'pointer',
     userSelect: 'none',
@@ -67,17 +55,6 @@ const ChatLeftNav = () => {
   const menuItemIconProps: SvgIconProps = {
     sx: { marginRight: 1 },
     fontSize: 'small',
-  };
-
-  const getChannelNameTextProps = (channel: Channel) => {
-    const selectedColor = isDarkMode ? 'white' : 'black';
-    return {
-      sx: {
-        color: channelId === channel.id ? selectedColor : 'text.secondary',
-        fontWeight: channelId === channel.id ? 600 : 500,
-        fontSize: '15px',
-      },
-    };
   };
 
   const handleMenuButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -151,19 +128,11 @@ const ChatLeftNav = () => {
       {!isChannalsLoading && channelsData && (
         <List>
           {channelsData.channels.map((channel) => (
-            <ListItemButton
+            <ChannelListItem
               key={channel.id}
-              onClick={() => navigate(`/channels/${channel.id}`)}
-              sx={listItemBtnSx}
-            >
-              <ListItemIcon sx={{ minWidth: '33px' }}>
-                <Tag sx={{ color: 'text.secondary' }} />
-              </ListItemIcon>
-              <ListItemText
-                primaryTypographyProps={getChannelNameTextProps(channel)}
-                primary={channel.name}
-              />
-            </ListItemButton>
+              channel={channel}
+              isActive={channelId === channel.id}
+            />
           ))}
         </List>
       )}
