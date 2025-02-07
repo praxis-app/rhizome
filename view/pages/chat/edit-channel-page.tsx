@@ -8,7 +8,7 @@ import {
   FormLabel,
   OutlinedInput,
 } from '@mui/material';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,12 +18,11 @@ import DeleteButton from '../../components/shared/delete-button';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
-import { Channel, MutateChannelReq } from '../../types/chat.types';
+import { MutateChannelReq } from '../../types/chat.types';
 
 const EditChannelPage = () => {
   const { channelId } = useParams();
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const { register, formState, reset, handleSubmit } =
@@ -48,24 +47,27 @@ const EditChannelPage = () => {
       }
       await api.updateChannel(data.channel.id, values);
 
-      const channel = { ...data.channel, ...values };
-      queryClient.setQueryData<{ channel: Channel }>(
-        ['channels', data.channel.id],
-        { channel },
-      );
-      queryClient.setQueryData<{ channels: Channel[] }>(
-        ['channels'],
-        (oldData) => {
-          if (!oldData) {
-            return { channels: [] };
-          }
-          return {
-            channels: oldData.channels.map((c) => {
-              return c.id === channel.id ? channel : c;
-            }),
-          };
-        },
-      );
+      // TODO: Uncomment if needed to update the cache
+      // const channel = { ...data.channel, ...values };
+      // queryClient.setQueryData<{ channel: Channel }>(
+      //   ['channels', data.channel.id],
+      //   { channel },
+      // );
+      // queryClient.setQueryData<{ channels: Channel[] }>(
+      //   ['channels'],
+      //   (oldData) => {
+      //     if (!oldData) {
+      //       return { channels: [] };
+      //     }
+      //     return {
+      //       channels: oldData.channels.map((c) => {
+      //         return c.id === channel.id ? channel : c;
+      //       }),
+      //     };
+      //   },
+      // );
+
+      navigate(`${NavigationPaths.Channels}/${channelId}`);
     },
   });
 
