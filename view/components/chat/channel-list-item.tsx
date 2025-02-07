@@ -36,12 +36,12 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
     paddingRight: '10px',
     paddingLeft: '8px',
     height: '30px',
-    // transition: 'all 0s',
   };
   const settingsIconSx: SxProps = {
     fontSize: '15px',
     color: 'inherit',
     marginTop: '4px',
+    transition: 'color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': { color: 'text.primary' },
   };
 
