@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { BLURPLE, GRAY } from '../../styles/theme';
-import { Channel, CreateChannelReq } from '../../types/chat.types';
+import { Channel, MutateChannelReq } from '../../types/chat.types';
 import DeleteButton from '../shared/delete-button';
 import Modal from '../shared/modal';
 
@@ -36,7 +36,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate: updateChannel, isPending } = useMutation({
-    mutationFn: async (values: CreateChannelReq) => {
+    mutationFn: async (values: MutateChannelReq) => {
       await api.updateChannel(editChannel.id, values);
 
       const channel = { ...editChannel, ...values };
@@ -83,7 +83,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
     },
   });
 
-  const { register, formState, handleSubmit } = useForm<CreateChannelReq>({
+  const { register, formState, handleSubmit } = useForm<MutateChannelReq>({
     defaultValues: {
       name: editChannel.name,
     },

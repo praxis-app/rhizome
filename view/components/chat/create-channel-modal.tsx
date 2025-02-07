@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
-import { Channel, CreateChannelReq } from '../../types/chat.types';
+import { Channel, MutateChannelReq } from '../../types/chat.types';
 import Modal from '../shared/modal';
 import PrimaryButton from '../shared/primary-button';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +26,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
   const navigate = useNavigate();
 
   const { mutate: createChannel, isPending } = useMutation({
-    mutationFn: async (values: CreateChannelReq) => {
+    mutationFn: async (values: MutateChannelReq) => {
       const { channel } = await api.createChannel(values);
 
       queryClient.setQueryData<{ channels: Channel[] }>(
@@ -46,7 +46,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
     },
   });
 
-  const { register, formState, handleSubmit } = useForm<CreateChannelReq>({
+  const { register, formState, handleSubmit } = useForm<MutateChannelReq>({
     mode: 'onChange',
   });
 

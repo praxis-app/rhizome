@@ -13,7 +13,7 @@ export interface Channel {
   name: string;
 }
 
-export interface CreateChannelReq {
+export interface MutateChannelReq {
   name: string;
 }
 
