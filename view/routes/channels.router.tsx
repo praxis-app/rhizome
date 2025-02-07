@@ -1,5 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 import { ChannelPage } from '../pages/chat/channel-page';
+import EditChannelPage from '../pages/chat/edit-channel-page';
 
 export const channelsRouter: RouteObject = {
   path: '/channels',
@@ -7,6 +8,10 @@ export const channelsRouter: RouteObject = {
     {
       path: ':channelId',
       element: <ChannelPage />,
+    },
+    {
+      path: ':channelId/edit',
+      element: <EditChannelPage />,
     },
   ],
 };

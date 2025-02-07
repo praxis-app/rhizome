@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { Channel } from '../../types/chat.types';
+import { NavigationPaths } from '../../constants/shared.constants';
 
 interface Props {
   channel: Channel;
@@ -30,6 +31,8 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
 
   const listItemBtnSx: SxProps = {
     color: 'text.secondary',
+    backgroundColor: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+    '&:not(:last-child)': { marginBottom: '2px' },
     borderRadius: '4px',
     marginRight: '6px',
     marginLeft: '8px',
@@ -39,8 +42,8 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
   };
   const settingsIconSx: SxProps = {
     fontSize: '15px',
-    color: 'inherit',
     marginTop: '4px',
+    color: 'text.secondary',
     transition: 'color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': { color: 'text.primary' },
   };
@@ -59,7 +62,7 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
   return (
     <ListItemButton
       key={channel.id}
-      onClick={() => navigate(`/channels/${channel.id}`)}
+      onClick={() => navigate(`${NavigationPaths.Channels}/${channel.id}`)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       sx={listItemBtnSx}
@@ -72,8 +75,14 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
           <Box display="flex" justifyContent="space-between">
             <Box>{channel.name}</Box>
             {showSettingsBtn && (
-              <Fade in easing="cubic-bezier(0.4, 0, 0.2, 1)" timeout={150}>
-                <Settings sx={settingsIconSx} />
+              <Fade easing="cubic-bezier(0.4, 0, 0.2, 1)" timeout={150} in>
+                <Settings
+                  sx={settingsIconSx}
+                  onClick={(e) => {
+                    navigate(`${NavigationPaths.Channels}/${channel.id}/edit`);
+                    e.stopPropagation();
+                  }}
+                />
               </Fade>
             )}
           </Box>
