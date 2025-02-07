@@ -13,7 +13,7 @@ interface Props {
   channelId: string;
 }
 
-const DeleteChannelModal = ({ channelId, isOpen, setIsOpen }: Props) => {
+const ConfirmDeleteChannelModal = ({ channelId, isOpen, setIsOpen }: Props) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -67,4 +67,4 @@ const DeleteChannelModal = ({ channelId, isOpen, setIsOpen }: Props) => {
   );
 };
 
-export default DeleteChannelModal;
+export default ConfirmDeleteChannelModal;

@@ -20,7 +20,7 @@ import { api } from '../../client/api-client';
 import { BLURPLE, GRAY } from '../../styles/theme';
 import { Channel, MutateChannelReq } from '../../types/chat.types';
 import DeleteButton from '../shared/delete-button';
-import DeleteChannelModal from './delete-channel-modal';
+import ConfirmDeleteChannelModal from './confirm-delete-channel-modal';
 
 interface Props {
   isOpen: boolean;
@@ -133,7 +133,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
         {t('chat.actions.deleteChannel')}
       </DeleteButton>
 
-      <DeleteChannelModal
+      <ConfirmDeleteChannelModal
         isOpen={isConfirmDeleteOpen}
         setIsOpen={setIsConfirmDeleteOpen}
         channelId={editChannel.id}

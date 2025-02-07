@@ -9,10 +9,12 @@ import {
   OutlinedInput,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import ConfirmDeleteChannelModal from '../../components/chat/confirm-delete-channel-modal';
 import TopNav from '../../components/nav/top-nav';
 import DeleteButton from '../../components/shared/delete-button';
 import PrimaryButton from '../../components/shared/primary-button';
@@ -21,6 +23,8 @@ import { NavigationPaths } from '../../constants/shared.constants';
 import { MutateChannelReq } from '../../types/chat.types';
 
 const EditChannelPage = () => {
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+
   const { channelId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -115,7 +119,17 @@ const EditChannelPage = () => {
         </CardContent>
       </Card>
 
-      <DeleteButton>{t('chat.actions.deleteChannel')}</DeleteButton>
+      <DeleteButton onClick={() => setIsConfirmDeleteOpen(true)}>
+        {t('chat.actions.deleteChannel')}
+      </DeleteButton>
+
+      {!!channelId && (
+        <ConfirmDeleteChannelModal
+          channelId={channelId}
+          isOpen={isConfirmDeleteOpen}
+          setIsOpen={setIsConfirmDeleteOpen}
+        />
+      )}
     </>
   );
 };
