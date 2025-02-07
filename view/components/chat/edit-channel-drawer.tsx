@@ -16,13 +16,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import { NavigationPaths } from '../../constants/shared.constants';
 import { BLURPLE, GRAY } from '../../styles/theme';
 import { Channel, MutateChannelReq } from '../../types/chat.types';
 import DeleteButton from '../shared/delete-button';
-import Modal from '../shared/modal';
+import DeleteChannelModal from './delete-channel-modal';
 
 interface Props {
   isOpen: boolean;
@@ -62,27 +60,6 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
     },
   });
 
-  const { mutate: deleteChannel, isPending: isDeletePending } = useMutation({
-    mutationFn: async () => {
-      await api.deleteChannel(editChannel.id);
-
-      queryClient.setQueryData<{ channels: Channel[] }>(
-        ['channels'],
-        (oldData) => {
-          if (!oldData) {
-            return { channels: [] };
-          }
-          return {
-            channels: oldData.channels.filter(
-              (role) => role.id !== editChannel.id,
-            ),
-          };
-        },
-      );
-      queryClient.invalidateQueries({ queryKey: ['me'] });
-    },
-  });
-
   const { register, formState, handleSubmit } = useForm<MutateChannelReq>({
     defaultValues: {
       name: editChannel.name,
@@ -91,7 +68,6 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   });
 
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const paperProps: PaperProps = {
     sx: {
@@ -101,11 +77,6 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
       borderTopRightRadius: '16px',
       paddingTop: '12px',
     },
-  };
-
-  const handleDeleteBtnClick = async () => {
-    await navigate(NavigationPaths.Home);
-    deleteChannel();
   };
 
   return (
@@ -162,31 +133,11 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
         {t('chat.actions.deleteChannel')}
       </DeleteButton>
 
-      <Modal
-        open={isConfirmDeleteOpen}
-        onClose={() => setIsConfirmDeleteOpen(false)}
-      >
-        <Typography marginBottom={3}>
-          {t('prompts.deleteItem', { itemType: 'channel' })}
-        </Typography>
-
-        <Box display="flex" gap={1}>
-          <Button
-            variant="contained"
-            onClick={() => setIsConfirmDeleteOpen(false)}
-          >
-            {t('actions.cancel')}
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ color: '#f44336' }}
-            onClick={handleDeleteBtnClick}
-            disabled={isDeletePending}
-          >
-            {t('actions.delete')}
-          </Button>
-        </Box>
-      </Modal>
+      <DeleteChannelModal
+        isOpen={isConfirmDeleteOpen}
+        setIsOpen={setIsConfirmDeleteOpen}
+        channelId={editChannel.id}
+      />
     </Drawer>
   );
 };
