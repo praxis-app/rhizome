@@ -1,7 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
-import { Channel, MutateChannelReq } from '../types/channel.types';
+import {
+  Channel,
+  CreateChannelReq,
+  UpdateChannelReq,
+} from '../types/channel.types';
 import { Image } from '../types/image.types';
 import { Message } from '../types/message.types';
 import {
@@ -155,14 +159,14 @@ class ApiClient {
     });
   };
 
-  createChannel = async (data: MutateChannelReq) => {
+  createChannel = async (data: CreateChannelReq) => {
     const path = '/channels';
     return this.executeRequest<{ channel: Channel }>('post', path, {
       data,
     });
   };
 
-  updateChannel = async (channelId: string, data: { name: string }) => {
+  updateChannel = async (channelId: string, data: UpdateChannelReq) => {
     const path = `/channels/${channelId}`;
     return this.executeRequest<void>('put', path, {
       data,

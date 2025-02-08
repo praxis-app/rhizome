@@ -13,7 +13,7 @@ import DeleteButton from '../../components/shared/delete-button';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
-import { MutateChannelReq } from '../../types/channel.types';
+import { UpdateChannelReq } from '../../types/channel.types';
 
 const EditChannelPage = () => {
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
@@ -23,7 +23,7 @@ const EditChannelPage = () => {
   const navigate = useNavigate();
 
   const { register, formState, reset, handleSubmit } =
-    useForm<MutateChannelReq>({
+    useForm<UpdateChannelReq>({
       mode: 'onChange',
     });
 
@@ -38,7 +38,7 @@ const EditChannelPage = () => {
   });
 
   const { mutate: updateChannel, isPending } = useMutation({
-    mutationFn: async (values: MutateChannelReq) => {
+    mutationFn: async (values: UpdateChannelReq) => {
       if (!data) {
         return;
       }

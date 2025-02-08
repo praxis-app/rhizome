@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import { Channel, MutateChannelReq } from '../../types/channel.types';
+import { Channel, CreateChannelReq } from '../../types/channel.types';
 import Modal from '../shared/modal';
 import PrimaryButton from '../shared/primary-button';
 import ChannelFormFields from './channel-form-fields';
@@ -20,7 +20,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
   const navigate = useNavigate();
 
   const { mutate: createChannel, isPending } = useMutation({
-    mutationFn: async (values: MutateChannelReq) => {
+    mutationFn: async (values: CreateChannelReq) => {
       const { channel } = await api.createChannel(values);
 
       queryClient.setQueryData<{ channels: Channel[] }>(
@@ -40,7 +40,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
     },
   });
 
-  const { register, formState, handleSubmit } = useForm<MutateChannelReq>({
+  const { register, formState, handleSubmit } = useForm<CreateChannelReq>({
     mode: 'onChange',
   });
 

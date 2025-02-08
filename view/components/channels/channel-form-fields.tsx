@@ -8,10 +8,10 @@ import {
 import { ChangeEvent } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { MutateChannelReq } from '../../types/channel.types';
+import { CreateChannelReq, UpdateChannelReq } from '../../types/channel.types';
 
 interface Props {
-  register: UseFormReturn<MutateChannelReq>['register'];
+  register: UseFormReturn<CreateChannelReq | UpdateChannelReq>['register'];
   sx?: FormGroupProps['sx'];
 }
 

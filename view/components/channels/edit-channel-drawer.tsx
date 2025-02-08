@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
 import { BLURPLE, GRAY } from '../../styles/theme';
-import { Channel, MutateChannelReq } from '../../types/channel.types';
+import { Channel, UpdateChannelReq } from '../../types/channel.types';
 import DeleteButton from '../shared/delete-button';
 import ChannelFormFields from './channel-form-fields';
 import ConfirmDeleteChannelModal from './confirm-delete-channel-modal';
@@ -31,7 +31,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   const queryClient = useQueryClient();
 
   const { mutate: updateChannel, isPending } = useMutation({
-    mutationFn: async (values: MutateChannelReq) => {
+    mutationFn: async (values: UpdateChannelReq) => {
       await api.updateChannel(editChannel.id, values);
 
       const channel = { ...editChannel, ...values };
@@ -58,7 +58,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   });
 
   const { register, formState, handleSubmit, reset } =
-    useForm<MutateChannelReq>({
+    useForm<UpdateChannelReq>({
       defaultValues: { name: editChannel.name },
       mode: 'onChange',
     });
