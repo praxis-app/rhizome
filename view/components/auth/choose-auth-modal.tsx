@@ -44,7 +44,7 @@ const ChooseAuthModal = ({ isOpen, setIsOpen, sendMessage }: Props) => {
 
       <Box display="flex" gap={1}>
         <Button onClick={handleSendAnonMsgBtnClick} variant="contained">
-          {t('chat.actions.sendAnonymous')}
+          {t('messages.actions.sendAnonymous')}
         </Button>
         <Button
           onClick={() => navigate(NavigationPaths.SignUp)}

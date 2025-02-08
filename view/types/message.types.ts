@@ -8,15 +8,6 @@ export interface Message {
   createdAt: string;
 }
 
-export interface Channel {
-  id: string;
-  name: string;
-}
-
-export interface MutateChannelReq {
-  name: string;
-}
-
 export interface MessagesQuery {
   pages: { messages: Message[] }[];
   pageParams: number[];

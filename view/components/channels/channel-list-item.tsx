@@ -9,9 +9,9 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { Channel } from '../../types/chat.types';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { Channel } from '../../types/channel.types';
 
 interface Props {
   channel: Channel;

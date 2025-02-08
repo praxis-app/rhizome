@@ -1,16 +1,22 @@
 import { Box, debounce } from '@mui/material';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import ChannelLeftNav from '../../components/channels/channel-left-nav';
+import ChannelTopNav from '../../components/channels/channel-top-nav';
+import MessageFeed from '../../components/messages/message-feed';
+import MessageForm from '../../components/messages/message-form';
+import ProgressBar from '../../components/shared/progress-bar';
 import { useAboveBreakpoint, useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
-import { Channel, Message, MessagesQuery } from '../../types/chat.types';
+import { Message, MessagesQuery } from '../../types/message.types';
 import { PubSubMessage } from '../../types/shared.types';
-import ChatLeftNav from './chat-left-nav';
-import ChatTopNav from './chat-top-nav';
-import MessageFeed from './message-feed';
-import MessageForm from './message-form';
 
 enum MessageType {
   MESSAGE = 'message',
@@ -29,39 +35,37 @@ interface ImageMessagePayload {
   imageId: string;
 }
 
-interface Props {
-  channel: Channel;
-}
-
-const ChatPanel = ({ channel }: Props) => {
+export const ChannelPage = () => {
   const { isLoggedIn } = useAppStore((state) => state);
+
+  const { channelId } = useParams();
+  const queryClient = useQueryClient();
+  const feedBoxRef = useRef<HTMLDivElement>(null);
+  const isAboveMd = useAboveBreakpoint('md');
 
   const { data: meData } = useMeQuery({
     enabled: isLoggedIn,
   });
 
+  const { data: channelData, isLoading } = useQuery({
+    queryKey: ['channels', channelId],
+    queryFn: () => api.getChannel(channelId!),
+    enabled: !!channelId,
+  });
+
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
-    queryKey: ['messages', channel.id],
+    queryKey: ['messages', channelId],
     queryFn: ({ pageParam }) => {
-      return api.getChannelMessages(channel.id, pageParam);
+      return api.getChannelMessages(channelId!, pageParam);
     },
     getNextPageParam: (_lastPage, pages) => {
       return pages.flatMap((page) => page.messages).length;
     },
     initialPageParam: 0,
+    enabled: !!channelId,
   });
 
-  const queryClient = useQueryClient();
-  const feedBoxRef = useRef<HTMLDivElement>(null);
-  const isAboveMd = useAboveBreakpoint('md');
-
-  const scrollToBottom = () => {
-    if (feedBoxRef.current && feedBoxRef.current.scrollTop >= -200) {
-      feedBoxRef.current.scrollTop = 0;
-    }
-  };
-
-  useSubscription(`channel-${channel.id}-${meData?.user.id}`, {
+  useSubscription(`channel-${channelId}-${meData?.user.id}`, {
     onMessage: (event) => {
       const { body }: PubSubMessage<NewMessagePayload | ImageMessagePayload> =
         JSON.parse(event.data);
@@ -72,7 +76,7 @@ const ChatPanel = ({ channel }: Props) => {
       // Update cache with new message, images are placeholders
       if (body.type === MessageType.MESSAGE) {
         queryClient.setQueryData<MessagesQuery>(
-          ['messages', channel.id],
+          ['messages', channelId],
           (oldData) => {
             if (!oldData) {
               return {
@@ -96,7 +100,7 @@ const ChatPanel = ({ channel }: Props) => {
       // Update cache with image status once uploaded
       if (body.type === MessageType.IMAGE) {
         queryClient.setQueryData<MessagesQuery>(
-          ['messages', channel.id],
+          ['messages', channelId],
           (oldData) => {
             if (!oldData) {
               return { pages: [], pageParams: [] };
@@ -125,28 +129,39 @@ const ChatPanel = ({ channel }: Props) => {
 
       scrollToBottom();
     },
-    enabled: !!meData,
+    enabled: !!meData && !!channelId,
   });
 
-  if (!messagesData) {
+  const scrollToBottom = () => {
+    if (feedBoxRef.current && feedBoxRef.current.scrollTop >= -200) {
+      feedBoxRef.current.scrollTop = 0;
+    }
+  };
+
+  if (isLoading) {
+    return <ProgressBar />;
+  }
+
+  if (!channelData || !messagesData) {
     return null;
   }
 
   return (
     <Box display="flex" position="fixed" top={0} left={0} bottom={0} right={0}>
-      {isAboveMd && <ChatLeftNav />}
+      {isAboveMd && <ChannelLeftNav />}
 
       <Box display="flex" flexDirection="column" flex={1}>
-        <ChatTopNav channel={channel} />
+        <ChannelTopNav channel={channelData.channel} />
         <MessageFeed
           feedBoxRef={feedBoxRef}
           onLoadMore={debounce(fetchNextPage, 500)}
           messages={messagesData.pages.flatMap((page) => page.messages)}
         />
-        <MessageForm channelId={channel.id} onSend={scrollToBottom} />
+        <MessageForm
+          channelId={channelData.channel.id}
+          onSend={scrollToBottom}
+        />
       </Box>
     </Box>
   );
 };
-
-export default ChatPanel;

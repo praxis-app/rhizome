@@ -14,13 +14,13 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import ConfirmDeleteChannelModal from '../../components/chat/confirm-delete-channel-modal';
+import ConfirmDeleteChannelModal from '../../components/channels/confirm-delete-channel-modal';
 import TopNav from '../../components/nav/top-nav';
 import DeleteButton from '../../components/shared/delete-button';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
-import { MutateChannelReq } from '../../types/chat.types';
+import { MutateChannelReq } from '../../types/channel.types';
 
 const EditChannelPage = () => {
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
@@ -86,7 +86,7 @@ const EditChannelPage = () => {
   return (
     <>
       <TopNav
-        header={t('chat.headers.channelSettings')}
+        header={t('channels.headers.channelSettings')}
         onBackClick={() => navigate(`${NavigationPaths.Channels}/${channelId}`)}
         backBtnIcon={<Close />}
       />
@@ -100,7 +100,7 @@ const EditChannelPage = () => {
             <FormGroup sx={{ gap: 1.5, paddingBottom: 3.5 }}>
               <FormControl>
                 <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                  {t('chat.form.name')}
+                  {t('messages.form.name')}
                 </FormLabel>
                 <OutlinedInput autoComplete="off" {...register('name')} />
               </FormControl>
@@ -120,7 +120,7 @@ const EditChannelPage = () => {
       </Card>
 
       <DeleteButton onClick={() => setIsConfirmDeleteOpen(true)}>
-        {t('chat.actions.deleteChannel')}
+        {t('channels.actions.deleteChannel')}
       </DeleteButton>
 
       {!!channelId && (

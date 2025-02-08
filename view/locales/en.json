@@ -48,7 +48,6 @@
   "navigation": {
     "about": "About",
     "activity": "Activity",
-    "chat": "Chat",
     "docs": "Docs",
     "events": "Events",
     "home": "Home",
@@ -160,11 +159,9 @@
     }
   },
 
-  "chat": {
+  "messages": {
     "actions": {
-      "sendAnonymous": "Send anonymously",
-      "createChannel": "Create Channel",
-      "deleteChannel": "Delete Channel"
+      "sendAnonymous": "Send anonymously"
     },
     "form": {
       "name": "Name"
@@ -173,12 +170,19 @@
       "sendAMessage": "Send a message...",
       "noMessagesYet": "No messages yet"
     },
-    "headers": {
-      "channelSettings": "Channel Settings"
-    },
     "errors": {
       "longBody": "Message body cannot exceed 6000 characters",
       "couldNotSend": "Message could not be sent"
+    }
+  },
+
+  "channels": {
+    "actions": {
+      "createChannel": "Create Channel",
+      "deleteChannel": "Delete Channel"
+    },
+    "headers": {
+      "channelSettings": "Channel Settings"
     }
   },
 

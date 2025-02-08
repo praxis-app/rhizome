@@ -36,7 +36,7 @@ import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import ConfirmLogoutModal from '../auth/confirm-logout-modal';
-import CreateChannelModal from '../chat/create-channel-modal';
+import CreateChannelModal from '../channels/create-channel-modal';
 import LazyLoadImage from '../images/lazy-load-image';
 import UserAvatar from '../users/user-avatar';
 
@@ -276,7 +276,7 @@ const NavDrawer = () => {
             <ListItemIcon>
               <AddCircle />
             </ListItemIcon>
-            <ListItemText primary={t('chat.actions.createChannel')} />
+            <ListItemText primary={t('channels.actions.createChannel')} />
           </ListItemButton>
 
           {showSettings && (

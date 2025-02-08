@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { RefObject, UIEvent, useRef, useState } from 'react';
 import { useInView, useScrollDirection } from '../../hooks/shared.hooks';
-import { Message as MessageType } from '../../types/chat.types';
+import { Message as MessageType } from '../../types/message.types';
 import Message from './message';
 
 interface Props {

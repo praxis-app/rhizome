@@ -18,12 +18,12 @@ import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
-import LazyLoadImage from '../images/lazy-load-image';
 import ChannelListItem from './channel-list-item';
 import CreateChannelModal from './create-channel-modal';
+import LazyLoadImage from '../images/lazy-load-image';
 
 /** Left panel navigation for desktop */
-const ChatLeftNav = () => {
+const ChannelLeftNav = () => {
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -116,7 +116,7 @@ const ChatLeftNav = () => {
 
         <MenuItem onClick={handleCreateChannelBtnClick}>
           <AddCircle {...menuItemIconProps} />
-          {t('chat.actions.createChannel')}
+          {t('channels.actions.createChannel')}
         </MenuItem>
       </Menu>
 
@@ -140,4 +140,4 @@ const ChatLeftNav = () => {
   );
 };
 
-export default ChatLeftNav;
+export default ChannelLeftNav;

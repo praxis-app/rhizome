@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
-import { Channel } from '../../types/chat.types';
+import { Channel } from '../../types/channel.types';
 import Modal from '../shared/modal';
 
 interface Props {

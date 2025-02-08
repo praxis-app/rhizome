@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
-import { Channel } from '../../types/chat.types';
+import { Channel } from '../../types/channel.types';
 import EditChannelDrawer from './edit-channel-drawer';
 
 interface Props {
   channel: Channel;
 }
 
-const ChatTopNav = ({ channel }: Props) => {
+const ChannelTopNav = ({ channel }: Props) => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
   const [isEditChannelDrawerOpen, setIsEditChannelDrawerOpen] = useState(false);
 
@@ -106,4 +106,4 @@ const ChatTopNav = ({ channel }: Props) => {
   );
 };
 
-export default ChatTopNav;
+export default ChannelTopNav;
