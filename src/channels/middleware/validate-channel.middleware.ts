@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import { sanitizeText } from '../../common/common.utils';
 import { CreateChannelReq } from '../channels.service';
 
+/** Channel names can only contain letters, numbers, and hyphens */
+const VALID_CHANNEL_NAME_REGEX = /^[A-Za-z0-9\-]+$/;
+
 const CHANNEL_NAME_MAX = 25;
-const VALID_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
 
 export const validateChannel = (
   req: Request,
@@ -21,8 +23,9 @@ export const validateChannel = (
     res.status(422).send(message);
     return;
   }
-  if (!VALID_NAME_REGEX.test(sanitizedName)) {
-    res.status(422).send('Channel names cannot contain special characters');
+  if (!VALID_CHANNEL_NAME_REGEX.test(sanitizedName)) {
+    const message = `Channel names can only contain letters, numbers, and hyphens`;
+    res.status(422).send(message);
     return;
   }
   next();
