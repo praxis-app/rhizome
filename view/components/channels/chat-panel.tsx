@@ -9,7 +9,7 @@ import { Channel, Message, MessagesQuery } from '../../types/chat.types';
 import { PubSubMessage } from '../../types/shared.types';
 import MessageFeed from '../messages/message-feed';
 import MessageForm from '../messages/message-form';
-import ChatLeftNav from './chat-left-nav';
+import ChannelLeftNav from './channel-left-nav';
 import ChannelTopNav from './channel-top-nav';
 
 enum MessageType {
@@ -134,7 +134,7 @@ const ChatPanel = ({ channel }: Props) => {
 
   return (
     <Box display="flex" position="fixed" top={0} left={0} bottom={0} right={0}>
-      {isAboveMd && <ChatLeftNav />}
+      {isAboveMd && <ChannelLeftNav />}
 
       <Box display="flex" flexDirection="column" flex={1}>
         <ChannelTopNav channel={channel} />

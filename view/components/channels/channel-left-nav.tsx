@@ -23,7 +23,7 @@ import CreateChannelModal from './create-channel-modal';
 import LazyLoadImage from '../images/lazy-load-image';
 
 /** Left panel navigation for desktop */
-const ChatLeftNav = () => {
+const ChannelLeftNav = () => {
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -140,4 +140,4 @@ const ChatLeftNav = () => {
   );
 };
 
-export default ChatLeftNav;
+export default ChannelLeftNav;
