@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
 import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
-import { Channel, MutateChannelReq, Message } from '../types/chat.types';
+import { Channel, MutateChannelReq, Message } from '../types/channel.types';
 import { Image } from '../types/image.types';
 import {
   CreateRoleReq,

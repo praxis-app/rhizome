@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
-import { Message as MessageType } from '../../types/chat.types';
+import { Message as MessageType } from '../../types/channel.types';
 import { timeAgo } from '../../utils/time.utils';
 import AttachedImageList from '../images/attached-image-list';
 import FormattedText from '../shared/formatted-text';

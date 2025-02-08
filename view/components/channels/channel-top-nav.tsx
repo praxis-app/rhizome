@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
-import { Channel } from '../../types/chat.types';
+import { Channel } from '../../types/channel.types';
 import EditChannelDrawer from './edit-channel-drawer';
 
 interface Props {

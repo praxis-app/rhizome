@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
-import { Channel, MutateChannelReq } from '../../types/chat.types';
+import { Channel, MutateChannelReq } from '../../types/channel.types';
 import Modal from '../shared/modal';
 import PrimaryButton from '../shared/primary-button';
 import { useNavigate } from 'react-router-dom';

@@ -15,7 +15,7 @@ import ProgressBar from '../../components/shared/progress-bar';
 import { useAboveBreakpoint, useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
-import { Message, MessagesQuery } from '../../types/chat.types';
+import { Message, MessagesQuery } from '../../types/channel.types';
 import { PubSubMessage } from '../../types/shared.types';
 
 enum MessageType {

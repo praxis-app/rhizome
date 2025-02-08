@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
 import { BLURPLE, GRAY } from '../../styles/theme';
-import { Channel, MutateChannelReq } from '../../types/chat.types';
+import { Channel, MutateChannelReq } from '../../types/channel.types';
 import DeleteButton from '../shared/delete-button';
 import ConfirmDeleteChannelModal from './confirm-delete-channel-modal';
 

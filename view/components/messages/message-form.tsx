@@ -18,7 +18,7 @@ import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
-import { MessagesQuery } from '../../types/chat.types';
+import { MessagesQuery } from '../../types/channel.types';
 import { Image } from '../../types/image.types';
 import { validateImageInput } from '../../utils/image.utils';
 import ChooseAuthModal from '../auth/choose-auth-modal';

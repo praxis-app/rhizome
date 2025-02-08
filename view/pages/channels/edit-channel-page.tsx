@@ -20,7 +20,7 @@ import DeleteButton from '../../components/shared/delete-button';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
-import { MutateChannelReq } from '../../types/chat.types';
+import { MutateChannelReq } from '../../types/channel.types';
 
 const EditChannelPage = () => {
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
