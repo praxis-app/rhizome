@@ -3,7 +3,7 @@ import { sanitizeText } from '../../common/common.utils';
 import { CreateChannelReq } from '../channels.service';
 
 /** Channel names can only contain letters, numbers, and hyphens */
-const VALID_CHANNEL_NAME_REGEX = /^[A-Za-z0-9\-]+$/;
+const VALID_CHANNEL_NAME_REGEX = /^[A-Za-z0-9-]+$/;
 
 const CHANNEL_NAME_MAX = 25;
 
