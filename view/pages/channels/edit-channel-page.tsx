@@ -1,19 +1,12 @@
 import { Close } from '@mui/icons-material';
-import {
-  Box,
-  Card,
-  CardContent,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  OutlinedInput,
-} from '@mui/material';
+import { Box, Card, CardContent } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import ChannelFormFields from '../../components/channels/channel-form-fields';
 import ConfirmDeleteChannelModal from '../../components/channels/confirm-delete-channel-modal';
 import TopNav from '../../components/nav/top-nav';
 import DeleteButton from '../../components/shared/delete-button';
@@ -50,27 +43,6 @@ const EditChannelPage = () => {
         return;
       }
       await api.updateChannel(data.channel.id, values);
-
-      // TODO: Uncomment if needed to update the cache
-      // const channel = { ...data.channel, ...values };
-      // queryClient.setQueryData<{ channel: Channel }>(
-      //   ['channels', data.channel.id],
-      //   { channel },
-      // );
-      // queryClient.setQueryData<{ channels: Channel[] }>(
-      //   ['channels'],
-      //   (oldData) => {
-      //     if (!oldData) {
-      //       return { channels: [] };
-      //     }
-      //     return {
-      //       channels: oldData.channels.map((c) => {
-      //         return c.id === channel.id ? channel : c;
-      //       }),
-      //     };
-      //   },
-      // );
-
       navigate(`${NavigationPaths.Channels}/${channelId}`);
     },
   });
@@ -97,14 +69,7 @@ const EditChannelPage = () => {
             component="form"
             onSubmit={handleSubmit((fv) => updateChannel(fv))}
           >
-            <FormGroup sx={{ gap: 1.5, paddingBottom: 3.5 }}>
-              <FormControl>
-                <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                  {t('channels.form.name')}
-                </FormLabel>
-                <OutlinedInput autoComplete="off" {...register('name')} />
-              </FormControl>
-            </FormGroup>
+            <ChannelFormFields register={register} />
 
             <Box display="flex" justifyContent="right" gap="16px">
               <PrimaryButton
