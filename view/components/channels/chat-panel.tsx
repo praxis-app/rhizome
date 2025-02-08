@@ -10,7 +10,7 @@ import { PubSubMessage } from '../../types/shared.types';
 import MessageFeed from '../messages/message-feed';
 import MessageForm from '../messages/message-form';
 import ChatLeftNav from './chat-left-nav';
-import ChatTopNav from './chat-top-nav';
+import ChannelTopNav from './channel-top-nav';
 
 enum MessageType {
   MESSAGE = 'message',
@@ -137,7 +137,7 @@ const ChatPanel = ({ channel }: Props) => {
       {isAboveMd && <ChatLeftNav />}
 
       <Box display="flex" flexDirection="column" flex={1}>
-        <ChatTopNav channel={channel} />
+        <ChannelTopNav channel={channel} />
         <MessageFeed
           feedBoxRef={feedBoxRef}
           onLoadMore={debounce(fetchNextPage, 500)}

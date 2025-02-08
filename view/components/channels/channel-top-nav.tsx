@@ -12,7 +12,7 @@ interface Props {
   channel: Channel;
 }
 
-const ChatTopNav = ({ channel }: Props) => {
+const ChannelTopNav = ({ channel }: Props) => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
   const [isEditChannelDrawerOpen, setIsEditChannelDrawerOpen] = useState(false);
 
@@ -106,4 +106,4 @@ const ChatTopNav = ({ channel }: Props) => {
   );
 };
 
-export default ChatTopNav;
+export default ChannelTopNav;
