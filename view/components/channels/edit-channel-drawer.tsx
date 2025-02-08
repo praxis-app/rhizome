@@ -101,7 +101,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
           </IconButton>
 
           <Typography alignSelf="center" fontWeight="600">
-            {t('messages.headers.channelSettings')}
+            {t('channels.headers.channelSettings')}
           </Typography>
 
           <Button
@@ -130,7 +130,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
         sx={{ marginX: '16px' }}
         fullWidth={false}
       >
-        {t('messages.actions.deleteChannel')}
+        {t('channels.actions.deleteChannel')}
       </DeleteButton>
 
       <ConfirmDeleteChannelModal

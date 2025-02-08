@@ -86,7 +86,7 @@ const EditChannelPage = () => {
   return (
     <>
       <TopNav
-        header={t('messages.headers.channelSettings')}
+        header={t('channels.headers.channelSettings')}
         onBackClick={() => navigate(`${NavigationPaths.Channels}/${channelId}`)}
         backBtnIcon={<Close />}
       />
@@ -120,7 +120,7 @@ const EditChannelPage = () => {
       </Card>
 
       <DeleteButton onClick={() => setIsConfirmDeleteOpen(true)}>
-        {t('messages.actions.deleteChannel')}
+        {t('channels.actions.deleteChannel')}
       </DeleteButton>
 
       {!!channelId && (

@@ -54,7 +54,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
 
   return (
     <Modal
-      title={t('messages.actions.createChannel')}
+      title={t('channels.actions.createChannel')}
       onClose={() => setIsOpen(false)}
       open={isOpen}
     >
