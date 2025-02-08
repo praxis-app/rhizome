@@ -41,8 +41,9 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
     height: '30px',
   };
   const settingsIconSx: SxProps = {
-    fontSize: '15px',
-    marginTop: '4px',
+    fontSize: '17px',
+    marginTop: '3px',
+    marginLeft: '2px',
     color: 'text.secondary',
     transition: 'color 150ms cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': { color: 'text.primary' },
@@ -53,7 +54,7 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
     return {
       sx: {
         color: isActive ? selectedColor : 'text.secondary',
-        fontWeight: isActive ? 600 : 500,
+        fontWeight: 500,
         fontSize: '15px',
       },
     };
@@ -73,7 +74,9 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
       <ListItemText
         primary={
           <Box display="flex" justifyContent="space-between">
-            <Box>{channel.name}</Box>
+            <Box overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
+              {channel.name}
+            </Box>
             {showSettingsBtn && (
               <Fade easing="cubic-bezier(0.4, 0, 0.2, 1)" timeout={150} in>
                 <Settings
