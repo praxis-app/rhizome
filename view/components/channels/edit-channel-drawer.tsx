@@ -4,11 +4,7 @@ import {
   Button,
   Divider,
   Drawer,
-  FormControl,
-  FormGroup,
-  FormLabel,
   IconButton,
-  OutlinedInput,
   PaperProps,
   Typography,
 } from '@mui/material';
@@ -20,6 +16,7 @@ import { api } from '../../client/api-client';
 import { BLURPLE, GRAY } from '../../styles/theme';
 import { Channel, MutateChannelReq } from '../../types/channel.types';
 import DeleteButton from '../shared/delete-button';
+import ChannelFormFields from './channel-form-fields';
 import ConfirmDeleteChannelModal from './confirm-delete-channel-modal';
 
 interface Props {
@@ -61,9 +58,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   });
 
   const { register, formState, handleSubmit } = useForm<MutateChannelReq>({
-    defaultValues: {
-      name: editChannel.name,
-    },
+    defaultValues: { name: editChannel.name },
     mode: 'onChange',
   });
 
@@ -115,14 +110,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
 
         <Divider sx={{ marginBottom: '16px' }} />
 
-        <FormGroup sx={{ gap: 1.5, paddingBottom: 3.5, paddingX: '16px' }}>
-          <FormControl>
-            <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-              {t('channels.form.name')}
-            </FormLabel>
-            <OutlinedInput autoComplete="off" {...register('name')} />
-          </FormControl>
-        </FormGroup>
+        <ChannelFormFields register={register} sx={{ paddingX: '16px' }} />
       </form>
 
       <DeleteButton
