@@ -5,10 +5,12 @@ import { Channel } from './models/channel.entity';
 
 export interface CreateChannelReq {
   name: string;
+  description?: string;
 }
 
 export interface UpdateChannelReq {
   name: string;
+  description?: string;
 }
 
 const GENERAL_CHANNEL_NAME = 'general';
@@ -55,12 +57,13 @@ export const getGeneralChannel = async () => {
 };
 
 export const createChannel = (
-  { name }: CreateChannelReq,
+  { name, description }: CreateChannelReq,
   currentUserId: string,
 ) => {
   return channelRepository.save({
-    members: [{ userId: currentUserId }],
     name: sanitizeText(name),
+    description: sanitizeText(description),
+    members: [{ userId: currentUserId }],
   });
 };
 
@@ -70,6 +73,7 @@ export const updateChannel = async (
 ) => {
   return channelRepository.update(channelId, {
     name: sanitizeText(name),
+    description: sanitizeText(name),
   });
 };
 
