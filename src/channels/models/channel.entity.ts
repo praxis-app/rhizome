@@ -17,6 +17,9 @@ export class Channel {
   @Column()
   name: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  description: string | null;
+
   @OneToMany(() => Message, (message) => message.channel)
   messages: Message[];
 
