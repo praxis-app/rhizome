@@ -18,9 +18,9 @@ import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
-import LazyLoadImage from '../images/lazy-load-image';
 import ChannelListItem from './channel-list-item';
 import CreateChannelModal from './create-channel-modal';
+import LazyLoadImage from '../images/lazy-load-image';
 
 /** Left panel navigation for desktop */
 const ChatLeftNav = () => {

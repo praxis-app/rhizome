@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import ConfirmDeleteChannelModal from '../../components/chat/confirm-delete-channel-modal';
+import ConfirmDeleteChannelModal from '../../components/channels/confirm-delete-channel-modal';
 import TopNav from '../../components/nav/top-nav';
 import DeleteButton from '../../components/shared/delete-button';
 import PrimaryButton from '../../components/shared/primary-button';

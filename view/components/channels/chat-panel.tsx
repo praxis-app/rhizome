@@ -7,10 +7,10 @@ import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Channel, Message, MessagesQuery } from '../../types/chat.types';
 import { PubSubMessage } from '../../types/shared.types';
+import MessageFeed from '../messages/message-feed';
+import MessageForm from '../messages/message-form';
 import ChatLeftNav from './chat-left-nav';
 import ChatTopNav from './chat-top-nav';
-import MessageFeed from './message-feed';
-import MessageForm from './message-form';
 
 enum MessageType {
   MESSAGE = 'message',
