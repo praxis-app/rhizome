@@ -47,7 +47,7 @@ export const ChannelPage = () => {
     enabled: isLoggedIn,
   });
 
-  const { data: channelData, isLoading } = useQuery({
+  const { data: channelData, isLoading: isChannelLoading } = useQuery({
     queryKey: ['channels', channelId],
     queryFn: () => api.getChannel(channelId!),
     enabled: !!channelId,
@@ -138,7 +138,7 @@ export const ChannelPage = () => {
     }
   };
 
-  if (isLoading) {
+  if (isChannelLoading) {
     return <ProgressBar />;
   }
 

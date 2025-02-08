@@ -63,10 +63,7 @@ const ChannelTopNav = ({ channel }: Props) => {
           }}
         >
           <Tag
-            sx={{
-              marginRight: '0.4ch',
-              color: 'text.secondary',
-            }}
+            sx={{ marginRight: '0.4ch', color: 'text.secondary' }}
             fontSize={isAboveMd ? 'medium' : 'small'}
           />
           <Typography

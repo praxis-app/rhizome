@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
@@ -57,12 +57,17 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
     },
   });
 
-  const { register, formState, handleSubmit } = useForm<MutateChannelReq>({
-    defaultValues: { name: editChannel.name },
-    mode: 'onChange',
-  });
+  const { register, formState, handleSubmit, reset } =
+    useForm<MutateChannelReq>({
+      defaultValues: { name: editChannel.name },
+      mode: 'onChange',
+    });
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    reset({ name: editChannel.name });
+  }, [editChannel, reset]);
 
   const paperProps: PaperProps = {
     sx: {
