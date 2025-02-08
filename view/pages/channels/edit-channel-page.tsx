@@ -100,7 +100,7 @@ const EditChannelPage = () => {
             <FormGroup sx={{ gap: 1.5, paddingBottom: 3.5 }}>
               <FormControl>
                 <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                  {t('messages.form.name')}
+                  {t('channels.form.name')}
                 </FormLabel>
                 <OutlinedInput autoComplete="off" {...register('name')} />
               </FormControl>

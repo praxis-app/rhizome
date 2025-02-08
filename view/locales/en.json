@@ -163,9 +163,6 @@
     "actions": {
       "sendAnonymous": "Send anonymously"
     },
-    "form": {
-      "name": "Name"
-    },
     "prompts": {
       "sendAMessage": "Send a message...",
       "noMessagesYet": "No messages yet"
@@ -180,6 +177,9 @@
     "actions": {
       "createChannel": "Create Channel",
       "deleteChannel": "Delete Channel"
+    },
+    "form": {
+      "name": "Name"
     },
     "headers": {
       "channelSettings": "Channel Settings"
