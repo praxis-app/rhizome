@@ -116,7 +116,7 @@ const ChannelLeftNav = () => {
 
         <MenuItem onClick={handleCreateChannelBtnClick}>
           <AddCircle {...menuItemIconProps} />
-          {t('chat.actions.createChannel')}
+          {t('messages.actions.createChannel')}
         </MenuItem>
       </Menu>
 

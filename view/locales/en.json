@@ -48,7 +48,6 @@
   "navigation": {
     "about": "About",
     "activity": "Activity",
-    "chat": "Chat",
     "docs": "Docs",
     "events": "Events",
     "home": "Home",
@@ -160,7 +159,7 @@
     }
   },
 
-  "chat": {
+  "messages": {
     "actions": {
       "sendAnonymous": "Send anonymously",
       "createChannel": "Create Channel",

@@ -54,7 +54,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
 
   return (
     <Modal
-      title={t('chat.actions.createChannel')}
+      title={t('messages.actions.createChannel')}
       onClose={() => setIsOpen(false)}
       open={isOpen}
     >
@@ -62,7 +62,7 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
         <FormGroup sx={{ gap: 1.5, paddingBottom: 3 }}>
           <FormControl>
             <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-              {t('chat.form.name')}
+              {t('messages.form.name')}
             </FormLabel>
             <OutlinedInput autoComplete="off" {...register('name')} />
           </FormControl>

@@ -86,7 +86,7 @@ const EditChannelPage = () => {
   return (
     <>
       <TopNav
-        header={t('chat.headers.channelSettings')}
+        header={t('messages.headers.channelSettings')}
         onBackClick={() => navigate(`${NavigationPaths.Channels}/${channelId}`)}
         backBtnIcon={<Close />}
       />
@@ -100,7 +100,7 @@ const EditChannelPage = () => {
             <FormGroup sx={{ gap: 1.5, paddingBottom: 3.5 }}>
               <FormControl>
                 <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-                  {t('chat.form.name')}
+                  {t('messages.form.name')}
                 </FormLabel>
                 <OutlinedInput autoComplete="off" {...register('name')} />
               </FormControl>
@@ -120,7 +120,7 @@ const EditChannelPage = () => {
       </Card>
 
       <DeleteButton onClick={() => setIsConfirmDeleteOpen(true)}>
-        {t('chat.actions.deleteChannel')}
+        {t('messages.actions.deleteChannel')}
       </DeleteButton>
 
       {!!channelId && (

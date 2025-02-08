@@ -54,7 +54,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const { onChange, ...registerBodyProps } = register('body', {
     maxLength: {
       value: MESSAGE_BODY_MAX,
-      message: t('chat.errors.longBody'),
+      message: t('messages.errors.longBody'),
     },
   });
 
@@ -226,7 +226,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
         <Input
           {...registerBodyProps}
           autoComplete="off"
-          placeholder={t('chat.prompts.sendAMessage')}
+          placeholder={t('messages.prompts.sendAMessage')}
           onKeyDown={handleInputKeyDown}
           onChange={(e) => {
             saveDraft(e.target.value);

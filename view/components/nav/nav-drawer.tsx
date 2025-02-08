@@ -276,7 +276,7 @@ const NavDrawer = () => {
             <ListItemIcon>
               <AddCircle />
             </ListItemIcon>
-            <ListItemText primary={t('chat.actions.createChannel')} />
+            <ListItemText primary={t('messages.actions.createChannel')} />
           </ListItemButton>
 
           {showSettings && (

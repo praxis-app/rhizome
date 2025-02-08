@@ -101,7 +101,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
           </IconButton>
 
           <Typography alignSelf="center" fontWeight="600">
-            {t('chat.headers.channelSettings')}
+            {t('messages.headers.channelSettings')}
           </Typography>
 
           <Button
@@ -118,7 +118,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
         <FormGroup sx={{ gap: 1.5, paddingBottom: 3.5, paddingX: '16px' }}>
           <FormControl>
             <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
-              {t('chat.form.name')}
+              {t('messages.form.name')}
             </FormLabel>
             <OutlinedInput autoComplete="off" {...register('name')} />
           </FormControl>
@@ -130,7 +130,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
         sx={{ marginX: '16px' }}
         fullWidth={false}
       >
-        {t('chat.actions.deleteChannel')}
+        {t('messages.actions.deleteChannel')}
       </DeleteButton>
 
       <ConfirmDeleteChannelModal
