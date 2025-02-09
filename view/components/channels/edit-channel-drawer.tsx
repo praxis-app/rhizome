@@ -59,14 +59,20 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
 
   const { register, formState, handleSubmit, reset } =
     useForm<UpdateChannelReq>({
-      defaultValues: { name: editChannel.name },
+      defaultValues: {
+        name: editChannel.name,
+        description: editChannel.description || '',
+      },
       mode: 'onChange',
     });
 
   const { t } = useTranslation();
 
   useEffect(() => {
-    reset({ name: editChannel.name });
+    reset({
+      name: editChannel.name,
+      description: editChannel.description || '',
+    });
   }, [editChannel, reset]);
 
   const paperProps: PaperProps = {
@@ -108,7 +114,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
           <Button
             type="submit"
             sx={{ textTransform: 'none', color: BLURPLE['300'] }}
-            disabled={isPending || !formState.dirtyFields.name}
+            disabled={isPending || !formState.isDirty}
           >
             {t('actions.save')}
           </Button>

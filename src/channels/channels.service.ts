@@ -69,11 +69,11 @@ export const createChannel = (
 
 export const updateChannel = async (
   channelId: string,
-  { name }: UpdateChannelReq,
+  { name, description }: UpdateChannelReq,
 ) => {
   return channelRepository.update(channelId, {
     name: sanitizeText(name),
-    description: sanitizeText(name),
+    description: sanitizeText(description),
   });
 };
 

@@ -16,13 +16,13 @@ interface Props {
 }
 
 const ChannelFormFields = ({ register, sx }: Props) => {
-  const { onChange, ...inputProps } = register('name');
+  const { onChange: onNameInputChange, ...nameInputProps } = register('name');
 
   const { t } = useTranslation();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleNameInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/\s/g, '-');
-    onChange(e);
+    onNameInputChange(e);
   };
 
   return (
@@ -33,9 +33,16 @@ const ChannelFormFields = ({ register, sx }: Props) => {
         </FormLabel>
         <OutlinedInput
           autoComplete="off"
-          onChange={handleChange}
-          {...inputProps}
+          onChange={handleNameInputChange}
+          {...nameInputProps}
         />
+      </FormControl>
+
+      <FormControl>
+        <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
+          {t('channels.form.description')}
+        </FormLabel>
+        <OutlinedInput autoComplete="off" {...register('description')} />
       </FormControl>
     </FormGroup>
   );

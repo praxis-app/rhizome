@@ -179,7 +179,8 @@
       "deleteChannel": "Delete Channel"
     },
     "form": {
-      "name": "Name"
+      "name": "Name",
+      "description": "Description"
     },
     "headers": {
       "channelSettings": "Channel Settings"

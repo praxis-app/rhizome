@@ -68,7 +68,9 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
       </Box>
 
       {channel.description && (
-        <Typography textAlign="center">{channel.description}</Typography>
+        <Typography textAlign="center" paddingBottom={1}>
+          {channel.description}
+        </Typography>
       )}
 
       <Divider sx={{ marginTop: 1.25, marginBottom: 3 }} />
