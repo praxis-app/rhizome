@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
 import { Channel } from '../../types/channel.types';
+import FormattedText from '../shared/formatted-text';
 import EditChannelDrawer from './edit-channel-drawer';
 
 interface Props {
@@ -68,9 +69,11 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
       </Box>
 
       {channel.description && (
-        <Typography textAlign="center" paddingBottom={1}>
-          {channel.description}
-        </Typography>
+        <FormattedText
+          text={channel.description}
+          textAlign="center"
+          paddingBottom={1}
+        />
       )}
 
       <Divider sx={{ marginTop: 1.25, marginBottom: 3 }} />

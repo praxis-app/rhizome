@@ -42,7 +42,11 @@ const ChannelFormFields = ({ register, sx }: Props) => {
         <FormLabel sx={{ fontWeight: 500, paddingBottom: 0.5 }}>
           {t('channels.form.description')}
         </FormLabel>
-        <OutlinedInput autoComplete="off" {...register('description')} />
+        <OutlinedInput
+          autoComplete="off"
+          multiline
+          {...register('description')}
+        />
       </FormControl>
     </FormGroup>
   );
