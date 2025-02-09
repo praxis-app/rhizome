@@ -34,7 +34,14 @@ const ConfirmLogoutModal = ({ isOpen, setIsOpen }: Props) => {
     <Modal open={isOpen} onClose={() => setIsOpen(false)}>
       <Typography marginBottom={3}>{t('users.prompts.logOut')}</Typography>
       <Box display="flex" gap={1}>
-        <Button variant="contained">{t('actions.cancel')}</Button>
+        <Button
+          variant="text"
+          sx={{ textTransform: 'none' }}
+          onClick={() => setIsOpen(false)}
+          disabled={isPending}
+        >
+          {t('actions.cancel')}
+        </Button>
         <Button
           variant="contained"
           onClick={() => logOut()}

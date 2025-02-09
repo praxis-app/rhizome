@@ -1,4 +1,9 @@
-import { AddCircle, ExpandMore, Settings } from '@mui/icons-material';
+import {
+  AddCircle,
+  ExitToApp,
+  ExpandMore,
+  Settings,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -20,6 +25,7 @@ import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
 import { CurrentUser } from '../../types/user.types';
+import ConfirmLogoutModal from '../auth/confirm-logout-modal';
 import LazyLoadImage from '../images/lazy-load-image';
 import UserAvatar from '../users/user-avatar';
 import ChannelListItem from './channel-list-item';
@@ -32,7 +38,9 @@ interface Props {
 /** Left panel navigation for desktop */
 const ChannelLeftNav = ({ me }: Props) => {
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
-  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
+  const [serverMenuEl, setServerMenuEl] = useState<HTMLElement | null>(null);
+  const [userMenuEl, setUserMenuEl] = useState<HTMLElement | null>(null);
+  const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
 
   const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
     queryKey: ['channels'],
@@ -75,17 +83,17 @@ const ChannelLeftNav = ({ me }: Props) => {
     fontSize: 'small',
   };
 
-  const handleMenuButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
-    setMenuAnchorEl(event.currentTarget);
+  const handleServerMenuBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setServerMenuEl(event.currentTarget);
+  };
+
+  const handleUserMenuBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    setUserMenuEl(event.currentTarget);
   };
 
   const handleCreateChannelBtnClick = () => {
     setShowCreateChannelModal(true);
-    setMenuAnchorEl(null);
-  };
-
-  const handleClose = () => {
-    setMenuAnchorEl(null);
+    setServerMenuEl(null);
   };
 
   return (
@@ -97,7 +105,7 @@ const ChannelLeftNav = ({ me }: Props) => {
       borderRight="1px solid"
       borderColor={isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}
     >
-      <Button onClick={handleMenuButtonClick} sx={menuButtonSx}>
+      <Button onClick={handleServerMenuBtnClick} sx={menuButtonSx}>
         <Box display="flex" gap="8px">
           <LazyLoadImage
             alt={t('labels.appIcon')}
@@ -115,18 +123,12 @@ const ChannelLeftNav = ({ me }: Props) => {
       </Button>
 
       <Menu
-        anchorEl={menuAnchorEl}
-        onClick={handleClose}
-        onClose={handleClose}
-        open={Boolean(menuAnchorEl)}
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        transformOrigin={{
-          horizontal: -18,
-          vertical: -15,
-        }}
+        anchorEl={serverMenuEl}
+        onClick={() => setServerMenuEl(null)}
+        onClose={() => setServerMenuEl(null)}
+        open={!!serverMenuEl}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: -18, vertical: -15 }}
         keepMounted
       >
         <MenuItem onClick={() => navigate(NavigationPaths.Settings)}>
@@ -165,7 +167,10 @@ const ChannelLeftNav = ({ me }: Props) => {
           borderColor={isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}
           padding={0.8}
         >
-          <Button sx={{ textTransform: 'none', gap: '8px' }}>
+          <Button
+            sx={{ textTransform: 'none', gap: '8px' }}
+            onClick={handleUserMenuBtnClick}
+          >
             <Box position="relative">
               <UserAvatar
                 userId={me.id}
@@ -188,6 +193,36 @@ const ChannelLeftNav = ({ me }: Props) => {
           <IconButton sx={{ height: '40px', alignSelf: 'center' }}>
             <Settings sx={{ color: 'text.secondary' }} />
           </IconButton>
+
+          <Menu
+            anchorEl={userMenuEl}
+            onClick={() => setUserMenuEl(null)}
+            onClose={() => setUserMenuEl(null)}
+            open={!!userMenuEl}
+            anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+            transformOrigin={{ horizontal: -22, vertical: 100 }}
+            keepMounted
+          >
+            <MenuItem sx={{ gap: 1 }}>
+              <UserAvatar
+                userId={me.id}
+                userName={me.name}
+                sx={{ fontSize: '10px' }}
+                size={20}
+              />
+              <Typography>{me.name}</Typography>
+            </MenuItem>
+
+            <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
+              <ExitToApp {...menuItemIconProps} />
+              {t('users.actions.logOut')}
+            </MenuItem>
+          </Menu>
+
+          <ConfirmLogoutModal
+            isOpen={isLogOutModalOpen}
+            setIsOpen={setIsLogOutModalOpen}
+          />
         </Box>
       )}
     </Box>
