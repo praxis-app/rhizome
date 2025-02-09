@@ -6,7 +6,7 @@ import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { Channel } from '../../types/channel.types';
-import EditChannelDrawer from './edit-channel-drawer';
+import ChannelDetailsDrawer from './channel-details-drawer';
 
 interface Props {
   channel: Channel;
@@ -14,7 +14,7 @@ interface Props {
 
 const ChannelTopNav = ({ channel }: Props) => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
-  const [isEditChannelDrawerOpen, setIsEditChannelDrawerOpen] = useState(false);
+  const [showChannelDetails, setShowChannelDetails] = useState(false);
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
@@ -58,7 +58,7 @@ const ChannelTopNav = ({ channel }: Props) => {
           disableRipple={isAboveMd}
           onClick={() => {
             if (!isAboveMd) {
-              setIsEditChannelDrawerOpen(true);
+              setShowChannelDetails(true);
             }
           }}
         >
@@ -84,10 +84,10 @@ const ChannelTopNav = ({ channel }: Props) => {
       </Box>
 
       {!isAboveMd && (
-        <EditChannelDrawer
-          editChannel={channel}
-          isOpen={isEditChannelDrawerOpen}
-          setIsOpen={setIsEditChannelDrawerOpen}
+        <ChannelDetailsDrawer
+          channel={channel}
+          isOpen={showChannelDetails}
+          setIsOpen={setShowChannelDetails}
         />
       )}
 

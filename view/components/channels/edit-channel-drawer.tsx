@@ -84,6 +84,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
       open={isOpen}
       onClose={() => setIsOpen(false)}
       anchor="bottom"
+      SlideProps={{ direction: 'left' }}
       PaperProps={paperProps}
     >
       <form onSubmit={handleSubmit((fv) => updateChannel(fv))}>
