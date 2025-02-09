@@ -28,15 +28,15 @@ import { CurrentUser } from '../../types/user.types';
 import ConfirmLogoutModal from '../auth/confirm-logout-modal';
 import LazyLoadImage from '../images/lazy-load-image';
 import UserAvatar from '../users/user-avatar';
-import ChannelListItem from './channel-list-item';
-import CreateChannelModal from './create-channel-modal';
+import ChannelListItem from '../channels/channel-list-item';
+import CreateChannelModal from '../channels/create-channel-modal';
 
 interface Props {
   me?: CurrentUser;
 }
 
 /** Left panel navigation for desktop */
-const ChannelLeftNav = ({ me }: Props) => {
+const LeftNav = ({ me }: Props) => {
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [serverMenuEl, setServerMenuEl] = useState<HTMLElement | null>(null);
   const [userMenuEl, setUserMenuEl] = useState<HTMLElement | null>(null);
@@ -229,4 +229,4 @@ const ChannelLeftNav = ({ me }: Props) => {
   );
 };
 
-export default ChannelLeftNav;
+export default LeftNav;

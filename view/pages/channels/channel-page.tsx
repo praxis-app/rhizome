@@ -7,10 +7,10 @@ import {
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import ChannelLeftNav from '../../components/channels/channel-left-nav';
 import ChannelTopNav from '../../components/channels/channel-top-nav';
 import MessageFeed from '../../components/messages/message-feed';
 import MessageForm from '../../components/messages/message-form';
+import LeftNav from '../../components/nav/left-nav';
 import ProgressBar from '../../components/shared/progress-bar';
 import { useAboveBreakpoint, useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
@@ -148,7 +148,7 @@ export const ChannelPage = () => {
 
   return (
     <Box display="flex" position="fixed" top={0} left={0} bottom={0} right={0}>
-      {isAboveMd && <ChannelLeftNav me={meData?.user} />}
+      {isAboveMd && <LeftNav me={meData?.user} />}
 
       <Box display="flex" flexDirection="column" flex={1}>
         <ChannelTopNav channel={channelData.channel} />
