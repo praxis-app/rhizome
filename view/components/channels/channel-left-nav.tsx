@@ -2,6 +2,7 @@ import { AddCircle, ExpandMore, Settings } from '@mui/icons-material';
 import {
   Box,
   Button,
+  IconButton,
   List,
   Menu,
   MenuItem,
@@ -18,12 +19,18 @@ import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
+import { CurrentUser } from '../../types/user.types';
+import LazyLoadImage from '../images/lazy-load-image';
+import UserAvatar from '../users/user-avatar';
 import ChannelListItem from './channel-list-item';
 import CreateChannelModal from './create-channel-modal';
-import LazyLoadImage from '../images/lazy-load-image';
+
+interface Props {
+  me?: CurrentUser;
+}
 
 /** Left panel navigation for desktop */
-const ChannelLeftNav = () => {
+const ChannelLeftNav = ({ me }: Props) => {
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -52,6 +59,17 @@ const ChannelLeftNav = () => {
     textTransform: 'none',
     width: '100%',
   };
+  const onlineBadge: SxProps = {
+    bgcolor: '#50a361',
+    border: '2.5px solid',
+    borderColor: 'background.paper',
+    borderRadius: 9999,
+    height: 15,
+    width: 15,
+    position: 'absolute',
+    top: 20,
+    right: -5,
+  };
   const menuItemIconProps: SvgIconProps = {
     sx: { marginRight: 1 },
     fontSize: 'small',
@@ -72,7 +90,9 @@ const ChannelLeftNav = () => {
 
   return (
     <Box
-      width="220px"
+      display="flex"
+      flexDirection="column"
+      width="240px"
       bgcolor="background.paper"
       borderRight="1px solid"
       borderColor={isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}
@@ -126,7 +146,7 @@ const ChannelLeftNav = () => {
       />
 
       {!isChannalsLoading && channelsData && (
-        <List>
+        <List sx={{ flex: 1, overflowY: 'scroll' }}>
           {channelsData.channels.map((channel) => (
             <ChannelListItem
               key={channel.id}
@@ -135,6 +155,40 @@ const ChannelLeftNav = () => {
             />
           ))}
         </List>
+      )}
+
+      {me && (
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          borderTop="1px solid"
+          borderColor={isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}
+          padding={0.8}
+        >
+          <Button sx={{ textTransform: 'none', gap: '8px' }}>
+            <Box position="relative">
+              <UserAvatar
+                userId={me.id}
+                userName={me.name}
+                sx={{ fontSize: '14px', alignSelf: 'center' }}
+                size={30}
+              />
+              <Box sx={onlineBadge} />
+            </Box>
+            <Box textAlign="left" alignSelf="center">
+              <Box lineHeight={1.25} fontSize="14px">
+                {me.name}
+              </Box>
+              <Box color="text.secondary" lineHeight={1.25} fontSize="12px">
+                {t('users.labels.online')}
+              </Box>
+            </Box>
+          </Button>
+
+          <IconButton sx={{ height: '40px', alignSelf: 'center' }}>
+            <Settings sx={{ color: 'text.secondary' }} />
+          </IconButton>
+        </Box>
       )}
     </Box>
   );

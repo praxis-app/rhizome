@@ -148,7 +148,7 @@ export const ChannelPage = () => {
 
   return (
     <Box display="flex" position="fixed" top={0} left={0} bottom={0} right={0}>
-      {isAboveMd && <ChannelLeftNav />}
+      {isAboveMd && <ChannelLeftNav me={meData?.user} />}
 
       <Box display="flex" flexDirection="column" flex={1}>
         <ChannelTopNav channel={channelData.channel} />

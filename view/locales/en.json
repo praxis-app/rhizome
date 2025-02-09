@@ -120,6 +120,9 @@
       "password": "Password",
       "yourEmail": "Your email address"
     },
+    "labels": {
+      "online": "Online"
+    },
     "errors": {
       "invalidEmail": "Email is invalid.",
       "missingEmail": "Email cannot be empty",
