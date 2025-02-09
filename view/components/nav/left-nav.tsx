@@ -159,72 +159,88 @@ const LeftNav = ({ me }: Props) => {
         </List>
       )}
 
-      {me && (
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          borderTop="1px solid"
-          borderColor={isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}
-          padding={0.8}
-        >
-          <Button
-            sx={{ textTransform: 'none', gap: '8px' }}
-            onClick={handleUserMenuBtnClick}
-          >
-            <Box position="relative">
-              <UserAvatar
-                userId={me.id}
-                userName={me.name}
-                sx={{ fontSize: '14px', alignSelf: 'center' }}
-                size={30}
-              />
-              <Box sx={onlineBadge} />
-            </Box>
-            <Box textAlign="left" alignSelf="center">
-              <Box lineHeight={1.25} fontSize="14px">
-                {me.name}
+      <Box
+        borderTop="1px solid"
+        borderColor={isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}
+        minHeight="58px"
+        padding={0.8}
+      >
+        {me ? (
+          <Box display="flex" justifyContent="space-between">
+            <Button
+              sx={{ textTransform: 'none', gap: '8px' }}
+              onClick={handleUserMenuBtnClick}
+            >
+              <Box position="relative">
+                <UserAvatar
+                  userId={me.id}
+                  userName={me.name}
+                  sx={{ fontSize: '14px', alignSelf: 'center' }}
+                  size={30}
+                />
+                <Box sx={onlineBadge} />
               </Box>
-              <Box color="text.secondary" lineHeight={1.25} fontSize="12px">
-                {t('users.labels.online')}
+              <Box textAlign="left" alignSelf="center">
+                <Box lineHeight={1.25} fontSize="14px">
+                  {me.name}
+                </Box>
+                <Box color="text.secondary" lineHeight={1.25} fontSize="12px">
+                  {t('users.labels.online')}
+                </Box>
               </Box>
-            </Box>
-          </Button>
+            </Button>
 
-          <IconButton sx={{ height: '40px', alignSelf: 'center' }}>
-            <Settings sx={{ color: 'text.secondary' }} />
-          </IconButton>
+            <IconButton sx={{ height: '40px', alignSelf: 'center' }}>
+              <Settings sx={{ color: 'text.secondary' }} />
+            </IconButton>
 
-          <Menu
-            anchorEl={userMenuEl}
-            onClick={() => setUserMenuEl(null)}
-            onClose={() => setUserMenuEl(null)}
-            open={!!userMenuEl}
-            anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-            transformOrigin={{ horizontal: -22, vertical: 100 }}
-            keepMounted
+            <Menu
+              anchorEl={userMenuEl}
+              onClick={() => setUserMenuEl(null)}
+              onClose={() => setUserMenuEl(null)}
+              open={!!userMenuEl}
+              anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+              transformOrigin={{ horizontal: -22, vertical: 100 }}
+              keepMounted
+            >
+              <MenuItem sx={{ gap: 1 }}>
+                <UserAvatar
+                  userId={me.id}
+                  userName={me.name}
+                  sx={{ fontSize: '10px' }}
+                  size={20}
+                />
+                <Typography>{me.name}</Typography>
+              </MenuItem>
+
+              <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
+                <ExitToApp {...menuItemIconProps} />
+                {t('users.actions.logOut')}
+              </MenuItem>
+            </Menu>
+
+            <ConfirmLogoutModal
+              isOpen={isLogOutModalOpen}
+              setIsOpen={setIsLogOutModalOpen}
+            />
+          </Box>
+        ) : (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="98%"
+            gap="8px"
           >
-            <MenuItem sx={{ gap: 1 }}>
-              <UserAvatar
-                userId={me.id}
-                userName={me.name}
-                sx={{ fontSize: '10px' }}
-                size={20}
-              />
-              <Typography>{me.name}</Typography>
-            </MenuItem>
-
-            <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
-              <ExitToApp {...menuItemIconProps} />
-              {t('users.actions.logOut')}
-            </MenuItem>
-          </Menu>
-
-          <ConfirmLogoutModal
-            isOpen={isLogOutModalOpen}
-            setIsOpen={setIsLogOutModalOpen}
-          />
-        </Box>
-      )}
+            <Button onClick={() => navigate(NavigationPaths.Login)}>
+              {t('users.actions.logIn')}
+            </Button>
+            <Button onClick={() => navigate(NavigationPaths.SignUp)}>
+              {t('users.actions.signUp')}
+            </Button>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };

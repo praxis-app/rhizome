@@ -3,7 +3,8 @@ import { Box, IconButton, SxProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { NavigationPaths } from '../../constants/shared.constants';
+import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
@@ -18,6 +19,7 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+  const isAboveMd = useAboveBreakpoint('md');
   const navigate = useNavigate();
 
   const headerSx: SxProps = {
@@ -41,6 +43,10 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
   const handleBackClick = () => {
     if (onBackClick) {
       onBackClick();
+      return;
+    }
+    if (isAboveMd) {
+      navigate(NavigationPaths.Home);
       return;
     }
     // Show nav drawer as default behavior
