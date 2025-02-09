@@ -1,11 +1,19 @@
 import { ChevronRight, Settings, Tag } from '@mui/icons-material';
-import { Box, Divider, Drawer, PaperProps, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  PaperProps,
+  SxProps,
+  Typography,
+} from '@mui/material';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
 import { Channel } from '../../types/channel.types';
 import EditChannelDrawer from './edit-channel-drawer';
-import { useState } from 'react';
 
 interface Props {
   isOpen: boolean;
@@ -29,6 +37,22 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
     },
   };
 
+  const channelSettingsBtnSx: SxProps = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    textTransform: 'none',
+    width: '100%',
+    padding: '14px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    userSelect: 'none',
+    boxShadow: isDarkMode
+      ? 'none'
+      : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
+    backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.045)' : GRAY[50],
+    border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
+  };
+
   return (
     <Drawer
       open={isOpen}
@@ -50,29 +74,16 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
       <Divider sx={{ marginTop: 1.25, marginBottom: 3 }} />
 
       <Box paddingX="16px">
-        <Box
-          sx={{
-            cursor: 'pointer',
-            userSelect: 'none',
-            boxShadow: isDarkMode
-              ? 'none'
-              : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
-            border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
-          }}
-          display="flex"
-          justifyContent="space-between"
-          bgcolor={isDarkMode ? 'rgba(255, 255, 255, 0.045)' : GRAY[50]}
+        <Button
+          sx={channelSettingsBtnSx}
           onClick={() => setIsEditChannelDrawerOpen(true)}
-          borderRadius="8px"
-          padding="14px"
-          width="100%"
         >
           <Box display="flex" gap={1.5}>
             <Settings />
             {t('channels.headers.channelSettings')}
           </Box>
           <ChevronRight />
-        </Box>
+        </Button>
       </Box>
 
       <EditChannelDrawer
