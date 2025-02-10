@@ -229,6 +229,7 @@ const LeftNav = ({ me }: Props) => {
               open={!!userMenuEl}
               anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
               transformOrigin={{ horizontal: -22, vertical: 100 }}
+              slotProps={{ paper: { sx: { minWidth: '185px' } } }}
               keepMounted
             >
               <MenuItem
