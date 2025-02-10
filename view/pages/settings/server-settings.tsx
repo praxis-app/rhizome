@@ -47,6 +47,7 @@ const ServerSettings = () => {
         backBtnIcon={<Close />}
       />
 
+      {/* TODO: Convert to MUI `Button` component */}
       <Box
         onClick={() => navigate(NavigationPaths.Roles)}
         sx={{
