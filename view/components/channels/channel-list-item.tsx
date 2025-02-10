@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { Channel } from '../../types/channel.types';
 
@@ -26,8 +27,10 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
 
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
+  const ability = useAbility();
 
-  const showSettingsBtn = isHovering || isActive;
+  const canManageChannels = ability.can('manage', 'Channel');
+  const showSettingsBtn = canManageChannels && (isHovering || isActive);
 
   const listItemBtnSx: SxProps = {
     color: 'text.secondary',
