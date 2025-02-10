@@ -281,10 +281,16 @@ const LeftNav = ({ me }: Props) => {
             height="98%"
             gap="8px"
           >
-            <Button onClick={() => navigate(NavigationPaths.Login)}>
+            <Button
+              sx={{ color: 'text.primary' }}
+              onClick={() => navigate(NavigationPaths.Login)}
+            >
               {t('users.actions.logIn')}
             </Button>
-            <Button onClick={() => navigate(NavigationPaths.SignUp)}>
+            <Button
+              sx={{ color: 'text.primary' }}
+              onClick={() => navigate(NavigationPaths.SignUp)}
+            >
               {t('users.actions.signUp')}
             </Button>
           </Box>

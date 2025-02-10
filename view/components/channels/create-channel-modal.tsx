@@ -69,7 +69,11 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
         <ChannelFormFields register={register} />
 
         <Box display="flex" justifyContent="right" gap="16px">
-          <Button variant="text" onClick={() => setIsOpen(false)}>
+          <Button
+            variant="text"
+            sx={{ color: 'text.primary' }}
+            onClick={() => setIsOpen(false)}
+          >
             {t('actions.cancel')}
           </Button>
           <PrimaryButton
