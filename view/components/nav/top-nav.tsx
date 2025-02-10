@@ -1,9 +1,13 @@
 import { ArrowBack, Search } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { NavigationPaths } from '../../constants/shared.constants';
+import {
+  BrowserEvents,
+  KeyCodes,
+  NavigationPaths,
+} from '../../constants/shared.constants';
 import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -33,6 +37,18 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
     width: 38,
     height: 38,
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === KeyCodes.Escape) {
+        handleBackClick();
+      }
+    };
+    window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
+    return () => {
+      window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
+    };
+  }, []);
 
   const handleHeaderClick = () => {
     if (!header) {
