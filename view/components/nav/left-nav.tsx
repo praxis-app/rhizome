@@ -192,6 +192,7 @@ const LeftNav = ({ me }: Props) => {
                 gap: '8px',
                 minWidth: '115px',
                 justifyContent: 'start',
+                color: 'text.primary',
               }}
               onClick={handleUserMenuBtnClick}
             >

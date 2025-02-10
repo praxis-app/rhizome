@@ -71,6 +71,7 @@ const ChannelTopNav = ({ channel }: Props) => {
               backgroundColor: isChannelBtnDisabled ? 'transparent' : undefined,
               cursor: isChannelBtnDisabled ? 'default' : undefined,
             },
+            color: 'text.primary',
           }}
           disableRipple={isChannelBtnDisabled}
           onClick={() => {
