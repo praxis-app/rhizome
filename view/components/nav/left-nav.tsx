@@ -22,14 +22,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
 import { CurrentUser } from '../../types/user.types';
 import ConfirmLogoutModal from '../auth/confirm-logout-modal';
-import LazyLoadImage from '../images/lazy-load-image';
-import UserAvatar from '../users/user-avatar';
 import ChannelListItem from '../channels/channel-list-item';
 import CreateChannelModal from '../channels/create-channel-modal';
+import LazyLoadImage from '../images/lazy-load-image';
+import UserAvatar from '../users/user-avatar';
 
 interface Props {
   me?: CurrentUser;
@@ -51,6 +52,11 @@ const LeftNav = ({ me }: Props) => {
   const { channelId } = useParams();
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
+  const ability = useAbility();
+
+  const canManageSettings = ability.can('manage', 'ServerConfig');
+  const canManageChannels = ability.can('manage', 'Channel');
+  const isServerMenuBtnDisabled = !canManageSettings && !canManageChannels;
 
   const menuButtonSx: SxProps = {
     cursor: 'pointer',
@@ -66,6 +72,9 @@ const LeftNav = ({ me }: Props) => {
     borderRadius: 0,
     textTransform: 'none',
     width: '100%',
+    '&:disabled': {
+      color: 'text.primary',
+    },
   };
   const onlineBadge: SxProps = {
     bgcolor: '#50a361',
@@ -105,7 +114,11 @@ const LeftNav = ({ me }: Props) => {
       borderRight="1px solid"
       borderColor={isDarkMode ? 'rgba(255, 255, 255, 0.04)' : GRAY[50]}
     >
-      <Button onClick={handleServerMenuBtnClick} sx={menuButtonSx}>
+      <Button
+        onClick={handleServerMenuBtnClick}
+        disabled={isServerMenuBtnDisabled}
+        sx={menuButtonSx}
+      >
         <Box display="flex" gap="8px">
           <LazyLoadImage
             alt={t('labels.appIcon')}
@@ -119,7 +132,7 @@ const LeftNav = ({ me }: Props) => {
           </Typography>
         </Box>
 
-        <ExpandMore sx={{ fontSize: '22px' }} />
+        {!isServerMenuBtnDisabled && <ExpandMore sx={{ fontSize: '22px' }} />}
       </Button>
 
       <Menu
@@ -131,15 +144,19 @@ const LeftNav = ({ me }: Props) => {
         transformOrigin={{ horizontal: -18, vertical: -15 }}
         keepMounted
       >
-        <MenuItem onClick={() => navigate(NavigationPaths.Settings)}>
-          <Settings {...menuItemIconProps} />
-          {t('navigation.serverSettings')}
-        </MenuItem>
+        {ability.can('manage', 'ServerConfig') && (
+          <MenuItem onClick={() => navigate(NavigationPaths.Settings)}>
+            <Settings {...menuItemIconProps} />
+            {t('navigation.serverSettings')}
+          </MenuItem>
+        )}
 
-        <MenuItem onClick={handleCreateChannelBtnClick}>
-          <AddCircle {...menuItemIconProps} />
-          {t('channels.actions.createChannel')}
-        </MenuItem>
+        {ability.can('manage', 'Channel') && (
+          <MenuItem onClick={handleCreateChannelBtnClick}>
+            <AddCircle {...menuItemIconProps} />
+            {t('channels.actions.createChannel')}
+          </MenuItem>
+        )}
       </Menu>
 
       <CreateChannelModal
