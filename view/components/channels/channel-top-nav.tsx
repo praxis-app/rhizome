@@ -1,7 +1,8 @@
 import { ArrowBack, ChevronRight, Search, Tag } from '@mui/icons-material';
 import { Box, Button, IconButton, SxProps, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BrowserEvents, KeyCodes } from '../../constants/shared.constants';
 import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -19,6 +20,18 @@ const ChannelTopNav = ({ channel }: Props) => {
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
   const isAboveMd = useAboveBreakpoint('md');
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === KeyCodes.Escape) {
+        setIsNavDrawerOpen(true);
+      }
+    };
+    window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
+    return () => {
+      window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
+    };
+  }, []);
 
   const buttonSx: SxProps = {
     width: 38,
