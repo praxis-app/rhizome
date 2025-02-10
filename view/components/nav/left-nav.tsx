@@ -2,6 +2,7 @@ import {
   AddCircle,
   ExitToApp,
   ExpandMore,
+  PersonAdd,
   Settings,
 } from '@mui/icons-material';
 import {
@@ -227,8 +228,11 @@ const LeftNav = ({ me }: Props) => {
               onClick={() => setUserMenuEl(null)}
               onClose={() => setUserMenuEl(null)}
               open={!!userMenuEl}
-              anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-              transformOrigin={{ horizontal: -22, vertical: 100 }}
+              anchorOrigin={{ horizontal: 'left', vertical: 'center' }}
+              transformOrigin={{
+                horizontal: -22,
+                vertical: me.anonymous ? 158 : 122.5,
+              }}
               slotProps={{ paper: { sx: { minWidth: '185px' } } }}
               keepMounted
             >
@@ -249,6 +253,13 @@ const LeftNav = ({ me }: Props) => {
                 />
                 <Typography>{me.name}</Typography>
               </MenuItem>
+
+              {me.anonymous && (
+                <MenuItem>
+                  <PersonAdd {...menuItemIconProps} />
+                  {t('users.actions.signUp')}
+                </MenuItem>
+              )}
 
               <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
                 <ExitToApp {...menuItemIconProps} />
