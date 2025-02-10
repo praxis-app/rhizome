@@ -68,7 +68,9 @@ const NavDrawer = () => {
   const me = meData?.user;
   const isAnon = !!me?.anonymous;
   const showSignUp = !isLoggedIn || isAnon;
-  const showSettings = ability.can('manage', 'ServerConfig');
+  const canManageChannels = ability.can('manage', 'Channel');
+  const canManageSettings = ability.can('manage', 'ServerConfig');
+  const isServerBtnDisabled = !canManageSettings && !canManageChannels;
 
   const leftDrawerSx: SxProps = {
     '& .MuiBackdrop-root': {
@@ -137,9 +139,11 @@ const NavDrawer = () => {
           <Button
             sx={{
               gap: '8px',
-              alignItems: 'center',
               borderRadius: '8px',
+              alignItems: 'center',
+              '&:disabled': { color: 'text.primary' },
             }}
+            disabled={isServerBtnDisabled}
             onClick={() => setIsBottomDrawerOpen(true)}
           >
             <LazyLoadImage
@@ -153,10 +157,13 @@ const NavDrawer = () => {
             <Typography fontWeight={700} fontSize="18px">
               {t('brand')}
             </Typography>
-            <ChevronRight
-              sx={{ color: 'text.secondary', marginTop: '2px' }}
-              fontSize="small"
-            />
+
+            {!isServerBtnDisabled && (
+              <ChevronRight
+                sx={{ color: 'text.secondary', marginTop: '2px' }}
+                fontSize="small"
+              />
+            )}
           </Button>
 
           {me && (
@@ -271,14 +278,16 @@ const NavDrawer = () => {
         PaperProps={bottomDrawerProps}
       >
         <List>
-          <ListItemButton onClick={() => setShowCreateChannelModal(true)}>
-            <ListItemIcon>
-              <AddCircle />
-            </ListItemIcon>
-            <ListItemText primary={t('channels.actions.createChannel')} />
-          </ListItemButton>
+          {canManageChannels && (
+            <ListItemButton onClick={() => setShowCreateChannelModal(true)}>
+              <ListItemIcon>
+                <AddCircle />
+              </ListItemIcon>
+              <ListItemText primary={t('channels.actions.createChannel')} />
+            </ListItemButton>
+          )}
 
-          {showSettings && (
+          {canManageSettings && (
             <ListItemButton
               onClick={() => handleNavigate(NavigationPaths.Settings)}
             >
