@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAbility } from '../../hooks/role.hooks';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { GRAY } from '../../styles/theme';
 import { Channel } from '../../types/channel.types';
@@ -27,6 +28,9 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+  const ability = useAbility();
+
+  const canManageChannels = ability.can('manage', 'Channel');
 
   const paperProps: PaperProps = {
     sx: {
@@ -38,6 +42,9 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
     },
   };
 
+  const buttonIconSx: SxProps = {
+    color: canManageChannels ? 'text.secondary' : 'text.disabled',
+  };
   const channelSettingsBtnSx: SxProps = {
     display: 'flex',
     justifyContent: 'space-between',
@@ -82,12 +89,13 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
         <Button
           sx={channelSettingsBtnSx}
           onClick={() => setIsEditChannelDrawerOpen(true)}
+          disabled={!canManageChannels}
         >
           <Box display="flex" gap={1.5}>
-            <Settings />
+            <Settings sx={buttonIconSx} />
             {t('channels.headers.channelSettings')}
           </Box>
-          <ChevronRight />
+          <ChevronRight sx={buttonIconSx} />
         </Button>
       </Box>
 
