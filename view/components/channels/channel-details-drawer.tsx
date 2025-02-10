@@ -31,6 +31,7 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
   const ability = useAbility();
 
   const canManageChannels = ability.can('manage', 'Channel');
+  const showNoContentMessage = !canManageChannels && !channel.description;
 
   const paperProps: PaperProps = {
     sx: {
@@ -82,20 +83,27 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
         />
       )}
 
-      <Divider sx={{ marginTop: 1.25, marginBottom: 3 }} />
+      {(canManageChannels || showNoContentMessage) && (
+        <Divider sx={{ marginTop: 1.25, marginBottom: 3 }} />
+      )}
 
       <Box paddingX="16px">
-        <Button
-          sx={channelSettingsBtnSx}
-          onClick={() => setIsEditChannelDrawerOpen(true)}
-          disabled={!canManageChannels}
-        >
-          <Box display="flex" gap={1.5}>
-            <Settings sx={buttonIconSx} />
-            {t('channels.headers.channelSettings')}
-          </Box>
-          <ChevronRight sx={buttonIconSx} />
-        </Button>
+        {canManageChannels && (
+          <Button
+            sx={channelSettingsBtnSx}
+            onClick={() => setIsEditChannelDrawerOpen(true)}
+          >
+            <Box display="flex" gap={1.5}>
+              <Settings sx={buttonIconSx} />
+              {t('channels.headers.channelSettings')}
+            </Box>
+            <ChevronRight sx={buttonIconSx} />
+          </Button>
+        )}
+
+        {showNoContentMessage && (
+          <Typography textAlign="center">{t('prompts.noContent')}</Typography>
+        )}
       </Box>
 
       <EditChannelDrawer
