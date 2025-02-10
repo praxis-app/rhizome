@@ -31,7 +31,7 @@ import appIconImg from '../../assets/images/app-icon.png';
 import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
-import { useAboveBreakpoint } from '../../hooks/shared.hooks';
+import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -53,6 +53,7 @@ const NavDrawer = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const ability = useAbility();
+  const isDarkMode = useIsDarkMode();
   const isAboveMd = useAboveBreakpoint('md');
 
   const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
@@ -89,7 +90,7 @@ const NavDrawer = () => {
   const bottomDrawerProps: PaperProps = {
     sx: {
       height: 'calc(100% - 68px)',
-      bgcolor: GRAY['900'],
+      bgcolor: isDarkMode ? GRAY['900'] : 'background.paper',
       borderTopLeftRadius: '16px',
       borderTopRightRadius: '16px',
       paddingTop: '12px',
@@ -124,7 +125,12 @@ const NavDrawer = () => {
           setIsBottomDrawerOpen(false);
           setIsNavDrawerOpen(false);
         }}
-        PaperProps={{ sx: { width: '100%', bgcolor: GRAY['900'] } }}
+        PaperProps={{
+          sx: {
+            width: '100%',
+            bgcolor: isDarkMode ? GRAY['900'] : GRAY['50'],
+          },
+        }}
         sx={leftDrawerSx}
       >
         <Box
@@ -141,6 +147,7 @@ const NavDrawer = () => {
               gap: '8px',
               borderRadius: '8px',
               alignItems: 'center',
+              color: 'text.primary',
               '&:disabled': { color: 'text.primary' },
             }}
             disabled={isServerBtnDisabled}
@@ -213,7 +220,7 @@ const NavDrawer = () => {
 
         <Box
           paddingTop="8px"
-          bgcolor={GRAY['800']}
+          bgcolor={isDarkMode ? GRAY['800'] : 'background.paper'}
           sx={{ borderTopRightRadius: '16px', borderTopLeftRadius: '16px' }}
           marginTop="12px"
           height="100%"
