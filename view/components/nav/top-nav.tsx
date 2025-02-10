@@ -15,7 +15,7 @@ export interface TopNavProps {
 }
 
 const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
-  const { setIsNavDrawerOpen } = useAppStore((state) => state);
+  const { setIsNavDrawerOpen, setToast } = useAppStore((state) => state);
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
@@ -86,6 +86,7 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
       <IconButton
         sx={buttonSx}
         aria-label={t('labels.menu')}
+        onClick={() => setToast({ status: 'info', title: t('prompts.inDev') })}
         size="large"
         edge="end"
       >

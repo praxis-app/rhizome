@@ -13,7 +13,7 @@ interface Props {
 }
 
 const ChannelTopNav = ({ channel }: Props) => {
-  const { setIsNavDrawerOpen } = useAppStore((state) => state);
+  const { setIsNavDrawerOpen, setToast } = useAppStore((state) => state);
   const [showChannelDetails, setShowChannelDetails] = useState(false);
 
   const { t } = useTranslation();
@@ -94,6 +94,7 @@ const ChannelTopNav = ({ channel }: Props) => {
       <IconButton
         sx={buttonSx}
         aria-label={t('labels.menu')}
+        onClick={() => setToast({ status: 'info', title: t('prompts.inDev') })}
         size="large"
         edge="end"
       >

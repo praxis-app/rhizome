@@ -24,6 +24,7 @@ import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { CurrentUser } from '../../types/user.types';
 import ConfirmLogoutModal from '../auth/confirm-logout-modal';
@@ -38,6 +39,8 @@ interface Props {
 
 /** Left panel navigation for desktop */
 const LeftNav = ({ me }: Props) => {
+  const { setToast } = useAppStore((state) => state);
+
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [serverMenuEl, setServerMenuEl] = useState<HTMLElement | null>(null);
   const [userMenuEl, setUserMenuEl] = useState<HTMLElement | null>(null);
@@ -207,7 +210,12 @@ const LeftNav = ({ me }: Props) => {
               </Box>
             </Button>
 
-            <IconButton sx={{ height: '40px', alignSelf: 'center' }}>
+            <IconButton
+              sx={{ height: '40px', alignSelf: 'center' }}
+              onClick={() =>
+                setToast({ title: t('prompts.inDev'), status: 'info' })
+              }
+            >
               <Settings sx={{ color: 'text.secondary' }} />
             </IconButton>
 
