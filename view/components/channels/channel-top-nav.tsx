@@ -3,6 +3,7 @@ import { Box, Button, IconButton, SxProps, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BrowserEvents, KeyCodes } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
@@ -20,6 +21,10 @@ const ChannelTopNav = ({ channel }: Props) => {
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
   const isAboveMd = useAboveBreakpoint('md');
+  const ability = useAbility();
+
+  const canManageChannels = ability.can('manage', 'Channel');
+  const isChannelBtnDisabled = !canManageChannels && !channel.description;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -63,13 +68,13 @@ const ChannelTopNav = ({ channel }: Props) => {
         <Button
           sx={{
             '&:hover': {
-              backgroundColor: isAboveMd ? 'transparent' : undefined,
-              cursor: isAboveMd ? 'default' : undefined,
+              backgroundColor: isChannelBtnDisabled ? 'transparent' : undefined,
+              cursor: isChannelBtnDisabled ? 'default' : undefined,
             },
           }}
-          disableRipple={isAboveMd}
+          disableRipple={isChannelBtnDisabled}
           onClick={() => {
-            if (!isAboveMd) {
+            if (!isChannelBtnDisabled) {
               setShowChannelDetails(true);
             }
           }}
@@ -86,7 +91,7 @@ const ChannelTopNav = ({ channel }: Props) => {
             {channel.name}
           </Typography>
 
-          {!isAboveMd && (
+          {!isChannelBtnDisabled && (
             <ChevronRight
               sx={{ color: 'text.secondary', marginTop: '1px' }}
               fontSize="small"
