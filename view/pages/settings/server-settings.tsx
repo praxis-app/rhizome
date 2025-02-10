@@ -33,7 +33,6 @@ const ServerSettings = () => {
     border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
     display: 'flex',
     justifyContent: 'space-between',
-    textTransform: 'none',
     width: '100%',
     padding: '14px',
     borderRadius: '8px',

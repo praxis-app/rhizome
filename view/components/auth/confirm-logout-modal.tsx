@@ -36,7 +36,6 @@ const ConfirmLogoutModal = ({ isOpen, setIsOpen }: Props) => {
       <Box display="flex" gap={1}>
         <Button
           variant="text"
-          sx={{ textTransform: 'none' }}
           onClick={() => setIsOpen(false)}
           disabled={isPending}
         >

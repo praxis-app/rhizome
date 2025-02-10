@@ -140,7 +140,6 @@ export const theme = createTheme({
           textTransform: 'none',
         },
         contained: ({ theme }: Props) => ({
-          textTransform: 'none',
           backgroundColor: 'rgb(0, 0, 0, 0.04)',
           '&:hover': {
             backgroundColor: 'rgb(0, 0, 0, 0.07)',

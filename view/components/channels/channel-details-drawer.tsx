@@ -48,7 +48,6 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
   const channelSettingsBtnSx: SxProps = {
     display: 'flex',
     justifyContent: 'space-between',
-    textTransform: 'none',
     width: '100%',
     padding: '14px',
     borderRadius: '8px',

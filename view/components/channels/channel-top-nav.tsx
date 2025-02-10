@@ -53,7 +53,6 @@ const ChannelTopNav = ({ channel }: Props) => {
               backgroundColor: isAboveMd ? 'transparent' : undefined,
               cursor: isAboveMd ? 'default' : undefined,
             },
-            textTransform: 'none',
           }}
           disableRipple={isAboveMd}
           onClick={() => {

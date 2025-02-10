@@ -32,7 +32,6 @@ const PrimaryButton = ({ isLoading, children, sx, ...props }: Props) => {
     color: theme.palette.common.white,
     fontWeight: 500,
     letterSpacing: '0.2px',
-    textTransform: 'none',
     borderRadius: 9999,
     padding: '0 15px',
     minWidth: 85,

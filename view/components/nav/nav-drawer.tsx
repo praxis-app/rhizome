@@ -138,7 +138,6 @@ const NavDrawer = () => {
             sx={{
               gap: '8px',
               alignItems: 'center',
-              textTransform: 'none',
               borderRadius: '8px',
             }}
             onClick={() => setIsBottomDrawerOpen(true)}

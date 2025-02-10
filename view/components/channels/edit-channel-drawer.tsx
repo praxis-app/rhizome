@@ -125,7 +125,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
 
           <Button
             type="submit"
-            sx={{ textTransform: 'none', color: BLURPLE['300'] }}
+            sx={{ color: BLURPLE['300'] }}
             disabled={isPending || !formState.isDirty}
           >
             {t('actions.save')}

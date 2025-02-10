@@ -73,7 +73,6 @@ const LeftNav = ({ me }: Props) => {
     paddingLeft: '16px',
     paddingRight: '12px',
     borderRadius: 0,
-    textTransform: 'none',
     width: '100%',
     '&:disabled': {
       color: 'text.primary',
@@ -188,7 +187,11 @@ const LeftNav = ({ me }: Props) => {
         {me ? (
           <Box display="flex" justifyContent="space-between">
             <Button
-              sx={{ textTransform: 'none', gap: '8px' }}
+              sx={{
+                gap: '8px',
+                minWidth: '115px',
+                justifyContent: 'start',
+              }}
               onClick={handleUserMenuBtnClick}
             >
               <Box position="relative">
@@ -228,7 +231,15 @@ const LeftNav = ({ me }: Props) => {
               transformOrigin={{ horizontal: -22, vertical: 100 }}
               keepMounted
             >
-              <MenuItem sx={{ gap: 1 }}>
+              <MenuItem
+                sx={{ gap: 1 }}
+                onClick={() =>
+                  setToast({
+                    title: t('prompts.inDev'),
+                    status: 'info',
+                  })
+                }
+              >
                 <UserAvatar
                   userId={me.id}
                   userName={me.name}
