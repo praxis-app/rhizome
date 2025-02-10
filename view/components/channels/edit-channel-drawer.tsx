@@ -9,10 +9,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
+import { useAppStore } from '../../store/app.store';
 import { BLURPLE, GRAY } from '../../styles/theme';
 import { Channel, UpdateChannelReq } from '../../types/channel.types';
 import DeleteButton from '../shared/delete-button';
@@ -26,6 +28,7 @@ interface Props {
 }
 
 const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
+  const { setToast } = useAppStore((state) => state);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -54,6 +57,15 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
       );
 
       setIsOpen(false);
+    },
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
+      setToast({
+        title: errorMessage,
+        status: 'error',
+      });
     },
   });
 

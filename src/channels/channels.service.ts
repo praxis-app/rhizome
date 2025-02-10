@@ -71,9 +71,12 @@ export const updateChannel = async (
   channelId: string,
   { name, description }: UpdateChannelReq,
 ) => {
+  const sanitizedName = sanitizeText(name);
+  const sanitizedDescription = sanitizeText(description);
+
   return channelRepository.update(channelId, {
-    name: sanitizeText(name),
-    description: sanitizeText(description),
+    name: sanitizedName.toLocaleLowerCase(),
+    description: sanitizedDescription,
   });
 };
 

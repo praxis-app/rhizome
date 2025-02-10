@@ -1,9 +1,11 @@
 import { Box, Button } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import { useAppStore } from '../../store/app.store';
 import { Channel, CreateChannelReq } from '../../types/channel.types';
 import Modal from '../shared/modal';
 import PrimaryButton from '../shared/primary-button';
@@ -16,6 +18,8 @@ interface Props {
 }
 
 const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
+  const { setToast } = useAppStore((state) => state);
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -37,6 +41,15 @@ const CreateChannelModal = ({ isOpen, setIsOpen, onSubmit }: Props) => {
       onSubmit?.();
 
       navigate(`/channels/${channel.id}`);
+    },
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
+      setToast({
+        title: errorMessage,
+        status: 'error',
+      });
     },
   });
 

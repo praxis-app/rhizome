@@ -21,7 +21,7 @@ const ChannelFormFields = ({ register, sx }: Props) => {
   const { t } = useTranslation();
 
   const handleNameInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/\s/g, '-');
+    e.target.value = e.target.value.replace(/\s/g, '-').toLocaleLowerCase();
     onNameInputChange(e);
   };
 

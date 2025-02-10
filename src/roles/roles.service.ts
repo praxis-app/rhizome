@@ -1,5 +1,6 @@
 import { RawRuleOf } from '@casl/ability';
 import { In, Not } from 'typeorm';
+import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
 import { AbilityAction, AbilitySubject, AppAbility } from './app-ability';
@@ -100,7 +101,13 @@ export const updateRole = async (
   id: string,
   { name, color }: CreateRoleReq,
 ) => {
-  return roleRepository.update(id, { name, color });
+  const sanitizedName = sanitizeText(name);
+  const sanitizedColor = sanitizeText(color);
+
+  return roleRepository.update(id, {
+    name: sanitizedName,
+    color: sanitizedColor,
+  });
 };
 
 export const updateRolePermissions = async (

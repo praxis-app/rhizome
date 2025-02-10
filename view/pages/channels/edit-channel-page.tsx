@@ -1,6 +1,7 @@
 import { Close } from '@mui/icons-material';
 import { Box, Card, CardContent } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -13,9 +14,11 @@ import DeleteButton from '../../components/shared/delete-button';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAppStore } from '../../store/app.store';
 import { UpdateChannelReq } from '../../types/channel.types';
 
 const EditChannelPage = () => {
+  const { setToast } = useAppStore((state) => state);
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
   const { channelId } = useParams();
@@ -44,6 +47,15 @@ const EditChannelPage = () => {
       }
       await api.updateChannel(data.channel.id, values);
       navigate(`${NavigationPaths.Channels}/${channelId}`);
+    },
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
+      setToast({
+        title: errorMessage,
+        status: 'error',
+      });
     },
   });
 
