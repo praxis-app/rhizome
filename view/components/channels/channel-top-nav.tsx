@@ -41,9 +41,18 @@ const ChannelTopNav = ({ channel }: Props) => {
     };
   }, []);
 
-  const buttonSx: SxProps = {
+  const iconButtonSx: SxProps = {
     width: 38,
     height: 38,
+  };
+  const channelNameBtnSx: SxProps = {
+    '&:hover': {
+      backgroundColor: isChannelBtnDisabled ? 'transparent' : undefined,
+      cursor: isChannelBtnDisabled ? 'default' : undefined,
+    },
+    color: 'text.primary',
+    justifyContent: 'flex-start',
+    flex: 1,
   };
 
   return (
@@ -57,11 +66,11 @@ const ChannelTopNav = ({ channel }: Props) => {
       paddingLeft={2.5}
       height="55px"
     >
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" flex={1}>
         {!isAboveMd && (
           <IconButton
             onClick={() => setIsNavDrawerOpen(true)}
-            sx={{ ...buttonSx, marginRight: 0.5 }}
+            sx={{ ...iconButtonSx, marginRight: 0.5 }}
             edge="start"
           >
             <ArrowBack />
@@ -69,13 +78,7 @@ const ChannelTopNav = ({ channel }: Props) => {
         )}
 
         <Button
-          sx={{
-            '&:hover': {
-              backgroundColor: isChannelBtnDisabled ? 'transparent' : undefined,
-              cursor: isChannelBtnDisabled ? 'default' : undefined,
-            },
-            color: 'text.primary',
-          }}
+          sx={channelNameBtnSx}
           disableRipple={isChannelBtnDisabled}
           onClick={() => {
             if (!isChannelBtnDisabled) {
@@ -113,7 +116,7 @@ const ChannelTopNav = ({ channel }: Props) => {
       )}
 
       <IconButton
-        sx={buttonSx}
+        sx={iconButtonSx}
         aria-label={t('labels.menu')}
         onClick={() => setToast({ status: 'info', title: t('prompts.inDev') })}
         size="large"
