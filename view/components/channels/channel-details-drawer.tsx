@@ -3,8 +3,8 @@ import {
   Box,
   Button,
   Divider,
-  Drawer,
   PaperProps,
+  SwipeableDrawer,
   SxProps,
   Typography,
 } from '@mui/material';
@@ -64,12 +64,23 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
   };
 
   return (
-    <Drawer
+    <SwipeableDrawer
       open={isOpen}
+      onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)}
-      anchor="bottom"
       PaperProps={paperProps}
+      anchor="bottom"
     >
+      <Box>
+        <Box
+          width="30px"
+          height="6px"
+          borderRadius={3}
+          bgcolor={isDarkMode ? GRAY['700'] : GRAY['200']}
+          marginBottom={2}
+          margin="auto"
+        />
+      </Box>
       <Box display="flex" justifyContent="center" paddingY={1}>
         <Tag sx={{ alignSelf: 'center' }} />
         <Typography fontSize="20px" fontWeight={600}>
@@ -113,7 +124,7 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
         isOpen={isEditChannelDrawerOpen}
         setIsOpen={setIsEditChannelDrawerOpen}
       />
-    </Drawer>
+    </SwipeableDrawer>
   );
 };
 
