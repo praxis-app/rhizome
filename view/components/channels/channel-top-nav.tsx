@@ -24,7 +24,10 @@ const ChannelTopNav = ({ channel }: Props) => {
   const ability = useAbility();
 
   const canManageChannels = ability.can('manage', 'Channel');
-  const isChannelBtnDisabled = !canManageChannels && !channel.description;
+  const hasDescription = !!channel.description;
+
+  const isChannelBtnDisabled =
+    (!canManageChannels && !hasDescription) || isAboveMd;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
