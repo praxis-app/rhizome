@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { BLURPLE, GRAY } from '../../styles/theme';
 import { Channel, UpdateChannelReq } from '../../types/channel.types';
@@ -32,6 +33,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
   const queryClient = useQueryClient();
+  const isDarkMode = useIsDarkMode();
 
   const { mutate: updateChannel, isPending } = useMutation({
     mutationFn: async (values: UpdateChannelReq) => {
@@ -90,7 +92,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
   const paperProps: PaperProps = {
     sx: {
       height: 'calc(100% - 54px)',
-      bgcolor: GRAY['900'],
+      bgcolor: isDarkMode ? GRAY['900'] : 'background.paper',
       borderTopLeftRadius: '16px',
       borderTopRightRadius: '16px',
       paddingTop: '12px',
@@ -125,7 +127,7 @@ const EditChannelDrawer = ({ isOpen, setIsOpen, editChannel }: Props) => {
 
           <Button
             type="submit"
-            sx={{ color: BLURPLE['300'] }}
+            sx={{ color: isDarkMode ? BLURPLE['300'] : BLURPLE['500'] }}
             disabled={isPending || !formState.isDirty}
           >
             {t('actions.save')}

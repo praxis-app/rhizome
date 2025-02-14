@@ -136,9 +136,10 @@ export const theme = createTheme({
 
     MuiButton: {
       styleOverrides: {
-        root: {
+        root: ({ theme }: Props) => ({
           textTransform: 'none',
-        },
+          color: theme.palette.text.primary,
+        }),
         contained: ({ theme }: Props) => ({
           backgroundColor: 'rgb(0, 0, 0, 0.04)',
           '&:hover': {
@@ -146,12 +147,10 @@ export const theme = createTheme({
             boxShadow: 'none',
           },
           boxShadow: 'none',
-          color: 'black',
 
           ...theme.applyStyles('dark', {
             backgroundColor: 'rgb(255, 255, 255, 0.04)',
             '&:hover': { backgroundColor: 'rgb(255, 255, 255, 0.07)' },
-            color: 'white',
           }),
         }),
       },

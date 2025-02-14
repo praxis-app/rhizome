@@ -36,7 +36,7 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
   const paperProps: PaperProps = {
     sx: {
       height: 'calc(100% - 54px)',
-      bgcolor: GRAY['900'],
+      bgcolor: isDarkMode ? GRAY['900'] : 'background.paper',
       borderTopLeftRadius: '16px',
       borderTopRightRadius: '16px',
       paddingTop: '12px',
@@ -57,7 +57,9 @@ const ChannelDetailsDrawer = ({ isOpen, setIsOpen, channel }: Props) => {
     boxShadow: isDarkMode
       ? 'none'
       : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
-    backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.045)' : GRAY[50],
+    backgroundColor: isDarkMode
+      ? 'rgba(255, 255, 255, 0.045)'
+      : 'background.paper',
     border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
   };
 
