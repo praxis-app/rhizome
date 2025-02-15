@@ -16,10 +16,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Menu,
-  MenuItem,
   PaperProps,
-  SvgIconProps,
   SxProps,
   Typography,
 } from '@mui/material';
@@ -39,6 +36,7 @@ import ConfirmLogoutModal from '../auth/confirm-logout-modal';
 import CreateChannelModal from '../channels/create-channel-modal';
 import LazyLoadImage from '../images/lazy-load-image';
 import UserAvatar from '../users/user-avatar';
+import NavDrawerUserMenu from './nav-drawer-user-menu';
 
 const NavDrawer = () => {
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
@@ -77,13 +75,6 @@ const NavDrawer = () => {
     '& .MuiBackdrop-root': {
       backgroundColor: 'rgba(0, 0, 0, 0.1)',
       backdropFilter: 'blur(25px)',
-    },
-  };
-
-  const menuItemIconProps: SvgIconProps = {
-    fontSize: 'small',
-    sx: {
-      marginRight: 1,
     },
   };
 
@@ -184,36 +175,12 @@ const NavDrawer = () => {
                 />
               </IconButton>
 
-              <Menu
+              <NavDrawerUserMenu
                 anchorEl={menuAnchorEl}
-                onClick={handleClose}
-                onClose={handleClose}
-                open={Boolean(menuAnchorEl)}
-                anchorOrigin={{
-                  horizontal: 'right',
-                  vertical: 'bottom',
-                }}
-                transformOrigin={{
-                  horizontal: 'right',
-                  vertical: -4,
-                }}
-                keepMounted
-              >
-                <MenuItem sx={{ gap: 1 }}>
-                  <UserAvatar
-                    userId={me.id}
-                    userName={me.name}
-                    sx={{ fontSize: '10px' }}
-                    size={20}
-                  />
-                  <Typography>{me.name}</Typography>
-                </MenuItem>
-
-                <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
-                  <ExitToApp {...menuItemIconProps} />
-                  {t('users.actions.logOut')}
-                </MenuItem>
-              </Menu>
+                handleClose={handleClose}
+                setIsLogOutModalOpen={setIsLogOutModalOpen}
+                me={me}
+              />
             </>
           )}
         </Box>
