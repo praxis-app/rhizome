@@ -1,11 +1,4 @@
-import {
-  AddCircle,
-  ChevronRight,
-  ExitToApp,
-  PersonAdd,
-  Settings,
-  Tag,
-} from '@mui/icons-material';
+import { ChevronRight, ExitToApp, PersonAdd, Tag } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -16,7 +9,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  PaperProps,
   SxProps,
   Typography,
 } from '@mui/material';
@@ -33,16 +25,15 @@ import { useMeQuery } from '../../../hooks/user.hooks';
 import { useAppStore } from '../../../store/app.store';
 import { GRAY } from '../../../styles/theme';
 import ConfirmLogoutModal from '../../auth/confirm-logout-modal';
-import CreateChannelModal from '../../channels/create-channel-modal';
 import LazyLoadImage from '../../images/lazy-load-image';
 import UserAvatar from '../../users/user-avatar';
+import NavDrawerServerMenu from './nav-drawer-server-menu';
 import NavDrawerUserMenu from './nav-drawer-user-menu';
 
 const NavDrawer = () => {
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
-  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
-  const [isBottomDrawerOpen, setIsBottomDrawerOpen] = useState(false);
+  const [isServerMenuOpen, setIsServerMenuOpen] = useState(false);
 
   const { isNavDrawerOpen, setIsNavDrawerOpen, isLoggedIn } = useAppStore(
     (state) => state,
@@ -78,19 +69,8 @@ const NavDrawer = () => {
     },
   };
 
-  const bottomDrawerProps: PaperProps = {
-    sx: {
-      height: 'calc(100% - 68px)',
-      bgcolor: isDarkMode ? GRAY['900'] : 'background.paper',
-      borderTopLeftRadius: '16px',
-      borderTopRightRadius: '16px',
-      paddingTop: '12px',
-      paddingX: '16px',
-    },
-  };
-
   const handleNavigate = async (path: string) => {
-    setIsBottomDrawerOpen(false);
+    setIsServerMenuOpen(false);
     setIsNavDrawerOpen(false);
     navigate(path);
   };
@@ -113,7 +93,7 @@ const NavDrawer = () => {
         anchor="left"
         open={isNavDrawerOpen}
         onClose={() => {
-          setIsBottomDrawerOpen(false);
+          setIsServerMenuOpen(false);
           setIsNavDrawerOpen(false);
         }}
         PaperProps={{
@@ -142,7 +122,7 @@ const NavDrawer = () => {
               '&:disabled': { color: 'text.primary' },
             }}
             disabled={isServerBtnDisabled}
-            onClick={() => setIsBottomDrawerOpen(true)}
+            onClick={() => setIsServerMenuOpen(true)}
           >
             <LazyLoadImage
               alt="App icon"
@@ -245,43 +225,12 @@ const NavDrawer = () => {
         />
       </Drawer>
 
-      <Drawer
-        anchor="bottom"
-        open={isBottomDrawerOpen}
-        onClose={() => setIsBottomDrawerOpen(false)}
-        PaperProps={bottomDrawerProps}
-      >
-        <List>
-          {canManageChannels && (
-            <ListItemButton onClick={() => setShowCreateChannelModal(true)}>
-              <ListItemIcon>
-                <AddCircle />
-              </ListItemIcon>
-              <ListItemText primary={t('channels.actions.createChannel')} />
-            </ListItemButton>
-          )}
-
-          {canManageSettings && (
-            <ListItemButton
-              onClick={() => handleNavigate(NavigationPaths.Settings)}
-            >
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary={t('navigation.serverSettings')} />
-            </ListItemButton>
-          )}
-        </List>
-
-        <CreateChannelModal
-          isOpen={showCreateChannelModal}
-          setIsOpen={setShowCreateChannelModal}
-          onSubmit={() => {
-            setIsBottomDrawerOpen(false);
-            setIsNavDrawerOpen(false);
-          }}
-        />
-      </Drawer>
+      <NavDrawerServerMenu
+        isOpen={isServerMenuOpen}
+        setIsOpen={setIsServerMenuOpen}
+        setIsNavDrawerOpen={setIsNavDrawerOpen}
+        handleNavigate={handleNavigate}
+      />
     </>
   );
 };
