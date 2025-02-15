@@ -4,6 +4,9 @@ import { List } from '@mui/material';
 import ChannelListItem from './channel-list-item';
 import { useParams } from 'react-router-dom';
 
+/**
+ * Channel list component for the left navigation panel on desktop
+ */
 const ChannelList = () => {
   const { data: channelsData } = useQuery({
     queryKey: ['channels'],
