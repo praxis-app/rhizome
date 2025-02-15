@@ -29,7 +29,9 @@ export const getChannels = async () => {
   if (channelCount === 0) {
     await initializeGeneralChannel();
   }
-  return channelRepository.find();
+  return channelRepository.find({
+    order: { createdAt: 'ASC' },
+  });
 };
 
 export const getChannelMembers = (channelId: string) => {
