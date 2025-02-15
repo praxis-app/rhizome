@@ -1,4 +1,5 @@
 import { Box, Skeleton } from '@mui/material';
+import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 
 const MessageSkeleton = () => (
   <Box display="flex" gap={1}>
@@ -17,6 +18,8 @@ const MessageSkeleton = () => (
 );
 
 const ChannelSkeleton = () => {
+  const isAboveMd = useAboveBreakpoint('md');
+
   return (
     <Box
       position="fixed"
@@ -24,21 +27,29 @@ const ChannelSkeleton = () => {
       left={0}
       width="100vw"
       height="100vh"
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
       padding={2}
+      display="flex"
+      gap={1.25}
     >
-      <Skeleton height={45} variant="rounded" />
+      {isAboveMd && <Skeleton variant="rounded" height="100%" width={200} />}
 
-      <Box display="flex" gap={3} flexDirection="column">
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        flex={1}
+      >
+        <Skeleton height={45} variant="rounded" />
+
         <Box display="flex" gap={3} flexDirection="column">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <MessageSkeleton key={index} />
-          ))}
-        </Box>
+          <Box display="flex" gap={3} flexDirection="column">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <MessageSkeleton key={index} />
+            ))}
+          </Box>
 
-        <Skeleton height={80} variant="rounded" />
+          <Skeleton height={80} variant="rounded" />
+        </Box>
       </Box>
     </Box>
   );
