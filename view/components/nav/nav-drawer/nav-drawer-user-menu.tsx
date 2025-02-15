@@ -1,8 +1,8 @@
 import { ExitToApp } from '@mui/icons-material';
 import { Menu, MenuItem, SvgIconProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { CurrentUser } from '../../types/user.types';
-import UserAvatar from '../users/user-avatar';
+import { CurrentUser } from '../../../types/user.types';
+import UserAvatar from '../../users/user-avatar';
 
 interface Props {
   setIsLogOutModalOpen: (value: boolean) => void;
