@@ -62,9 +62,13 @@ export const createChannel = (
   { name, description }: CreateChannelReq,
   currentUserId: string,
 ) => {
+  const sanitizedName = sanitizeText(name);
+  const normalizedName = sanitizedName.toLocaleLowerCase();
+  const sanitizedDescription = sanitizeText(description);
+
   return channelRepository.save({
-    name: sanitizeText(name),
-    description: sanitizeText(description),
+    name: normalizedName,
+    description: sanitizedDescription,
     members: [{ userId: currentUserId }],
   });
 };
@@ -74,10 +78,11 @@ export const updateChannel = async (
   { name, description }: UpdateChannelReq,
 ) => {
   const sanitizedName = sanitizeText(name);
+  const normalizedName = sanitizedName.toLocaleLowerCase();
   const sanitizedDescription = sanitizeText(description);
 
   return channelRepository.update(channelId, {
-    name: sanitizedName.toLocaleLowerCase(),
+    name: normalizedName,
     description: sanitizedDescription,
   });
 };
