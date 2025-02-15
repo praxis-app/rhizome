@@ -7,6 +7,7 @@ import ChannelTopNav from '../../components/channels/channel-top-nav';
 import MessageFeed from '../../components/messages/message-feed';
 import MessageForm from '../../components/messages/message-form';
 import LeftNav from '../../components/nav/left-nav/left-nav';
+import { GENERAL_CHANNEL_NAME } from '../../constants/channel.constants';
 import { useAboveBreakpoint, useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
@@ -34,9 +35,10 @@ interface ImageMessagePayload {
 
 interface Props {
   channel: Channel;
+  isGeneral?: boolean;
 }
 
-const ChannelView = ({ channel }: Props) => {
+const ChannelView = ({ channel, isGeneral }: Props) => {
   const { isLoggedIn } = useAppStore((state) => state);
 
   const { channelId } = useParams();
@@ -48,19 +50,21 @@ const ChannelView = ({ channel }: Props) => {
     enabled: isLoggedIn,
   });
 
+  const resolvedChannelId = isGeneral ? GENERAL_CHANNEL_NAME : channelId;
+
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
-    queryKey: ['messages', channelId],
+    queryKey: ['messages', resolvedChannelId],
     queryFn: ({ pageParam }) => {
-      return api.getChannelMessages(channelId!, pageParam);
+      return api.getChannelMessages(resolvedChannelId!, pageParam);
     },
     getNextPageParam: (_lastPage, pages) => {
       return pages.flatMap((page) => page.messages).length;
     },
     initialPageParam: 0,
-    enabled: !!channelId,
+    enabled: !!resolvedChannelId,
   });
 
-  useSubscription(`channel-${channelId}-${meData?.user.id}`, {
+  useSubscription(`channel-${resolvedChannelId}-${meData?.user.id}`, {
     onMessage: (event) => {
       const { body }: PubSubMessage<NewMessagePayload | ImageMessagePayload> =
         JSON.parse(event.data);
@@ -71,7 +75,7 @@ const ChannelView = ({ channel }: Props) => {
       // Update cache with new message, images are placeholders
       if (body.type === MessageType.MESSAGE) {
         queryClient.setQueryData<MessagesQuery>(
-          ['messages', channelId],
+          ['messages', resolvedChannelId],
           (oldData) => {
             if (!oldData) {
               return {
@@ -95,7 +99,7 @@ const ChannelView = ({ channel }: Props) => {
       // Update cache with image status once uploaded
       if (body.type === MessageType.IMAGE) {
         queryClient.setQueryData<MessagesQuery>(
-          ['messages', channelId],
+          ['messages', resolvedChannelId],
           (oldData) => {
             if (!oldData) {
               return { pages: [], pageParams: [] };
@@ -124,7 +128,7 @@ const ChannelView = ({ channel }: Props) => {
 
       scrollToBottom();
     },
-    enabled: !!meData && !!channelId,
+    enabled: !!meData && !!resolvedChannelId,
   });
 
   const scrollToBottom = () => {
@@ -133,7 +137,7 @@ const ChannelView = ({ channel }: Props) => {
     }
   };
 
-  if (!messagesData) {
+  if (!messagesData || !resolvedChannelId) {
     return <ChannelSkeleton />;
   }
 
@@ -148,7 +152,7 @@ const ChannelView = ({ channel }: Props) => {
           onLoadMore={debounce(fetchNextPage, 500)}
           messages={messagesData.pages.flatMap((page) => page.messages)}
         />
-        <MessageForm channelId={channel.id} onSend={scrollToBottom} />
+        <MessageForm channelId={resolvedChannelId} onSend={scrollToBottom} />
       </Box>
     </Box>
   );

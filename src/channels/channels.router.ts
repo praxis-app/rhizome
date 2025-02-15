@@ -1,6 +1,7 @@
 // TODO: Ensure all routes are protected by the appropriate permissions
 
 import express from 'express';
+import { authenticate } from '../auth/middleware/authenticate.middleware';
 import { messagesRouter } from '../messages/messages.router';
 import { can } from '../roles/middleware/can.middleware';
 import {
@@ -9,22 +10,24 @@ import {
   getChannel,
   getChannels,
   getGeneralChannel,
+  getGeneralChannelMessages,
   updateChannel,
 } from './channels.controller';
 import { validateChannel } from './middleware/validate-channel.middleware';
-import { authenticate } from '../auth/middleware/authenticate.middleware';
 
 export const channelsRouter = express.Router();
 
+// Public routes
 channelsRouter
   .get('/general', getGeneralChannel)
-  // TODO: Move to protected routes
-  .use('/:channelId/messages', messagesRouter);
+  .get('/general/messages', getGeneralChannelMessages);
 
+// Protected routes
 channelsRouter
   .use(authenticate)
   .get('/', getChannels)
   .get('/:channelId', getChannel)
   .post('/', can('create', 'Channel'), validateChannel, createChannel)
   .put('/:channelId', can('update', 'Channel'), validateChannel, updateChannel)
-  .delete('/:channelId', can('delete', 'Channel'), deleteChannel);
+  .delete('/:channelId', can('delete', 'Channel'), deleteChannel)
+  .use('/:channelId/messages', messagesRouter);

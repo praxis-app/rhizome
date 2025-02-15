@@ -2,19 +2,12 @@ import { Request, Response } from 'express';
 import * as messagesService from './messages.service';
 
 export const getMessages = async (req: Request, res: Response) => {
-  try {
-    const { channelId } = req.params;
-    const offset = req.query.offset ? Number(req.query.offset) : undefined;
-    const limit = req.query.limit ? Number(req.query.limit) : undefined;
-    const messages = await messagesService.getMessages(
-      channelId,
-      offset,
-      limit,
-    );
-    res.json({ messages });
-  } catch (e: any) {
-    res.status(500).send(e.message);
-  }
+  const { channelId } = req.params;
+  const offset = req.query.offset ? Number(req.query.offset) : undefined;
+  const limit = req.query.limit ? Number(req.query.limit) : undefined;
+
+  const messages = await messagesService.getMessages(channelId, offset, limit);
+  res.json({ messages });
 };
 
 export const createMessage = async (req: Request, res: Response) => {

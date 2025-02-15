@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as channelsService from './channels.service';
+import * as messagesService from '../messages/messages.service';
 
 export const getChannels = async (_: Request, res: Response) => {
   const channels = await channelsService.getChannels();
@@ -14,6 +15,20 @@ export const getChannel = async (req: Request, res: Response) => {
 export const getGeneralChannel = async (_: Request, res: Response) => {
   const channel = await channelsService.getGeneralChannel();
   res.json({ channel });
+};
+
+export const getGeneralChannelMessages = async (
+  req: Request,
+  res: Response,
+) => {
+  const offset = req.query.offset ? Number(req.query.offset) : undefined;
+  const limit = req.query.limit ? Number(req.query.limit) : undefined;
+
+  const messages = await messagesService.getGeneralChannelMessages(
+    offset,
+    limit,
+  );
+  res.json({ messages });
 };
 
 export const createChannel = async (req: Request, res: Response) => {

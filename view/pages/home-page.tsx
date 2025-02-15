@@ -21,5 +21,5 @@ export const HomePage = () => {
     return <Typography>{t('errors.somethingWentWrong')}</Typography>;
   }
 
-  return <ChannelView channel={data.channel} />;
+  return <ChannelView channel={data.channel} isGeneral />;
 };
