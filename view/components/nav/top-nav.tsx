@@ -1,9 +1,14 @@
 import { ArrowBack, Search } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
+import {
+  BrowserEvents,
+  KeyCodes,
+  NavigationPaths,
+} from '../../constants/shared.constants';
+import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
@@ -14,10 +19,11 @@ export interface TopNavProps {
 }
 
 const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
-  const { setIsNavDrawerOpen } = useAppStore((state) => state);
+  const { setIsNavDrawerOpen, setToast } = useAppStore((state) => state);
 
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+  const isAboveMd = useAboveBreakpoint('md');
   const navigate = useNavigate();
 
   const headerSx: SxProps = {
@@ -32,6 +38,18 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
     height: 38,
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === KeyCodes.Escape) {
+        handleBackClick();
+      }
+    };
+    window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
+    return () => {
+      window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
+    };
+  }, []);
+
   const handleHeaderClick = () => {
     if (!header) {
       navigate('/');
@@ -41,6 +59,10 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
   const handleBackClick = () => {
     if (onBackClick) {
       onBackClick();
+      return;
+    }
+    if (isAboveMd) {
+      navigate(NavigationPaths.Home);
       return;
     }
     // Show nav drawer as default behavior
@@ -80,6 +102,7 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
       <IconButton
         sx={buttonSx}
         aria-label={t('labels.menu')}
+        onClick={() => setToast({ status: 'info', title: t('prompts.inDev') })}
         size="large"
         edge="end"
       >

@@ -16,7 +16,7 @@ import { SyntheticEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import TopNav from '../../components/app/top-nav';
+import TopNav from '../../components/nav/top-nav';
 import AddRoleMemberOption from '../../components/roles/add-role-member-option';
 import PermissionDenied from '../../components/roles/permission-denied';
 import PermissionsForm from '../../components/roles/permissions-form';

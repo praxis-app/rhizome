@@ -26,7 +26,7 @@ export const urlifyText = (text: string, urlTrimSize?: number) =>
   });
 
 export const parseMarkdownText = async (text: string) => {
-  const newLine = '<div style="margin-bottom: -6px;"></div>';
+  const newLine = '<div style="margin-bottom: -15px;"></div>';
   const withNewLines = text.replace(/\n(?=\n)/g, newLine);
   const parsedText = await marked.parse(withNewLines);
   return parsedText.replace(/<\/?p>/g, '');

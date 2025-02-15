@@ -19,7 +19,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import TopNav from '../../components/app/top-nav';
+import TopNav from '../../components/nav/top-nav';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import {
@@ -144,11 +144,11 @@ const SignUp = () => {
   });
 
   const showPasswordIconSx: SxProps = {
-    color: isDarkMode ? GRAY['300'] : GRAY['900'],
+    color: isDarkMode ? GRAY['300'] : GRAY['800'],
   };
   const inputBaseSx: SxProps = {
     '&:-webkit-autofill': {
-      WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['800'] : GRAY['100']} inset`,
+      WebkitBoxShadow: `0 0 0 100px ${isDarkMode ? GRAY['750'] : GRAY['100']} inset`,
       WebkitTextFillColor: isDarkMode ? GRAY['100'] : GRAY['950'],
     },
   };

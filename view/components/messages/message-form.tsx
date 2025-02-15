@@ -18,8 +18,8 @@ import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
-import { MessagesQuery } from '../../types/chat.types';
 import { Image } from '../../types/image.types';
+import { MessagesQuery } from '../../types/message.types';
 import { validateImageInput } from '../../utils/image.utils';
 import ChooseAuthModal from '../auth/choose-auth-modal';
 import AttachedImagePreview from '../images/attached-image-preview';
@@ -54,7 +54,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
   const { onChange, ...registerBodyProps } = register('body', {
     maxLength: {
       value: MESSAGE_BODY_MAX,
-      message: t('chat.errors.longBody'),
+      message: t('messages.errors.longBody'),
     },
   });
 
@@ -127,6 +127,14 @@ const MessageForm = ({ channelId, onSend }: Props) => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const activeElement = document.activeElement;
+      if (
+        activeElement &&
+        (activeElement.tagName === 'INPUT' ||
+          activeElement.tagName === 'TEXTAREA')
+      ) {
+        return;
+      }
       if (
         ['Space', 'Enter', 'Key', 'Digit'].some((key) => e.code.includes(key))
       ) {
@@ -218,7 +226,7 @@ const MessageForm = ({ channelId, onSend }: Props) => {
         <Input
           {...registerBodyProps}
           autoComplete="off"
-          placeholder={t('chat.prompts.sendAMessage')}
+          placeholder={t('messages.prompts.sendAMessage')}
           onKeyDown={handleInputKeyDown}
           onChange={(e) => {
             saveDraft(e.target.value);

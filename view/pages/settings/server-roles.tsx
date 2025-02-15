@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import TopNav from '../../components/app/top-nav';
+import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import Role from '../../components/roles/role';
 import RoleForm from '../../components/roles/role-form';

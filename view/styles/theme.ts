@@ -10,8 +10,9 @@ export const GRAY = {
   '500': '#505051',
   '600': '#424242',
   '700': '#3a3b3c',
-  '800': '#303233',
-  '900': '#242526',
+  '750': '#303233',
+  '800': '#242526',
+  '900': '#1c1d21',
   '950': '#18191a',
 } as const;
 
@@ -19,6 +20,7 @@ export const BLURPLE = {
   '300': '#7D95E3',
   '400': '#6573CF',
   '500': '#5868CB',
+  '700': '#43498e',
 } as const;
 
 declare module '@mui/material/styles/createPalette' {
@@ -63,7 +65,7 @@ export const theme = createTheme({
         },
         background: {
           default: GRAY['950'],
-          paper: GRAY['900'],
+          paper: GRAY['800'],
           secondary: GRAY['700'],
         },
         divider: GRAY['700'],
@@ -103,6 +105,9 @@ export const theme = createTheme({
 
     MuiPaper: {
       styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+        },
         elevation: {
           boxShadow: `
             0 0 #0000,
@@ -131,20 +136,21 @@ export const theme = createTheme({
 
     MuiButton: {
       styleOverrides: {
-        contained: ({ theme }: Props) => ({
+        root: ({ theme }: Props) => ({
           textTransform: 'none',
+          color: theme.palette.text.primary,
+        }),
+        contained: ({ theme }: Props) => ({
           backgroundColor: 'rgb(0, 0, 0, 0.04)',
           '&:hover': {
             backgroundColor: 'rgb(0, 0, 0, 0.07)',
             boxShadow: 'none',
           },
           boxShadow: 'none',
-          color: 'black',
 
           ...theme.applyStyles('dark', {
             backgroundColor: 'rgb(255, 255, 255, 0.04)',
             '&:hover': { backgroundColor: 'rgb(255, 255, 255, 0.07)' },
-            color: 'white',
           }),
         }),
       },
@@ -219,7 +225,6 @@ export const theme = createTheme({
           border: `1px solid ${theme.palette.divider}`,
           padding: 4,
           ...theme.applyStyles('dark', {
-            backgroundColor: theme.palette.background.default,
             borderColor: theme.palette.divider,
           }),
         }),

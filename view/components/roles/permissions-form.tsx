@@ -21,6 +21,14 @@ interface Props {
 
 const getPermissionValues = (permissions: Permission[]) =>
   PERMISSION_KEYS.map((name) => {
+    if (name === 'manageChannels') {
+      return {
+        value: permissions.some(
+          (p) => p.subject === 'Channel' && p.action.includes('manage'),
+        ),
+        name,
+      };
+    }
     if (name === 'manageSettings') {
       return {
         value: permissions.some(
@@ -73,6 +81,9 @@ const PermissionsForm = ({ role }: Props) => {
         (result, permission) => {
           if (!permission.value) {
             return result;
+          }
+          if (permission.name === 'manageChannels') {
+            result.push({ subject: 'Channel', action: ['manage'] });
           }
           if (permission.name === 'manageSettings') {
             result.push({ subject: 'ServerConfig', action: ['manage'] });

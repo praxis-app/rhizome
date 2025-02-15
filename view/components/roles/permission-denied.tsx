@@ -1,12 +1,14 @@
 import { Box, BoxProps, Typography } from '@mui/material';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import TopNav, { TopNavProps } from '../app/top-nav';
+import TopNav, { TopNavProps } from '../nav/top-nav';
 
 interface Props extends BoxProps {
   topNavProps?: TopNavProps;
+  message?: ReactNode;
 }
 
-const PermissionDenied = ({ topNavProps, ...boxProps }: Props) => {
+const PermissionDenied = ({ message, topNavProps, ...boxProps }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -24,7 +26,7 @@ const PermissionDenied = ({ topNavProps, ...boxProps }: Props) => {
       {...boxProps}
     >
       <TopNav {...topNavProps} />
-      <Typography>{t('prompts.permissionDenied')}</Typography>
+      <Typography>{message || t('prompts.permissionDenied')}</Typography>
     </Box>
   );
 };

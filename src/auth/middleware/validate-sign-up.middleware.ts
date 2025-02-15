@@ -22,33 +22,33 @@ export const validateSignUp = async (
   const { email, name, password } = req.body as SignUpReq;
 
   if (!VALID_EMAIL_REGEX.test(email)) {
-    res.status(400).send('Invalid email address');
+    res.status(422).send('Invalid email address');
     return;
   }
   if (email.length > EMAIL_MAX_LENGTH) {
-    res.status(400).send('Email address cannot exceed 254 characters');
+    res.status(422).send('Email address cannot exceed 254 characters');
     return;
   }
   if (name && !VALID_NAME_REGEX.test(name)) {
-    res.status(400).send('User names cannot contain special characters');
+    res.status(422).send('User names cannot contain special characters');
     return;
   }
   if (name && name.length < MIN_NAME_LENGTH) {
-    res.status(400).send('Username must be at least 2 characters');
+    res.status(422).send('Username must be at least 2 characters');
     return;
   }
   if (name && name.length > MAX_NAME_LENGTH) {
-    res.status(400).send('Username cannot exceed 15 characters');
+    res.status(422).send('Username cannot exceed 15 characters');
     return;
   }
   if (password.length < MIN_PASSWORD_LENGTH) {
     const message = `Password must be at least ${MIN_PASSWORD_LENGTH} characters long`;
-    res.status(400).send(message);
+    res.status(422).send(message);
     return;
   }
   if (password.length > MAX_PASSWORD_LENGTH) {
     const message = `Password must be at most ${MAX_PASSWORD_LENGTH} characters long`;
-    res.status(400).send(message);
+    res.status(422).send(message);
     return;
   }
 

@@ -1,22 +1,50 @@
 import { AdminPanelSettings, ChevronRight, Close } from '@mui/icons-material';
-import { Box } from '@mui/material';
+import { Box, Button, SxProps } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import TopNav from '../../components/app/top-nav';
+import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
+import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
+import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
 const ServerSettings = () => {
+  const { setIsNavDrawerOpen } = useAppStore((state) => state);
+
   const { t } = useTranslation();
   const isDarkMode = useIsDarkMode();
+  const isAboveMd = useAboveBreakpoint('md');
   const navigate = useNavigate();
   const ability = useAbility();
 
-  // TODO: Update to check for ServerConfig after adding more settings
-  if (!ability.can('manage', 'Role')) {
+  const canManageSettings = ability.can('manage', 'ServerConfig');
+  const canManageRoles = ability.can('manage', 'Role') && canManageSettings;
+
+  const buttonIconSx: SxProps = {
+    color: canManageRoles ? 'text.secondary' : 'text.disabled',
+  };
+
+  const rolesBtnSx: SxProps = {
+    boxShadow: isDarkMode
+      ? 'none'
+      : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
+    backgroundColor: isDarkMode
+      ? 'rgba(255, 255, 255, 0.045)'
+      : 'background.paper',
+    border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
+    color: 'text.primary',
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+    padding: '14px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    userSelect: 'none',
+  };
+
+  if (!canManageSettings) {
     return (
       <PermissionDenied
         topNavProps={{
@@ -27,37 +55,34 @@ const ServerSettings = () => {
     );
   }
 
+  const handleBackClick = () => {
+    if (isAboveMd) {
+      navigate(NavigationPaths.Home);
+      return;
+    }
+    setIsNavDrawerOpen(true);
+  };
+
   return (
     <>
       <TopNav
-        backBtnIcon={<Close />}
-        onBackClick={() => navigate(NavigationPaths.Home)}
         header={t('navigation.serverSettings')}
+        onBackClick={handleBackClick}
+        backBtnIcon={<Close />}
       />
 
-      <Box
+      {/* TODO: Add shared component for this button type */}
+      <Button
+        sx={rolesBtnSx}
         onClick={() => navigate(NavigationPaths.Roles)}
-        sx={{
-          cursor: 'pointer',
-          userSelect: 'none',
-          boxShadow: isDarkMode
-            ? 'none'
-            : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
-          border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
-        }}
-        display="flex"
-        justifyContent="space-between"
-        bgcolor="background.paper"
-        borderRadius="8px"
-        padding="14px"
-        width="100%"
+        disabled={!canManageRoles}
       >
         <Box display="flex" gap={1.5}>
-          <AdminPanelSettings />
+          <AdminPanelSettings sx={buttonIconSx} />
           {t('navigation.roles')}
         </Box>
-        <ChevronRight />
-      </Box>
+        <ChevronRight sx={buttonIconSx} />
+      </Button>
     </>
   );
 };

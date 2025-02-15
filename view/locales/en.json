@@ -29,7 +29,8 @@
     "menuButton": "Menu button",
     "scrollToTop": "Scroll to top",
     "switch": "Switch",
-    "toggleButton": "Toggle button"
+    "toggleButton": "Toggle button",
+    "appIcon": "App icon"
   },
 
   "errors": {
@@ -47,7 +48,6 @@
   "navigation": {
     "about": "About",
     "activity": "Activity",
-    "chat": "Chat",
     "docs": "Docs",
     "events": "Events",
     "home": "Home",
@@ -120,6 +120,9 @@
       "password": "Password",
       "yourEmail": "Your email address"
     },
+    "labels": {
+      "online": "Online"
+    },
     "errors": {
       "invalidEmail": "Email is invalid.",
       "missingEmail": "Email cannot be empty",
@@ -159,7 +162,7 @@
     }
   },
 
-  "chat": {
+  "messages": {
     "actions": {
       "sendAnonymous": "Send anonymously"
     },
@@ -173,11 +176,25 @@
     }
   },
 
+  "channels": {
+    "actions": {
+      "createChannel": "Create Channel",
+      "deleteChannel": "Delete Channel"
+    },
+    "form": {
+      "name": "Name",
+      "description": "Description"
+    },
+    "headers": {
+      "channelSettings": "Channel Settings"
+    }
+  },
+
   "roles": {
     "actions": {
       "add": "Add",
       "addMembers": "Add members",
-      "delete": "Delete role",
+      "delete": "Delete Role",
       "manageRoles": "Manage roles",
       "viewRoles": "View roles"
     },
@@ -216,6 +233,7 @@
     "names": {
       "createEvents": "Create Events",
       "createInvites": "Create Invites",
+      "manageChannels": "Manage Channels",
       "manageEvents": "Manage Events",
       "manageInvites": "Manage Invites",
       "managePosts": "Manage Posts",
@@ -231,6 +249,7 @@
       "createEvents": "Allows members to create and plan events.",
       "createInvites": "Allows members to invite new people to the server.",
       "manageComments": "Allows members to remove or hide comments by other members.",
+      "manageChannels": "Allows members to create, edit, or delete channels.",
       "manageEvents": "Allows members to remove or edit events created by other members.",
       "manageInvites": "Allows members to create or delete invite links for the server.",
       "managePosts": "Allows members to remove or hide posts by other members.",
