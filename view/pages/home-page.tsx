@@ -1,22 +1,25 @@
+import { Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { api } from '../client/api-client';
-import ProgressBar from '../components/shared/progress-bar';
+import ChannelSkeleton from '../components/channels/channel-skeleton';
+import ChannelView from '../components/channels/channel-view';
 
-/**
- * Home page component. Redirects to the general channel page.
- */
 export const HomePage = () => {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['general-channel'],
-    queryFn: async () => {
-      const result = await api.getGeneralChannel();
-      navigate(`/channels/${result.channel.id}`, { replace: true });
-      return result;
-    },
+    queryFn: () => api.getGeneralChannel(),
   });
 
-  return <ProgressBar />;
+  if (isLoading) {
+    return <ChannelSkeleton />;
+  }
+
+  if (!data || error) {
+    return <Typography>{t('errors.somethingWentWrong')}</Typography>;
+  }
+
+  return <ChannelView channel={data.channel} />;
 };
