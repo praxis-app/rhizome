@@ -25,6 +25,7 @@ const ServerSettings = () => {
   const buttonIconSx: SxProps = {
     color: canManageRoles ? 'text.secondary' : 'text.disabled',
   };
+
   const rolesBtnSx: SxProps = {
     boxShadow: isDarkMode
       ? 'none'
@@ -70,6 +71,7 @@ const ServerSettings = () => {
         backBtnIcon={<Close />}
       />
 
+      {/* TODO: Add shared component for this button type */}
       <Button
         sx={rolesBtnSx}
         onClick={() => navigate(NavigationPaths.Roles)}
