@@ -9,19 +9,16 @@ import {
   Box,
   Button,
   IconButton,
-  List,
   Menu,
   MenuItem,
   SvgIconProps,
   SxProps,
   Typography,
 } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import appIconImg from '../../assets/images/app-icon.png';
-import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
@@ -29,7 +26,7 @@ import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 import { CurrentUser } from '../../types/user.types';
 import ConfirmLogoutModal from '../auth/confirm-logout-modal';
-import ChannelListItem from '../channels/channel-list-item';
+import ChannelList from '../channels/channel-list';
 import CreateChannelModal from '../channels/create-channel-modal';
 import LazyLoadImage from '../images/lazy-load-image';
 import UserAvatar from '../users/user-avatar';
@@ -47,13 +44,7 @@ const LeftNav = ({ me }: Props) => {
   const [userMenuEl, setUserMenuEl] = useState<HTMLElement | null>(null);
   const [isLogOutModalOpen, setIsLogOutModalOpen] = useState(false);
 
-  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
-    queryKey: ['channels'],
-    queryFn: api.getChannels,
-  });
-
   const { t } = useTranslation();
-  const { channelId } = useParams();
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
   const ability = useAbility();
@@ -167,17 +158,7 @@ const LeftNav = ({ me }: Props) => {
         setIsOpen={setShowCreateChannelModal}
       />
 
-      {!isChannalsLoading && channelsData && (
-        <List sx={{ flex: 1, overflowY: 'scroll' }}>
-          {channelsData.channels.map((channel) => (
-            <ChannelListItem
-              key={channel.id}
-              channel={channel}
-              isActive={channelId === channel.id}
-            />
-          ))}
-        </List>
-      )}
+      <ChannelList />
 
       <Box
         borderTop="1px solid"
