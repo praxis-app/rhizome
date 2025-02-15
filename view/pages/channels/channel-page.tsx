@@ -7,11 +7,11 @@ import {
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import ChannelSkeleton from '../../components/channels/channel-skeleton';
 import ChannelTopNav from '../../components/channels/channel-top-nav';
 import MessageFeed from '../../components/messages/message-feed';
 import MessageForm from '../../components/messages/message-form';
 import LeftNav from '../../components/nav/left-nav';
-import ProgressBar from '../../components/shared/progress-bar';
 import { useAboveBreakpoint, useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
@@ -139,7 +139,7 @@ export const ChannelPage = () => {
   };
 
   if (isChannelLoading) {
-    return <ProgressBar />;
+    return <ChannelSkeleton />;
   }
 
   if (!channelData || !messagesData) {
