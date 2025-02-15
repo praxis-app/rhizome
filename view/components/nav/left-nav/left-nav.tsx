@@ -1,10 +1,4 @@
-import {
-  AddCircle,
-  ExitToApp,
-  ExpandMore,
-  PersonAdd,
-  Settings,
-} from '@mui/icons-material';
+import { AddCircle, ExpandMore, Settings } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -18,18 +12,19 @@ import {
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import appIconImg from '../../assets/images/app-icon.png';
-import { NavigationPaths } from '../../constants/shared.constants';
-import { useAbility } from '../../hooks/role.hooks';
-import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { useAppStore } from '../../store/app.store';
-import { GRAY } from '../../styles/theme';
-import { CurrentUser } from '../../types/user.types';
-import ConfirmLogoutModal from '../auth/confirm-logout-modal';
-import ChannelList from '../channels/channel-list';
-import CreateChannelModal from '../channels/create-channel-modal';
-import LazyLoadImage from '../images/lazy-load-image';
-import UserAvatar from '../users/user-avatar';
+import appIconImg from '../../../assets/images/app-icon.png';
+import { NavigationPaths } from '../../../constants/shared.constants';
+import { useAbility } from '../../../hooks/role.hooks';
+import { useIsDarkMode } from '../../../hooks/shared.hooks';
+import { useAppStore } from '../../../store/app.store';
+import { GRAY } from '../../../styles/theme';
+import { CurrentUser } from '../../../types/user.types';
+import ConfirmLogoutModal from '../../auth/confirm-logout-modal';
+import ChannelList from '../../channels/channel-list';
+import CreateChannelModal from '../../channels/create-channel-modal';
+import LazyLoadImage from '../../images/lazy-load-image';
+import UserAvatar from '../../users/user-avatar';
+import LeftNavUserMenu from './left-nav-user-menu';
 
 interface Props {
   me?: CurrentUser;
@@ -205,49 +200,12 @@ const LeftNav = ({ me }: Props) => {
               <Settings sx={{ color: 'text.secondary' }} />
             </IconButton>
 
-            <Menu
+            <LeftNavUserMenu
+              me={me}
               anchorEl={userMenuEl}
-              onClick={() => setUserMenuEl(null)}
-              onClose={() => setUserMenuEl(null)}
-              open={!!userMenuEl}
-              anchorOrigin={{ horizontal: 'left', vertical: 'center' }}
-              transformOrigin={{
-                horizontal: -22,
-                vertical: me.anonymous ? 158 : 122.5,
-              }}
-              slotProps={{ paper: { sx: { minWidth: '185px' } } }}
-              keepMounted
-            >
-              <MenuItem
-                sx={{ gap: 1 }}
-                onClick={() =>
-                  setToast({
-                    title: t('prompts.inDev'),
-                    status: 'info',
-                  })
-                }
-              >
-                <UserAvatar
-                  userId={me.id}
-                  userName={me.name}
-                  sx={{ fontSize: '10px' }}
-                  size={20}
-                />
-                <Typography>{me.name}</Typography>
-              </MenuItem>
-
-              {me.anonymous && (
-                <MenuItem>
-                  <PersonAdd {...menuItemIconProps} />
-                  {t('users.actions.signUp')}
-                </MenuItem>
-              )}
-
-              <MenuItem onClick={() => setIsLogOutModalOpen(true)}>
-                <ExitToApp {...menuItemIconProps} />
-                {t('users.actions.logOut')}
-              </MenuItem>
-            </Menu>
+              setAnchorEl={setUserMenuEl}
+              setIsLogOutModalOpen={setIsLogOutModalOpen}
+            />
 
             <ConfirmLogoutModal
               isOpen={isLogOutModalOpen}

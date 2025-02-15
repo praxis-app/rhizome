@@ -11,7 +11,7 @@ import ChannelSkeleton from '../../components/channels/channel-skeleton';
 import ChannelTopNav from '../../components/channels/channel-top-nav';
 import MessageFeed from '../../components/messages/message-feed';
 import MessageForm from '../../components/messages/message-form';
-import LeftNav from '../../components/nav/left-nav';
+import LeftNav from '../../components/nav/left-nav/left-nav';
 import { useAboveBreakpoint, useSubscription } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
