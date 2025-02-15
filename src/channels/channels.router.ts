@@ -17,13 +17,14 @@ import { authenticate } from '../auth/middleware/authenticate.middleware';
 export const channelsRouter = express.Router();
 
 channelsRouter
-  .get('/', getChannels)
   .get('/general', getGeneralChannel)
-  .get('/:channelId', getChannel)
+  // TODO: Move to protected routes
   .use('/:channelId/messages', messagesRouter);
 
 channelsRouter
   .use(authenticate)
+  .get('/', getChannels)
+  .get('/:channelId', getChannel)
   .post('/', can('create', 'Channel'), validateChannel, createChannel)
   .put('/:channelId', can('update', 'Channel'), validateChannel, updateChannel)
   .delete('/:channelId', can('delete', 'Channel'), deleteChannel);
