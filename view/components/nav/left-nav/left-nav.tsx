@@ -1,14 +1,5 @@
-import { AddCircle, ExpandMore, Settings } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  SvgIconProps,
-  SxProps,
-  Typography,
-} from '@mui/material';
+import { ExpandMore, Settings } from '@mui/icons-material';
+import { Box, Button, IconButton, SxProps, Typography } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +15,7 @@ import ChannelList from '../../channels/channel-list';
 import CreateChannelModal from '../../channels/create-channel-modal';
 import LazyLoadImage from '../../images/lazy-load-image';
 import UserAvatar from '../../users/user-avatar';
+import LeftNavServerMenu from './left-nav-server-menu';
 import LeftNavUserMenu from './left-nav-user-menu';
 
 interface Props {
@@ -76,10 +68,6 @@ const LeftNav = ({ me }: Props) => {
     top: 20,
     right: -5,
   };
-  const menuItemIconProps: SvgIconProps = {
-    sx: { marginRight: 1 },
-    fontSize: 'small',
-  };
 
   const handleServerMenuBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
     setServerMenuEl(event.currentTarget);
@@ -87,11 +75,6 @@ const LeftNav = ({ me }: Props) => {
 
   const handleUserMenuBtnClick = (event: MouseEvent<HTMLButtonElement>) => {
     setUserMenuEl(event.currentTarget);
-  };
-
-  const handleCreateChannelBtnClick = () => {
-    setShowCreateChannelModal(true);
-    setServerMenuEl(null);
   };
 
   return (
@@ -124,29 +107,11 @@ const LeftNav = ({ me }: Props) => {
         {!isServerMenuBtnDisabled && <ExpandMore sx={{ fontSize: '22px' }} />}
       </Button>
 
-      <Menu
+      <LeftNavServerMenu
         anchorEl={serverMenuEl}
-        onClick={() => setServerMenuEl(null)}
-        onClose={() => setServerMenuEl(null)}
-        open={!!serverMenuEl}
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-        transformOrigin={{ horizontal: -18, vertical: -15 }}
-        keepMounted
-      >
-        {ability.can('manage', 'ServerConfig') && (
-          <MenuItem onClick={() => navigate(NavigationPaths.Settings)}>
-            <Settings {...menuItemIconProps} />
-            {t('navigation.serverSettings')}
-          </MenuItem>
-        )}
-
-        {ability.can('manage', 'Channel') && (
-          <MenuItem onClick={handleCreateChannelBtnClick}>
-            <AddCircle {...menuItemIconProps} />
-            {t('channels.actions.createChannel')}
-          </MenuItem>
-        )}
-      </Menu>
+        setAnchorEl={setServerMenuEl}
+        setShowCreateChannelModal={setShowCreateChannelModal}
+      />
 
       <CreateChannelModal
         isOpen={showCreateChannelModal}
