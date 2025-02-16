@@ -45,22 +45,29 @@ const NavDrawer = () => {
   const isDarkMode = useIsDarkMode();
   const isAboveMd = useAboveBreakpoint('md');
 
-  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
-    queryKey: ['channels'],
-    queryFn: api.getChannels,
-    enabled: !isAboveMd,
-  });
-
   const { data: meData } = useMeQuery({
     enabled: !isAboveMd,
   });
 
   const me = meData?.user;
   const isAnon = !!me?.anonymous;
+  const isRegistered = !!me && !isAnon;
   const showSignUp = !isLoggedIn || isAnon;
   const canManageChannels = ability.can('manage', 'Channel');
   const canManageSettings = ability.can('manage', 'ServerConfig');
   const isServerBtnDisabled = !canManageSettings && !canManageChannels;
+
+  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
+    queryKey: ['channels'],
+    queryFn: api.getChannels,
+    enabled: !isAboveMd && isRegistered,
+  });
+
+  const { data: generalChannelData } = useQuery({
+    queryKey: ['general-channel'],
+    queryFn: () => api.getGeneralChannel(),
+    enabled: !isRegistered,
+  });
 
   const leftDrawerSx: SxProps = {
     '& .MuiBackdrop-root': {
@@ -177,7 +184,9 @@ const NavDrawer = () => {
               {channelsData.channels.map((channel) => (
                 <ListItemButton
                   key={channel.id}
-                  onClick={() => handleNavigate(`/channels/${channel.id}`)}
+                  onClick={() =>
+                    handleNavigate(`${NavigationPaths.Channels}/${channel.id}`)
+                  }
                 >
                   <ListItemIcon sx={{ minWidth: '33px' }}>
                     <Tag />
@@ -188,11 +197,23 @@ const NavDrawer = () => {
             </List>
           )}
 
+          {/* Show general channel for unregistered users */}
+          {generalChannelData && (
+            <List>
+              <ListItemButton
+                onClick={() => handleNavigate(NavigationPaths.Home)}
+              >
+                <ListItemIcon sx={{ minWidth: '33px' }}>
+                  <Tag />
+                </ListItemIcon>
+                <ListItemText primary={generalChannelData.channel.name} />
+              </ListItemButton>
+            </List>
+          )}
+
           {(showSignUp || !isLoggedIn) && (
             <List>
-              <Divider sx={{ marginX: '16px' }} />
-
-              {/* TODO: Show link to general channel here */}
+              <Divider sx={{ marginX: '16px', marginBottom: '16px' }} />
 
               {showSignUp && (
                 <ListItemButton
