@@ -7,24 +7,8 @@ import {
   WebSocketWithId,
 } from './pub-sub.models';
 
-type ChannelHandler = (
-  message: any,
-  publisher: WebSocketWithId,
-) => Promise<void>;
-
 /** Local mapping of subscriber IDs to websockets */
 const subscribers: Record<string, WebSocketWithId> = {};
-
-/** Map of channel names to message handlers */
-const channelHandlers: Record<string, ChannelHandler> = {};
-
-// TODO: Determine if this is still needed
-export const registerChannelHandler = (
-  channel: string,
-  handler: ChannelHandler,
-) => {
-  channelHandlers[channel] = handler;
-};
 
 export const handleMessage = async (
   webSocket: WebSocketWithId,
@@ -67,11 +51,6 @@ export const publish = async (
   message: unknown,
   publisher?: WebSocketWithId,
 ) => {
-  // Handle channel specific actions
-  if (channelHandlers[channel] && publisher) {
-    await channelHandlers[channel](message, publisher);
-  }
-
   const channelKey = getChannelCacheKey(channel);
   const subscriberIds = await cacheService.getSetMembers(channelKey);
   if (subscriberIds.length === 0) {
