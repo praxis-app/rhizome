@@ -14,6 +14,7 @@ import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
+import { GENERAL_CHANNEL_NAME } from '../../constants/channel.constants';
 import { KeyCodes } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
@@ -34,9 +35,10 @@ interface FormValues {
 interface Props {
   channelId: string;
   onSend?(): void;
+  isGeneralChannel?: boolean;
 }
 
-const MessageForm = ({ channelId, onSend }: Props) => {
+const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
   const { isLoggedIn, setToast } = useAppStore((state) => state);
 
   const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
@@ -92,8 +94,12 @@ const MessageForm = ({ channelId, onSend }: Props) => {
         images: messageImages,
       };
 
+      const resolvedChannelId = isGeneralChannel
+        ? GENERAL_CHANNEL_NAME
+        : channelId;
+
       queryClient.setQueryData<MessagesQuery>(
-        ['messages', channelId],
+        ['messages', resolvedChannelId],
         (oldData) => {
           if (!oldData) {
             return {

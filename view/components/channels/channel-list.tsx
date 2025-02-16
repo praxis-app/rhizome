@@ -34,7 +34,7 @@ const ChannelList = ({ me }: Props) => {
       <List sx={{ flex: 1, overflowX: 'scroll' }}>
         <ChannelListItem
           channel={generalChannelData.channel}
-          isGeneral
+          isGeneralChannel
           isActive
         />
       </List>

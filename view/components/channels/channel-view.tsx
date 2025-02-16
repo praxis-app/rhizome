@@ -1,7 +1,6 @@
 import { Box, debounce } from '@mui/material';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import ChannelTopNav from '../../components/channels/channel-top-nav';
 import MessageFeed from '../../components/messages/message-feed';
@@ -35,22 +34,23 @@ interface ImageMessagePayload {
 
 interface Props {
   channel: Channel;
-  isGeneral?: boolean;
+  isGeneralChannel?: boolean;
 }
 
-const ChannelView = ({ channel, isGeneral }: Props) => {
+const ChannelView = ({ channel, isGeneralChannel }: Props) => {
   const { isLoggedIn } = useAppStore((state) => state);
 
-  const { channelId } = useParams();
   const queryClient = useQueryClient();
   const feedBoxRef = useRef<HTMLDivElement>(null);
   const isAboveMd = useAboveBreakpoint('md');
 
+  const resolvedChannelId = isGeneralChannel
+    ? GENERAL_CHANNEL_NAME
+    : channel.id;
+
   const { data: meData } = useMeQuery({
     enabled: isLoggedIn,
   });
-
-  const resolvedChannelId = isGeneral ? GENERAL_CHANNEL_NAME : channelId;
 
   const { data: messagesData, fetchNextPage } = useInfiniteQuery({
     queryKey: ['messages', resolvedChannelId],
@@ -64,7 +64,7 @@ const ChannelView = ({ channel, isGeneral }: Props) => {
     enabled: !!resolvedChannelId,
   });
 
-  useSubscription(`channel-${resolvedChannelId}-${meData?.user.id}`, {
+  useSubscription(`channel-${channel.id}-${meData?.user.id}`, {
     onMessage: (event) => {
       const { body }: PubSubMessage<NewMessagePayload | ImageMessagePayload> =
         JSON.parse(event.data);
@@ -137,7 +137,7 @@ const ChannelView = ({ channel, isGeneral }: Props) => {
     }
   };
 
-  if (!messagesData || !resolvedChannelId) {
+  if (!messagesData) {
     return <ChannelSkeleton />;
   }
 
@@ -152,7 +152,11 @@ const ChannelView = ({ channel, isGeneral }: Props) => {
           onLoadMore={debounce(fetchNextPage, 500)}
           messages={messagesData.pages.flatMap((page) => page.messages)}
         />
-        <MessageForm channelId={resolvedChannelId} onSend={scrollToBottom} />
+        <MessageForm
+          channelId={channel.id}
+          onSend={scrollToBottom}
+          isGeneralChannel={isGeneralChannel}
+        />
       </Box>
     </Box>
   );

@@ -1,7 +1,8 @@
-// TODO: Ensure all routes are protected by the appropriate permissions
+// TODO: Add channel specific permissions
 
 import express from 'express';
 import { authenticate } from '../auth/middleware/authenticate.middleware';
+import { isRegistered } from '../auth/middleware/is-registered.middleware';
 import { messagesRouter } from '../messages/messages.router';
 import { can } from '../roles/middleware/can.middleware';
 import {
@@ -25,8 +26,8 @@ channelsRouter
 // Protected routes
 channelsRouter
   .use(authenticate)
-  .get('/', getChannels)
-  .get('/:channelId', getChannel)
+  .get('/', isRegistered, getChannels)
+  .get('/:channelId', isRegistered, getChannel)
   .post('/', can('create', 'Channel'), validateChannel, createChannel)
   .put('/:channelId', can('update', 'Channel'), validateChannel, updateChannel)
   .delete('/:channelId', can('delete', 'Channel'), deleteChannel)
