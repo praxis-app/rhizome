@@ -4,7 +4,7 @@ import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { User } from '../users/user.entity';
 import { AbilityAction, AbilitySubject, AppAbility } from './app-ability';
-import { CHANNEL_ACCESS_RULES } from './channel-access-rules';
+import { CHANNEL_ACCESS_MAP } from './channel-access';
 import { Permission } from './models/permission.entity';
 import { Role } from './models/role.entity';
 
@@ -225,10 +225,10 @@ const buildPermissionRules = (roles: Role[]): RawRuleOf<AppAbility>[] => {
 
 /** Check if user can access a given pub-sub channel */
 export const canAccessChannel = (channelKey: string, user: User) => {
-  for (const rule of Object.values(CHANNEL_ACCESS_RULES)) {
-    const match = rule.pattern.exec(channelKey);
+  for (const { pattern, rules } of Object.values(CHANNEL_ACCESS_MAP)) {
+    const match = pattern.exec(channelKey);
     if (match) {
-      return rule.validate(match, user);
+      return Object.values(rules).every((rule) => rule(match, user));
     }
   }
   return false;
