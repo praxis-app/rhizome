@@ -17,12 +17,13 @@ import { Channel } from '../../types/channel.types';
 interface Props {
   channel: Channel;
   isActive: boolean;
+  isGeneral?: boolean;
 }
 
 /**
  * Channel list item component for the left navigation panel on desktop
  */
-const ChannelListItem = ({ channel, isActive }: Props) => {
+const ChannelListItem = ({ channel, isActive, isGeneral }: Props) => {
   const [isHovering, setIsHovering] = useState(false);
 
   const isDarkMode = useIsDarkMode();
@@ -31,6 +32,7 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
 
   const canManageChannels = ability.can('manage', 'Channel');
   const showSettingsBtn = canManageChannels && (isHovering || isActive);
+  const channelPath = `${NavigationPaths.Channels}/${channel.id}`;
 
   const listItemBtnSx: SxProps = {
     color: 'text.secondary',
@@ -66,7 +68,7 @@ const ChannelListItem = ({ channel, isActive }: Props) => {
   return (
     <ListItemButton
       key={channel.id}
-      onClick={() => navigate(`${NavigationPaths.Channels}/${channel.id}`)}
+      onClick={() => navigate(isGeneral ? NavigationPaths.Home : channelPath)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       sx={listItemBtnSx}
