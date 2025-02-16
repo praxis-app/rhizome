@@ -9,12 +9,13 @@ type ChannelAccessRule = (
   user: User,
 ) => Promise<boolean> | boolean;
 
-type ChannelAccessRuleMap = Record<string, ChannelAccessRule>;
-type ChannelAccess = { pattern: RegExp; rules: ChannelAccessRuleMap };
-type ChannelAccessMap = Record<string, ChannelAccess>;
+interface ChannelAccessPolicy {
+  pattern: RegExp;
+  rules: Record<string, ChannelAccessRule>;
+}
 
 /** Rules to determine if a user can access a given pub-sub channel */
-export const CHANNEL_ACCESS_MAP: ChannelAccessMap = {
+export const CHANNEL_ACCESS_MAP: Record<string, ChannelAccessPolicy> = {
   newMessage: {
     pattern: new RegExp(`^new-message-(${UUID_REGEX})-(${UUID_REGEX})$`),
     rules: {
