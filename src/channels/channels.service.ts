@@ -50,6 +50,12 @@ export const getGeneralChannel = async () => {
   return generalChannel;
 };
 
+export const isChannelMember = async (channelId: string, userId: string) => {
+  return channelMemberRepository.exist({
+    where: { channelId, userId },
+  });
+};
+
 export const addMemberToGeneralChannel = async (userId: string) => {
   const generalChannel = await getGeneralChannel();
   await channelMemberRepository.save({
