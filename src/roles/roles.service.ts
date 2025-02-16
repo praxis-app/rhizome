@@ -225,7 +225,7 @@ const buildPermissionRules = (roles: Role[]): RawRuleOf<AppAbility>[] => {
 
 /** Check if user can access a given pub-sub channel */
 export const canAccessChannel = (channelKey: string, user: User) => {
-  for (const rule of CHANNEL_ACCESS_RULES) {
+  for (const rule of Object.values(CHANNEL_ACCESS_RULES)) {
     const match = rule.pattern.exec(channelKey);
     if (match) {
       return rule.validate(match, user);
