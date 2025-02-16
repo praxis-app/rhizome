@@ -1,6 +1,7 @@
 import WebSocket from 'ws';
 import * as authService from '../auth/auth.service';
 import * as cacheService from '../cache/cache.service';
+import { canAccessChannel } from '../roles/can-access-channel';
 import {
   PubSubRequest,
   PubSubResponse,
@@ -24,6 +25,17 @@ export const handleMessage = async (
   if (!user) {
     const response: PubSubResponse = {
       error: { code: 'UNAUTHORIZED', message: 'Invalid token' },
+      type: 'RESPONSE',
+      channel,
+    };
+    webSocket.send(JSON.stringify(response));
+    return;
+  }
+
+  const canAccess = canAccessChannel(channel, user);
+  if (!canAccess) {
+    const response: PubSubResponse = {
+      error: { code: 'FORBIDDEN', message: 'Forbidden' },
       type: 'RESPONSE',
       channel,
     };
