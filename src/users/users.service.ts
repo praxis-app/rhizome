@@ -23,7 +23,7 @@ export const signUp = async (
     email: normalizeText(email),
     password,
   });
-  await channelsService.addMemberToGeneralChannel(user.id);
+  await channelsService.addMemberToAllChannels(user.id);
   return user;
 };
 

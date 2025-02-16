@@ -64,6 +64,15 @@ export const addMemberToGeneralChannel = async (userId: string) => {
   });
 };
 
+export const addMemberToAllChannels = async (userId: string) => {
+  const channels = await getChannels();
+  const channelMembers = channels.map((channel) => ({
+    channelId: channel.id,
+    userId,
+  }));
+  await channelMemberRepository.save(channelMembers);
+};
+
 export const createChannel = (
   { name, description }: CreateChannelReq,
   currentUserId: string,
