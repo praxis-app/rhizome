@@ -11,7 +11,7 @@ const UUID_REGEX =
 /** Rules to determine if a user can access a given pub-sub channel */
 export const CHANNEL_ACCESS_RULES: Record<string, ChannelAccessRule> = {
   isOwnChannel: {
-    pattern: new RegExp(`^channel-(${UUID_REGEX})-(${UUID_REGEX})$`),
+    pattern: new RegExp(`^new-message-(${UUID_REGEX})-(${UUID_REGEX})$`),
     validate: (match, user) => {
       const userId = match[2];
       return user.id === userId;

@@ -64,7 +64,7 @@ const ChannelView = ({ channel, isGeneralChannel }: Props) => {
     enabled: !!resolvedChannelId,
   });
 
-  useSubscription(`channel-${channel.id}-${meData?.user.id}`, {
+  useSubscription(`new-message-${channel.id}-${meData?.user.id}`, {
     onMessage: (event) => {
       const { body }: PubSubMessage<NewMessagePayload | ImageMessagePayload> =
         JSON.parse(event.data);
