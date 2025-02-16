@@ -1,7 +1,7 @@
 import WebSocket from 'ws';
 import * as authService from '../auth/auth.service';
 import * as cacheService from '../cache/cache.service';
-import { canAccessChannel } from '../roles/can-access-channel';
+import { canAccessChannel } from '../roles/roles.service';
 import {
   PubSubRequest,
   PubSubResponse,
