@@ -45,8 +45,8 @@ export const redeemInvite = async (token: string) => {
   await inviteRepository.increment({ token }, 'uses', 1);
 };
 
-export const deleteInvite = async (id: string) => {
-  return inviteRepository.delete(id);
+export const deleteInvite = async (inviteId: string) => {
+  return inviteRepository.delete(inviteId);
 };
 
 export const validateInvite = (invite: Invite) => {
