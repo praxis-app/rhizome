@@ -46,7 +46,7 @@ const NavDrawer = () => {
   const isDarkMode = useIsDarkMode();
   const isAboveMd = useAboveBreakpoint('md');
 
-  const { data: meData } = useMeQuery({
+  const { data: meData, isLoading: isMeLoading } = useMeQuery({
     enabled: !isAboveMd && isLoggedIn,
   });
 
@@ -67,7 +67,7 @@ const NavDrawer = () => {
   const { data: generalChannelData } = useQuery({
     queryKey: ['channels', GENERAL_CHANNEL_NAME],
     queryFn: () => api.getGeneralChannel(),
-    enabled: !isRegistered,
+    enabled: !isMeLoading && !isRegistered,
   });
 
   const leftDrawerSx: SxProps = {
