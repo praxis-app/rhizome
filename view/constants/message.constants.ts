@@ -1,1 +1,1 @@
-export const MESSAGE_FEED_PAGE_SIZE = 20;
+export const MESSAGES_PAGE_SIZE = 20;
