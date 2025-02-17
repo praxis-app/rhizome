@@ -14,6 +14,7 @@ import {
   getGeneralChannelMessages,
   updateChannel,
 } from './channels.controller';
+import { isChannelMember } from './middleware/is-channel-member.middleware';
 import { validateChannel } from './middleware/validate-channel.middleware';
 
 export const channelsRouter = express.Router();
@@ -27,8 +28,8 @@ channelsRouter
 channelsRouter
   .use(authenticate)
   .get('/', isRegistered, getChannels)
-  .get('/:channelId', isRegistered, getChannel)
+  .get('/:channelId', isRegistered, isChannelMember, getChannel)
   .post('/', can('create', 'Channel'), validateChannel, createChannel)
   .put('/:channelId', can('update', 'Channel'), validateChannel, updateChannel)
   .delete('/:channelId', can('delete', 'Channel'), deleteChannel)
-  .use('/:channelId/messages', messagesRouter);
+  .use('/:channelId/messages', isChannelMember, messagesRouter);

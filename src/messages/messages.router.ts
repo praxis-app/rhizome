@@ -16,10 +16,8 @@ export const messagesRouter = express.Router({
   mergeParams: true,
 });
 
-// Public routes
-messagesRouter.get('/', getMessages);
-
-// Protected routes
-messagesRouter.use(authenticate);
-messagesRouter.post('/', validateMessage, createMessage);
-messagesRouter.post(`${IMAGE_ROUTE}/upload`, uploadImage, uploadMessageImage);
+messagesRouter
+  .use(authenticate)
+  .get('/', getMessages)
+  .post('/', validateMessage, createMessage)
+  .post(`${IMAGE_ROUTE}/upload`, uploadImage, uploadMessageImage);
