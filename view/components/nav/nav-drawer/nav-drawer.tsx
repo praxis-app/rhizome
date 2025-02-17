@@ -64,7 +64,7 @@ const NavDrawer = () => {
   });
 
   const { data: generalChannelData } = useQuery({
-    queryKey: ['general-channel'],
+    queryKey: ['channels', 'general'],
     queryFn: () => api.getGeneralChannel(),
     enabled: !isRegistered,
   });

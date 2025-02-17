@@ -9,7 +9,7 @@ export const HomePage = () => {
   const { t } = useTranslation();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['general-channel'],
+    queryKey: ['channels', 'general'],
     queryFn: () => api.getGeneralChannel(),
   });
 

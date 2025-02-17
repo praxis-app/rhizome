@@ -22,14 +22,14 @@ const ChannelList = ({ me }: Props) => {
   });
 
   const { data: generalChannelData } = useQuery({
-    queryKey: ['general-channel'],
+    queryKey: ['channels', 'general'],
     queryFn: () => api.getGeneralChannel(),
     enabled: !isRegistered,
   });
 
   const { channelId } = useParams();
 
-  if (generalChannelData) {
+  if (generalChannelData && !isRegistered) {
     return (
       <List sx={{ flex: 1, overflowX: 'scroll' }}>
         <ChannelListItem
