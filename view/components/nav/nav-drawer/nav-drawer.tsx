@@ -47,7 +47,7 @@ const NavDrawer = () => {
   const isAboveMd = useAboveBreakpoint('md');
 
   const { data: meData } = useMeQuery({
-    enabled: !isAboveMd,
+    enabled: !isAboveMd && isLoggedIn,
   });
 
   const me = meData?.user;
