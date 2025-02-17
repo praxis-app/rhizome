@@ -2,6 +2,7 @@ import { List } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import { GENERAL_CHANNEL_NAME } from '../../constants/channel.constants';
 import { CurrentUser } from '../../types/user.types';
 import ChannelListItem from './channel-list-item';
 
@@ -22,7 +23,7 @@ const ChannelList = ({ me }: Props) => {
   });
 
   const { data: generalChannelData } = useQuery({
-    queryKey: ['channels', 'general'],
+    queryKey: ['channels', GENERAL_CHANNEL_NAME],
     queryFn: () => api.getGeneralChannel(),
     enabled: !isRegistered,
   });

@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import appIconImg from '../../../assets/images/app-icon.png';
 import { api } from '../../../client/api-client';
+import { GENERAL_CHANNEL_NAME } from '../../../constants/channel.constants';
 import { NavigationPaths } from '../../../constants/shared.constants';
 import { useAbility } from '../../../hooks/role.hooks';
 import { useAboveBreakpoint, useIsDarkMode } from '../../../hooks/shared.hooks';
@@ -64,7 +65,7 @@ const NavDrawer = () => {
   });
 
   const { data: generalChannelData } = useQuery({
-    queryKey: ['channels', 'general'],
+    queryKey: ['channels', GENERAL_CHANNEL_NAME],
     queryFn: () => api.getGeneralChannel(),
     enabled: !isRegistered,
   });
