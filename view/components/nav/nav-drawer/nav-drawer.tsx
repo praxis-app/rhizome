@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import appIconImg from '../../../assets/images/app-icon.png';
 import { api } from '../../../client/api-client';
+import { GENERAL_CHANNEL_NAME } from '../../../constants/channel.constants';
 import { NavigationPaths } from '../../../constants/shared.constants';
 import { useAbility } from '../../../hooks/role.hooks';
 import { useAboveBreakpoint, useIsDarkMode } from '../../../hooks/shared.hooks';
@@ -45,22 +46,29 @@ const NavDrawer = () => {
   const isDarkMode = useIsDarkMode();
   const isAboveMd = useAboveBreakpoint('md');
 
-  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
-    queryKey: ['channels'],
-    queryFn: api.getChannels,
-    enabled: !isAboveMd,
-  });
-
-  const { data: meData } = useMeQuery({
-    enabled: !isAboveMd,
+  const { data: meData, isLoading: isMeLoading } = useMeQuery({
+    enabled: !isAboveMd && isLoggedIn,
   });
 
   const me = meData?.user;
   const isAnon = !!me?.anonymous;
+  const isRegistered = !!me && !isAnon;
   const showSignUp = !isLoggedIn || isAnon;
   const canManageChannels = ability.can('manage', 'Channel');
   const canManageSettings = ability.can('manage', 'ServerConfig');
   const isServerBtnDisabled = !canManageSettings && !canManageChannels;
+
+  const { data: channelsData, isLoading: isChannalsLoading } = useQuery({
+    queryKey: ['channels'],
+    queryFn: api.getChannels,
+    enabled: !isAboveMd && isRegistered,
+  });
+
+  const { data: generalChannelData } = useQuery({
+    queryKey: ['channels', GENERAL_CHANNEL_NAME],
+    queryFn: () => api.getGeneralChannel(),
+    enabled: !isMeLoading && !isRegistered,
+  });
 
   const leftDrawerSx: SxProps = {
     '& .MuiBackdrop-root': {
@@ -177,7 +185,9 @@ const NavDrawer = () => {
               {channelsData.channels.map((channel) => (
                 <ListItemButton
                   key={channel.id}
-                  onClick={() => handleNavigate(`/channels/${channel.id}`)}
+                  onClick={() =>
+                    handleNavigate(`${NavigationPaths.Channels}/${channel.id}`)
+                  }
                 >
                   <ListItemIcon sx={{ minWidth: '33px' }}>
                     <Tag />
@@ -188,11 +198,23 @@ const NavDrawer = () => {
             </List>
           )}
 
+          {/* Show general channel for unregistered users */}
+          {generalChannelData && (
+            <List>
+              <ListItemButton
+                onClick={() => handleNavigate(NavigationPaths.Home)}
+              >
+                <ListItemIcon sx={{ minWidth: '33px' }}>
+                  <Tag />
+                </ListItemIcon>
+                <ListItemText primary={generalChannelData.channel.name} />
+              </ListItemButton>
+            </List>
+          )}
+
           {(showSignUp || !isLoggedIn) && (
             <List>
-              <Divider sx={{ marginX: '16px' }} />
-
-              {/* TODO: Show link to general channel here */}
+              <Divider sx={{ marginX: '16px', marginBottom: '16px' }} />
 
               {showSignUp && (
                 <ListItemButton

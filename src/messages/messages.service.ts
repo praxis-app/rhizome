@@ -61,6 +61,14 @@ export const getMessages = async (
   }));
 };
 
+export const getGeneralChannelMessages = async (
+  offset?: number,
+  limit?: number,
+) => {
+  const generalChannel = await channelsService.getGeneralChannel();
+  return getMessages(generalChannel.id, offset, limit);
+};
+
 export const createMessage = async (
   { body, imageCount, ...messageData }: CreateMessageReq,
   user: User,
@@ -95,7 +103,7 @@ export const createMessage = async (
     if (member.userId === user.id) {
       continue;
     }
-    await pubSubService.publish(getChannelKey(channelId, member.userId), {
+    await pubSubService.publish(getNewMessageKey(channelId, member.userId), {
       type: MessageType.MESSAGE,
       message: messagePayload,
     });
@@ -125,7 +133,7 @@ export const saveMessageImage = async (
     if (member.userId === user.id) {
       continue;
     }
-    const channelKey = getChannelKey(message.channelId, member.userId);
+    const channelKey = getNewMessageKey(message.channelId, member.userId);
     await pubSubService.publish(channelKey, {
       type: MessageType.IMAGE,
       isPlaceholder: false,
@@ -136,6 +144,6 @@ export const saveMessageImage = async (
   return image;
 };
 
-const getChannelKey = (channelId: string, userId: string) => {
-  return `channel-${channelId}-${userId}`;
+const getNewMessageKey = (channelId: string, userId: string) => {
+  return `new-message-${channelId}-${userId}`;
 };

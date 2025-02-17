@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, Method } from 'axios';
+import { MESSAGES_PAGE_SIZE } from '../constants/message.constants';
 import { LocalStorageKeys } from '../constants/shared.constants';
 import { AuthRes, LoginReq, SignUpReq } from '../types/auth.types';
 import {
@@ -151,7 +152,7 @@ class ApiClient {
   getChannelMessages = async (
     channelId: string,
     offset: number,
-    limit = 20,
+    limit = MESSAGES_PAGE_SIZE,
   ) => {
     const path = `/channels/${channelId}/messages`;
     return this.executeRequest<{ messages: Message[] }>('get', path, {

@@ -1,30 +1,15 @@
 import WebSocket from 'ws';
 import * as authService from '../auth/auth.service';
 import * as cacheService from '../cache/cache.service';
+import { canAccessChannel } from '../roles/roles.service';
 import {
   PubSubRequest,
   PubSubResponse,
   WebSocketWithId,
 } from './pub-sub.models';
 
-type ChannelHandler = (
-  message: any,
-  publisher: WebSocketWithId,
-) => Promise<void>;
-
 /** Local mapping of subscriber IDs to websockets */
 const subscribers: Record<string, WebSocketWithId> = {};
-
-/** Map of channel names to message handlers */
-const channelHandlers: Record<string, ChannelHandler> = {};
-
-// TODO: Determine if this is still needed
-export const registerChannelHandler = (
-  channel: string,
-  handler: ChannelHandler,
-) => {
-  channelHandlers[channel] = handler;
-};
 
 export const handleMessage = async (
   webSocket: WebSocketWithId,
@@ -40,6 +25,17 @@ export const handleMessage = async (
   if (!user) {
     const response: PubSubResponse = {
       error: { code: 'UNAUTHORIZED', message: 'Invalid token' },
+      type: 'RESPONSE',
+      channel,
+    };
+    webSocket.send(JSON.stringify(response));
+    return;
+  }
+
+  const canAccess = canAccessChannel(channel, user);
+  if (!canAccess) {
+    const response: PubSubResponse = {
+      error: { code: 'FORBIDDEN', message: 'Forbidden' },
       type: 'RESPONSE',
       channel,
     };
@@ -67,11 +63,6 @@ export const publish = async (
   message: unknown,
   publisher?: WebSocketWithId,
 ) => {
-  // Handle channel specific actions
-  if (channelHandlers[channel] && publisher) {
-    await channelHandlers[channel](message, publisher);
-  }
-
   const channelKey = getChannelCacheKey(channel);
   const subscriberIds = await cacheService.getSetMembers(channelKey);
   if (subscriberIds.length === 0) {

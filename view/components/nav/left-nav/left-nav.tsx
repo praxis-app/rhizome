@@ -118,7 +118,7 @@ const LeftNav = ({ me }: Props) => {
         setIsOpen={setShowCreateChannelModal}
       />
 
-      <ChannelList />
+      <ChannelList me={me} />
 
       <Box
         borderTop="1px solid"

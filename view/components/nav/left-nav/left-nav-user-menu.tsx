@@ -1,6 +1,8 @@
 import { ExitToApp, PersonAdd } from '@mui/icons-material';
 import { Menu, MenuItem, SvgIconProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { NavigationPaths } from '../../../constants/shared.constants';
 import { useAppStore } from '../../../store/app.store';
 import { CurrentUser } from '../../../types/user.types';
 import UserAvatar from '../../users/user-avatar';
@@ -21,6 +23,7 @@ const LeftNavUserMenu = ({
   const { setToast } = useAppStore((state) => state);
 
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const menuItemIconProps: SvgIconProps = {
     sx: { marginRight: 1 },
@@ -60,7 +63,7 @@ const LeftNavUserMenu = ({
       </MenuItem>
 
       {me.anonymous && (
-        <MenuItem>
+        <MenuItem onClick={() => navigate(NavigationPaths.SignUp)}>
           <PersonAdd {...menuItemIconProps} />
           {t('users.actions.signUp')}
         </MenuItem>
