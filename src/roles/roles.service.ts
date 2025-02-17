@@ -223,7 +223,7 @@ const buildPermissionRules = (roles: Role[]): RawRuleOf<AppAbility>[] => {
   }));
 };
 
-/** Check if user can access a given pub-sub channel */
+/** Check if a user can access a given pub-sub channel */
 export const canAccessChannel = (channelKey: string, user: User) => {
   for (const { pattern, rules } of Object.values(CHANNEL_ACCESS_MAP)) {
     const match = pattern.exec(channelKey);
