@@ -25,6 +25,7 @@
     "chroma-js": "^3.1.2",
     "color-hash": "^2.0.2",
     "cors": "^2.8.5",
+    "crypto-random-string": "^5.0.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "express": "^5.0.1",

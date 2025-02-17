@@ -10,8 +10,8 @@ import { User } from '../users/user.entity';
 
 @Entity()
 export class Invite {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   token: string;
