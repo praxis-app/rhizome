@@ -1,7 +1,7 @@
 import { marked } from 'marked';
 import { URL_REGEX } from '../constants/shared.constants';
 
-const truncate = (text: string, length = 30) => {
+export const truncate = (text: string, length = 30) => {
   const omission = '...';
   if (text.length <= length) {
     return text;

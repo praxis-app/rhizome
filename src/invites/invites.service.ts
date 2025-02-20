@@ -26,10 +26,24 @@ export const getValidInvite = async (token: string) => {
 };
 
 export const getValidInvites = async () => {
-  const invites = await inviteRepository.find({
-    order: { createdAt: 'DESC' },
+  const invites = await inviteRepository
+    .createQueryBuilder('invite')
+    .leftJoinAndSelect('invite.user', 'user')
+    .select([
+      'invite.id',
+      'invite.maxUses',
+      'invite.token',
+      'invite.uses',
+      'invite.expiresAt',
+      'user.id',
+      'user.name',
+    ])
+    .orderBy('invite.createdAt', 'DESC')
+    .getMany();
+
+  const validInvites = invites.filter((invite) => {
+    return validateInvite(invite);
   });
-  const validInvites = invites.filter((invite) => validateInvite(invite));
 
   // TODO: Update once pagination has been implemented
   return validInvites.slice(0, INVITES_PAGE_SIZE);

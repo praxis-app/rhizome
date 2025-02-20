@@ -3,6 +3,10 @@ export interface Invite {
   token: string;
   uses: number;
   maxUses?: number;
+  user: {
+    id: string;
+    name: string;
+  };
   expiresAt?: string;
   createdAt: string;
 }

@@ -14,6 +14,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
+import InviteCard from '../../components/invites/invite-card';
 import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import PrimaryButton from '../../components/shared/primary-button';
@@ -108,7 +109,7 @@ const InvitesPage = () => {
         onBackClick={() => navigate(NavigationPaths.Settings)}
       />
 
-      <Card sx={{ marginBottom: 2 }}>
+      <Card sx={{ marginBottom: '12px' }}>
         <CardContent>
           <form onSubmit={handleSubmit((fv) => createInvite(fv))}>
             <FormGroup sx={{ marginBottom: 1.5 }}>
@@ -167,7 +168,13 @@ const InvitesPage = () => {
         </CardContent>
       </Card>
 
-      {JSON.stringify(data)}
+      {data && (
+        <Box display="flex" flexDirection="column" gap="12px">
+          {data.invites.map((invite) => (
+            <InviteCard key={invite.id} invite={invite} />
+          ))}
+        </Box>
+      )}
 
       {error && <Typography>{t('errors.somethingWentWrong')}</Typography>}
     </>
