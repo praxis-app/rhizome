@@ -5,6 +5,11 @@ import { Invite } from './invite.entity';
 
 const INVITES_PAGE_SIZE = 20;
 
+interface CreateInviteReq {
+  maxUses?: number;
+  expiresAt?: number;
+}
+
 const inviteRepository = dataSource.getRepository(Invite);
 
 export const getValidInvite = async (token: string) => {
@@ -31,7 +36,7 @@ export const getValidInvites = async () => {
   return validInvites.slice(0, INVITES_PAGE_SIZE);
 };
 
-export const createInvite = async (inviteData: any, user: User) => {
+export const createInvite = async (inviteData: CreateInviteReq, user: User) => {
   const token = cryptoRandomString({ length: 8 });
   const invite = await inviteRepository.save({
     ...inviteData,

@@ -8,6 +8,7 @@ import {
   UpdateChannelReq,
 } from '../types/channel.types';
 import { Image } from '../types/image.types';
+import { CreateInviteReq, Invite } from '../types/invite.types';
 import { Message } from '../types/message.types';
 import {
   CreateRoleReq,
@@ -197,17 +198,19 @@ class ApiClient {
 
   getInvites = async () => {
     const path = '/invites';
-    return this.executeRequest<{ invites: any[] }>('get', path);
+    return this.executeRequest<{ invites: Invite[] }>('get', path);
   };
 
   getInvite = async (token: string) => {
     const path = `/invites/${token}`;
-    return this.executeRequest<{ invite: any }>('get', path);
+    return this.executeRequest<{ invite: Invite }>('get', path);
   };
 
-  createInvite = async () => {
+  createInvite = async (data: CreateInviteReq) => {
     const path = '/invites';
-    return this.executeRequest<{ invite: any }>('post', path);
+    return this.executeRequest<{ invite: Invite }>('post', path, {
+      data,
+    });
   };
 
   deleteInvite = async (inviteId: string) => {
