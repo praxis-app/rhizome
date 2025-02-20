@@ -13,5 +13,5 @@ export interface Invite {
 
 export interface CreateInviteReq {
   maxUses?: number;
-  expiresAt?: number;
+  expiresAt?: Date;
 }

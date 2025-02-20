@@ -41,10 +41,17 @@ const InvitesPage = () => {
     mode: 'onChange',
   });
 
+  const getFormattedExpiresAt = (expiresAt: string) => {
+    if (expiresAt === '') {
+      return;
+    }
+    return new Date(Date.now() + Number(expiresAt) * 1000);
+  };
+
   const { mutate: createInvite, isPending: isCreatePending } = useMutation({
     mutationFn: async (data: FormValues) => {
       const { invite } = await api.createInvite({
-        expiresAt: Number(data.expiresAt) || undefined,
+        expiresAt: getFormattedExpiresAt(data.expiresAt),
         maxUses: Number(data.maxUses) || undefined,
       });
 

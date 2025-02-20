@@ -12,10 +12,7 @@ export const getInvites = async (_: Request, res: Response) => {
 };
 
 export const createInvite = async (req: Request, res: Response) => {
-  const invite = await invitesService.createInvite(
-    req.body,
-    res.locals.user.id,
-  );
+  const invite = await invitesService.createInvite(req.body, res.locals.user);
   res.json({ invite });
 };
 

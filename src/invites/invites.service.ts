@@ -1,6 +1,7 @@
 import cryptoRandomString from 'crypto-random-string';
 import { dataSource } from '../database/data-source';
 import { Invite } from './invite.entity';
+import { User } from '../users/user.entity';
 
 const INVITES_PAGE_SIZE = 20;
 
@@ -49,17 +50,14 @@ export const getValidInvites = async () => {
   return validInvites.slice(0, INVITES_PAGE_SIZE);
 };
 
-export const createInvite = async (
-  inviteData: CreateInviteReq,
-  userId: string,
-) => {
+export const createInvite = async (inviteData: CreateInviteReq, user: User) => {
   const token = cryptoRandomString({ length: 8 });
   const invite = await inviteRepository.save({
     ...inviteData,
-    userId,
+    userId: user.id,
     token,
   });
-  return invite;
+  return { ...invite, user };
 };
 
 export const redeemInvite = async (token: string) => {
