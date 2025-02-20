@@ -191,6 +191,34 @@ class ApiClient {
     return this.executeRequest<void>('delete', path);
   };
 
+  // -------------------------------------------------------------------------
+  // Invites
+  // -------------------------------------------------------------------------
+
+  getInvites = async () => {
+    const path = '/invites';
+    return this.executeRequest<{ invites: any[] }>('get', path);
+  };
+
+  getInvite = async (token: string) => {
+    const path = `/invites/${token}`;
+    return this.executeRequest<{ invite: any }>('get', path);
+  };
+
+  createInvite = async () => {
+    const path = '/invites';
+    return this.executeRequest<{ invite: any }>('post', path);
+  };
+
+  deleteInvite = async (inviteId: string) => {
+    const path = `/invites/${inviteId}`;
+    return this.executeRequest<void>('delete', path);
+  };
+
+  // -------------------------------------------------------------------------
+  // Misc.
+  // -------------------------------------------------------------------------
+
   getImage = (imageId: string) => {
     const path = `/images/${imageId}`;
     return this.executeRequest<any>('get', path, {

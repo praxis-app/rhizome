@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as invitesService from './invites.service';
 
 export const getInvite = async (req: Request, res: Response) => {
-  const invite = await invitesService.getValidInvite(req.params.channelId);
+  const invite = await invitesService.getValidInvite(req.params.token);
   res.json({ invite });
 };
 

@@ -11,6 +11,6 @@ export const invitesRouter = express.Router();
 
 invitesRouter
   .get('/', getInvites)
-  .get('/:inviteId', authenticate, getInvite)
+  .get('/:token', authenticate, getInvite)
   .post('/', authenticate, createInvite)
   .delete('/:inviteId', authenticate, deleteInvite);
