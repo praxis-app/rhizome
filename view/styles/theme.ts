@@ -207,6 +207,22 @@ export const theme = createTheme({
       },
     },
 
+    MuiInput: {
+      styleOverrides: {
+        underline: ({ theme }: Props) => ({
+          '&:before': {
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          },
+          '&:after': {
+            borderBottom: `2px solid ${theme.palette.primary.dark}`,
+          },
+          '&&:hover:before': {
+            borderBottom: `2px solid ${theme.palette.primary.dark}`,
+          },
+        }),
+      },
+    },
+
     MuiSvgIcon: {
       styleOverrides: {
         root: ({ theme }: Props) => ({
