@@ -9,13 +9,16 @@ import {
   Select,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import TopNav from '../../components/nav/top-nav';
 import PrimaryButton from '../../components/shared/primary-button';
-import { Time } from '../../constants/shared.constants';
+import { NavigationPaths, Time } from '../../constants/shared.constants';
 
 const MAX_USES_OPTIONS = [1, 5, 10, 25, 50, 100];
 
 const InvitesPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const expiresAtOptions = [
     {
@@ -38,6 +41,11 @@ const InvitesPage = () => {
 
   return (
     <>
+      <TopNav
+        header={t('invites.headers.serverInvites')}
+        onBackClick={() => navigate(NavigationPaths.Settings)}
+      />
+
       <Card>
         <CardContent>
           <FormGroup sx={{ marginBottom: 1.5 }}>
