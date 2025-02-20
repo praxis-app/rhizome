@@ -23,6 +23,10 @@ class ApiClient {
     this.axiosInstance = axios.create({ baseURL: '/api' });
   }
 
+  // -------------------------------------------------------------------------
+  // Authentication
+  // -------------------------------------------------------------------------
+
   login = async (data: LoginReq) => {
     const path = '/auth/login';
     return this.executeRequest<AuthRes>('post', path, {
@@ -58,6 +62,10 @@ class ApiClient {
     const path = '/users/me';
     return this.executeRequest<{ user: CurrentUser }>('get', path);
   };
+
+  // -------------------------------------------------------------------------
+  // Roles & Permissions
+  // -------------------------------------------------------------------------
 
   getRole = async (roleId: string) => {
     const path = `/roles/${roleId}`;
@@ -114,6 +122,10 @@ class ApiClient {
     const path = `/roles/${roleId}`;
     return this.executeRequest<void>('delete', path);
   };
+
+  // -------------------------------------------------------------------------
+  // Channels & Messages
+  // -------------------------------------------------------------------------
 
   sendMessage = async (channelId: string, body: string, imageCount: number) => {
     const path = `/channels/${channelId}/messages`;
