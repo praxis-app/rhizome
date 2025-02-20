@@ -7,20 +7,27 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Typography,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import PrimaryButton from '../../components/shared/primary-button';
+import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths, Time } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
-import { CreateInviteReq, Invite } from '../../types/invite.types';
+import { Invite } from '../../types/invite.types';
 
 const MAX_USES_OPTIONS = [1, 5, 10, 25, 50, 100];
+
+interface FormValues {
+  expiresAt: string;
+  maxUses: string;
+}
 
 const InvitesPage = () => {
   const { t } = useTranslation();
@@ -28,13 +35,17 @@ const InvitesPage = () => {
   const navigate = useNavigate();
   const ability = useAbility();
 
-  const { handleSubmit, register, reset } = useForm<CreateInviteReq>({
+  const { handleSubmit, control, reset } = useForm<FormValues>({
+    defaultValues: { expiresAt: '', maxUses: '' },
     mode: 'onChange',
   });
 
   const { mutate: createInvite, isPending: isCreatePending } = useMutation({
-    mutationFn: async (data: CreateInviteReq) => {
-      const { invite } = await api.createInvite(data);
+    mutationFn: async (data: FormValues) => {
+      const { invite } = await api.createInvite({
+        expiresAt: Number(data.expiresAt) || undefined,
+        maxUses: Number(data.maxUses) || undefined,
+      });
 
       queryClient.setQueryData<{ invites: Invite[] }>(
         ['invites'],
@@ -49,6 +60,11 @@ const InvitesPage = () => {
     onSuccess: () => {
       reset();
     },
+  });
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['invites'],
+    queryFn: api.getInvites,
   });
 
   const expiresAtOptions = [
@@ -81,6 +97,10 @@ const InvitesPage = () => {
     );
   }
 
+  if (isLoading) {
+    return <ProgressBar />;
+  }
+
   return (
     <>
       <TopNav
@@ -88,35 +108,49 @@ const InvitesPage = () => {
         onBackClick={() => navigate(NavigationPaths.Settings)}
       />
 
-      <Card>
+      <Card sx={{ marginBottom: 2 }}>
         <CardContent>
           <form onSubmit={handleSubmit((fv) => createInvite(fv))}>
             <FormGroup sx={{ marginBottom: 1.5 }}>
               <FormControl variant="standard" sx={{ marginBottom: 1 }}>
                 <InputLabel>{t('invites.form.labels.expiresAt')}</InputLabel>
-                <Select {...register('expiresAt')}>
-                  {expiresAtOptions.map((option) => (
-                    <MenuItem value={option.value} key={option.value}>
-                      {option.message}
-                    </MenuItem>
-                  ))}
-                </Select>
+
+                <Controller
+                  control={control}
+                  name="expiresAt"
+                  render={({ field }) => (
+                    <Select {...field}>
+                      {expiresAtOptions.map((option) => (
+                        <MenuItem value={option.value} key={option.value}>
+                          {option.message}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  )}
+                />
               </FormControl>
 
               <FormControl variant="standard">
                 <InputLabel>{t('invites.form.labels.maxUses')}</InputLabel>
-                <Select {...register('maxUses')}>
-                  {MAX_USES_OPTIONS.map((option) => (
-                    <MenuItem value={option} key={option}>
-                      {t('invites.form.maxUsesOptions.xUses', {
-                        count: option,
-                      })}
-                    </MenuItem>
-                  ))}
-                  <MenuItem value={''}>
-                    {t('invites.form.maxUsesOptions.noLimit')}
-                  </MenuItem>
-                </Select>
+
+                <Controller
+                  control={control}
+                  name="maxUses"
+                  render={({ field }) => (
+                    <Select {...field}>
+                      {MAX_USES_OPTIONS.map((option) => (
+                        <MenuItem value={option} key={option}>
+                          {t('invites.form.maxUsesOptions.xUses', {
+                            count: option,
+                          })}
+                        </MenuItem>
+                      ))}
+                      <MenuItem value={''}>
+                        {t('invites.form.maxUsesOptions.noLimit')}
+                      </MenuItem>
+                    </Select>
+                  )}
+                />
               </FormControl>
             </FormGroup>
 
@@ -132,6 +166,10 @@ const InvitesPage = () => {
           </form>
         </CardContent>
       </Card>
+
+      {JSON.stringify(data)}
+
+      {error && <Typography>{t('errors.somethingWentWrong')}</Typography>}
     </>
   );
 };
