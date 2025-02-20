@@ -39,7 +39,7 @@ const ChannelTopNav = ({ channel }: Props) => {
     return () => {
       window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
     };
-  }, []);
+  }, [setIsNavDrawerOpen]);
 
   const iconButtonSx: SxProps = {
     width: 38,

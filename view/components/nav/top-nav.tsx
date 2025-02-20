@@ -1,6 +1,6 @@
 import { ArrowBack, Search } from '@mui/icons-material';
 import { Box, IconButton, SxProps, Typography } from '@mui/material';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -38,25 +38,7 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
     height: 38,
   };
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === KeyCodes.Escape) {
-        handleBackClick();
-      }
-    };
-    window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
-    return () => {
-      window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
-    };
-  }, []);
-
-  const handleHeaderClick = () => {
-    if (!header) {
-      navigate('/');
-    }
-  };
-
-  const handleBackClick = () => {
+  const handleBackClick = useCallback(() => {
     if (onBackClick) {
       onBackClick();
       return;
@@ -67,6 +49,24 @@ const TopNav = ({ header, onBackClick, backBtnIcon }: TopNavProps) => {
     }
     // Show nav drawer as default behavior
     setIsNavDrawerOpen(true);
+  }, [isAboveMd, navigate, onBackClick, setIsNavDrawerOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === KeyCodes.Escape) {
+        handleBackClick();
+      }
+    };
+    window.addEventListener(BrowserEvents.Keydown, handleKeyDown);
+    return () => {
+      window.removeEventListener(BrowserEvents.Keydown, handleKeyDown);
+    };
+  }, [handleBackClick]);
+
+  const handleHeaderClick = () => {
+    if (!header) {
+      navigate('/');
+    }
   };
 
   return (
