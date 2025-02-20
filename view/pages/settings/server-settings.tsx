@@ -20,6 +20,7 @@ const ServerSettings = () => {
 
   const canManageSettings = ability.can('manage', 'ServerConfig');
   const canManageRoles = ability.can('manage', 'Role') && canManageSettings;
+  const canManageInvites = ability.can('manage', 'Invite') && canManageSettings;
 
   if (!canManageSettings) {
     return (
@@ -58,6 +59,7 @@ const ServerSettings = () => {
 
         <SettingsNavItem
           Icon={Link}
+          disabled={!canManageInvites}
           onClick={() => navigate(NavigationPaths.Invites)}
           label={t('navigation.invites')}
         />

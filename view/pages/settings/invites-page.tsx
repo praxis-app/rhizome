@@ -11,14 +11,17 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../../components/nav/top-nav';
+import PermissionDenied from '../../components/roles/permission-denied';
 import PrimaryButton from '../../components/shared/primary-button';
 import { NavigationPaths, Time } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 
 const MAX_USES_OPTIONS = [1, 5, 10, 25, 50, 100];
 
 const InvitesPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const ability = useAbility();
 
   const expiresAtOptions = [
     {
@@ -38,6 +41,17 @@ const InvitesPage = () => {
       value: '',
     },
   ];
+
+  if (!ability.can('manage', 'Invite')) {
+    return (
+      <PermissionDenied
+        topNavProps={{
+          header: t('invites.headers.serverInvites'),
+          onBackClick: () => navigate(NavigationPaths.Settings),
+        }}
+      />
+    );
+  }
 
   return (
     <>
