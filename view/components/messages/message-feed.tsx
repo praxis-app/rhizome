@@ -1,7 +1,9 @@
 import { Box } from '@mui/material';
 import { RefObject, UIEvent, useRef, useState } from 'react';
 import { useInView, useScrollDirection } from '../../hooks/shared.hooks';
+import { useAppStore } from '../../store/app.store';
 import { Message as MessageType } from '../../types/message.types';
+import BotMessage from './bot-message';
 import Message from './message';
 
 interface Props {
@@ -11,6 +13,7 @@ interface Props {
 }
 
 const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
+  const { inviteToken } = useAppStore((state) => state);
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollDirection = useScrollDirection(feedBoxRef, 800);
 
@@ -37,9 +40,12 @@ const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
       paddingX={1.5}
       flex={1}
     >
+      {!!inviteToken && <BotMessage>{inviteToken}</BotMessage>}
+
       {messages.map((message) => (
         <Message key={message.id} message={message} />
       ))}
+
       {/* Bottom is top due to `column-reverse` */}
       <Box ref={feedTopRef} paddingBottom={2.25} />
     </Box>
