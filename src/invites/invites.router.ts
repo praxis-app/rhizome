@@ -1,16 +1,16 @@
 import express from 'express';
+import { authenticate } from '../auth/middleware/authenticate.middleware';
 import {
   createInvite,
   deleteInvite,
   getInvite,
   getInvites,
 } from './invites.controller';
-import { authenticate } from '../auth/middleware/authenticate.middleware';
 
 export const invitesRouter = express.Router();
 
 invitesRouter
-  .get('/', getInvites)
-  .get('/:token', authenticate, getInvite)
+  .get('/:token', getInvite)
+  .get('/', authenticate, getInvites)
   .post('/', authenticate, createInvite)
   .delete('/:inviteId', authenticate, deleteInvite);
