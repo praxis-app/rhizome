@@ -1,20 +1,21 @@
-import { Box, Typography } from '@mui/material';
+import { Box, BoxProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import appIconImg from '../../assets/images/app-icon.png';
 import { timeAgo } from '../../utils/time.utils';
 import UserAvatar from '../users/user-avatar';
 
-interface Props {
+interface Props extends BoxProps {
   children: ReactNode;
+  bodySx?: BoxProps['sx'];
 }
 
-const BotMessage = ({ children }: Props) => {
+const BotMessage = ({ children, bodySx, ...boxProps }: Props) => {
   const { t } = useTranslation();
   const formattedDate = timeAgo(Date());
 
   return (
-    <Box display="flex" gap={2} paddingBottom={2}>
+    <Box display="flex" gap={2} paddingBottom={2} {...boxProps}>
       <UserAvatar imageSrc={appIconImg} sx={{ marginTop: 0.5 }} />
 
       <Box>
@@ -31,7 +32,7 @@ const BotMessage = ({ children }: Props) => {
           </Typography>
         </Box>
 
-        {children}
+        <Box sx={bodySx}>{children}</Box>
       </Box>
     </Box>
   );

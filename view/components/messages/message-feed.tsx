@@ -3,8 +3,8 @@ import { RefObject, UIEvent, useRef, useState } from 'react';
 import { useInView, useScrollDirection } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Message as MessageType } from '../../types/message.types';
-import BotMessage from './bot-message';
 import Message from './message';
+import WelcomeMessage from '../invites/welcome-message';
 
 interface Props {
   messages: MessageType[];
@@ -40,7 +40,7 @@ const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
       paddingX={1.5}
       flex={1}
     >
-      {!!inviteToken && <BotMessage>{inviteToken}</BotMessage>}
+      {!!inviteToken && <WelcomeMessage />}
 
       {messages.map((message) => (
         <Message key={message.id} message={message} />
