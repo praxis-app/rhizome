@@ -1,11 +1,9 @@
 import { Assignment } from '@mui/icons-material';
 import { Box, MenuItem, SxProps, TableCell, TableRow } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useDeleteInviteMutation } from '../../hooks/invite.hooks';
 import { useAbility } from '../../hooks/role.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Invite } from '../../types/invite.types';
@@ -29,36 +27,11 @@ const InviteRow = ({
   const { setToast } = useAppStore((state) => state);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
+  const { mutate: deleteInvite, isPending: isDeletePending } =
+    useDeleteInviteMutation(id);
+
   const { t } = useTranslation();
-  const queryClient = useQueryClient();
   const ability = useAbility();
-
-  const { mutate: deleteInvite, isPending: isDeletePending } = useMutation({
-    mutationFn: async () => {
-      await api.deleteInvite(id);
-
-      queryClient.setQueryData<{ invites: Invite[] }>(
-        ['invites'],
-        (oldData) => {
-          if (!oldData) {
-            return { invites: [] };
-          }
-          return {
-            invites: oldData.invites.filter((invite) => invite.id !== id),
-          };
-        },
-      );
-    },
-    onError(error: AxiosError) {
-      const errorMessage =
-        (error.response?.data as string) || t('errors.somethingWentWrong');
-
-      setToast({
-        title: errorMessage,
-        status: 'error',
-      });
-    },
-  });
 
   const deleteInvitePrompt = t('prompts.deleteItem', {
     itemType: 'invite link',
