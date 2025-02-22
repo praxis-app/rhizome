@@ -199,7 +199,7 @@ const NavDrawer = () => {
           )}
 
           {/* Show general channel for unregistered users */}
-          {generalChannelData && (
+          {!isRegistered && generalChannelData && (
             <List>
               <ListItemButton
                 onClick={() => handleNavigate(NavigationPaths.Home)}
