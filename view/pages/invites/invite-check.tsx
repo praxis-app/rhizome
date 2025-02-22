@@ -11,7 +11,7 @@ import {
 } from '../../constants/shared.constants';
 import { useAppStore } from '../../store/app.store';
 
-const InvitePage = () => {
+const InviteCheck = () => {
   const { isLoggedIn } = useAppStore((state) => state);
 
   const { t } = useTranslation();
@@ -46,4 +46,4 @@ const InvitePage = () => {
   return <ProgressBar />;
 };
 
-export default InvitePage;
+export default InviteCheck;
