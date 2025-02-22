@@ -13,6 +13,8 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useDeleteInviteMutation } from '../../hooks/invite.hooks';
+import { useAbility } from '../../hooks/role.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Invite } from '../../types/invite.types';
 import { copyInviteLink } from '../../utils/invite.utils';
@@ -44,12 +46,16 @@ interface Props {
 }
 
 const InviteCard = ({
-  invite: { user, token, uses, maxUses, expiresAt },
+  invite: { id, user, token, uses, maxUses, expiresAt },
 }: Props) => {
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
   const { setToast } = useAppStore((state) => state);
 
+  const { mutate: deleteInvite, isPending: isDeletePending } =
+    useDeleteInviteMutation(id);
+
   const { t } = useTranslation();
+  const ability = useAbility();
 
   const truncatedUsername = truncate(user.name, 25);
 
@@ -94,8 +100,11 @@ const InviteCard = ({
         action={
           <ItemMenu
             anchorEl={menuAnchorEl}
+            canDelete={ability.can('manage', 'Invite')}
             deletePrompt={deleteInvitePrompt}
+            deleteItem={deleteInvite}
             setAnchorEl={setMenuAnchorEl}
+            loading={isDeletePending}
             prependChildren
           >
             <MenuItem onClick={handleCopyLink}>
