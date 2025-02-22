@@ -3,6 +3,7 @@ import { App } from '../components/app/app';
 import { ErrorPage } from '../pages/error-page';
 import { HealthPage } from '../pages/health-page';
 import { HomePage } from '../pages/home-page';
+import InvitePage from '../pages/invites/invite-page';
 import { PageNotFound } from '../pages/page-not-found';
 import { authRouter } from './auth.router';
 import { channelsRouter } from './channels.router';
@@ -21,6 +22,10 @@ export const appRouter = createBrowserRouter([
       {
         path: '*',
         element: <PageNotFound />,
+      },
+      {
+        path: 'i/:token',
+        element: <InvitePage />,
       },
       {
         path: 'health',
