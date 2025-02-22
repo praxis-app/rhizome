@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import InviteCard from '../../components/invites/invite-card';
-import ServerInviteRow from '../../components/invites/invite-row';
+import InviteRow from '../../components/invites/invite-row';
 import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import PrimaryButton from '../../components/shared/primary-button';
@@ -74,9 +74,7 @@ const InvitesPage = () => {
         },
       );
     },
-    onSuccess: () => {
-      reset();
-    },
+    onSuccess: () => reset(),
   });
 
   const {
@@ -108,6 +106,9 @@ const InvitesPage = () => {
       value: '',
     },
   ];
+
+  const showInvitesTable = invitesData && isAboveMd;
+  const showInviteCards = invitesData && !isAboveMd;
 
   if (!ability.can('manage', 'Invite')) {
     return (
@@ -194,7 +195,7 @@ const InvitesPage = () => {
         </CardContent>
       </Card>
 
-      {invitesData && !isAboveMd && (
+      {showInviteCards && (
         <Box display="flex" flexDirection="column" gap="12px">
           {invitesData.invites.map((invite) => (
             <InviteCard key={invite.id} invite={invite} />
@@ -202,7 +203,7 @@ const InvitesPage = () => {
         </Box>
       )}
 
-      {invitesData && isAboveMd && (
+      {showInvitesTable && (
         <Card>
           <Table>
             <TableHead>
@@ -216,11 +217,7 @@ const InvitesPage = () => {
             </TableHead>
             <TableBody>
               {invitesData.invites.map((invite) => (
-                <ServerInviteRow
-                  key={invite.id}
-                  invite={invite}
-                  me={meData.user}
-                />
+                <InviteRow key={invite.id} invite={invite} me={meData.user} />
               ))}
             </TableBody>
           </Table>

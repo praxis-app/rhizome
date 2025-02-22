@@ -30,7 +30,7 @@ interface Props {
   invite: Invite;
 }
 
-const ServerInviteRow = ({
+const InviteRow = ({
   invite: { user, token, uses, maxUses, expiresAt },
   me,
 }: Props) => {
@@ -105,4 +105,4 @@ const ServerInviteRow = ({
   );
 };
 
-export default ServerInviteRow;
+export default InviteRow;
