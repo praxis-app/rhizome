@@ -12,7 +12,7 @@ import {
 import { useAppStore } from '../../store/app.store';
 
 const InviteCheck = () => {
-  const { isLoggedIn } = useAppStore((state) => state);
+  const { isLoggedIn, setInviteToken } = useAppStore((state) => state);
 
   const { t } = useTranslation();
   const { token } = useParams();
@@ -30,6 +30,8 @@ const InviteCheck = () => {
     queryFn: async () => {
       const { invite } = await api.getInvite(token!);
       localStorage.setItem(LocalStorageKeys.InviteToken, invite.token);
+      setInviteToken(invite.token);
+
       await navigate(NavigationPaths.Home);
       return invite;
     },

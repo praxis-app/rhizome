@@ -6,7 +6,6 @@ import {
 } from '@mui/material';
 import { ReactNode } from 'react';
 import { useMeQuery } from '../../hooks/user.hooks';
-import { useAppStore } from '../../store/app.store';
 
 const ProgressBar = styled(LinearProgress)<LinearProgressProps>(
   ({ theme }) => ({
@@ -29,10 +28,11 @@ interface Props {
 }
 
 export const AuthWrapper = ({ children }: Props) => {
-  const { isAppLoading } = useAppStore((state) => state);
-  useMeQuery({ retry: false });
+  const { isLoading } = useMeQuery({
+    retry: import.meta.env.PROD ? 1 : 0,
+  });
 
-  if (isAppLoading) {
+  if (isLoading) {
     return <ProgressBar />;
   }
 
