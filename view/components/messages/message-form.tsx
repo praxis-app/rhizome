@@ -141,8 +141,13 @@ const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
       ) {
         return;
       }
+
       if (
-        ['Space', 'Enter', 'Key', 'Digit'].some((key) => e.code.includes(key))
+        ['Space', 'Enter', 'Key', 'Digit'].some((key) =>
+          e.code.includes(key),
+        ) &&
+        // Allow for Ctrl + C to copy
+        e.code !== 'KeyC'
       ) {
         inputRef.current?.focus();
       }
