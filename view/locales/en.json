@@ -179,7 +179,7 @@
       "noMessagesYet": "No messages yet"
     },
     "names": {
-      "praxisBot": "praxis bot"
+      "praxisBot": "praxis-bot"
     },
     "errors": {
       "longBody": "Message body cannot exceed 6000 characters",
