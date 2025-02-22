@@ -1,8 +1,12 @@
 import { Assignment } from '@mui/icons-material';
 import { Box, MenuItem, SxProps, TableCell, TableRow } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { api } from '../../client/api-client';
 import { NavigationPaths } from '../../constants/shared.constants';
+import { useAbility } from '../../hooks/role.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Invite } from '../../types/invite.types';
 import { CurrentUser } from '../../types/user.types';
@@ -19,13 +23,42 @@ interface Props {
 }
 
 const InviteRow = ({
-  invite: { user, token, uses, maxUses, expiresAt },
+  invite: { id, user, token, uses, maxUses, expiresAt },
   me,
 }: Props) => {
   const { setToast } = useAppStore((state) => state);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const ability = useAbility();
+
+  const { mutate: deleteInvite, isPending: isDeletePending } = useMutation({
+    mutationFn: async () => {
+      await api.deleteInvite(id);
+
+      queryClient.setQueryData<{ invites: Invite[] }>(
+        ['invites'],
+        (oldData) => {
+          if (!oldData) {
+            return { invites: [] };
+          }
+          return {
+            invites: oldData.invites.filter((invite) => invite.id !== id),
+          };
+        },
+      );
+    },
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
+      setToast({
+        title: errorMessage,
+        status: 'error',
+      });
+    },
+  });
 
   const deleteInvitePrompt = t('prompts.deleteItem', {
     itemType: 'invite link',
@@ -79,8 +112,11 @@ const InviteRow = ({
       <TableCell>
         <ItemMenu
           anchorEl={menuAnchorEl}
+          canDelete={ability.can('manage', 'Invite')}
           deletePrompt={deleteInvitePrompt}
+          deleteItem={deleteInvite}
           setAnchorEl={setMenuAnchorEl}
+          loading={isDeletePending}
           prependChildren
         >
           <MenuItem onClick={handleCopyLink}>

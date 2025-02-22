@@ -35,7 +35,6 @@ const ConfirmDeleteChannelModal = ({ channelId, isOpen, setIsOpen }: Props) => {
           };
         },
       );
-      queryClient.invalidateQueries({ queryKey: ['me'] });
     },
   });
 
