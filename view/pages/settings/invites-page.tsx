@@ -7,6 +7,11 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Typography,
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -15,12 +20,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import InviteCard from '../../components/invites/invite-card';
+import ServerInviteRow from '../../components/invites/invite-row';
 import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
 import PrimaryButton from '../../components/shared/primary-button';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths, Time } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
+import { useAboveBreakpoint } from '../../hooks/shared.hooks';
+import { useMeQuery } from '../../hooks/user.hooks';
 import { Invite } from '../../types/invite.types';
 
 const MAX_USES_OPTIONS = [1, 5, 10, 25, 50, 100];
@@ -32,6 +40,7 @@ interface FormValues {
 
 const InvitesPage = () => {
   const { t } = useTranslation();
+  const isAboveMd = useAboveBreakpoint('md');
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const ability = useAbility();
@@ -70,10 +79,16 @@ const InvitesPage = () => {
     },
   });
 
-  const { data, isLoading, error } = useQuery({
+  const {
+    data: invitesData,
+    isLoading: isInvitesLoading,
+    error: invitesError,
+  } = useQuery({
     queryKey: ['invites'],
     queryFn: api.getInvites,
   });
+
+  const { data: meData } = useMeQuery();
 
   const expiresAtOptions = [
     {
@@ -105,8 +120,12 @@ const InvitesPage = () => {
     );
   }
 
-  if (isLoading) {
+  if (isInvitesLoading) {
     return <ProgressBar />;
+  }
+
+  if (!meData) {
+    return null;
   }
 
   return (
@@ -175,15 +194,42 @@ const InvitesPage = () => {
         </CardContent>
       </Card>
 
-      {data && (
+      {invitesData && !isAboveMd && (
         <Box display="flex" flexDirection="column" gap="12px">
-          {data.invites.map((invite) => (
+          {invitesData.invites.map((invite) => (
             <InviteCard key={invite.id} invite={invite} />
           ))}
         </Box>
       )}
 
-      {error && <Typography>{t('errors.somethingWentWrong')}</Typography>}
+      {invitesData && isAboveMd && (
+        <Card>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>{t('invites.columnNames.inviter')}</TableCell>
+                <TableCell>{t('invites.columnNames.code')}</TableCell>
+                <TableCell>{t('invites.columnNames.uses')}</TableCell>
+                <TableCell>{t('invites.columnNames.expires')}</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {invitesData.invites.map((invite) => (
+                <ServerInviteRow
+                  key={invite.id}
+                  invite={invite}
+                  me={meData.user}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      )}
+
+      {invitesError && (
+        <Typography>{t('errors.somethingWentWrong')}</Typography>
+      )}
     </>
   );
 };
