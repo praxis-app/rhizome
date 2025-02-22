@@ -276,6 +276,14 @@ export const theme = createTheme({
       },
     },
 
+    MuiTableCell: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          borderColor: theme.palette.divider,
+        }),
+      },
+    },
+
     MuiDrawer: {
       styleOverrides: {
         paper: ({ theme }: Props) => ({

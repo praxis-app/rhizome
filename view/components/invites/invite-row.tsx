@@ -1,12 +1,5 @@
 import { Assignment } from '@mui/icons-material';
-import {
-  Box,
-  MenuItem,
-  TableCell as MuiTableCell,
-  styled,
-  SxProps,
-  TableRow,
-} from '@mui/material';
+import { Box, MenuItem, SxProps, TableCell, TableRow } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavigationPaths } from '../../constants/shared.constants';
@@ -19,11 +12,6 @@ import { timeFromNow } from '../../utils/time.utils';
 import ItemMenu from '../shared/item-menu';
 import { Link } from '../shared/link';
 import UserAvatar from '../users/user-avatar';
-
-const TableCell = styled(MuiTableCell)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  borderColor: theme.palette.divider,
-}));
 
 interface Props {
   me: CurrentUser;
