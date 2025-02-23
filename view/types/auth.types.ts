@@ -2,6 +2,7 @@ export interface SignUpReq {
   email: string;
   name?: string;
   password: string;
+  inviteToken?: string;
 }
 
 export interface LoginReq {

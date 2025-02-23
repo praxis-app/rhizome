@@ -63,7 +63,9 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
-    mutationFn: api.signUp,
+    mutationFn: async (values: FormValues) => {
+      return api.signUp({ ...values, inviteToken: token });
+    },
     onSuccess: ({ access_token }) => {
       localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       navigate(NavigationPaths.Home);
