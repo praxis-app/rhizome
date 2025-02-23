@@ -13,11 +13,11 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import TopNav from '../../components/nav/top-nav';
 import PrimaryButton from '../../components/shared/primary-button';
@@ -48,9 +48,17 @@ interface FormValues {
 }
 
 const SignUp = () => {
-  const { setToast, isLoggedIn, setIsLoggedIn } = useAppStore((state) => state);
+  const { setToast, isLoggedIn, setIsLoggedIn, setInviteToken } = useAppStore(
+    (state) => state,
+  );
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { t } = useTranslation();
+  const { token } = useParams();
+  const isDarkMode = useIsDarkMode();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
     mutationFn: api.signUp,
@@ -83,15 +91,23 @@ const SignUp = () => {
     },
   });
 
+  const { isLoading: isInviteLoading, error: inviteError } = useQuery({
+    queryKey: ['invites', token],
+    queryFn: async () => {
+      const { invite } = await api.getInvite(token!);
+      localStorage.setItem(LocalStorageKeys.InviteToken, invite.token);
+      setInviteToken(invite.token);
+
+      await navigate(NavigationPaths.Home);
+      return invite;
+    },
+    enabled: !!token,
+  });
+
   const { data: meData, isLoading: isMeLoading } = useMeQuery({
     enabled: isLoggedIn,
     retry: false,
   });
-
-  const { t } = useTranslation();
-  const isDarkMode = useIsDarkMode();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (meData && !meData.user.anonymous) {
@@ -178,7 +194,11 @@ const SignUp = () => {
     isAnon ? 'users.prompts.upgradeAccount' : 'users.prompts.signUpSubtext',
   );
 
-  if (isMeLoading || isRedirecting || isSignedUp) {
+  if (inviteError) {
+    return <Typography>{t('invites.prompts.expiredOrInvalid')}</Typography>;
+  }
+
+  if (isMeLoading || isRedirecting || isSignedUp || isInviteLoading) {
     return <ProgressBar />;
   }
 

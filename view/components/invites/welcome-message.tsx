@@ -32,7 +32,7 @@ const WelcomeMessage = () => {
       {!!inviteToken && (
         <Button
           variant="contained"
-          onClick={() => navigate(NavigationPaths.SignUp)}
+          onClick={() => `${navigate(NavigationPaths.SignUp)}/${inviteToken}`}
           sx={{ textTransform: 'uppercase', marginRight: '12px' }}
         >
           {t('users.actions.signUp')}
