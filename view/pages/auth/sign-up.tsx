@@ -101,8 +101,6 @@ const SignUp = () => {
       const { invite } = await api.getInvite(token!);
       localStorage.setItem(LocalStorageKeys.InviteToken, invite.token);
       setInviteToken(invite.token);
-
-      await navigate(NavigationPaths.Home);
       return invite;
     },
     enabled: !!token,
