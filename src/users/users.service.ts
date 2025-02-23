@@ -1,5 +1,6 @@
 // TODO: Add support for user updates with validation
 
+import { FindManyOptions } from 'typeorm';
 import {
   colors,
   NumberDictionary,
@@ -12,6 +13,10 @@ import { User } from './user.entity';
 import { NATURE_DICTIONARY, SPACE_DICTIONARY } from './users.constants';
 
 const userRepository = dataSource.getRepository(User);
+
+export const getUserCount = async (options?: FindManyOptions<User>) => {
+  return userRepository.count(options);
+};
 
 export const signUp = async (
   email: string,
