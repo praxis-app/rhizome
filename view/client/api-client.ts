@@ -59,9 +59,18 @@ class ApiClient {
     return this.executeRequest<void>('delete', path);
   };
 
+  // -------------------------------------------------------------------------
+  // Users
+  // -------------------------------------------------------------------------
+
   getCurrentUser = async () => {
     const path = '/users/me';
     return this.executeRequest<{ user: CurrentUser }>('get', path);
+  };
+
+  isFirstUser = async () => {
+    const path = '/users/is-first';
+    return this.executeRequest<{ isFirstUser: boolean }>('get', path);
   };
 
   // -------------------------------------------------------------------------

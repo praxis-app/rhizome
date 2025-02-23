@@ -18,6 +18,11 @@ export const getUserCount = async (options?: FindManyOptions<User>) => {
   return userRepository.count(options);
 };
 
+export const isFirstUser = async () => {
+  const userCount = await getUserCount();
+  return userCount === 0;
+};
+
 export const createUser = async (
   email: string,
   name: string | undefined,
