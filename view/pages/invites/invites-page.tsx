@@ -29,6 +29,7 @@ import { NavigationPaths, Time } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { useMeQuery } from '../../hooks/user.hooks';
+import { useAppStore } from '../../store/app.store';
 import { Invite } from '../../types/invite.types';
 
 const MAX_USES_OPTIONS = [1, 5, 10, 25, 50, 100];
@@ -39,6 +40,8 @@ interface FormValues {
 }
 
 const InvitesPage = () => {
+  const { isLoggedIn } = useAppStore((state) => state);
+
   const { t } = useTranslation();
   const isAboveMd = useAboveBreakpoint('md');
   const queryClient = useQueryClient();
@@ -84,9 +87,13 @@ const InvitesPage = () => {
   } = useQuery({
     queryKey: ['invites'],
     queryFn: api.getInvites,
+    enabled: isLoggedIn,
   });
 
-  const { data: meData } = useMeQuery();
+  const { data: meData } = useMeQuery({
+    enabled: isLoggedIn,
+    retry: false,
+  });
 
   const expiresAtOptions = [
     {
@@ -110,7 +117,7 @@ const InvitesPage = () => {
   const showInvitesTable = invitesData && isAboveMd;
   const showInviteCards = invitesData && !isAboveMd;
 
-  if (!ability.can('manage', 'Invite')) {
+  if (!isLoggedIn || !ability.can('manage', 'Invite')) {
     return (
       <PermissionDenied
         topNavProps={{
