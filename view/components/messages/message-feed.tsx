@@ -13,7 +13,7 @@ interface Props {
 }
 
 const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
-  const { inviteToken } = useAppStore((state) => state);
+  const { isLoggedIn } = useAppStore((state) => state);
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollDirection = useScrollDirection(feedBoxRef, 800);
 
@@ -40,7 +40,7 @@ const MessageFeed = ({ messages, feedBoxRef, onLoadMore }: Props) => {
       paddingX={1.5}
       flex={1}
     >
-      {!!inviteToken && <WelcomeMessage />}
+      {!isLoggedIn && <WelcomeMessage />}
 
       {messages.map((message) => (
         <Message key={message.id} message={message} />
