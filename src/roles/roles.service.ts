@@ -8,6 +8,9 @@ import { CHANNEL_ACCESS_MAP } from './channel-access';
 import { Permission } from './models/permission.entity';
 import { Role } from './models/role.entity';
 
+export const DEFAULT_ROLE_COLOR = '#f44336';
+export const ADMIN_ROLE_NAME = 'admin';
+
 type PermissionMap = Record<string, AbilityAction[]>;
 
 interface CreateRoleReq {
@@ -96,6 +99,21 @@ export const getUsersEligibleForRole = async (roleId: string) => {
 export const createRole = async ({ name, color }: CreateRoleReq) => {
   const role = await roleRepository.save({ name, color });
   return { ...role, memberCount: 0 };
+};
+
+export const createAdminRole = async (userId: string) => {
+  await roleRepository.save({
+    name: ADMIN_ROLE_NAME,
+    color: DEFAULT_ROLE_COLOR,
+    members: [{ id: userId }],
+    permissions: [
+      { subject: 'ServerConfig', action: 'manage' },
+      { subject: 'Channel', action: 'manage' },
+      { subject: 'Invite', action: 'create' },
+      { subject: 'Invite', action: 'manage' },
+      { subject: 'Role', action: 'manage' },
+    ],
+  });
 };
 
 export const updateRole = async (

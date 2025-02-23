@@ -9,6 +9,7 @@ import {
 import * as channelsService from '../channels/channels.service';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
+import { createAdminRole } from '../roles/roles.service';
 import { User } from './user.entity';
 import { NATURE_DICTIONARY, SPACE_DICTIONARY } from './users.constants';
 
@@ -28,12 +29,18 @@ export const createUser = async (
   name: string | undefined,
   password: string,
 ) => {
+  const isFirst = await isFirstUser();
   const user = await userRepository.save({
     name: name?.trim() || generateName(),
     email: normalizeText(email),
     password,
   });
+
+  if (isFirst) {
+    await createAdminRole(user.id);
+  }
   await channelsService.addMemberToAllChannels(user.id);
+
   return user;
 };
 
