@@ -2,7 +2,8 @@ import { compare, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { normalizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
-import { getUserPermissions } from '../roles/roles.service';
+import * as invitesService from '../invites/invites.service';
+import * as rolesService from '../roles/roles.service';
 import { User } from '../users/user.entity';
 import * as usersService from '../users/users.service';
 
@@ -47,9 +48,18 @@ export const login = async ({ email, password }: LoginReq) => {
   return generateAccessToken(user.id);
 };
 
-export const signUp = async ({ email, name, password }: SignUpReq) => {
+export const signUp = async ({
+  email,
+  name,
+  password,
+  inviteToken,
+}: SignUpReq) => {
   const passwordHash = await hash(password, SALT_ROUNDS);
-  const user = await usersService.signUp(email, name, passwordHash);
+  const user = await usersService.createUser(email, name, passwordHash);
+
+  if (inviteToken) {
+    await invitesService.redeemInvite(inviteToken);
+  }
   return generateAccessToken(user.id);
 };
 
@@ -84,7 +94,7 @@ export const getAuthedUser = async (userId: string, includePerms = true) => {
   if (!includePerms) {
     return user;
   }
-  const permissions = await getUserPermissions(userId);
+  const permissions = await rolesService.getUserPermissions(userId);
   return { ...user, permissions };
 };
 

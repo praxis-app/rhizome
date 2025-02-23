@@ -18,7 +18,7 @@ export const getUserCount = async (options?: FindManyOptions<User>) => {
   return userRepository.count(options);
 };
 
-export const signUp = async (
+export const createUser = async (
   email: string,
   name: string | undefined,
   password: string,
