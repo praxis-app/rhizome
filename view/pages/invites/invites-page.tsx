@@ -226,6 +226,14 @@ const InvitesPage = () => {
               {invitesData.invites.map((invite) => (
                 <InviteRow key={invite.id} invite={invite} me={meData.user} />
               ))}
+
+              {invitesData.invites.length === 0 && (
+                <TableRow sx={{ td: { border: 0 } }}>
+                  <TableCell colSpan={5}>
+                    <Typography>{t('invites.prompts.noInvites')}</Typography>
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </Card>
