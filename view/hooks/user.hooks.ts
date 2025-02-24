@@ -1,7 +1,10 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { api } from '../client/api-client';
-import { LocalStorageKeys } from '../constants/shared.constants';
+import {
+  LocalStorageKeys,
+  NavigationPaths,
+} from '../constants/shared.constants';
 import { useAppStore } from '../store/app.store';
 import { CurrentUser } from '../types/user.types';
 
@@ -33,4 +36,19 @@ export const useMeQuery = (
     retry: 2,
     ...options,
   });
+};
+
+export const useSignUpPath = () => {
+  const { inviteToken } = useAppStore((state) => state);
+
+  const { data } = useQuery({
+    queryKey: ['is-first-user'],
+    queryFn: api.isFirstUser,
+  });
+
+  if (data?.isFirstUser) {
+    return NavigationPaths.SignUp;
+  }
+
+  return `${NavigationPaths.SignUp}/${inviteToken}`;
 };

@@ -3,10 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
-import {
-  LocalStorageKeys,
-  NavigationPaths,
-} from '../../constants/shared.constants';
+import { LocalStorageKeys } from '../../constants/shared.constants';
+import { useSignUpPath } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import Modal from '../shared/modal';
 
@@ -30,6 +28,7 @@ const ChooseAuthModal = ({ isOpen, setIsOpen, sendMessage }: Props) => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const signUpPath = useSignUpPath();
 
   const handleSendAnonMsgBtnClick = () => {
     createAnonSession();
@@ -46,10 +45,7 @@ const ChooseAuthModal = ({ isOpen, setIsOpen, sendMessage }: Props) => {
         <Button onClick={handleSendAnonMsgBtnClick} variant="contained">
           {t('messages.actions.sendAnonymous')}
         </Button>
-        <Button
-          onClick={() => navigate(NavigationPaths.SignUp)}
-          variant="contained"
-        >
+        <Button onClick={() => navigate(signUpPath)} variant="contained">
           {t('users.actions.signUp')}
         </Button>
       </Box>
