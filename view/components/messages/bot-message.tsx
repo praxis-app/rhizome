@@ -12,9 +12,16 @@ interface Props extends BoxProps {
   children: ReactNode;
   bodySx?: BoxProps['sx'];
   currentUserOnly?: boolean;
+  onDismiss?: () => void;
 }
 
-const BotMessage = ({ children, bodySx, ...boxProps }: Props) => {
+const BotMessage = ({
+  children,
+  bodySx,
+  currentUserOnly,
+  onDismiss,
+  ...boxProps
+}: Props) => {
   const { t } = useTranslation();
   const formattedDate = timeAgo(Date());
 
@@ -38,18 +45,33 @@ const BotMessage = ({ children, bodySx, ...boxProps }: Props) => {
 
         <Box sx={bodySx}>{children}</Box>
 
-        <Box display="flex" gap="4px" alignItems="center" paddingTop={1}>
-          <Visibility sx={{ fontSize: '13px', color: 'text.secondary' }} />
-          <Typography fontSize="13px" color="text.secondary">
-            {t('messages.prompts.onlyVisibleToYou')}
-          </Typography>
-          <Box color="text.secondary" marginTop="1px">
-            {MIDDOT_WITH_SPACES}
+        {(currentUserOnly || onDismiss) && (
+          <Box display="flex" gap="4px" paddingTop={1}>
+            {currentUserOnly && (
+              <Box display="flex" gap="4px" alignItems="center">
+                <Visibility
+                  sx={{ fontSize: '13px', color: 'text.secondary' }}
+                />
+                <Typography fontSize="13px" color="text.secondary">
+                  {t('messages.prompts.onlyVisibleToYou')}
+                </Typography>
+              </Box>
+            )}
+            {currentUserOnly && onDismiss && (
+              <Box color="text.secondary" marginTop="1px">
+                {MIDDOT_WITH_SPACES}
+              </Box>
+            )}
+            {onDismiss && (
+              <ButtonBase
+                onClick={onDismiss}
+                sx={{ color: BLURPLE['300'], marginTop: '1px' }}
+              >
+                {t('messages.actions.dismissMessage')}
+              </ButtonBase>
+            )}
           </Box>
-          <ButtonBase sx={{ color: BLURPLE['300'], marginTop: '1px' }}>
-            {t('messages.actions.dismissMessage')}
-          </ButtonBase>
-        </Box>
+        )}
       </Box>
     </Box>
   );
