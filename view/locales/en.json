@@ -172,11 +172,13 @@
 
   "messages": {
     "actions": {
-      "sendAnonymous": "Send anonymously"
+      "sendAnonymous": "Send anonymously",
+      "dismissMessage": "Dismiss message"
     },
     "prompts": {
       "sendAMessage": "Send a message...",
-      "noMessagesYet": "No messages yet"
+      "noMessagesYet": "No messages yet",
+      "onlyVisibleToYou": "Only visible to you"
     },
     "names": {
       "praxisBot": "praxis-bot"

@@ -1,13 +1,17 @@
-import { Box, BoxProps, Typography } from '@mui/material';
+import { Visibility } from '@mui/icons-material';
+import { Box, BoxProps, ButtonBase, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import appIconImg from '../../assets/images/app-icon.png';
+import { MIDDOT_WITH_SPACES } from '../../constants/shared.constants';
+import { BLURPLE } from '../../styles/theme';
 import { timeAgo } from '../../utils/time.utils';
 import UserAvatar from '../users/user-avatar';
 
 interface Props extends BoxProps {
   children: ReactNode;
   bodySx?: BoxProps['sx'];
+  currentUserOnly?: boolean;
 }
 
 const BotMessage = ({ children, bodySx, ...boxProps }: Props) => {
@@ -33,6 +37,19 @@ const BotMessage = ({ children, bodySx, ...boxProps }: Props) => {
         </Box>
 
         <Box sx={bodySx}>{children}</Box>
+
+        <Box display="flex" gap="4px" alignItems="center" paddingTop={1}>
+          <Visibility sx={{ fontSize: '13px', color: 'text.secondary' }} />
+          <Typography fontSize="13px" color="text.secondary">
+            {t('messages.prompts.onlyVisibleToYou')}
+          </Typography>
+          <Box color="text.secondary" marginTop="1px">
+            {MIDDOT_WITH_SPACES}
+          </Box>
+          <ButtonBase sx={{ color: BLURPLE['300'], marginTop: '1px' }}>
+            {t('messages.actions.dismissMessage')}
+          </ButtonBase>
+        </Box>
       </Box>
     </Box>
   );
