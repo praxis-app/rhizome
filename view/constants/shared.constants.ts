@@ -44,4 +44,5 @@ export enum NavigationPaths {
 export enum LocalStorageKeys {
   AccessToken = 'access_token',
   InviteToken = 'invite-token',
+  HideWelcomeMessage = 'hide-welcome-message',
 }

@@ -1,12 +1,19 @@
 import { Button, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { NavigationPaths } from '../../constants/shared.constants';
+import {
+  LocalStorageKeys,
+  NavigationPaths,
+} from '../../constants/shared.constants';
 import { useSignUpPath } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import BotMessage from '../messages/bot-message';
 
-const WelcomeMessage = () => {
+interface Props {
+  onDismiss: () => void;
+}
+
+const WelcomeMessage = ({ onDismiss }: Props) => {
   const { inviteToken } = useAppStore((state) => state);
 
   const { t } = useTranslation();
@@ -15,8 +22,17 @@ const WelcomeMessage = () => {
   const signUpPath = useSignUpPath();
   const showSignUp = !!inviteToken || signUpPath === NavigationPaths.SignUp;
 
+  const handleDismiss = () => {
+    localStorage.setItem(LocalStorageKeys.HideWelcomeMessage, 'true');
+    onDismiss();
+  };
+
   return (
-    <BotMessage bodySx={{ paddingTop: 0.9 }}>
+    <BotMessage
+      bodySx={{ paddingTop: 0.9 }}
+      onDismiss={handleDismiss}
+      currentUserOnly
+    >
       <Typography variant="h6" sx={{ marginBottom: 1 }}>
         {t('prompts.welcomeToPraxis')}
       </Typography>
