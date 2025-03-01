@@ -6,11 +6,14 @@ import {
   getInvite,
   getInvites,
 } from './invites.controller';
+import { can } from '../roles/middleware/can.middleware';
 
 export const invitesRouter = express.Router();
 
+invitesRouter.get('/:token', getInvite);
+
 invitesRouter
-  .get('/:token', getInvite)
-  .get('/', authenticate, getInvites)
-  .post('/', authenticate, createInvite)
-  .delete('/:inviteId', authenticate, deleteInvite);
+  .use(authenticate)
+  .get('/', can('read', 'Invite'), getInvites)
+  .post('/', can('create', 'Invite'), createInvite)
+  .delete('/:inviteId', can('delete', 'Invite'), deleteInvite);
