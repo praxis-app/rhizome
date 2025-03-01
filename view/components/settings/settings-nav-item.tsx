@@ -40,7 +40,7 @@ const SettingsNavItem = ({
   };
 
   return (
-    <Button sx={buttonSx} {...buttonProps}>
+    <Button sx={buttonSx} disabled={disabled} {...buttonProps}>
       <Box display="flex" gap={1.5}>
         <Icon sx={buttonIconSx} />
         {label}
