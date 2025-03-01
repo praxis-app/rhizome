@@ -116,10 +116,12 @@ const InvitesPage = () => {
 
   const showInvitesTable =
     invitesData && !!invitesData.invites.length && isAboveMd;
-
   const showInviteCards = invitesData && !isAboveMd;
 
-  if (!isLoggedIn || !ability.can('manage', 'Invite')) {
+  const canManageInvites = ability.can('manage', 'Invite');
+  const canCreateInvites = ability.can('create', 'Invite');
+
+  if (!isLoggedIn || (!canManageInvites && !canCreateInvites)) {
     return (
       <PermissionDenied
         topNavProps={{
@@ -145,64 +147,66 @@ const InvitesPage = () => {
         onBackClick={() => navigate(NavigationPaths.Settings)}
       />
 
-      <Card sx={{ marginBottom: '12px' }}>
-        <CardContent>
-          <form onSubmit={handleSubmit((fv) => createInvite(fv))}>
-            <FormGroup sx={{ marginBottom: 1.5 }}>
-              <FormControl variant="standard" sx={{ marginBottom: 1 }}>
-                <InputLabel>{t('invites.form.labels.expiresAt')}</InputLabel>
+      {canCreateInvites && (
+        <Card sx={{ marginBottom: '12px' }}>
+          <CardContent>
+            <form onSubmit={handleSubmit((fv) => createInvite(fv))}>
+              <FormGroup sx={{ marginBottom: 1.5 }}>
+                <FormControl variant="standard" sx={{ marginBottom: 1 }}>
+                  <InputLabel>{t('invites.form.labels.expiresAt')}</InputLabel>
 
-                <Controller
-                  control={control}
-                  name="expiresAt"
-                  render={({ field }) => (
-                    <Select {...field}>
-                      {expiresAtOptions.map((option) => (
-                        <MenuItem value={option.value} key={option.value}>
-                          {option.message}
+                  <Controller
+                    control={control}
+                    name="expiresAt"
+                    render={({ field }) => (
+                      <Select {...field}>
+                        {expiresAtOptions.map((option) => (
+                          <MenuItem value={option.value} key={option.value}>
+                            {option.message}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+
+                <FormControl variant="standard">
+                  <InputLabel>{t('invites.form.labels.maxUses')}</InputLabel>
+
+                  <Controller
+                    control={control}
+                    name="maxUses"
+                    render={({ field }) => (
+                      <Select {...field}>
+                        {MAX_USES_OPTIONS.map((option) => (
+                          <MenuItem value={option} key={option}>
+                            {t('invites.form.maxUsesOptions.xUses', {
+                              count: option,
+                            })}
+                          </MenuItem>
+                        ))}
+                        <MenuItem value={''}>
+                          {t('invites.form.maxUsesOptions.noLimit')}
                         </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-              </FormControl>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </FormGroup>
 
-              <FormControl variant="standard">
-                <InputLabel>{t('invites.form.labels.maxUses')}</InputLabel>
-
-                <Controller
-                  control={control}
-                  name="maxUses"
-                  render={({ field }) => (
-                    <Select {...field}>
-                      {MAX_USES_OPTIONS.map((option) => (
-                        <MenuItem value={option} key={option}>
-                          {t('invites.form.maxUsesOptions.xUses', {
-                            count: option,
-                          })}
-                        </MenuItem>
-                      ))}
-                      <MenuItem value={''}>
-                        {t('invites.form.maxUsesOptions.noLimit')}
-                      </MenuItem>
-                    </Select>
-                  )}
-                />
-              </FormControl>
-            </FormGroup>
-
-            <Box display="flex" justifyContent="end">
-              <PrimaryButton
-                sx={{ marginTop: 1.5 }}
-                disabled={isCreatePending}
-                type="submit"
-              >
-                {t('invites.actions.generateLink')}
-              </PrimaryButton>
-            </Box>
-          </form>
-        </CardContent>
-      </Card>
+              <Box display="flex" justifyContent="end">
+                <PrimaryButton
+                  sx={{ marginTop: 1.5 }}
+                  disabled={isCreatePending}
+                  type="submit"
+                >
+                  {t('invites.actions.generateLink')}
+                </PrimaryButton>
+              </Box>
+            </form>
+          </CardContent>
+        </Card>
+      )}
 
       {showInviteCards && (
         <Box display="flex" flexDirection="column" gap="12px">
