@@ -107,6 +107,12 @@ const SignUp = () => {
     enabled: !!token,
   });
 
+  const { data: isFirstUserData } = useQuery({
+    queryKey: ['is-first-user'],
+    queryFn: api.isFirstUser,
+    enabled: !isLoggedIn && !token,
+  });
+
   const { data: meData, isLoading: isMeLoading } = useMeQuery({
     enabled: isLoggedIn,
     retry: false,
@@ -190,7 +196,7 @@ const SignUp = () => {
   );
 
   const isPending = isSignUpPending || isUpgradeAnonPending;
-  const isSignedUp = meData && meData.user.anonymous === false;
+  const isRegistered = meData && meData.user.anonymous === false;
   const isAnon = meData && meData.user.anonymous === true;
 
   const subheader = t(
@@ -201,8 +207,26 @@ const SignUp = () => {
     return <Typography>{t('invites.prompts.expiredOrInvalid')}</Typography>;
   }
 
-  if (isMeLoading || isRedirecting || isSignedUp || isInviteLoading) {
+  if (isMeLoading || isRedirecting || isRegistered || isInviteLoading) {
     return <ProgressBar />;
+  }
+
+  if (isLoggedIn && !isAnon) {
+    return (
+      <>
+        <TopNav />
+        <Typography>{t('users.prompts.alreadyRegistered')}</Typography>
+      </>
+    );
+  }
+
+  if (!token && !isFirstUserData?.isFirstUser && !isAnon) {
+    return (
+      <>
+        <TopNav />
+        <Typography>{t('invites.prompts.inviteRequired')}</Typography>
+      </>
+    );
   }
 
   return (

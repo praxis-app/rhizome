@@ -5,8 +5,7 @@ import {
   LocalStorageKeys,
   NavigationPaths,
 } from '../../constants/shared.constants';
-import { useSignUpPath } from '../../hooks/user.hooks';
-import { useAppStore } from '../../store/app.store';
+import { useSignUpData } from '../../hooks/user.hooks';
 import BotMessage from '../messages/bot-message';
 
 interface Props {
@@ -14,13 +13,10 @@ interface Props {
 }
 
 const WelcomeMessage = ({ onDismiss }: Props) => {
-  const { inviteToken } = useAppStore((state) => state);
-
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const signUpPath = useSignUpPath();
-  const showSignUp = !!inviteToken || signUpPath === NavigationPaths.SignUp;
+  const { signUpPath, showSignUp } = useSignUpData();
 
   const handleDismiss = () => {
     localStorage.setItem(LocalStorageKeys.HideWelcomeMessage, 'true');

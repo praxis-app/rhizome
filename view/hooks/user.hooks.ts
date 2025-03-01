@@ -38,17 +38,43 @@ export const useMeQuery = (
   });
 };
 
-export const useSignUpPath = () => {
-  const { inviteToken } = useAppStore((state) => state);
+export const useSignUpData = () => {
+  const { isLoggedIn, inviteToken } = useAppStore((state) => state);
 
   const { data } = useQuery({
     queryKey: ['is-first-user'],
     queryFn: api.isFirstUser,
   });
 
-  if (data?.isFirstUser || !inviteToken) {
-    return NavigationPaths.SignUp;
-  }
+  const { data: meData } = useMeQuery({
+    enabled: isLoggedIn,
+  });
 
-  return `${NavigationPaths.SignUp}/${inviteToken}`;
+  const isAnon = !!meData?.user?.anonymous;
+  const isFirstUser = !!data?.isFirstUser;
+  const isInvited = !!inviteToken;
+
+  const signUpPath =
+    isFirstUser || !inviteToken
+      ? NavigationPaths.SignUp
+      : `${NavigationPaths.SignUp}/${inviteToken}`;
+
+  const getShowSignUp = () => {
+    if (isAnon) {
+      return true;
+    }
+    if (isLoggedIn) {
+      return false;
+    }
+    return isFirstUser || isInvited;
+  };
+
+  return {
+    isInvited: !!inviteToken,
+    isFirstUser: data?.isFirstUser,
+    showSignUp: getShowSignUp(),
+    inviteToken,
+    signUpPath,
+    isAnon,
+  };
 };

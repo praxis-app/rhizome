@@ -2,7 +2,7 @@ import { ExitToApp, PersonAdd } from '@mui/icons-material';
 import { Menu, MenuItem, SvgIconProps, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useSignUpPath } from '../../../hooks/user.hooks';
+import { useSignUpData } from '../../../hooks/user.hooks';
 import { useAppStore } from '../../../store/app.store';
 import { CurrentUser } from '../../../types/user.types';
 import UserAvatar from '../../users/user-avatar';
@@ -24,7 +24,7 @@ const LeftNavUserMenu = ({
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const signUpPath = useSignUpPath();
+  const { signUpPath } = useSignUpData();
 
   const menuItemIconProps: SvgIconProps = {
     sx: { marginRight: 1 },

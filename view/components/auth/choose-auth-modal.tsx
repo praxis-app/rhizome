@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { LocalStorageKeys } from '../../constants/shared.constants';
-import { useSignUpPath } from '../../hooks/user.hooks';
+import { useSignUpData } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import Modal from '../shared/modal';
 
@@ -28,7 +28,7 @@ const ChooseAuthModal = ({ isOpen, setIsOpen, sendMessage }: Props) => {
 
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const signUpPath = useSignUpPath();
+  const { signUpPath } = useSignUpData();
 
   const handleSendAnonMsgBtnClick = () => {
     createAnonSession();
