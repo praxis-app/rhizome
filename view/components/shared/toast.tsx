@@ -1,15 +1,14 @@
 import { Close } from '@mui/icons-material';
-import { Alert, IconButton, Snackbar, useTheme } from '@mui/material';
+import { Alert, IconButton, Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useAppStore } from '../../store/app.store';
+import { GRAY } from '../../styles/theme';
 
 const AUTO_HIDE_DURATION = 6000;
 
 const Toast = () => {
   const { toast, setToast } = useAppStore((state) => state);
   const [open, setOpen] = useState(false);
-
-  const theme = useTheme();
 
   useEffect(() => {
     if (toast) {
@@ -25,10 +24,6 @@ const Toast = () => {
     [setToast],
   );
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   if (!toast) {
     return null;
   }
@@ -41,20 +36,17 @@ const Toast = () => {
       }}
       anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       autoHideDuration={AUTO_HIDE_DURATION}
-      onClose={handleClose}
+      onClose={() => setOpen(false)}
       open={open}
     >
       <Alert
         action={
-          <IconButton size="small" onClick={handleClose}>
-            <Close
-              fontSize="small"
-              sx={{ color: theme.palette.primary.main }}
-            />
+          <IconButton size="small" onClick={() => setOpen(false)}>
+            <Close fontSize="small" sx={{ color: GRAY['50'] }} />
           </IconButton>
         }
         severity={toast.status}
-        sx={{ color: theme.palette.text.primary }}
+        sx={{ color: GRAY['50'] }}
         variant="filled"
       >
         {toast.title}

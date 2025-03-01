@@ -333,5 +333,15 @@ export const theme = createTheme({
         }),
       },
     },
+
+    MuiAlert: {
+      styleOverrides: {
+        icon: {
+          '& .MuiSvgIcon-root': {
+            fill: GRAY['50'],
+          },
+        },
+      },
+    },
   },
 });
