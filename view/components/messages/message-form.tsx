@@ -39,7 +39,7 @@ interface Props {
 }
 
 const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
-  const { isLoggedIn, setToast } = useAppStore((state) => state);
+  const { isLoggedIn, inviteToken, setToast } = useAppStore((state) => state);
 
   const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
@@ -202,6 +202,13 @@ const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
       return;
     }
     if (!isLoggedIn) {
+      if (!inviteToken) {
+        setToast({
+          title: t('messages.prompts.inviteRequired'),
+          status: 'info',
+        });
+        return;
+      }
       setIsAuthPromptOpen(true);
       return;
     }
