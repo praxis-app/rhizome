@@ -46,7 +46,7 @@ export const useSignUpPath = () => {
     queryFn: api.isFirstUser,
   });
 
-  if (data?.isFirstUser) {
+  if (data?.isFirstUser || !inviteToken) {
     return NavigationPaths.SignUp;
   }
 
