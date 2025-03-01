@@ -89,7 +89,7 @@ const PermissionsForm = ({ role }: Props) => {
             result.push({ subject: 'ServerConfig', action: ['manage'] });
           }
           if (permission.name === 'createInvites') {
-            result.push({ subject: 'Invite', action: ['create'] });
+            result.push({ subject: 'Invite', action: ['read', 'create'] });
           }
           if (permission.name === 'manageInvites') {
             result.push({ subject: 'Invite', action: ['manage'] });
