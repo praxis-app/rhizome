@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import appIconImg from '../../assets/images/app-icon.png';
 import { MIDDOT_WITH_SPACES } from '../../constants/shared.constants';
+import { useIsDarkMode } from '../../hooks/shared.hooks';
 import { BLURPLE } from '../../styles/theme';
 import { timeAgo } from '../../utils/time.utils';
 import UserAvatar from '../users/user-avatar';
@@ -23,6 +24,8 @@ const BotMessage = ({
   ...boxProps
 }: Props) => {
   const { t } = useTranslation();
+  const isDarkMode = useIsDarkMode();
+
   const formattedDate = timeAgo(Date());
 
   return (
@@ -65,7 +68,10 @@ const BotMessage = ({
             {onDismiss && (
               <ButtonBase
                 onClick={onDismiss}
-                sx={{ color: BLURPLE['300'], marginTop: '1px' }}
+                sx={{
+                  color: isDarkMode ? BLURPLE['300'] : BLURPLE['500'],
+                  marginTop: '1px',
+                }}
               >
                 {t('messages.actions.dismissMessage')}
               </ButtonBase>
