@@ -13,11 +13,11 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import TopNav from '../../components/nav/top-nav';
 import PrimaryButton from '../../components/shared/primary-button';
@@ -27,7 +27,7 @@ import {
   NavigationPaths,
 } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { useMeQuery } from '../../hooks/user.hooks';
+import { useSignUpData } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
@@ -48,14 +48,27 @@ interface FormValues {
 }
 
 const SignUp = () => {
-  const { setToast, isLoggedIn, setIsLoggedIn } = useAppStore((state) => state);
+  const { setToast, isLoggedIn, setIsLoggedIn, setInviteToken } = useAppStore(
+    (state) => state,
+  );
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const { t } = useTranslation();
+  const { token } = useParams();
+  const isDarkMode = useIsDarkMode();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const { isFirstUser, isAnon, isRegistered, me } = useSignUpData();
+
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
-    mutationFn: api.signUp,
+    mutationFn: async (values: FormValues) => {
+      return api.signUp({ ...values, inviteToken: token });
+    },
     onSuccess: ({ access_token }) => {
       localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
+      localStorage.removeItem(LocalStorageKeys.InviteToken);
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
       setIsLoggedIn(true);
@@ -83,22 +96,23 @@ const SignUp = () => {
     },
   });
 
-  const { data: meData, isLoading: isMeLoading } = useMeQuery({
-    enabled: isLoggedIn,
-    retry: false,
+  const { isLoading: isInviteLoading, error: inviteError } = useQuery({
+    queryKey: ['invites', token],
+    queryFn: async () => {
+      const { invite } = await api.getInvite(token!);
+      localStorage.setItem(LocalStorageKeys.InviteToken, invite.token);
+      setInviteToken(invite.token);
+      return invite;
+    },
+    enabled: !!token,
   });
 
-  const { t } = useTranslation();
-  const isDarkMode = useIsDarkMode();
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (meData && !meData.user.anonymous) {
+    if (me && !isAnon) {
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
     }
-  }, [meData, navigate, setIsRedirecting]);
+  }, [me, navigate, setIsRedirecting, isAnon]);
 
   const { handleSubmit, register, formState } = useForm<FormValues>({
     mode: 'onChange',
@@ -171,15 +185,35 @@ const SignUp = () => {
   );
 
   const isPending = isSignUpPending || isUpgradeAnonPending;
-  const isSignedUp = meData && meData.user.anonymous === false;
-  const isAnon = meData && meData.user.anonymous === true;
 
   const subheader = t(
     isAnon ? 'users.prompts.upgradeAccount' : 'users.prompts.signUpSubtext',
   );
 
-  if (isMeLoading || isRedirecting || isSignedUp) {
+  if (inviteError) {
+    return <Typography>{t('invites.prompts.expiredOrInvalid')}</Typography>;
+  }
+
+  if (isRedirecting || isRegistered || isInviteLoading) {
     return <ProgressBar />;
+  }
+
+  if (isLoggedIn && !isAnon) {
+    return (
+      <>
+        <TopNav />
+        <Typography>{t('users.prompts.alreadyRegistered')}</Typography>
+      </>
+    );
+  }
+
+  if (!token && !isFirstUser && !isAnon) {
+    return (
+      <>
+        <TopNav />
+        <Typography>{t('invites.prompts.inviteRequired')}</Typography>
+      </>
+    );
   }
 
   return (

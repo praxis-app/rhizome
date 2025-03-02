@@ -207,6 +207,22 @@ export const theme = createTheme({
       },
     },
 
+    MuiInput: {
+      styleOverrides: {
+        underline: ({ theme }: Props) => ({
+          '&:before': {
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          },
+          '&:after': {
+            borderBottom: `2px solid ${theme.palette.primary.dark}`,
+          },
+          '&&:hover:before': {
+            borderBottom: `2px solid ${theme.palette.primary.dark}`,
+          },
+        }),
+      },
+    },
+
     MuiSvgIcon: {
       styleOverrides: {
         root: ({ theme }: Props) => ({
@@ -260,6 +276,14 @@ export const theme = createTheme({
       },
     },
 
+    MuiTableCell: {
+      styleOverrides: {
+        root: ({ theme }: Props) => ({
+          borderColor: theme.palette.divider,
+        }),
+      },
+    },
+
     MuiDrawer: {
       styleOverrides: {
         paper: ({ theme }: Props) => ({
@@ -307,6 +331,16 @@ export const theme = createTheme({
             }),
           },
         }),
+      },
+    },
+
+    MuiAlert: {
+      styleOverrides: {
+        icon: {
+          '& .MuiSvgIcon-root': {
+            fill: GRAY['50'],
+          },
+        },
       },
     },
   },

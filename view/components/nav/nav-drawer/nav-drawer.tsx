@@ -22,7 +22,7 @@ import { GENERAL_CHANNEL_NAME } from '../../../constants/channel.constants';
 import { NavigationPaths } from '../../../constants/shared.constants';
 import { useAbility } from '../../../hooks/role.hooks';
 import { useAboveBreakpoint, useIsDarkMode } from '../../../hooks/shared.hooks';
-import { useMeQuery } from '../../../hooks/user.hooks';
+import { useMeQuery, useSignUpData } from '../../../hooks/user.hooks';
 import { useAppStore } from '../../../store/app.store';
 import { GRAY } from '../../../styles/theme';
 import ConfirmLogoutModal from '../../auth/confirm-logout-modal';
@@ -50,10 +50,11 @@ const NavDrawer = () => {
     enabled: !isAboveMd && isLoggedIn,
   });
 
+  const { signUpPath, showSignUp, isAnon } = useSignUpData();
+
   const me = meData?.user;
-  const isAnon = !!me?.anonymous;
   const isRegistered = !!me && !isAnon;
-  const showSignUp = !isLoggedIn || isAnon;
+
   const canManageChannels = ability.can('manage', 'Channel');
   const canManageSettings = ability.can('manage', 'ServerConfig');
   const isServerBtnDisabled = !canManageSettings && !canManageChannels;
@@ -199,7 +200,7 @@ const NavDrawer = () => {
           )}
 
           {/* Show general channel for unregistered users */}
-          {generalChannelData && (
+          {!isRegistered && generalChannelData && (
             <List>
               <ListItemButton
                 onClick={() => handleNavigate(NavigationPaths.Home)}
@@ -217,9 +218,7 @@ const NavDrawer = () => {
               <Divider sx={{ marginX: '16px', marginBottom: '16px' }} />
 
               {showSignUp && (
-                <ListItemButton
-                  onClick={() => handleNavigate(NavigationPaths.SignUp)}
-                >
+                <ListItemButton onClick={() => handleNavigate(signUpPath)}>
                   <ListItemIcon>
                     <PersonAdd />
                   </ListItemIcon>

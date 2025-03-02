@@ -9,7 +9,7 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +39,7 @@ interface Props {
 }
 
 const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
-  const { isLoggedIn, setToast } = useAppStore((state) => state);
+  const { isLoggedIn, inviteToken, setToast } = useAppStore((state) => state);
 
   const [isAuthPromptOpen, setIsAuthPromptOpen] = useState(false);
   const [imagesInputKey, setImagesInputKey] = useState<number>();
@@ -131,6 +131,12 @@ const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     },
   });
 
+  const { data: isFirstUserData } = useQuery({
+    queryKey: ['is-first-user'],
+    queryFn: api.isFirstUser,
+    enabled: !isLoggedIn,
+  });
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const activeElement = document.activeElement;
@@ -141,8 +147,13 @@ const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
       ) {
         return;
       }
+
       if (
-        ['Space', 'Enter', 'Key', 'Digit'].some((key) => e.code.includes(key))
+        ['Space', 'Enter', 'Key', 'Digit'].some((key) =>
+          e.code.includes(key),
+        ) &&
+        // Allow for Ctrl + C to copy
+        e.code !== 'KeyC'
       ) {
         inputRef.current?.focus();
       }
@@ -197,6 +208,13 @@ const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
       return;
     }
     if (!isLoggedIn) {
+      if (!inviteToken && !isFirstUserData?.isFirstUser) {
+        setToast({
+          title: t('messages.prompts.inviteRequired'),
+          status: 'info',
+        });
+        return;
+      }
       setIsAuthPromptOpen(true);
       return;
     }

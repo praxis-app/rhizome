@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { normalizeText } from '../../common/common.utils';
-import { dataSource } from '../../database/data-source';
-import { User } from '../../users/user.entity';
+import { getValidInvite } from '../../invites/invites.service';
+import { getUserCount } from '../../users/users.service';
 import { SignUpReq } from '../auth.service';
 
 const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
@@ -19,7 +19,7 @@ export const validateSignUp = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { email, name, password } = req.body as SignUpReq;
+  const { email, name, password, inviteToken } = req.body as SignUpReq;
 
   if (!VALID_EMAIL_REGEX.test(email)) {
     res.status(422).send('Invalid email address');
@@ -52,8 +52,21 @@ export const validateSignUp = async (
     return;
   }
 
-  const userRepository = dataSource.getRepository(User);
-  const usersWithEmailCount = await userRepository.count({
+  const userCount = await getUserCount();
+  if (userCount && !inviteToken) {
+    res.status(403).send('You need an invite to sign up');
+    return;
+  }
+  if (inviteToken) {
+    try {
+      await getValidInvite(inviteToken);
+    } catch (error) {
+      res.status(403).send('Invalid invite token');
+      return;
+    }
+  }
+
+  const usersWithEmailCount = await getUserCount({
     where: { email: normalizeText(email) },
   });
   if (usersWithEmailCount > 0) {

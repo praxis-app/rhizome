@@ -25,6 +25,7 @@
     "chroma-js": "^3.1.2",
     "color-hash": "^2.0.2",
     "cors": "^2.8.5",
+    "crypto-random-string": "^3.3.1",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "express": "^5.0.1",
@@ -76,6 +77,6 @@
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4",
-    "vite": "^5.4.14"
+    "vite": "^6.2.0"
   }
 }

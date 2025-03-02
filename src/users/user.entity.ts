@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ChannelMember } from '../channels/models/channel-member.entity';
+import { Invite } from '../invites/invite.entity';
 import { Message } from '../messages/message.entity';
 import { Role } from '../roles/models/role.entity';
 
@@ -51,6 +52,11 @@ export class User {
     onDelete: 'CASCADE',
   })
   roles: Role[];
+
+  @OneToMany(() => Invite, (invite) => invite.user, {
+    cascade: true,
+  })
+  invites: Invite[];
 
   @CreateDateColumn()
   createdAt: Date;

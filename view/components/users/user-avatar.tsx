@@ -12,8 +12,9 @@ import { Link } from '../shared/link';
 
 interface Props extends AvatarProps {
   imageFile?: File;
-  userName: string;
-  userId: string;
+  imageSrc?: string;
+  userName?: string;
+  userId?: string;
   linkStyles?: CSSProperties;
   size?: number;
   href?: string;
@@ -21,6 +22,7 @@ interface Props extends AvatarProps {
 
 const UserAvatar = ({
   imageFile,
+  imageSrc,
   linkStyles,
   userId,
   size,
@@ -31,9 +33,10 @@ const UserAvatar = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const avatarSx = {
+  const avatarSx: AvatarProps['sx'] = {
     fontSize: '17px',
     borderRadius: '50%',
+    backgroundColor: 'transparent',
     width: 38,
     height: 38,
     ...sx,
@@ -41,6 +44,9 @@ const UserAvatar = ({
   };
 
   const getImageFileSrc = () => {
+    if (imageSrc) {
+      return imageSrc;
+    }
     if (imageFile) {
       return URL.createObjectURL(imageFile);
     }
@@ -55,19 +61,22 @@ const UserAvatar = ({
   };
 
   const getStringAvatarProps = (): AvatarProps => {
+    if (!userId || !userName) {
+      return { sx: avatarSx, children: null };
+    }
     const colorHash = new ColorHash();
     const baseColor = colorHash.hex(userId);
     const color = chroma(baseColor).darken(1.25).hex();
     const bgcolor = chroma(baseColor).brighten(2).hex();
 
     return {
-      sx: { color, bgcolor, ...avatarSx },
+      sx: { ...avatarSx, color, bgcolor },
       children: getNameAcronym(userName),
     };
   };
 
   const renderAvatar = () => {
-    if (!imageFile) {
+    if (!imageFile && !imageSrc) {
       return <Avatar title={userName} {...getStringAvatarProps()} />;
     }
     return (

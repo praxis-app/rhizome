@@ -1,48 +1,27 @@
-import { AdminPanelSettings, ChevronRight, Close } from '@mui/icons-material';
-import { Box, Button, SxProps } from '@mui/material';
+import { AdminPanelSettings, Close, Link } from '@mui/icons-material';
+import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../../components/nav/top-nav';
 import PermissionDenied from '../../components/roles/permission-denied';
+import SettingsNavItem from '../../components/settings/settings-nav-item';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
-import { useAboveBreakpoint, useIsDarkMode } from '../../hooks/shared.hooks';
+import { useAboveBreakpoint } from '../../hooks/shared.hooks';
 import { useAppStore } from '../../store/app.store';
-import { GRAY } from '../../styles/theme';
 
 const ServerSettings = () => {
   const { setIsNavDrawerOpen } = useAppStore((state) => state);
 
   const { t } = useTranslation();
-  const isDarkMode = useIsDarkMode();
   const isAboveMd = useAboveBreakpoint('md');
   const navigate = useNavigate();
   const ability = useAbility();
 
   const canManageSettings = ability.can('manage', 'ServerConfig');
   const canManageRoles = ability.can('manage', 'Role') && canManageSettings;
-
-  const buttonIconSx: SxProps = {
-    color: canManageRoles ? 'text.secondary' : 'text.disabled',
-  };
-
-  const rolesBtnSx: SxProps = {
-    boxShadow: isDarkMode
-      ? 'none'
-      : '0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px -1px rgba(0, 0, 0, .1);',
-    backgroundColor: isDarkMode
-      ? 'rgba(255, 255, 255, 0.045)'
-      : 'background.paper',
-    border: isDarkMode ? 'none' : `1px solid ${GRAY[100]}`,
-    color: 'text.primary',
-    display: 'flex',
-    justifyContent: 'space-between',
-    width: '100%',
-    padding: '14px',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    userSelect: 'none',
-  };
+  const canManageInvites = ability.can('manage', 'Invite') && canManageSettings;
+  const canCreateInvites = ability.can('create', 'Invite') && canManageSettings;
 
   if (!canManageSettings) {
     return (
@@ -71,18 +50,21 @@ const ServerSettings = () => {
         backBtnIcon={<Close />}
       />
 
-      {/* TODO: Add shared component for this button type */}
-      <Button
-        sx={rolesBtnSx}
-        onClick={() => navigate(NavigationPaths.Roles)}
-        disabled={!canManageRoles}
-      >
-        <Box display="flex" gap={1.5}>
-          <AdminPanelSettings sx={buttonIconSx} />
-          {t('navigation.roles')}
-        </Box>
-        <ChevronRight sx={buttonIconSx} />
-      </Button>
+      <Box display="flex" flexDirection="column" gap="16px">
+        <SettingsNavItem
+          Icon={AdminPanelSettings}
+          disabled={!canManageRoles}
+          onClick={() => navigate(NavigationPaths.Roles)}
+          label={t('navigation.roles')}
+        />
+
+        <SettingsNavItem
+          Icon={Link}
+          disabled={!canManageInvites && !canCreateInvites}
+          onClick={() => navigate(NavigationPaths.Invites)}
+          label={t('navigation.invites')}
+        />
+      </Box>
     </>
   );
 };

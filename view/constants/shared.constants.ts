@@ -1,4 +1,5 @@
 export const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+export const MIDDOT_WITH_SPACES = ' · ';
 
 /** Time in seconds */
 export enum Time {
@@ -34,11 +35,14 @@ export enum NavigationPaths {
   Home = '/',
   Login = '/auth/login',
   SignUp = '/auth/signup',
-  Settings = '/settings',
-  Roles = '/settings/roles',
   Channels = '/channels',
+  Settings = '/settings',
+  Invites = '/settings/invites',
+  Roles = '/settings/roles',
 }
 
 export enum LocalStorageKeys {
   AccessToken = 'access_token',
+  InviteToken = 'invite-token',
+  HideWelcomeMessage = 'hide-welcome-message',
 }

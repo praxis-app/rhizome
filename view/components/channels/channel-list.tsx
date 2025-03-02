@@ -1,8 +1,9 @@
 import { List } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { api } from '../../client/api-client';
 import { GENERAL_CHANNEL_NAME } from '../../constants/channel.constants';
+import { NavigationPaths } from '../../constants/shared.constants';
 import { CurrentUser } from '../../types/user.types';
 import ChannelListItem from './channel-list-item';
 
@@ -14,6 +15,9 @@ interface Props {
  * Channel list component for the left navigation panel on desktop
  */
 const ChannelList = ({ me }: Props) => {
+  const { channelId } = useParams();
+  const { pathname } = useLocation();
+
   const isRegistered = !!me && !me.anonymous;
 
   const { data: channelsData } = useQuery({
@@ -27,8 +31,6 @@ const ChannelList = ({ me }: Props) => {
     queryFn: () => api.getGeneralChannel(),
     enabled: !isRegistered,
   });
-
-  const { channelId } = useParams();
 
   if (generalChannelData && !isRegistered) {
     return (
@@ -48,13 +50,19 @@ const ChannelList = ({ me }: Props) => {
 
   return (
     <List sx={{ flex: 1, overflowY: 'scroll' }}>
-      {channelsData.channels.map((channel) => (
-        <ChannelListItem
-          key={channel.id}
-          channel={channel}
-          isActive={channelId === channel.id}
-        />
-      ))}
+      {channelsData.channels.map((channel) => {
+        const isHome = pathname === NavigationPaths.Home;
+        const isGeneral = channel.name === GENERAL_CHANNEL_NAME;
+        const isActive = channelId === channel.id || (isHome && isGeneral);
+
+        return (
+          <ChannelListItem
+            key={channel.id}
+            channel={channel}
+            isActive={isActive}
+          />
+        );
+      })}
     </List>
   );
 };

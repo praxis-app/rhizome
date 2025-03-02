@@ -7,6 +7,7 @@ import appIconImg from '../../../assets/images/app-icon.png';
 import { NavigationPaths } from '../../../constants/shared.constants';
 import { useAbility } from '../../../hooks/role.hooks';
 import { useIsDarkMode } from '../../../hooks/shared.hooks';
+import { useSignUpData } from '../../../hooks/user.hooks';
 import { useAppStore } from '../../../store/app.store';
 import { GRAY } from '../../../styles/theme';
 import { CurrentUser } from '../../../types/user.types';
@@ -35,6 +36,8 @@ const LeftNav = ({ me }: Props) => {
   const isDarkMode = useIsDarkMode();
   const navigate = useNavigate();
   const ability = useAbility();
+
+  const { signUpPath } = useSignUpData();
 
   const canManageSettings = ability.can('manage', 'ServerConfig');
   const canManageChannels = ability.can('manage', 'Channel');
@@ -193,7 +196,7 @@ const LeftNav = ({ me }: Props) => {
             </Button>
             <Button
               sx={{ color: 'text.primary' }}
-              onClick={() => navigate(NavigationPaths.SignUp)}
+              onClick={() => navigate(signUpPath)}
             >
               {t('users.actions.signUp')}
             </Button>
