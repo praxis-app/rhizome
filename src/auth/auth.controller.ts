@@ -11,8 +11,10 @@ export const signUp = async (req: Request, res: Response) => {
   res.json({ access_token });
 };
 
-export const createAnonSession = async (_req: Request, res: Response) => {
-  const access_token = await authService.createAnonSession();
+export const createAnonSession = async (req: Request, res: Response) => {
+  const access_token = await authService.createAnonSession(
+    req.body.inviteToken,
+  );
   res.json({ access_token });
 };
 

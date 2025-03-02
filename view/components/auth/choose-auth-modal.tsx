@@ -15,11 +15,11 @@ interface Props {
 }
 
 const ChooseAuthModal = ({ isOpen, setIsOpen, sendMessage }: Props) => {
-  const { setIsLoggedIn } = useAppStore((state) => state);
+  const { inviteToken, setIsLoggedIn } = useAppStore((state) => state);
 
   const { mutate: createAnonSession } = useMutation({
     mutationFn: async () => {
-      const { access_token } = await api.createAnonSession();
+      const { access_token } = await api.createAnonSession(inviteToken);
       localStorage.setItem(LocalStorageKeys.AccessToken, access_token);
       setIsLoggedIn(true);
       sendMessage();

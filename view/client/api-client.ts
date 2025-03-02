@@ -42,9 +42,11 @@ class ApiClient {
     });
   };
 
-  createAnonSession = async () => {
+  createAnonSession = async (inviteToken?: string | null) => {
     const path = '/auth/anon';
-    return this.executeRequest<AuthRes>('post', path);
+    return this.executeRequest<AuthRes>('post', path, {
+      data: { inviteToken },
+    });
   };
 
   upgradeAnonSession = async (data: SignUpReq) => {
