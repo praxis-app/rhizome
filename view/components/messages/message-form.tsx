@@ -9,7 +9,7 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -131,6 +131,12 @@ const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
     },
   });
 
+  const { data: isFirstUserData } = useQuery({
+    queryKey: ['is-first-user'],
+    queryFn: api.isFirstUser,
+    enabled: !isLoggedIn,
+  });
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const activeElement = document.activeElement;
@@ -202,7 +208,7 @@ const MessageForm = ({ channelId, onSend, isGeneralChannel }: Props) => {
       return;
     }
     if (!isLoggedIn) {
-      if (!inviteToken) {
+      if (!inviteToken && !isFirstUserData?.isFirstUser) {
         setToast({
           title: t('messages.prompts.inviteRequired'),
           status: 'info',

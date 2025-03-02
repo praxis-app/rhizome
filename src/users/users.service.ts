@@ -70,7 +70,15 @@ export const createAnonUser = async () => {
     name: generateName(),
     anonymous: true,
   });
-  await channelsService.addMemberToGeneralChannel(user.id);
+  const isFirst = await isFirstUser();
+
+  if (isFirst) {
+    await createAdminRole(user.id);
+    await channelsService.addMemberToAllChannels(user.id);
+  } else {
+    await channelsService.addMemberToGeneralChannel(user.id);
+  }
+
   return user;
 };
 
