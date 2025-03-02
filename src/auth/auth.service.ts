@@ -73,12 +73,11 @@ export const upgradeAnonSession = async (
 
 export const createAnonSession = async (inviteToken?: string) => {
   const user = await usersService.createAnonUser();
-  const accessToken = generateAccessToken(user.id);
 
   if (inviteToken) {
     await invitesService.redeemInvite(inviteToken);
   }
-  return accessToken;
+  return generateAccessToken(user.id);
 };
 
 export const verifyAccessToken = (token: string) => {
