@@ -28,7 +28,6 @@ import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths, Time } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
 import { useAboveBreakpoint } from '../../hooks/shared.hooks';
-import { useMeQuery } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Invite } from '../../types/invite.types';
 
@@ -90,11 +89,6 @@ const InvitesPage = () => {
     enabled: isLoggedIn,
   });
 
-  const { data: meData } = useMeQuery({
-    enabled: isLoggedIn,
-    retry: false,
-  });
-
   const expiresAtOptions = [
     {
       message: t('invites.form.expiresAtOptions.oneDay'),
@@ -134,10 +128,6 @@ const InvitesPage = () => {
 
   if (isInvitesLoading) {
     return <ProgressBar />;
-  }
-
-  if (!meData) {
-    return null;
   }
 
   return (
@@ -230,7 +220,7 @@ const InvitesPage = () => {
             </TableHead>
             <TableBody>
               {invitesData.invites.map((invite) => (
-                <InviteRow key={invite.id} invite={invite} me={meData.user} />
+                <InviteRow key={invite.id} invite={invite} />
               ))}
 
               {/* TODO: Decide whether or not to remove */}

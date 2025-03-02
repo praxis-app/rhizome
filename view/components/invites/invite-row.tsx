@@ -7,7 +7,6 @@ import { useDeleteInviteMutation } from '../../hooks/invite.hooks';
 import { useAbility } from '../../hooks/role.hooks';
 import { useAppStore } from '../../store/app.store';
 import { Invite } from '../../types/invite.types';
-import { CurrentUser } from '../../types/user.types';
 import { copyInviteLink } from '../../utils/invite.utils';
 import { truncate } from '../../utils/text.utils';
 import { timeFromNow } from '../../utils/time.utils';
@@ -16,13 +15,11 @@ import { Link } from '../shared/link';
 import UserAvatar from '../users/user-avatar';
 
 interface Props {
-  me: CurrentUser;
   invite: Invite;
 }
 
 const InviteRow = ({
   invite: { id, user, token, uses, maxUses, expiresAt },
-  me,
 }: Props) => {
   const { setToast } = useAppStore((state) => state);
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,10 +48,6 @@ const InviteRow = ({
     });
     setMenuAnchorEl(null);
   };
-
-  if (!me) {
-    return null;
-  }
 
   const truncatedUsername = truncate(user.name, 18);
 
