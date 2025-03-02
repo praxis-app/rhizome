@@ -114,7 +114,7 @@ const SignUp = () => {
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
     }
-  }, [me, navigate, setIsRedirecting]);
+  }, [me, navigate, setIsRedirecting, isAnon]);
 
   const { handleSubmit, register, formState } = useForm<FormValues>({
     mode: 'onChange',
