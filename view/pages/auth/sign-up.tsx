@@ -1,5 +1,3 @@
-// TODO: Account for first user sign-up flow
-
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Card,
