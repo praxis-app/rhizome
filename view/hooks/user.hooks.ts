@@ -44,13 +44,16 @@ export const useSignUpData = () => {
   const { data } = useQuery({
     queryKey: ['is-first-user'],
     queryFn: api.isFirstUser,
+    enabled: !isLoggedIn,
   });
 
   const { data: meData } = useMeQuery({
     enabled: isLoggedIn,
   });
 
-  const isAnon = !!meData?.user?.anonymous;
+  const me = meData?.user;
+  const isAnon = !!me && me.anonymous === true;
+  const isRegistered = !!me && me.anonymous === false;
   const isFirstUser = !!data?.isFirstUser;
   const isInvited = !!inviteToken;
 
@@ -70,11 +73,13 @@ export const useSignUpData = () => {
   };
 
   return {
+    isAnon,
+    isRegistered,
     isInvited: !!inviteToken,
     isFirstUser: data?.isFirstUser,
     showSignUp: getShowSignUp(),
     inviteToken,
     signUpPath,
-    isAnon,
+    me,
   };
 };

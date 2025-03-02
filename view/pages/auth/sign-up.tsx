@@ -29,7 +29,7 @@ import {
   NavigationPaths,
 } from '../../constants/shared.constants';
 import { useIsDarkMode } from '../../hooks/shared.hooks';
-import { useMeQuery } from '../../hooks/user.hooks';
+import { useSignUpData } from '../../hooks/user.hooks';
 import { useAppStore } from '../../store/app.store';
 import { GRAY } from '../../styles/theme';
 
@@ -61,6 +61,8 @@ const SignUp = () => {
   const isDarkMode = useIsDarkMode();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  const { isFirstUser, isAnon, isRegistered, me } = useSignUpData();
 
   const { mutate: signUp, isPending: isSignUpPending } = useMutation({
     mutationFn: async (values: FormValues) => {
@@ -107,23 +109,12 @@ const SignUp = () => {
     enabled: !!token,
   });
 
-  const { data: isFirstUserData } = useQuery({
-    queryKey: ['is-first-user'],
-    queryFn: api.isFirstUser,
-    enabled: !isLoggedIn && !token,
-  });
-
-  const { data: meData, isLoading: isMeLoading } = useMeQuery({
-    enabled: isLoggedIn,
-    retry: false,
-  });
-
   useEffect(() => {
-    if (meData && !meData.user.anonymous) {
+    if (me && !isAnon) {
       navigate(NavigationPaths.Home);
       setIsRedirecting(true);
     }
-  }, [meData, navigate, setIsRedirecting]);
+  }, [me, navigate, setIsRedirecting]);
 
   const { handleSubmit, register, formState } = useForm<FormValues>({
     mode: 'onChange',
@@ -196,8 +187,6 @@ const SignUp = () => {
   );
 
   const isPending = isSignUpPending || isUpgradeAnonPending;
-  const isRegistered = meData && meData.user.anonymous === false;
-  const isAnon = meData && meData.user.anonymous === true;
 
   const subheader = t(
     isAnon ? 'users.prompts.upgradeAccount' : 'users.prompts.signUpSubtext',
@@ -207,7 +196,7 @@ const SignUp = () => {
     return <Typography>{t('invites.prompts.expiredOrInvalid')}</Typography>;
   }
 
-  if (isMeLoading || isRedirecting || isRegistered || isInviteLoading) {
+  if (isRedirecting || isRegistered || isInviteLoading) {
     return <ProgressBar />;
   }
 
@@ -220,7 +209,7 @@ const SignUp = () => {
     );
   }
 
-  if (!token && !isFirstUserData?.isFirstUser && !isAnon) {
+  if (!token && !isFirstUser && !isAnon) {
     return (
       <>
         <TopNav />
