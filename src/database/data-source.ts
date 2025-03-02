@@ -8,7 +8,7 @@ import { Message } from '../messages/message.entity';
 import { Permission } from '../roles/models/permission.entity';
 import { Role } from '../roles/models/role.entity';
 import { User } from '../users/user.entity';
-import { AddUserTable1733010289874 } from './migrations/1733010289874-AddUserTable';
+import { Init1740949608930 } from './migrations/1740949608930-Init';
 
 dotenv.config();
 
@@ -30,5 +30,5 @@ export const dataSource = new DataSource({
     Role,
     User,
   ],
-  migrations: [AddUserTable1733010289874],
+  migrations: [Init1740949608930],
 });
