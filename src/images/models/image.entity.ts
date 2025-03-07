@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Message } from '../../messages/message.entity';
+import { Proposal } from '../../proposals/proposal.entity';
 
 @Entity()
 export class Image {
@@ -26,6 +27,14 @@ export class Image {
 
   @Column({ nullable: true, type: 'varchar' })
   messageId: string | null;
+
+  @ManyToOne(() => Proposal, (proposal) => proposal.images, {
+    onDelete: 'CASCADE',
+  })
+  proposal?: Proposal;
+
+  @Column({ nullable: true })
+  proposalId?: number;
 
   @CreateDateColumn()
   createdAt: Date;
