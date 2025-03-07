@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Image } from '../images/models/image.entity';
 import { User } from '../users/user.entity';
+import { ProposalStage } from './proposals.constants';
 
 @Entity()
 export class Proposal {
@@ -20,9 +21,8 @@ export class Proposal {
   @Column({ type: 'varchar', nullable: true })
   body: string | null;
 
-  // TODO: Uncomment when ProposalStage is defined
-  // @Column({ type: 'varchar', default: ProposalStage.Voting })
-  // stage: ProposalStage;
+  @Column({ type: 'varchar', default: ProposalStage.Voting })
+  stage: ProposalStage;
 
   // TODO: Uncomment when ProposalAction is defined
   // @OneToOne(() => ProposalAction, (action) => action.proposal, {
