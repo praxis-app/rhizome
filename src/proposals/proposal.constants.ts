@@ -12,9 +12,9 @@ export enum ProposalActionType {
   Test = 'test',
 }
 
-export enum ProposalStage {
-  Voting = 'voting',
-  Ratified = 'ratified',
-  Revision = 'revision',
-  Closed = 'closed',
-}
+export const PROPOSAL_STAGE = [
+  'voting',
+  'ratified',
+  'revision',
+  'closed',
+] as const;

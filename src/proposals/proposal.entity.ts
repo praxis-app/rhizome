@@ -12,7 +12,8 @@ import {
 import { Image } from '../images/models/image.entity';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
-import { ProposalStage } from './proposals.constants';
+import { PROPOSAL_STAGE } from './proposal.constants';
+import { ProposalStage } from './proposal.types';
 
 @Entity()
 export class Proposal {
@@ -22,7 +23,7 @@ export class Proposal {
   @Column({ type: 'varchar', nullable: true })
   body: string | null;
 
-  @Column({ type: 'varchar', default: ProposalStage.Voting })
+  @Column({ type: 'enum', default: 'voting', enum: PROPOSAL_STAGE })
   stage: ProposalStage;
 
   // TODO: Uncomment when ProposalAction is defined
