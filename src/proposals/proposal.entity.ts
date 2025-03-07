@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Image } from '../images/models/image.entity';
 import { User } from '../users/user.entity';
+import { Vote } from '../votes/vote.entity';
 import { ProposalStage } from './proposals.constants';
 
 @Entity()
@@ -36,11 +37,10 @@ export class Proposal {
   // })
   // config: ProposalConfig;
 
-  // TODO: Uncomment when Vote is defined
-  // @OneToMany(() => Vote, (vote) => vote.proposal, {
-  //   cascade: true,
-  // })
-  // votes: Vote[];
+  @OneToMany(() => Vote, (vote) => vote.proposal, {
+    cascade: true,
+  })
+  votes: Vote[];
 
   @OneToMany(() => Image, (image) => image.proposal, {
     cascade: true,

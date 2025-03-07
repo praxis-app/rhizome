@@ -9,6 +9,7 @@ import { Proposal } from '../proposals/proposal.entity';
 import { Permission } from '../roles/models/permission.entity';
 import { Role } from '../roles/models/role.entity';
 import { User } from '../users/user.entity';
+import { Vote } from '../votes/vote.entity';
 import { Init1740949608930 } from './migrations/1740949608930-Init';
 
 dotenv.config();
@@ -31,6 +32,7 @@ export const dataSource = new DataSource({
     Proposal,
     Role,
     User,
+    Vote,
   ],
   migrations: [Init1740949608930],
 });

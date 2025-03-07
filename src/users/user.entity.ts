@@ -12,6 +12,7 @@ import { Invite } from '../invites/invite.entity';
 import { Message } from '../messages/message.entity';
 import { Proposal } from '../proposals/proposal.entity';
 import { Role } from '../roles/models/role.entity';
+import { Vote } from '../votes/vote.entity';
 
 @Entity()
 export class User {
@@ -43,6 +44,11 @@ export class User {
     cascade: true,
   })
   proposals: Proposal[];
+
+  @OneToMany(() => Vote, (vote) => vote.user, {
+    cascade: true,
+  })
+  votes: Vote[];
 
   @OneToMany(() => Message, (message) => message.user, {
     cascade: true,
