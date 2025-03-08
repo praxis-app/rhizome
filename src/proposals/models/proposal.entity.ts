@@ -1,4 +1,8 @@
-// Used for reference: https://github.com/forrestwilkins/anrcho/blob/master/app/models/proposal.rb
+/**
+ * Used for reference:
+ * - https://github.com/forrestwilkins/anrcho/blob/master/app/models/proposal.rb
+ * - https://github.com/praxis-app/praxis/blob/main/src/proposals/models/proposal.model.ts
+ */
 
 import {
   Column,
@@ -16,6 +20,7 @@ import { Vote } from '../../votes/vote.entity';
 import { PROPOSAL_STAGE } from '../proposal.constants';
 import { ProposalStage } from '../proposal.types';
 import { ProposalAction } from './proposal-action.entity';
+import { ProposalConfig } from './proposal-config.entity';
 
 @Entity()
 export class Proposal {
@@ -33,11 +38,10 @@ export class Proposal {
   })
   action: ProposalAction;
 
-  // TODO: Uncomment when ProposalConfig is defined
-  // @OneToOne(() => ProposalConfig, (proposalConfig) => proposalConfig.proposal, {
-  //   cascade: true,
-  // })
-  // config: ProposalConfig;
+  @OneToOne(() => ProposalConfig, (proposalConfig) => proposalConfig.proposal, {
+    cascade: true,
+  })
+  config: ProposalConfig;
 
   @OneToMany(() => Vote, (vote) => vote.proposal, {
     cascade: true,
