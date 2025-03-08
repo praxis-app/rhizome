@@ -5,6 +5,7 @@ import { Channel } from '../channels/models/channel.entity';
 import { Image } from '../images/models/image.entity';
 import { Invite } from '../invites/invite.entity';
 import { Message } from '../messages/message.entity';
+import { ProposalAction } from '../proposals/proposal-action.entity';
 import { Proposal } from '../proposals/proposal.entity';
 import { Permission } from '../roles/models/permission.entity';
 import { Role } from '../roles/models/role.entity';
@@ -30,6 +31,7 @@ export const dataSource = new DataSource({
     Message,
     Permission,
     Proposal,
+    ProposalAction,
     Role,
     User,
     Vote,

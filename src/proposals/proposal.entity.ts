@@ -6,12 +6,14 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Image } from '../images/models/image.entity';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
+import { ProposalAction } from './proposal-action.entity';
 import { PROPOSAL_STAGE } from './proposal.constants';
 import { ProposalStage } from './proposal.types';
 
@@ -26,11 +28,10 @@ export class Proposal {
   @Column({ type: 'enum', default: 'voting', enum: PROPOSAL_STAGE })
   stage: ProposalStage;
 
-  // TODO: Uncomment when ProposalAction is defined
-  // @OneToOne(() => ProposalAction, (action) => action.proposal, {
-  //   cascade: true,
-  // })
-  // action: ProposalAction;
+  @OneToOne(() => ProposalAction, (action) => action.proposal, {
+    cascade: true,
+  })
+  action: ProposalAction;
 
   // TODO: Uncomment when ProposalConfig is defined
   // @OneToOne(() => ProposalConfig, (proposalConfig) => proposalConfig.proposal, {
