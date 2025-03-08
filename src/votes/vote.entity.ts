@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Proposal } from '../proposals/proposal.entity';
+import { Proposal } from '../proposals/models/proposal.entity';
 import { User } from '../users/user.entity';
 import { VOTE_TYPES } from './vote.constants';
 import { VoteType } from './vote.types';

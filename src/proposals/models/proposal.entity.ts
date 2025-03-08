@@ -10,12 +10,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Image } from '../images/models/image.entity';
-import { User } from '../users/user.entity';
-import { Vote } from '../votes/vote.entity';
+import { Image } from '../../images/models/image.entity';
+import { User } from '../../users/user.entity';
+import { Vote } from '../../votes/vote.entity';
+import { PROPOSAL_STAGE } from '../proposal.constants';
+import { ProposalStage } from '../proposal.types';
 import { ProposalAction } from './proposal-action.entity';
-import { PROPOSAL_STAGE } from './proposal.constants';
-import { ProposalStage } from './proposal.types';
 
 @Entity()
 export class Proposal {

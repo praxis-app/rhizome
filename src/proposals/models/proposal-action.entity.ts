@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PROPOSA_ACTION_TYPE } from './proposal.constants';
+import { PROPOSA_ACTION_TYPE } from '../proposal.constants';
 import { Proposal } from './proposal.entity';
-import { ProposalActionType } from './proposal.types';
+import { ProposalActionType } from '../proposal.types';
 
 @Entity()
 export class ProposalAction {
