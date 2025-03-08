@@ -1,16 +1,16 @@
-export enum DecisionMakingModel {
-  Consent = 'consent',
-  Consensus = 'consensus',
-  MajorityVote = 'majority-vote',
-}
+export const DECISION_MAKING_MODEL = [
+  'consent',
+  'consensus',
+  'majority-vote',
+] as const;
 
-export enum ProposalActionType {
-  ChangeRole = 'change-role',
-  ChangeSettings = 'change-settings',
-  CreateRole = 'create-role',
-  PlanEvent = 'plan-event',
-  Test = 'test',
-}
+export const PROPOSA_ACTION_TYPE = [
+  'change-role',
+  'change-settings',
+  'create-role',
+  'plan-event',
+  'test',
+] as const;
 
 export const PROPOSAL_STAGE = [
   'voting',

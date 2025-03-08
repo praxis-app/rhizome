@@ -7,16 +7,17 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PROPOSA_ACTION_TYPE } from './proposal.constants';
 import { Proposal } from './proposal.entity';
+import { ProposalActionType } from './proposal.types';
 
 @Entity()
 export class ProposalAction {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // TODO: Uncomment and implement with PG enum type
-  // @Column({ type: 'varchar' })
-  // actionType: ProposalActionType;
+  @Column({ type: 'enum', enum: PROPOSA_ACTION_TYPE })
+  actionType: ProposalActionType;
 
   // TODO: Uncomment when ProposalActionRole is defined
   // @OneToOne(
