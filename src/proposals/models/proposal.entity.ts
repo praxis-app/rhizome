@@ -24,8 +24,8 @@ import { ProposalConfig } from './proposal-config.entity';
 
 @Entity()
 export class Proposal {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', nullable: true })
   body: string | null;
@@ -57,7 +57,7 @@ export class Proposal {
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @CreateDateColumn()
   createdAt: Date;

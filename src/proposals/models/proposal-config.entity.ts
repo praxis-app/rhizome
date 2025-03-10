@@ -13,8 +13,8 @@ import { Proposal } from './proposal.entity';
 
 @Entity()
 export class ProposalConfig {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'enum', enum: DECISION_MAKING_MODEL })
   decisionMakingModel: DecisionMakingModel;
@@ -38,7 +38,7 @@ export class ProposalConfig {
   proposal: Proposal;
 
   @Column()
-  proposalId: number;
+  proposalId: string;
 
   @CreateDateColumn()
   createdAt: Date;

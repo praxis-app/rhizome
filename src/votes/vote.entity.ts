@@ -13,8 +13,8 @@ import { VoteType } from './vote.types';
 
 @Entity()
 export class Vote {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'enum', enum: VOTE_TYPES })
   voteType: VoteType;
@@ -24,8 +24,8 @@ export class Vote {
   })
   proposal?: Proposal;
 
-  @Column({ nullable: true })
-  proposalId?: number;
+  @Column({ type: 'varchar', nullable: true })
+  proposalId: string | null;
 
   // TODO: Uncomment when QuestionnaireTicket is defined
   // @ManyToOne(
@@ -37,14 +37,15 @@ export class Vote {
   // )
   // questionnaireTicket?: QuestionnaireTicket;
 
-  @Column({ nullable: true })
-  questionnaireTicketId?: number;
+  // TODO: Uncomment when QuestionnaireTicket is defined
+  // @Column({ type: 'varchar', nullable: true })
+  // questionnaireTicketId: string | null;
 
   @ManyToOne(() => User, (user) => user.votes, { onDelete: 'CASCADE' })
   user: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   // TODO: Uncomment when Notification is defined
   // @OneToMany(() => Notification, (notification) => notification.vote)

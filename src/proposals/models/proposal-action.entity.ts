@@ -13,8 +13,8 @@ import { ProposalActionType } from '../proposal.types';
 
 @Entity()
 export class ProposalAction {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'enum', enum: PROPOSA_ACTION_TYPE })
   actionType: ProposalActionType;
@@ -37,7 +37,7 @@ export class ProposalAction {
   proposal: Proposal;
 
   @Column()
-  proposalId: number;
+  proposalId: string;
 
   @CreateDateColumn()
   createdAt: Date;
