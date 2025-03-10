@@ -1,8 +1,23 @@
+import { FindOptionsWhere } from 'typeorm';
 import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { Proposal } from './models/proposal.entity';
 
 const proposalRepository = dataSource.getRepository(Proposal);
+
+export const getProposal = (id: string, relations?: string[]) => {
+  return proposalRepository.findOneOrFail({
+    where: { id },
+    relations,
+  });
+};
+
+export const getProposals = (
+  where?: FindOptionsWhere<Proposal>,
+  relations?: string[],
+) => {
+  return proposalRepository.find({ where, relations });
+};
 
 export const createProposal = async (
   { body, closingAt, action, groupId }: any,
