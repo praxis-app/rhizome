@@ -1,9 +1,12 @@
 import { FindOptionsWhere } from 'typeorm';
 import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
+import { deleteImageFile } from '../images/images.utils';
+import { Image } from '../images/models/image.entity';
 import { Proposal } from './models/proposal.entity';
 
 const proposalRepository = dataSource.getRepository(Proposal);
+const imageRepository = dataSource.getRepository(Image);
 
 export const getProposal = (id: string, relations?: string[]) => {
   return proposalRepository.findOneOrFail({
@@ -52,4 +55,14 @@ export const createProposal = async (
   });
 
   return proposal;
+};
+
+export const deleteProposal = async (proposalId: string) => {
+  const images = await imageRepository.find({ where: { proposalId } });
+  for (const { filename } of images) {
+    if (filename) {
+      await deleteImageFile(filename);
+    }
+  }
+  return proposalRepository.delete(proposalId);
 };

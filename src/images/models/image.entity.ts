@@ -25,7 +25,7 @@ export class Image {
   })
   message?: Message;
 
-  @Column({ nullable: true, type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   messageId: string | null;
 
   @ManyToOne(() => Proposal, (proposal) => proposal.images, {
@@ -33,8 +33,8 @@ export class Image {
   })
   proposal?: Proposal;
 
-  @Column({ nullable: true })
-  proposalId?: number;
+  @Column({ type: 'varchar', nullable: true })
+  proposalId: string | null;
 
   @CreateDateColumn()
   createdAt: Date;
