@@ -17,7 +17,7 @@ export const getVoteCount = async () => {
   return voteRepository.count();
 };
 
-export const createVote = async (voteData: any, userId: number) => {
+export const createVote = async (voteData: any, userId: string) => {
   const vote = await voteRepository.save({
     ...voteData,
     userId,
@@ -32,4 +32,25 @@ export const createVote = async (voteData: any, userId: number) => {
   }
 
   return vote;
+};
+
+export const updateVote = async (voteId: string, voteData: any) => {
+  const result = await voteRepository.update(voteId, voteData);
+  const vote = await getVote(voteId, ['proposal']);
+
+  if (vote.proposalId) {
+    const isProposalRatifiable = await proposalsService.isProposalRatifiable(
+      vote.proposalId,
+    );
+    if (isProposalRatifiable) {
+      await proposalsService.ratifyProposal(vote.proposalId);
+      // TODO: Implement proposal here (implementProposal)
+    }
+  }
+
+  return result;
+};
+
+export const deleteVote = async (voteId: string) => {
+  return voteRepository.delete(voteId);
 };
