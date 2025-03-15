@@ -10,6 +10,7 @@ import { ProposalConfig } from '../proposals/models/proposal-config.entity';
 import { Proposal } from '../proposals/models/proposal.entity';
 import { Permission } from '../roles/models/permission.entity';
 import { Role } from '../roles/models/role.entity';
+import { ServerConfig } from '../server-config/server-config.entity';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
 import { Init1740949608930 } from './migrations/1740949608930-Init';
@@ -35,6 +36,7 @@ export const dataSource = new DataSource({
     ProposalAction,
     ProposalConfig,
     Role,
+    ServerConfig,
     User,
     Vote,
   ],
