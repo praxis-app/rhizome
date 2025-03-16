@@ -16,6 +16,6 @@ export const initializeServerConfig = async () => {
 };
 
 export const updateServerConfig = async (data: Partial<ServerConfig>) => {
-  let serverConfig = await getServerConfig();
+  const serverConfig = await getServerConfig();
   return serverConfigRepository.update(serverConfig.id, data);
 };
