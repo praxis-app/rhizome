@@ -53,7 +53,9 @@ export class Proposal {
   })
   images: Image[];
 
-  @ManyToOne(() => User, (user) => user.proposals, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.proposals, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 
   @Column()
