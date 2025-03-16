@@ -7,7 +7,10 @@ export const createVote = async (req: Request, res: Response) => {
 };
 
 export const updateVote = async (req: Request, res: Response) => {
-  const result = await votesService.updateVote(req.params.voteId, req.body);
+  const result = await votesService.updateVote(
+    req.params.voteId,
+    req.body.voteType,
+  );
   res.json(result);
 };
 

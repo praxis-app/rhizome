@@ -2,6 +2,12 @@ import { FindOptionsWhere } from 'typeorm';
 import { dataSource } from '../database/data-source';
 import * as proposalsService from '../proposals/proposals.service';
 import { Vote } from './vote.entity';
+import { VoteType } from './vote.types';
+
+interface CreateVoteReq {
+  proposalId: string;
+  voteType: VoteType;
+}
 
 const voteRepository = dataSource.getRepository(Vote);
 
@@ -17,7 +23,7 @@ export const getVoteCount = async () => {
   return voteRepository.count();
 };
 
-export const createVote = async (voteData: any, userId: string) => {
+export const createVote = async (voteData: CreateVoteReq, userId: string) => {
   const vote = await voteRepository.save({
     ...voteData,
     userId,
@@ -34,8 +40,8 @@ export const createVote = async (voteData: any, userId: string) => {
   return vote;
 };
 
-export const updateVote = async (voteId: string, voteData: any) => {
-  const result = await voteRepository.update(voteId, voteData);
+export const updateVote = async (voteId: string, voteType: VoteType) => {
+  const result = await voteRepository.update(voteId, { voteType });
   const vote = await getVote(voteId, ['proposal']);
 
   if (vote.proposalId) {
