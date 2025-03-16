@@ -6,6 +6,10 @@ import {
 } from '../proposals/proposals.controller';
 import { createVote, deleteVote, updateVote } from '../votes/votes.controller';
 import { authIntegration } from './auth-integration.middleware';
+import {
+  getServerConfig,
+  updateServerConfig,
+} from '../server-configs/server-configs.controller';
 
 export const integrationsRouter = express.Router();
 
@@ -20,3 +24,7 @@ integrationsRouter
   .post('/votes', createVote)
   .put('/votes/:voteId', updateVote)
   .delete('/votes/:voteId', deleteVote);
+
+integrationsRouter
+  .get('/server-configs', getServerConfig)
+  .put('/server-configs', updateServerConfig);
