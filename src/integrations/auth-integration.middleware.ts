@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { getServerConfig } from '../server-configs/server-configs.service';
 
 export const authIntegration = async (
   req: Request,
@@ -12,7 +13,11 @@ export const authIntegration = async (
     return;
   }
 
-  // TODO: Verify integration token here
+  const serverConfig = await getServerConfig();
+  if (token !== serverConfig.botApiKey) {
+    res.status(401).send('Unauthorized');
+    return;
+  }
 
   next();
 };
