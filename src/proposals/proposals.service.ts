@@ -3,14 +3,22 @@ import { sanitizeText } from '../common/common.utils';
 import { dataSource } from '../database/data-source';
 import { deleteImageFile } from '../images/images.utils';
 import { Image } from '../images/models/image.entity';
+import { getServerConfig } from '../server-configs/server-configs.service';
 import { User } from '../users/user.entity';
 import { Vote } from '../votes/vote.entity';
 import {
   sortConsensusVotesByType,
   sortMajorityVotesByType,
 } from '../votes/votes.utils';
+import { ProposalAction } from './models/proposal-action.entity';
 import { ProposalConfig } from './models/proposal-config.entity';
 import { Proposal } from './models/proposal.entity';
+
+interface CreateProposalReq {
+  body: string;
+  closingAt?: Date;
+  action: Partial<ProposalAction>;
+}
 
 const proposalRepository = dataSource.getRepository(Proposal);
 const imageRepository = dataSource.getRepository(Image);
@@ -109,7 +117,7 @@ export const hasMajorityVote = (
 };
 
 export const createProposal = async (
-  { body, closingAt, action, groupId }: any,
+  { body, closingAt, action }: CreateProposalReq,
   userId: string,
 ) => {
   const sanitizedBody = sanitizeText(body);
@@ -117,18 +125,16 @@ export const createProposal = async (
     throw new Error('Proposals must be 8000 characters or less');
   }
 
-  // TODO: Determine how to get the config
-  let config: any;
-
-  const configClosingAt = config.votingTimeLimit
-    ? new Date(Date.now() + config.votingTimeLimit * 60 * 1000)
+  const serverConfig = await getServerConfig();
+  const configClosingAt = serverConfig.votingTimeLimit
+    ? new Date(Date.now() + serverConfig.votingTimeLimit * 60 * 1000)
     : undefined;
 
-  const proposalConfig: Partial<any> = {
-    decisionMakingModel: config.decisionMakingModel,
-    ratificationThreshold: config.ratificationThreshold,
-    reservationsLimit: config.reservationsLimit,
-    standAsidesLimit: config.standAsidesLimit,
+  const proposalConfig: Partial<ProposalConfig> = {
+    decisionMakingModel: serverConfig.decisionMakingModel,
+    ratificationThreshold: serverConfig.ratificationThreshold,
+    reservationsLimit: serverConfig.reservationsLimit,
+    standAsidesLimit: serverConfig.standAsidesLimit,
     closingAt: closingAt || configClosingAt,
   };
 
@@ -136,7 +142,6 @@ export const createProposal = async (
     body: sanitizedBody,
     config: proposalConfig,
     userId,
-    groupId,
     action,
   });
 
