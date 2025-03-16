@@ -3,7 +3,7 @@ import { authRouter } from './auth/auth.router';
 import { channelsRouter } from './channels/channels.router';
 import { healthRouter } from './health/health.router';
 import { imagesRouter } from './images/images.router';
-import { integrationsRouter } from './integrations/integrations.router';
+import integrationsRouter from './integrations/integrations.router';
 import { invitesRouter } from './invites/invites.router';
 import { messagesRouter } from './messages/messages.router';
 import { rolesRouter } from './roles/roles.router';
