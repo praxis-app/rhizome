@@ -235,7 +235,7 @@ class ApiClient {
 
   getImage = (imageId: string) => {
     const path = `/images/${imageId}`;
-    return this.executeRequest<any>('get', path, {
+    return this.executeRequest<Blob>('get', path, {
       responseType: 'blob',
     });
   };
