@@ -19,5 +19,7 @@ export const authIntegration = async (
     return;
   }
 
+  // TODO: Determine how to set res.locals.user for integration
+
   next();
 };

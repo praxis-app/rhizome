@@ -6,6 +6,7 @@ export const getProposal = async (req: Request, res: Response) => {
   res.json({ proposal });
 };
 
+// TODO: Determine how to set res.locals.user for integration
 export const createProposal = async (req: Request, res: Response) => {
   const proposal = await proposalsService.createProposal(
     req.body,
