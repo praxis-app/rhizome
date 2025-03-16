@@ -32,6 +32,18 @@ export class ServerConfig {
   @Column({ default: VotingTimeLimit.Unlimited })
   votingTimeLimit: number;
 
+  /**
+   * The API key used by the bot when making requests to the Praxis instance.
+   */
+  @Column({ type: 'varchar', nullable: true })
+  botApiKey: string | null;
+
+  /**
+   * The API key used by Praxis to authenticate its calls to the bots endpoints.
+   */
+  @Column({ type: 'varchar', nullable: true })
+  appApiKey: string | null;
+
   @CreateDateColumn()
   createdAt: Date;
 
