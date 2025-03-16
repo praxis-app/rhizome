@@ -1,4 +1,5 @@
-import multer from 'multer';
+import { Request } from 'express';
+import multer, { FileFilterCallback } from 'multer';
 import { getUploadsPath } from '../images.utils';
 
 export const VALID_IMAGE_FORMAT = /(jpe?g|png|gif|webp)$/;
@@ -15,7 +16,11 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (_req: any, file: Express.Multer.File, cb: any) => {
+const fileFilter = (
+  _req: Request,
+  file: Express.Multer.File,
+  cb: FileFilterCallback,
+) => {
   const extension = file.mimetype.split('/')[1];
   if (extension.match(VALID_IMAGE_FORMAT)) {
     cb(null, true);
