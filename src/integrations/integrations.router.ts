@@ -1,4 +1,5 @@
 import express from 'express';
+import { getHealth } from '../health/health.controller';
 import {
   createProposal,
   deleteProposal,
@@ -34,6 +35,7 @@ integrationsRouter
   .use(authIntegration)
   .use('/proposals', proposalsIntegrationRouter)
   .use('/votes', votesIntegrationRouter)
-  .use('/server-configs', serverConfigsIntegrationRouter);
+  .use('/server-configs', serverConfigsIntegrationRouter)
+  .get('/health', getHealth);
 
 export default integrationsRouter;
