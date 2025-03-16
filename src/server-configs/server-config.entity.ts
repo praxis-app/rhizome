@@ -32,6 +32,9 @@ export class ServerConfig {
   @Column({ default: VotingTimeLimit.Unlimited })
   votingTimeLimit: number;
 
+  @Column({ type: 'varchar', nullable: true })
+  botClientId: string | null;
+
   /**
    * The API key used by the bot when making requests to the Praxis instance.
    */
