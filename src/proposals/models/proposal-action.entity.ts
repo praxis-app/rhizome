@@ -7,16 +7,16 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PROPOSA_ACTION_TYPE } from '../proposal.constants';
-import { Proposal } from './proposal.entity';
+import { PROPOSAL_ACTION_TYPE } from '../proposal.constants';
 import { ProposalActionType } from '../proposal.types';
+import { Proposal } from './proposal.entity';
 
 @Entity()
 export class ProposalAction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'enum', enum: PROPOSA_ACTION_TYPE })
+  @Column({ type: 'enum', enum: PROPOSAL_ACTION_TYPE })
   actionType: ProposalActionType;
 
   // TODO: Uncomment when ProposalActionRole is defined

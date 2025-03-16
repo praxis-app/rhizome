@@ -4,7 +4,7 @@ export const DECISION_MAKING_MODEL = [
   'majority-vote',
 ] as const;
 
-export const PROPOSA_ACTION_TYPE = [
+export const PROPOSAL_ACTION_TYPE = [
   'change-role',
   'change-settings',
   'create-role',
