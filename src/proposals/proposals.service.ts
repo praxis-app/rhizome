@@ -22,6 +22,7 @@ interface CreateProposalReq {
 
 const proposalRepository = dataSource.getRepository(Proposal);
 const imageRepository = dataSource.getRepository(Image);
+const userRepository = dataSource.getRepository(User);
 
 export const getProposal = (id: string, relations?: string[]) => {
   return proposalRepository.findOneOrFail({
@@ -37,9 +38,14 @@ export const getProposals = (
   return proposalRepository.find({ where, relations });
 };
 
-// TODO: Implement: Return eligible voters for a given proposal
+// TODO: Account for instances with multiple servers / guilds
 export const getProposalMembers = async () => {
-  return [];
+  return userRepository.find({
+    where: {
+      anonymous: false,
+      locked: false,
+    },
+  });
 };
 
 export const isProposalRatifiable = async (proposalId: string) => {
@@ -104,16 +110,14 @@ export const hasConsent = (votes: Vote[], proposalConfig: ProposalConfig) => {
 export const hasMajorityVote = (
   votes: Vote[],
   { ratificationThreshold, closingAt }: ProposalConfig,
-  groupMembers: User[],
+  members: User[],
 ) => {
   if (closingAt && Date.now() < Number(closingAt)) {
     return false;
   }
   const { agreements } = sortMajorityVotesByType(votes);
 
-  return (
-    agreements.length >= groupMembers.length * (ratificationThreshold * 0.01)
-  );
+  return agreements.length >= members.length * (ratificationThreshold * 0.01);
 };
 
 export const createProposal = async (
