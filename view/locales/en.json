@@ -206,7 +206,11 @@
 
   "settings": {
     "labels": {
-      "integrations": "Integrations"
+      "integrations": "Integrations",
+      "discordClientId": "Discord Client ID"
+    },
+    "actions": {
+      "connectDiscord": "Connect to Discord"
     }
   },
 
