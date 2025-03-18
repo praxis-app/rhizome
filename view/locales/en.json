@@ -204,6 +204,12 @@
     }
   },
 
+  "settings": {
+    "labels": {
+      "integrations": "Integrations"
+    }
+  },
+
   "roles": {
     "actions": {
       "add": "Add",
