@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { normalizeText } from '../../common/common.utils';
 import { getValidInvite } from '../../invites/invites.service';
-import { getUserCount } from '../../users/users.service';
+import { getUserCount, isFirstUser } from '../../users/users.service';
 import { SignUpReq } from '../auth.service';
 
 const VALID_EMAIL_REGEX = /^\S+@\S+\.\S+$/;
@@ -52,8 +52,8 @@ export const validateSignUp = async (
     return;
   }
 
-  const userCount = await getUserCount();
-  if (userCount && !inviteToken) {
+  const isFirst = await isFirstUser();
+  if (!isFirst && !inviteToken) {
     res.status(403).send('You need an invite to sign up');
     return;
   }

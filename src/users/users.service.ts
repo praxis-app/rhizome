@@ -20,7 +20,9 @@ export const getUserCount = async (options?: FindManyOptions<User>) => {
 };
 
 export const isFirstUser = async () => {
-  const userCount = await getUserCount();
+  const userCount = await getUserCount({
+    where: { anonymous: false },
+  });
   return userCount === 0;
 };
 
