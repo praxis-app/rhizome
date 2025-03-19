@@ -15,6 +15,10 @@ import {
   Role,
   UpdateRolePermissionsReq,
 } from '../types/role.types';
+import {
+  ServerConfig,
+  UpdateServerConfigReq,
+} from '../types/server-config.types';
 import { CurrentUser, User } from '../types/user.types';
 
 class ApiClient {
@@ -230,12 +234,28 @@ class ApiClient {
   };
 
   // -------------------------------------------------------------------------
+  // Server Configs
+  // -------------------------------------------------------------------------
+
+  getServerConfig = async () => {
+    const path = '/server-configs';
+    return this.executeRequest<{ config: ServerConfig }>('get', path);
+  };
+
+  updateServerConfig = async (data: UpdateServerConfigReq) => {
+    const path = '/server-configs';
+    return this.executeRequest<void>('put', path, {
+      data,
+    });
+  };
+
+  // -------------------------------------------------------------------------
   // Misc.
   // -------------------------------------------------------------------------
 
   getImage = (imageId: string) => {
     const path = `/images/${imageId}`;
-    return this.executeRequest<any>('get', path, {
+    return this.executeRequest<Blob>('get', path, {
       responseType: 'blob',
     });
   };

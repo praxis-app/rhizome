@@ -3,6 +3,7 @@ import { Box, IconButton, SxProps } from '@mui/material';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useImageSrc } from '../../hooks/image.hooks';
+import { Image } from '../../types/image.types';
 
 const REMOVE_BUTTON_STYLES: SxProps = {
   position: 'absolute',
@@ -31,8 +32,8 @@ const SavedImagePreview = ({
   handleDelete,
 }: {
   containerStyles: SxProps;
-  handleDelete?(id: number): void;
-  savedImage: any;
+  handleDelete?(id: string): void;
+  savedImage: Image;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const src = useImageSrc(id, ref);
@@ -46,10 +47,10 @@ const SavedImagePreview = ({
 };
 
 interface Props {
-  handleDelete?: (id: number) => void;
+  handleDelete?: (id: string) => void;
   handleRemove?: (imageName: string) => void;
   imageContainerStyles?: SxProps;
-  savedImages?: any[];
+  savedImages?: Image[];
   selectedImages: File[];
   sx?: SxProps;
 }

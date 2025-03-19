@@ -1,4 +1,9 @@
-import { AdminPanelSettings, Close, Link } from '@mui/icons-material';
+import {
+  AdminPanelSettings,
+  Close,
+  Extension,
+  Link,
+} from '@mui/icons-material';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -56,6 +61,12 @@ const ServerSettings = () => {
           disabled={!canManageRoles}
           onClick={() => navigate(NavigationPaths.Roles)}
           label={t('navigation.roles')}
+        />
+
+        <SettingsNavItem
+          Icon={Extension}
+          onClick={() => navigate(NavigationPaths.Integrations)}
+          label={t('settings.labels.integrations')}
         />
 
         <SettingsNavItem
