@@ -7,6 +7,7 @@ import integrationsRouter from './integrations/integrations.router';
 import { invitesRouter } from './invites/invites.router';
 import { messagesRouter } from './messages/messages.router';
 import { rolesRouter } from './roles/roles.router';
+import { serverConfigsRouter } from './server-configs/server-configs.router';
 import { usersRouter } from './users/users.router';
 
 export const appRouter = express.Router();
@@ -18,5 +19,6 @@ appRouter.use('/channels', channelsRouter);
 appRouter.use('/messages', messagesRouter);
 appRouter.use('/images', imagesRouter);
 appRouter.use('/invites', invitesRouter);
+appRouter.use('/server-configs', serverConfigsRouter);
 appRouter.use('/integrations', integrationsRouter);
 appRouter.use('/health', healthRouter);
