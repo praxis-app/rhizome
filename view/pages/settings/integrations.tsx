@@ -1,31 +1,11 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  OutlinedInput,
-} from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
+import { Card, CardContent } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../client/api-client';
 import TopNav from '../../components/nav/top-nav';
-import PrimaryButton from '../../components/shared/primary-button';
+import ConnectDiscordForm from '../../components/settings/connect-discord-form';
 import { NavigationPaths } from '../../constants/shared.constants';
-import { UpdateServerConfigReq } from '../../types/server-config.types';
 
 const Integrations = () => {
-  const { mutate: updateConfig, isPending } = useMutation({
-    mutationFn: api.updateServerConfig,
-  });
-
-  const { register, handleSubmit } = useForm<UpdateServerConfigReq>({
-    mode: 'onChange',
-  });
-
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -38,29 +18,7 @@ const Integrations = () => {
 
       <Card>
         <CardContent>
-          <form onSubmit={handleSubmit((fv) => updateConfig(fv))}>
-            <FormGroup sx={{ marginBottom: 1.5 }}>
-              <FormControl>
-                <FormLabel sx={{ fontWeight: 500, paddingBottom: 1 }}>
-                  {t('settings.labels.discordClientId')}
-                </FormLabel>
-                <OutlinedInput
-                  autoComplete="off"
-                  {...register('botClientId')}
-                />
-              </FormControl>
-            </FormGroup>
-
-            <Box display="flex" justifyContent="end">
-              <PrimaryButton
-                disabled={isPending}
-                sx={{ marginTop: 1.5 }}
-                type="submit"
-              >
-                {t('settings.actions.connectDiscord')}
-              </PrimaryButton>
-            </Box>
-          </form>
+          <ConnectDiscordForm />
         </CardContent>
       </Card>
     </>
