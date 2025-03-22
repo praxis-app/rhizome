@@ -1,6 +1,6 @@
 {
   "name": "rhizome",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "start": "ts-node --project ./tsconfig.src.json src/main.ts",
     "start:dev": "nodemon --config ./nodemon.json",
