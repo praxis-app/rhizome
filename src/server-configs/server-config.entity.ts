@@ -32,6 +32,15 @@ export class ServerConfig {
   @Column({ default: VotingTimeLimit.Unlimited })
   votingTimeLimit: number;
 
+  /**
+   * The base URL for the Discord bot's API endpoints
+   */
+  @Column({ type: 'varchar', nullable: true })
+  botApiUrl: string | null;
+
+  /**
+   * The client ID for the Discord bot
+   */
   @Column({ type: 'varchar', nullable: true })
   botClientId: string | null;
 
@@ -46,12 +55,6 @@ export class ServerConfig {
    */
   @Column({ type: 'varchar', nullable: true })
   appApiKey: string | null;
-
-  /**
-   * The base URL for the Discord bot's API endpoints
-   */
-  @Column({ type: 'varchar', nullable: true })
-  botApiUrl: string | null;
 
   @CreateDateColumn()
   createdAt: Date;
