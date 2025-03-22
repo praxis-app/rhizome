@@ -17,6 +17,11 @@ import {
   UpdateServerConfigReq,
 } from '../../types/server-config.types';
 
+const DISCORD_OAUTH_URL = 'https://discord.com/oauth2/authorize';
+
+const DISCORD_OAUTH_PERMS =
+  'permissions=0&integration_type=0&scope=bot+applications.commands';
+
 interface Props {
   serverConfig: ServerConfig;
 }
@@ -48,6 +53,11 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
             },
           };
         },
+      );
+
+      window.open(
+        `${DISCORD_OAUTH_URL}?${DISCORD_OAUTH_PERMS}&client_id=${values.botClientId}`,
+        '_blank',
       );
     },
     onError(error: AxiosError) {
