@@ -10,3 +10,8 @@ export const updateServerConfig = async (req: Request, res: Response) => {
   const result = await serverConfigsService.updateServerConfig(req.body);
   res.json(result);
 };
+
+export const connectBot = async (req: Request, res: Response) => {
+  const result = await serverConfigsService.connectBot(req.body);
+  res.json(result);
+};

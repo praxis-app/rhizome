@@ -6,6 +6,11 @@ interface UpdateServerConfigReq {
   botApiUrl?: string | null;
 }
 
+interface ConnectBotReq {
+  botClientId: string;
+  botApiUrl: string;
+}
+
 const serverConfigRepository = dataSource.getRepository(ServerConfig);
 
 export const getServerConfig = async () => {
@@ -23,4 +28,13 @@ export const initializeServerConfig = async () => {
 export const updateServerConfig = async (data: UpdateServerConfigReq) => {
   const serverConfig = await getServerConfig();
   return serverConfigRepository.update(serverConfig.id, data);
+};
+
+export const connectBot = async (data: ConnectBotReq) => {
+  const serverConfig = await getServerConfig();
+  const result = await serverConfigRepository.update(serverConfig.id, data);
+
+  // TODO: Send a request to the bot to connect with API keys sent in both directions
+
+  return result;
 };
