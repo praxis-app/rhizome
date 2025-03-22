@@ -207,7 +207,8 @@
   "settings": {
     "labels": {
       "integrations": "Integrations",
-      "discordClientId": "Discord Client ID"
+      "discordClientId": "Client ID",
+      "discordBotApiUrl": "Bot API URL"
     },
     "actions": {
       "connectDiscord": "Connect to Discord"

@@ -36,6 +36,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
     mode: 'onChange',
     defaultValues: {
       botClientId: serverConfig.botClientId,
+      botApiUrl: serverConfig.botApiUrl,
     },
   });
 
@@ -50,6 +51,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
             serverConfig: {
               ...oldData?.serverConfig,
               botClientId: values.botClientId || null,
+              botApiUrl: values.botApiUrl || null,
             },
           };
         },
@@ -74,11 +76,18 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
   return (
     <form onSubmit={handleSubmit((fv) => updateConfig(fv))}>
       <FormGroup sx={{ marginBottom: 1.5 }}>
-        <FormControl>
+        <FormControl sx={{ marginBottom: 2 }}>
           <FormLabel sx={{ fontWeight: 500, paddingBottom: 1 }}>
             {t('settings.labels.discordClientId')}
           </FormLabel>
           <OutlinedInput autoComplete="off" {...register('botClientId')} />
+        </FormControl>
+
+        <FormControl>
+          <FormLabel sx={{ fontWeight: 500, paddingBottom: 1 }}>
+            {t('settings.labels.discordBotApiUrl')}
+          </FormLabel>
+          <OutlinedInput autoComplete="off" {...register('botApiUrl')} />
         </FormControl>
       </FormGroup>
 

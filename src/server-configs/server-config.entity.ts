@@ -36,16 +36,22 @@ export class ServerConfig {
   botClientId: string | null;
 
   /**
-   * The API key used by the bot when making requests to the Praxis instance.
+   * The API key used by the bot when making requests to the Praxis instance
    */
   @Column({ type: 'varchar', nullable: true })
   botApiKey: string | null;
 
   /**
-   * The API key used by Praxis to authenticate its calls to the bots endpoints.
+   * The API key used by Praxis to authenticate its calls to the bots endpoints
    */
   @Column({ type: 'varchar', nullable: true })
   appApiKey: string | null;
+
+  /**
+   * The base URL for the Discord bot's API endpoints
+   */
+  @Column({ type: 'varchar', nullable: true })
+  botApiUrl: string | null;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,6 +1,11 @@
 import { dataSource } from '../database/data-source';
 import { ServerConfig } from './server-config.entity';
 
+interface UpdateServerConfigReq {
+  botClientId?: string | null;
+  botApiUrl?: string | null;
+}
+
 const serverConfigRepository = dataSource.getRepository(ServerConfig);
 
 export const getServerConfig = async () => {
@@ -15,7 +20,7 @@ export const initializeServerConfig = async () => {
   return serverConfigRepository.save({});
 };
 
-export const updateServerConfig = async (data: Partial<ServerConfig>) => {
+export const updateServerConfig = async (data: UpdateServerConfigReq) => {
   const serverConfig = await getServerConfig();
   return serverConfigRepository.update(serverConfig.id, data);
 };
