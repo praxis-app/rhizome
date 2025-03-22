@@ -5,23 +5,61 @@ import {
   FormLabel,
   OutlinedInput,
 } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../client/api-client';
 import PrimaryButton from '../../components/shared/primary-button';
-import { UpdateServerConfigReq } from '../../types/server-config.types';
+import { useAppStore } from '../../store/app.store';
+import {
+  ServerConfig,
+  UpdateServerConfigReq,
+} from '../../types/server-config.types';
 
-const ConnectDiscordForm = () => {
-  const { mutate: updateConfig, isPending } = useMutation({
-    mutationFn: api.updateServerConfig,
-  });
+interface Props {
+  serverConfig: ServerConfig;
+}
+
+const ConnectDiscordForm = ({ serverConfig }: Props) => {
+  const { setToast } = useAppStore((state) => state);
+
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { register, handleSubmit } = useForm<UpdateServerConfigReq>({
     mode: 'onChange',
+    defaultValues: {
+      botClientId: serverConfig.botClientId,
+    },
   });
 
-  const { t } = useTranslation();
+  const { mutate: updateConfig, isPending } = useMutation({
+    mutationFn: async (values: UpdateServerConfigReq) => {
+      await api.updateServerConfig(values);
+
+      queryClient.setQueryData<{ serverConfig: ServerConfig }>(
+        ['serverConfig'],
+        (oldData) => {
+          return {
+            serverConfig: {
+              ...oldData?.serverConfig,
+              botClientId: values.botClientId || null,
+            },
+          };
+        },
+      );
+    },
+    onError(error: AxiosError) {
+      const errorMessage =
+        (error.response?.data as string) || t('errors.somethingWentWrong');
+
+      setToast({
+        title: errorMessage,
+        status: 'error',
+      });
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit((fv) => updateConfig(fv))}>

@@ -3,5 +3,5 @@ export interface ServerConfig {
 }
 
 export interface UpdateServerConfigReq {
-  botClientId?: string;
+  botClientId?: string | null;
 }

@@ -239,7 +239,7 @@ class ApiClient {
 
   getServerConfig = async () => {
     const path = '/server-configs';
-    return this.executeRequest<{ config: ServerConfig }>('get', path);
+    return this.executeRequest<{ serverConfig: ServerConfig }>('get', path);
   };
 
   updateServerConfig = async (data: UpdateServerConfigReq) => {
