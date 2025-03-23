@@ -70,6 +70,11 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
         },
       );
 
+      reset({
+        botClientId: values.botClientId,
+        botApiUrl: values.botApiUrl,
+      });
+
       window.open(
         `${DISCORD_OAUTH_URL}&client_id=${values.botClientId}`,
         '_blank',
@@ -103,11 +108,15 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
         },
       );
 
+      reset({
+        botClientId: '',
+        botApiUrl: '',
+      });
+
       setToast({
         title: t('settings.messages.discordDisconnected'),
         status: 'success',
       });
-      reset();
     },
     onError(error: AxiosError) {
       const errorMessage =
