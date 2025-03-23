@@ -7,15 +7,14 @@ export const authIntegration = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { authorization } = req.headers;
-  const [type, token] = authorization?.split(' ') ?? [];
-  if (type !== 'Bearer' || !token) {
+  const apiKey = req.headers['x-api-key'];
+  if (!apiKey) {
     res.status(401).send('Unauthorized');
     return;
   }
 
   const serverConfig = await getServerConfig();
-  if (token !== serverConfig.botApiKey) {
+  if (apiKey !== serverConfig.botApiKey) {
     res.status(401).send('Unauthorized');
     return;
   }
