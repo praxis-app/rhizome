@@ -38,6 +38,7 @@ export const connectBot = async (data: ConnectBotReq) => {
   const result = await axios.post<{ botApiKey: string }>(
     data.botApiUrl,
     {
+      serverConfigId: serverConfig.id,
       botClientId: data.botClientId,
       botApiUrl: data.botApiUrl,
     },
