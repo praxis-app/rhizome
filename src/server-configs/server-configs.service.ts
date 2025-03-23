@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { dataSource } from '../database/data-source';
 import { ServerConfig } from './server-config.entity';
 
@@ -30,11 +31,34 @@ export const updateServerConfig = async (data: UpdateServerConfigReq) => {
   return serverConfigRepository.update(serverConfig.id, data);
 };
 
+// TODO: Decide whether to move to integrations service
 export const connectBot = async (data: ConnectBotReq) => {
   const serverConfig = await getServerConfig();
-  const result = await serverConfigRepository.update(serverConfig.id, data);
 
-  // TODO: Send a request to the bot to connect with API keys sent in both directions
+  const result = await axios.post<{ botApiKey: string }>(
+    data.botApiUrl,
+    {
+      botClientId: data.botClientId,
+      botApiUrl: data.botApiUrl,
+    },
+    { headers: { 'Content-Type': 'application/json' } },
+  );
 
-  return result;
+  return serverConfigRepository.update(serverConfig.id, {
+    botApiKey: result.data.botApiKey,
+    ...data,
+  });
+};
+
+// TODO: Decide whether to move to integrations service
+export const disconnectBot = async () => {
+  const serverConfig = await getServerConfig();
+
+  // TODO: Call the bot API to disconnect
+
+  return serverConfigRepository.update(serverConfig.id, {
+    botApiKey: null,
+    botClientId: null,
+    botApiUrl: null,
+  });
 };
