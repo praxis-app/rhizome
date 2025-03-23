@@ -27,9 +27,8 @@ import {
   ServerConfig,
 } from '../../types/server-config.types';
 
-const DISCORD_OAUTH_URL = 'https://discord.com/oauth2/authorize';
-const DISCORD_OAUTH_PERMS =
-  'permissions=0&integration_type=0&scope=bot+applications.commands';
+const DISCORD_OAUTH_URL =
+  'https://discord.com/oauth2/authorize?permissions=0&integration_type=0&scope=bot+applications.commands';
 
 interface Props {
   serverConfig: ServerConfig;
@@ -42,7 +41,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit } = useForm<ConnectDiscordBotReq>({
+  const { register, handleSubmit, reset } = useForm<ConnectDiscordBotReq>({
     mode: 'onChange',
     defaultValues: {
       botClientId: serverConfig.botClientId || '',
@@ -64,15 +63,15 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
           return {
             serverConfig: {
               ...oldData?.serverConfig,
-              botClientId: values.botClientId || null,
-              botApiUrl: values.botApiUrl || null,
+              botClientId: values.botClientId,
+              botApiUrl: values.botApiUrl,
             },
           };
         },
       );
 
       window.open(
-        `${DISCORD_OAUTH_URL}?${DISCORD_OAUTH_PERMS}&client_id=${values.botClientId}`,
+        `${DISCORD_OAUTH_URL}&client_id=${values.botClientId}`,
         '_blank',
       );
     },
@@ -103,6 +102,12 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
           };
         },
       );
+
+      setToast({
+        title: t('settings.messages.discordDisconnected'),
+        status: 'success',
+      });
+      reset();
     },
     onError(error: AxiosError) {
       const errorMessage =
@@ -111,12 +116,6 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
       setToast({
         title: errorMessage,
         status: 'error',
-      });
-    },
-    onSuccess() {
-      setToast({
-        title: t('settings.messages.discordDisconnected'),
-        status: 'success',
       });
     },
   });
