@@ -1,4 +1,4 @@
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { TaskAlt } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -131,10 +131,11 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
         <Box mb={2.5}>
           <Alert
             severity="success"
-            icon={<CheckCircleIcon />}
+            icon={<TaskAlt />}
+            sx={{ '& .MuiSvgIcon-root': { fill: '#66bb6a' } }}
             action={
               <Button
-                color="error"
+                sx={{ color: 'inherit' }}
                 onClick={() => setShowDisconnectDialog(true)}
                 disabled={isDisconnecting}
               >
@@ -148,7 +149,10 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
         </Box>
       ) : (
         <Box mb={2.5}>
-          <Alert severity="info">
+          <Alert
+            severity="info"
+            sx={{ '& .MuiSvgIcon-root': { fill: '#29b5f6' } }}
+          >
             {t('settings.messages.discordNotConnected')}
           </Alert>
         </Box>
