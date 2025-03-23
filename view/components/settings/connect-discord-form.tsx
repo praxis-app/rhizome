@@ -4,10 +4,6 @@ import {
   AlertTitle,
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControl,
   FormGroup,
   FormLabel,
@@ -26,6 +22,7 @@ import {
   ConnectDiscordBotReq,
   ServerConfig,
 } from '../../types/server-config.types';
+import Modal from '../shared/modal';
 
 const DISCORD_OAUTH_URL =
   'https://discord.com/oauth2/authorize?permissions=0&integration_type=0&scope=bot+applications.commands';
@@ -36,7 +33,7 @@ interface Props {
 
 const ConnectDiscordForm = ({ serverConfig }: Props) => {
   const { setToast } = useAppStore((state) => state);
-  const [showDisconnectDialog, setShowDisconnectDialog] = useState(false);
+  const [showDisconnectModal, setShowDisconnectModal] = useState(false);
 
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -130,7 +127,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
   });
 
   const handleDisconnect = () => {
-    setShowDisconnectDialog(false);
+    setShowDisconnectModal(false);
     disconnectBot();
   };
 
@@ -145,7 +142,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
             action={
               <Button
                 sx={{ color: 'inherit' }}
-                onClick={() => setShowDisconnectDialog(true)}
+                onClick={() => setShowDisconnectModal(true)}
                 disabled={isDisconnecting}
               >
                 {t('settings.actions.disconnect')}
@@ -213,28 +210,27 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
         )}
       </form>
 
-      {/* TODO: Improve styling for dialog */}
-      <Dialog
-        open={showDisconnectDialog}
-        onClose={() => setShowDisconnectDialog(false)}
+      <Modal
+        open={showDisconnectModal}
+        onClose={() => setShowDisconnectModal(false)}
+        title={t('settings.dialogs.disconnectDiscord.title')}
       >
-        <DialogTitle>
-          {t('settings.dialogs.disconnectDiscord.title')}
-        </DialogTitle>
-        <DialogContent>
-          <Typography>
-            {t('settings.dialogs.disconnectDiscord.message')}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowDisconnectDialog(false)}>
+        <Typography marginBottom={3}>
+          {t('settings.dialogs.disconnectDiscord.message')}
+        </Typography>
+
+        <Box display="flex" gap={1}>
+          <Button
+            onClick={() => setShowDisconnectModal(false)}
+            variant="contained"
+          >
             {t('actions.cancel')}
           </Button>
-          <Button onClick={handleDisconnect} color="error" autoFocus>
+          <Button onClick={handleDisconnect} variant="contained">
             {t('settings.actions.disconnect')}
           </Button>
-        </DialogActions>
-      </Dialog>
+        </Box>
+      </Modal>
     </>
   );
 };
