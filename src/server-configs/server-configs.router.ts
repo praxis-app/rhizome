@@ -3,6 +3,7 @@ import { authenticate } from '../auth/middleware/authenticate.middleware';
 import { validateConnectBot } from './middleware/validate-connect-bot.middleware';
 import {
   connectBot,
+  disconnectBot,
   getServerConfig,
   updateServerConfig,
 } from './server-configs.controller';
@@ -13,4 +14,5 @@ serverConfigsRouter
   .use(authenticate)
   .get('/', getServerConfig)
   .put('/', updateServerConfig)
-  .post('/connect-bot', validateConnectBot, connectBot);
+  .post('/connect-bot', validateConnectBot, connectBot)
+  .delete('/disconnect-bot', disconnectBot);

@@ -257,6 +257,11 @@ class ApiClient {
     });
   };
 
+  disconnectDiscordBot = async () => {
+    const path = '/server-configs/disconnect-bot';
+    return this.executeRequest<void>('delete', path);
+  };
+
   // -------------------------------------------------------------------------
   // Misc.
   // -------------------------------------------------------------------------
