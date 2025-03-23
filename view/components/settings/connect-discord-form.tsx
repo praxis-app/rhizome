@@ -1,4 +1,3 @@
-import { TaskAlt } from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -137,8 +136,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
         <Box mb={2.5}>
           <Alert
             severity="success"
-            icon={<TaskAlt />}
-            sx={{ '& .MuiSvgIcon-root': { fill: '#66bb6a' } }}
+            sx={{ '& .MuiAlert-icon .MuiSvgIcon-root': { fill: '#66bb6a' } }}
             action={
               <Button
                 sx={{ color: 'inherit' }}
@@ -157,7 +155,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
         <Box mb={2.5}>
           <Alert
             severity="info"
-            sx={{ '& .MuiSvgIcon-root': { fill: '#29b5f6' } }}
+            sx={{ '& .MuiAlert-icon .MuiSvgIcon-root': { fill: '#29b5f6' } }}
           >
             {t('settings.messages.discordNotConnected')}
           </Alert>
