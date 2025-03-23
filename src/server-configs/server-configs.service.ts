@@ -31,12 +31,12 @@ export const updateServerConfig = async (data: UpdateServerConfigReq) => {
   return serverConfigRepository.update(serverConfig.id, data);
 };
 
-// TODO: Decide whether to move to integrations service
 export const connectBot = async (data: ConnectBotReq) => {
   const serverConfig = await getServerConfig();
 
+  const url = `${data.botApiUrl}/praxis-instances`;
   const result = await axios.post<{ botApiKey: string }>(
-    data.botApiUrl,
+    url,
     {
       serverConfigId: serverConfig.id,
       botClientId: data.botClientId,
@@ -51,7 +51,6 @@ export const connectBot = async (data: ConnectBotReq) => {
   });
 };
 
-// TODO: Decide whether to move to integrations service
 export const disconnectBot = async () => {
   const serverConfig = await getServerConfig();
 
