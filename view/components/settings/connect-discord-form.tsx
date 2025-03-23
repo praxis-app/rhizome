@@ -13,8 +13,8 @@ import { api } from '../../client/api-client';
 import PrimaryButton from '../../components/shared/primary-button';
 import { useAppStore } from '../../store/app.store';
 import {
+  ConnectDiscordBotReq,
   ServerConfig,
-  UpdateServerConfigReq,
 } from '../../types/server-config.types';
 
 const DISCORD_OAUTH_URL = 'https://discord.com/oauth2/authorize';
@@ -32,17 +32,17 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit } = useForm<UpdateServerConfigReq>({
+  const { register, handleSubmit } = useForm<ConnectDiscordBotReq>({
     mode: 'onChange',
     defaultValues: {
-      botClientId: serverConfig.botClientId,
-      botApiUrl: serverConfig.botApiUrl,
+      botClientId: serverConfig.botClientId || '',
+      botApiUrl: serverConfig.botApiUrl || '',
     },
   });
 
-  const { mutate: updateConfig, isPending } = useMutation({
-    mutationFn: async (values: UpdateServerConfigReq) => {
-      await api.updateServerConfig(values);
+  const { mutate: connectBot, isPending } = useMutation({
+    mutationFn: async (values: ConnectDiscordBotReq) => {
+      await api.connectDiscordBot(values);
 
       queryClient.setQueryData<{ serverConfig: ServerConfig }>(
         ['serverConfig'],
@@ -74,7 +74,7 @@ const ConnectDiscordForm = ({ serverConfig }: Props) => {
   });
 
   return (
-    <form onSubmit={handleSubmit((fv) => updateConfig(fv))}>
+    <form onSubmit={handleSubmit((fv) => connectBot(fv))}>
       <FormGroup sx={{ marginBottom: 1.5 }}>
         <FormControl sx={{ marginBottom: 2 }}>
           <FormLabel sx={{ fontWeight: 500, paddingBottom: 1 }}>

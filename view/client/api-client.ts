@@ -16,7 +16,7 @@ import {
   UpdateRolePermissionsReq,
 } from '../types/role.types';
 import {
-  ConnectBotReq,
+  ConnectDiscordBotReq,
   ServerConfig,
   UpdateServerConfigReq,
 } from '../types/server-config.types';
@@ -250,7 +250,7 @@ class ApiClient {
     });
   };
 
-  connectBot = async (data: ConnectBotReq) => {
+  connectDiscordBot = async (data: ConnectDiscordBotReq) => {
     const path = '/server-configs/connect-bot';
     return this.executeRequest<void>('post', path, {
       data,

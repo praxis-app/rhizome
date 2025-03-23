@@ -8,7 +8,7 @@ export interface UpdateServerConfigReq {
   botApiUrl?: string | null;
 }
 
-export interface ConnectBotReq {
+export interface ConnectDiscordBotReq {
   botClientId: string;
   botApiUrl: string;
 }
