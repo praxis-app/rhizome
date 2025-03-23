@@ -56,8 +56,12 @@ export const connectBot = async (data: ConnectBotReq) => {
 export const disconnectBot = async () => {
   const serverConfig = await getServerConfig();
 
-  // TODO: Call the bot API to disconnect
+  // Remove the Praxis instance registration from the bot
+  await axios.delete(`${serverConfig.botApiUrl}/praxis-instances`, {
+    headers: { 'x-api-key': serverConfig.appApiKey },
+  });
 
+  // Remove the Praxis instance registration from the server config
   return serverConfigRepository.update(serverConfig.id, {
     botApiKey: null,
     botClientId: null,
