@@ -45,13 +45,13 @@ export class ServerConfig {
   botClientId: string | null;
 
   /**
-   * The API key used by the bot when making requests to the Praxis instance
+   * API key used by the bot to authenticate its calls to the Praxis instance
    */
   @Column({ type: 'varchar', nullable: true })
   botApiKey: string | null;
 
   /**
-   * The API key used by Praxis to authenticate its calls to the bots endpoints
+   * API key used by Praxis to authenticate its calls to the bot's endpoints
    */
   @Column({ type: 'varchar', nullable: true })
   appApiKey: string | null;
