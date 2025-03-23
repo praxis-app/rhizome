@@ -1,16 +1,11 @@
 import axios from 'axios';
 import { dataSource } from '../database/data-source';
-import { ServerConfig } from './server-config.entity';
-
-interface UpdateServerConfigReq {
-  botClientId?: string | null;
-  botApiUrl?: string | null;
-}
-
-interface ConnectBotReq {
-  botClientId: string;
-  botApiUrl: string;
-}
+import { ServerConfig } from './models/server-config.entity';
+import {
+  ConnectBotReq,
+  RegisterPraxisInstanceRes,
+  UpdateServerConfigReq,
+} from './models/server-config.types';
 
 const serverConfigRepository = dataSource.getRepository(ServerConfig);
 
@@ -34,9 +29,8 @@ export const updateServerConfig = async (data: UpdateServerConfigReq) => {
 export const connectBot = async (data: ConnectBotReq) => {
   const serverConfig = await getServerConfig();
 
-  const url = `${data.botApiUrl}/praxis-instances`;
-  const result = await axios.post<{ botApiKey: string }>(
-    url,
+  const result = await axios.post<RegisterPraxisInstanceRes>(
+    `${data.botApiUrl}/praxis-instances`,
     {
       serverConfigId: serverConfig.id,
       botClientId: data.botClientId,
