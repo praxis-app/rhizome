@@ -33,11 +33,12 @@ export const updateServerConfig = async (data: UpdateServerConfigReq) => {
 export const connectBot = async (data: ConnectBotReq) => {
   const serverConfig = await getServerConfig();
 
-  const apiUrl = `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
   const apiKey = crypto.randomBytes(32).toString('hex');
+  const apiUrl = `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
+  const botApiUrl = data.botApiUrl.replace(/\/$/, '');
 
   const result = await axios.post<RegisterPraxisInstanceRes>(
-    `${data.botApiUrl}/praxis-instances`,
+    `${botApiUrl}/praxis-instances`,
     {
       serverConfigId: serverConfig.id,
       apiUrl,
