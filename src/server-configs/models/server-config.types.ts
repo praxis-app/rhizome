@@ -7,7 +7,3 @@ export interface ConnectBotReq {
   botClientId: string;
   botApiUrl: string;
 }
-
-export interface RegisterPraxisInstanceRes {
-  botApiKey: string;
-}

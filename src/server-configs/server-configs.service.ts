@@ -2,10 +2,10 @@ import axios from 'axios';
 import crypto from 'crypto';
 import * as dotenv from 'dotenv';
 import { dataSource } from '../database/data-source';
+import { integrationsApi } from '../integrations/integrations.api-client';
 import { ServerConfig } from './models/server-config.entity';
 import {
   ConnectBotReq,
-  RegisterPraxisInstanceRes,
   UpdateServerConfigReq,
 } from './models/server-config.types';
 
@@ -37,20 +37,16 @@ export const connectBot = async (data: ConnectBotReq) => {
   const apiUrl = `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
   const botApiUrl = data.botApiUrl.replace(/\/$/, '');
 
-  const result = await axios.post<RegisterPraxisInstanceRes>(
-    `${botApiUrl}/praxis-instances`,
-    {
-      serverConfigId: serverConfig.id,
-      apiUrl,
-      apiKey,
-    },
-    { headers: { 'Content-Type': 'application/json' } },
-  );
+  const result = await integrationsApi.registerPraxisInstance({
+    serverConfigId: serverConfig.id,
+    apiUrl,
+    apiKey,
+  });
 
   return serverConfigRepository.update(serverConfig.id, {
-    botApiKey: result.data.botApiKey,
+    botApiKey: result.botApiKey,
     botClientId: data.botClientId,
-    botApiUrl: data.botApiUrl,
+    botApiUrl: botApiUrl,
     appApiKey: apiKey,
   });
 };
