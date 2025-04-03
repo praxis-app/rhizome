@@ -30,18 +30,24 @@ export const updateServerConfig = async (data: UpdateServerConfigReq) => {
   return serverConfigRepository.update(serverConfig.id, data);
 };
 
+const getInstanceApiUrl = () => {
+  const appApiProtocol =
+    process.env.NODE_ENV === 'production' ? 'https' : 'http';
+
+  return `${appApiProtocol}://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
+};
+
 export const connectBot = async (data: ConnectBotReq) => {
   const serverConfig = await getServerConfig();
 
   const apiKey = crypto.randomBytes(32).toString('hex');
-  const apiUrl = `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`;
   const botApiUrl = data.botApiUrl.replace(/\/$/, '');
 
   const result = await axios.post<RegisterPraxisInstanceRes>(
     `${botApiUrl}/praxis-instances`,
     {
       serverConfigId: serverConfig.id,
-      apiUrl,
+      apiUrl: getInstanceApiUrl(),
       apiKey,
     },
     { headers: { 'Content-Type': 'application/json' } },
@@ -70,4 +76,17 @@ export const disconnectBot = async () => {
     botApiUrl: null,
     appApiKey: null,
   });
+};
+
+export const checkBotConnection = async () => {
+  const serverConfig = await getServerConfig();
+
+  const { data } = await axios.get(
+    `${serverConfig.botApiUrl}/praxis-instances/check-connection`,
+    {
+      headers: { 'x-api-key': serverConfig.appApiKey },
+    },
+  );
+
+  return data.isConnected;
 };

@@ -233,6 +233,9 @@
         "title": "Disconnect Discord Bot",
         "message": "Are you sure you want to disconnect the Discord bot? This will remove the integration and stop all Discord functionality."
       }
+    },
+    "errors": {
+      "discordBotConnectionError": "Failed to connect to Discord bot. Please check your configuration and try again."
     }
   },
 

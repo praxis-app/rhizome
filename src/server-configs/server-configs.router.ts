@@ -24,6 +24,11 @@ serverConfigsRouter
     validateConnectBot,
     serverConfigsController.connectBot,
   )
+  .get(
+    '/check-bot-connection',
+    can('read', 'ServerConfig'),
+    serverConfigsController.checkBotConnection,
+  )
   .delete(
     '/disconnect-bot',
     can('manage', 'ServerConfig'),

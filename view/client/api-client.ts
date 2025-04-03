@@ -262,6 +262,11 @@ class ApiClient {
     return this.executeRequest<void>('delete', path);
   };
 
+  checkDiscordBotConnection = async () => {
+    const path = '/server-configs/check-bot-connection';
+    return this.executeRequest<{ isConnected: boolean }>('get', path);
+  };
+
   // -------------------------------------------------------------------------
   // Misc.
   // -------------------------------------------------------------------------

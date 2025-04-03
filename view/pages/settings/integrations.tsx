@@ -9,11 +9,28 @@ import ConnectDiscordForm from '../../components/settings/connect-discord-form';
 import ProgressBar from '../../components/shared/progress-bar';
 import { NavigationPaths } from '../../constants/shared.constants';
 import { useAbility } from '../../hooks/role.hooks';
+import { useAppStore } from '../../store/app.store';
 
 const Integrations = () => {
+  const { setToast } = useAppStore((state) => state);
   const { data: serverConfigData, isLoading } = useQuery({
     queryKey: ['serverConfig'],
     queryFn: () => api.getServerConfig(),
+  });
+
+  useQuery({
+    queryKey: ['check-bot-connection'],
+    queryFn: async () => {
+      try {
+        await api.checkDiscordBotConnection();
+      } catch (error) {
+        setToast({
+          title: t('settings.errors.discordBotConnectionError'),
+          status: 'error',
+        });
+      }
+    },
+    enabled: !!serverConfigData?.serverConfig.botApiUrl,
   });
 
   const { t } = useTranslation();
