@@ -56,7 +56,7 @@ export const connectBot = async (data: ConnectBotReq) => {
   return serverConfigRepository.update(serverConfig.id, {
     botApiKey: result.data.botApiKey,
     botClientId: data.botClientId,
-    botApiUrl: data.botApiUrl,
+    botApiUrl,
     apiKey,
   });
 };
