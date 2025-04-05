@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 import InvitesPage from '../pages/invites/invites-page';
 import EditRolePage from '../pages/settings/edit-role-page';
+import Integrations from '../pages/settings/integrations';
 import ServerRoles from '../pages/settings/server-roles';
 import ServerSettings from '../pages/settings/server-settings';
 
@@ -12,6 +13,14 @@ export const settingsRouter: RouteObject = {
       element: <ServerSettings />,
     },
     {
+      path: 'invites',
+      element: <InvitesPage />,
+    },
+    {
+      path: 'integrations',
+      element: <Integrations />,
+    },
+    {
       path: 'roles',
       children: [
         {
@@ -21,15 +30,6 @@ export const settingsRouter: RouteObject = {
         {
           path: ':roleId/edit',
           element: <EditRolePage />,
-        },
-      ],
-    },
-    {
-      path: 'invites',
-      children: [
-        {
-          index: true,
-          element: <InvitesPage />,
         },
       ],
     },

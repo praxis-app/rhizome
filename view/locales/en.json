@@ -204,6 +204,41 @@
     }
   },
 
+  "settings": {
+    "labels": {
+      "integrations": "Integrations",
+      "discordClientId": "Client ID",
+      "discordBotApiUrl": "Bot API URL"
+    },
+    "actions": {
+      "connectDiscord": "Connect to Discord",
+      "disconnect": "Disconnect"
+    },
+    "messages": {
+      "discordConnected": "Discord Connected",
+      "discordBotActive": "Your Discord bot is active and ready to use",
+      "discordNotConnected": "Connect your Discord bot to enable Discord integration",
+      "discordDisconnected": "Discord bot has been disconnected"
+    },
+    "help": {
+      "discordClientId": "Your Discord application's client ID from the Discord Developer Portal",
+      "discordBotApiUrl": "The URL where your Discord bot is hosted"
+    },
+    "placeholders": {
+      "discordClientId": "Enter your Discord client ID",
+      "discordBotApiUrl": "Enter your bot's API URL"
+    },
+    "dialogs": {
+      "disconnectDiscord": {
+        "title": "Disconnect Discord Bot",
+        "message": "Are you sure you want to disconnect the Discord bot? This will remove the integration and stop all Discord functionality."
+      }
+    },
+    "errors": {
+      "discordBotConnectionError": "Failed to connect to Discord bot. Please check your configuration and try again."
+    }
+  },
+
   "roles": {
     "actions": {
       "add": "Add",

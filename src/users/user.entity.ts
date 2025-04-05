@@ -10,7 +10,9 @@ import {
 import { ChannelMember } from '../channels/models/channel-member.entity';
 import { Invite } from '../invites/invite.entity';
 import { Message } from '../messages/message.entity';
+import { Proposal } from '../proposals/models/proposal.entity';
 import { Role } from '../roles/models/role.entity';
+import { Vote } from '../votes/vote.entity';
 
 @Entity()
 export class User {
@@ -37,6 +39,16 @@ export class User {
 
   @Column({ default: false })
   locked: boolean;
+
+  @OneToMany(() => Proposal, (proposal) => proposal.user, {
+    cascade: true,
+  })
+  proposals: Proposal[];
+
+  @OneToMany(() => Vote, (vote) => vote.user, {
+    cascade: true,
+  })
+  votes: Vote[];
 
   @OneToMany(() => Message, (message) => message.user, {
     cascade: true,
