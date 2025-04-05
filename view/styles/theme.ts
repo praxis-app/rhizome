@@ -180,14 +180,6 @@ export const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }: Props) => ({
-          // '&:hover': {
-          //   '& .MuiOutlinedInput-notchedOutline': {
-          //     borderColor: GRAY[200],
-          //     ...theme.applyStyles('dark', {
-          //       borderColor: GRAY[600],
-          //     }),
-          //   },
-          // },
           '&.Mui-focused': {
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: GRAY[400],
