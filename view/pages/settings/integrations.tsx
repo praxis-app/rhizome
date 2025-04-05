@@ -13,6 +13,7 @@ import { useAppStore } from '../../store/app.store';
 
 const Integrations = () => {
   const { setToast } = useAppStore((state) => state);
+
   const { data: serverConfigData, isLoading } = useQuery({
     queryKey: ['serverConfig'],
     queryFn: () => api.getServerConfig(),
