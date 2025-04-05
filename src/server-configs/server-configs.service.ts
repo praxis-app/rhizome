@@ -57,7 +57,7 @@ export const connectBot = async (data: ConnectBotReq) => {
     botApiKey: result.data.botApiKey,
     botClientId: data.botClientId,
     botApiUrl: data.botApiUrl,
-    appApiKey: apiKey,
+    apiKey,
   });
 };
 
@@ -66,7 +66,7 @@ export const disconnectBot = async () => {
 
   // Remove the Praxis instance registration from the bot
   await axios.delete(`${serverConfig.botApiUrl}/praxis-instances`, {
-    headers: { 'x-api-key': serverConfig.appApiKey },
+    headers: { 'x-api-key': serverConfig.apiKey },
   });
 
   // Remove the Praxis instance registration from the server config
@@ -74,7 +74,7 @@ export const disconnectBot = async () => {
     botApiKey: null,
     botClientId: null,
     botApiUrl: null,
-    appApiKey: null,
+    apiKey: null,
   });
 };
 
@@ -84,7 +84,7 @@ export const checkBotConnection = async () => {
   const { data } = await axios.get(
     `${serverConfig.botApiUrl}/praxis-instances/check-connection`,
     {
-      headers: { 'x-api-key': serverConfig.appApiKey },
+      headers: { 'x-api-key': serverConfig.apiKey },
     },
   );
 

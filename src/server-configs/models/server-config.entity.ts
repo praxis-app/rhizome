@@ -54,7 +54,7 @@ export class ServerConfig {
    * API key used by the Praxis instance (self) to authenticate its calls to the bot
    */
   @Column({ type: 'varchar', nullable: true })
-  appApiKey: string | null;
+  apiKey: string | null;
 
   @CreateDateColumn()
   createdAt: Date;
